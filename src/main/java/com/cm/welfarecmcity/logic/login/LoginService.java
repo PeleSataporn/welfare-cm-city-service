@@ -15,7 +15,7 @@ public class LoginService {
     val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
 
     if (user == null) {
-      throw new Error("Password is incorrect.");
+      throw new Error("Password is incorrect...");
     }
   }
 }
