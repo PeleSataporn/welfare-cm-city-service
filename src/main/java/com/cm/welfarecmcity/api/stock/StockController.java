@@ -4,13 +4,10 @@ import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/stock")
+@RequestMapping("/api/v1/stock")
 public class StockController {
 
   @Autowired
@@ -20,4 +17,9 @@ public class StockController {
   public ResponseModel<ResponseId> add(@RequestBody StockDto dto) {
     return stockService.add(dto);
   }
+
+//  @GetMapping
+//  public String add() {
+//    return "Hello World";
+//  }
 }
