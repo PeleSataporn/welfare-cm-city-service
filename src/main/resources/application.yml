@@ -22,6 +22,24 @@ spring:
     show-sql: true
   main:
     allow-circular-references: true
+  mail:
+    host: smtp.gmail.com
+    username: sound.nature.v1@gmail.com
+    password: azvjeqcptynijxng
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+#    scheduler:
+#      persistence:
+#        enabled: true
+#        redis:
+#          embedded: true
+#          enabled: false
 
 management:
   endpoints:

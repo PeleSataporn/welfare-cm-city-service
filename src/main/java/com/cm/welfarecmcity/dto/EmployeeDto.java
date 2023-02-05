@@ -4,7 +4,6 @@ import com.cm.welfarecmcity.dto.base.BaseDto;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
@@ -23,12 +22,18 @@ public class EmployeeDto extends BaseDto {
   private String gender;
 
   @Comment("สถานภาพสมรส")
+  @Column(columnDefinition = "integer default 0")
   private int maritalStatus;
 
   private Date birthday;
-  private int age;
+
+  @Column(columnDefinition = "integer default 0")
+  private int age = 0;
+
   private String agency;
   private String position;
+
+  @Column(columnDefinition = "double default 0.0")
   private double salary;
 
   @Comment("ค่าตอบแทน")
@@ -46,6 +51,7 @@ public class EmployeeDto extends BaseDto {
   private Date billingStartDate;
 
   @Comment("เงินหุ้นรายเดือน (เป็นการแสดงผล)")
+  @Column(columnDefinition = "double default 0.0")
   private Double monthlyStockMoney;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
