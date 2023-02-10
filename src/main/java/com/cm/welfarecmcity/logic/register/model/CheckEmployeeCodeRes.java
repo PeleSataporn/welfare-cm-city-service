@@ -9,4 +9,5 @@ public class CheckEmployeeCodeRes {
   private Long id;
   private String employeeCode;
   private String idCard;
+  private String employeeStatus;
 }

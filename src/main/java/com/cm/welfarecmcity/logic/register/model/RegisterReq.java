@@ -22,4 +22,9 @@ public class RegisterReq {
 
 //  @NotBlank(message = "email is mandatory")
   private String email;
+
+// ประเภทพนักงาน
+  private String employeeType;
+
+  private Long id;
 }

@@ -35,4 +35,25 @@ public class RegisterRepository {
     }
     return null;
   }
+
+  // test
+  public StringBuilder buildQuerySql2(RegisterReq req) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT id, employee_code, id_card, employee_status FROM employee WHERE ")
+            .append(" id_card = '")
+            .append(req.getIdCard())
+            .append("'");
+    return sql;
+  }
+
+  public CheckEmployeeCodeRes checkEmployeeCode2(RegisterReq req) {
+    val sql = buildQuerySql2(req);
+    try {
+      return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(CheckEmployeeCodeRes.class));
+    } catch (EmptyResultDataAccessException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 }
