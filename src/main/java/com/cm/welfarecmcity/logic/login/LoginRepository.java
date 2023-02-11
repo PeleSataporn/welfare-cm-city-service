@@ -19,11 +19,12 @@ public class LoginRepository {
     val sql = new StringBuilder();
 
     sql
-      .append(" SELECT id, username, password FROM user WHERE username = ")
+      .append(" SELECT id, username, password FROM user WHERE username = '")
       .append(username)
-      .append(" AND ")
-      .append("password = ")
-      .append(password);
+      .append("' AND ")
+      .append("password = '")
+      .append(password)
+      .append("' ");
       //.append(" AND user.deleted = false");
 
     return sql;

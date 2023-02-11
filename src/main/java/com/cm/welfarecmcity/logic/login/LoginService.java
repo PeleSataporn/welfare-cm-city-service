@@ -22,7 +22,7 @@ public class LoginService {
 
     if (user == null) {
       //throw new Error("Password is incorrect...");
-      return responseDataUtils.insertDataSuccess(null);
+      return responseDataUtils.insertDataSuccess(Long.valueOf(0));
     }else{
       return responseDataUtils.insertDataSuccess(user.getId());
     }

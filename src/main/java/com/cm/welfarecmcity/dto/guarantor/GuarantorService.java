@@ -1,4 +1,4 @@
-package com.cm.welfarecmcity.api.guarantor;
+package com.cm.welfarecmcity.dto.guarantor;
 
 import com.cm.welfarecmcity.dto.GuarantorDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
