@@ -1,6 +1,9 @@
 package com.cm.welfarecmcity.logic.login;
 
 import com.cm.welfarecmcity.dto.UserDto;
+import com.cm.welfarecmcity.dto.base.ResponseData;
+import com.cm.welfarecmcity.dto.base.ResponseId;
+import com.cm.welfarecmcity.dto.base.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +17,9 @@ public class LoginController {
   @Autowired
   private LoginService loginService;
 
-  @PostMapping
-  public void login(@RequestBody UserDto dto) {
-    loginService.login(dto);
+  @PostMapping("/userLogin")
+  public ResponseModel<ResponseId> login(@RequestBody UserDto dto) {
+   return loginService.login(dto);
   }
+
 }
