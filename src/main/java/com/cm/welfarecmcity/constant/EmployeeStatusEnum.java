@@ -1,15 +1,17 @@
 package com.cm.welfarecmcity.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 public enum EmployeeStatusEnum {
-  // สถานะสมาชิกแรกเข้า
+  // สมาชิกแรกเข้า (สมัครเข้าใช้งานใหม่)
   NEW_EMPLOYEE(1),
-  // สถานะคงสภาพการเป็นสมาชิก
-  EMPLOYEE(2),
-  // สถานะพ้นสภาพการเป็นสมาชิก
-  LAYOFF(3);
+  // ใช้งานปกติ ( ปัจจุบัน )
+  NORMAL_EMPLOYEE(2),
+  // ลาออก
+  RESIGN_EMPLOYEE(3);
 
   private final int state;
 
@@ -17,16 +19,15 @@ public enum EmployeeStatusEnum {
     this.state = state;
   }
 
-  @Getter
-  @Setter
+  public int getState() {
+    return state;
+  }
+
+  @Data
+  @AllArgsConstructor
   public static class EmployeeStatusDto {
 
     private String name;
     private int state;
-
-    EmployeeStatusDto(String name, int state) {
-      this.name = name;
-      this.state = state;
-    }
   }
 }

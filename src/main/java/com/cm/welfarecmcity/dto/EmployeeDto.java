@@ -45,7 +45,7 @@ public class EmployeeDto extends BaseDto {
   @Comment("วันที่บรรจุเข้ารับราชการ")
   private String civilServiceDate;
 
-  private String employeeStatus;
+  private int employeeStatus;
 
   @Comment("วันที่เริ่มเก็บเงิน")
   private Date billingStartDate;
@@ -101,4 +101,6 @@ public class EmployeeDto extends BaseDto {
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employee_id")
   private List<PetitionNotificationDto> PetitionNotifications;
+
+  private Boolean approveFlag;
 }

@@ -3,9 +3,10 @@ package com.cm.welfarecmcity.logic.register;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
-import com.cm.welfarecmcity.logic.register.model.RegisterReq;
-
-import com.sun.mail.iap.Response;
+import com.cm.welfarecmcity.logic.register.model.req.ApproveRegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
+import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +17,31 @@ public class RegisterController {
   @Autowired
   private RegisterService registerService;
 
-  @PostMapping("/addEmployee")
+  @PostMapping("/add-employee")
   public ResponseModel<ResponseData> addEmployee(@RequestBody RegisterReq req) {
-    try{
-      return registerService.addEmployee(req);
-    }catch (Exception e){
-     return null;
-    }
+    return registerService.addEmployee(req);
   }
 
-  @PutMapping("/editStatusEmployeeResign")
-  public ResponseModel<ResponseData> editStatusEmployeeResign(@RequestBody RegisterReq req) {
-    try{
-      return registerService.editStatusEmployeeResign(req);
-    }catch (Exception e){
-      return null;
-    }
+  @PatchMapping("/approve-register")
+  public ResponseModel<ResponseId> approveRegister(@RequestBody ApproveRegisterReq req) {
+    return registerService.approveRegister(req);
   }
 
+  @PostMapping("/search-register")
+  public List<SearchNewRegisterRes> searchNewRegister() {
+    return registerService.searchNewRegister();
+  }
+
+  @PostMapping("/count-register")
+  public Integer countNewRegister() {
+    return registerService.countNewRegister();
+  }
+  //  @PutMapping("/editStatusEmployeeResign")
+  //  public ResponseModel<ResponseData> editStatusEmployeeResign(@RequestBody RegisterReq req) {
+  //    try {
+  //      return registerService.editStatusEmployeeResign(req);
+  //    } catch (Exception e) {
+  //      return null;
+  //    }
+  //  }
 }

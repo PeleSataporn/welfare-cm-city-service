@@ -1,15 +1,20 @@
 package com.cm.welfarecmcity.logic.register;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.dto.ContactDto;
 import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
+import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
-//import com.cm.welfarecmcity.logic.email.EmailSendService;
 import com.cm.welfarecmcity.logic.email.EmailSenderService;
-import com.cm.welfarecmcity.logic.register.model.RegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.ApproveRegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
+import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
+import com.cm.welfarecmcity.utils.listener.GenerateListener;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,76 +34,90 @@ public class RegisterService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
-  public ResponseModel<ResponseData> addEmployee(RegisterReq req) {
-    if (req.getEmployeeCode() != null) {
-      val check = registerRepository.checkEmployeeCode(req);
-      if (check == null) {
-        throw new EmployeeException("invalid employee code or  idCard.");
-      }
+  @Autowired
+  private GenerateListener generateListener;
 
-      val contact = new ContactDto();
-      contact.setMobile(req.getTel());
-      contact.setEmail(req.getEmail());
+  public Long setModelEmployee(RegisterReq req) {
+    val contact = new ContactDto();
+    contact.setMobile(req.getTel());
+    contact.setEmail(req.getEmail());
 
-      val employee = new EmployeeDto();
-      employee.setId(check.getId());
-      employee.setEmployeeCode(req.getEmployeeCode());
-      employee.setIdCard(req.getIdCard());
-      employee.setPrefix(req.getPrefix());
-      employee.setFirstName(req.getFirstName());
-      employee.setLastName(req.getLastName());
-      employee.setContact(contact);
+    val employee = new EmployeeDto();
+    employee.setIdCard(req.getIdCard());
+    employee.setFirstName(req.getFirstName());
+    employee.setLastName(req.getLastName());
+    employee.setEmployeeStatus(EmployeeStatusEnum.NEW_EMPLOYEE.getState());
+    employee.setContact(contact);
+    employee.setApproveFlag(false);
+    employee.setAgency(req.getAgency());
+    employee.setPosition(req.getPosition());
 
-      employeeRepository.save(employee);
-      emailSendService.sendSimpleEmail(req.getEmail());
-
-      return null;
-    }else{
-      String resultStatus = "";
-      Long idEmp = null;
-      val result = registerRepository.checkEmployeeCode2(req);
-      // employeeStatus มาเช็ค สถานะสมาชิก มี 3 สถานะ [ ใช้งานปกติ ( ปัจจุบัน ),ลาออก, รอการอนุมัติ ] สมมติ
-      if(result != null ){
-        if(result.getEmployeeStatus().equals("1")){  // 1 = ใช้งานปกติ ( ปัจจุบัน )
-          //  ไม่ต้องทำอะไร มีข้อมูลอยู่เเล้ว
-          resultStatus = "normal";
-          idEmp = result.getId();
-        }else if(result.getEmployeeStatus().equals("2")){ // 2 = ลาออก
-          //  ไม่ต้องทำอะไร มีข้อมูลอยู่เเล้ว
-          resultStatus = "resign";
-          idEmp = result.getId();
-        }
-      }else{  // 3 = รอการอนุมัติ
-        val contact = new ContactDto();
-        contact.setMobile(req.getTel());
-        contact.setEmail(req.getEmail());
-
-        val employee = new EmployeeDto();
-        employee.setEmployeeCode(req.getEmployeeCode());
-        employee.setIdCard(req.getIdCard());
-        employee.setPrefix(req.getPrefix());
-        employee.setFirstName(req.getFirstName());
-        employee.setLastName(req.getLastName());
-        employee.setContact(contact);
-        employee.setEmployeeStatus("3");
-
-        employeeRepository.save(employee);
-        emailSendService.sendSimpleEmail(req.getEmail());
-        resultStatus = "register";
-        idEmp = null;
-      }
-      return responseDataUtils.DataResourceJson(resultStatus,idEmp);
-    }
+    return employeeRepository.save(employee).getId();
   }
 
-  public ResponseModel<ResponseData> editStatusEmployeeResign(RegisterReq req) {
+  public ResponseModel<ResponseData> addEmployee(RegisterReq req) {
     String resultStatus = "";
     Long idEmp = null;
-    EmployeeDto emp = employeeRepository.findById(req.getId()).get();
-    emp.setEmployeeStatus("1");
-    employeeRepository.save(emp);
-    resultStatus = "normal";
-    return responseDataUtils.DataResourceJson(resultStatus,idEmp);
+    val result = registerRepository.checkEmployee(req.getIdCard());
+
+    // check employee status เช็คสถานะสมาชิก มี 3 สถานะ [ ใช้งานปกติ ( ปัจจุบัน ),ลาออก, รอการอนุมัติ ] สมมติ
+    if (result != null) {
+      if (result.getEmployeeStatus() == EmployeeStatusEnum.NORMAL_EMPLOYEE.getState()) {
+        // ใช้งานปกติ ( ปัจจุบัน )
+        resultStatus = EmployeeStatusEnum.NORMAL_EMPLOYEE.name();
+        idEmp = result.getId();
+      } else if (result.getEmployeeStatus() == EmployeeStatusEnum.RESIGN_EMPLOYEE.getState()) {
+        // ลาออก
+        resultStatus = EmployeeStatusEnum.RESIGN_EMPLOYEE.name();
+        idEmp = result.getId();
+
+        val findEmployee = employeeRepository.findById(idEmp).get();
+        findEmployee.setApproveFlag(false);
+        employeeRepository.save(findEmployee);
+      }
+    } else {
+      // 3 = รอการอนุมัติ (สมัครเข้าใช้งานใหม่)
+      idEmp = setModelEmployee(req);
+      resultStatus = EmployeeStatusEnum.NEW_EMPLOYEE.name();
+    }
+    return responseDataUtils.DataResourceJson(resultStatus, idEmp);
   }
 
+  public ResponseModel<ResponseId> approveRegister(ApproveRegisterReq req) {
+    val findEmployee = employeeRepository.findById(req.getId());
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee not found.");
+    }
+    val employee = findEmployee.get();
+    employee.setEmployeeCode(generateListener.generateCustomerCode());
+    employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.ordinal());
+    employee.setApproveFlag(req.getApproveFlag());
+
+    val emp = employeeRepository.save(employee);
+    emailSendService.sendSimpleEmail(employee.getContact().getEmail());
+
+    return responseDataUtils.insertDataSuccess(emp.getId());
+  }
+
+  public List<SearchNewRegisterRes> searchNewRegister() {
+    val listNewRegister = registerRepository.searchNewRegister();
+    if (listNewRegister.isEmpty()) {
+      throw new EmployeeException("Employee not list new register.");
+    }
+
+    return listNewRegister;
+  }
+
+  public Integer countNewRegister() {
+    return registerRepository.countNewRegister();
+  }
+  //  public ResponseModel<ResponseData> editStatusEmployeeResign(RegisterReq req) {
+  //    String resultStatus = "";
+  //    Long idEmp = null;
+  //    EmployeeDto emp = employeeRepository.findById(req.getId()).get();
+  //    emp.setEmployeeStatus("1");
+  //    employeeRepository.save(emp);
+  //    resultStatus = "normal";
+  //    return responseDataUtils.DataResourceJson(resultStatus, idEmp);
+  //  }
 }

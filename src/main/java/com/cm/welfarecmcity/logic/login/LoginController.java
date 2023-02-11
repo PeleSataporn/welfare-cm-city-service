@@ -17,9 +17,8 @@ public class LoginController {
   @Autowired
   private LoginService loginService;
 
-  @PostMapping("/userLogin")
+  @PostMapping("/user-login")
   public ResponseModel<ResponseId> login(@RequestBody UserDto dto) {
-   return loginService.login(dto);
+    return loginService.login(dto);
   }
-
 }

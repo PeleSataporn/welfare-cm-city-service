@@ -3,6 +3,7 @@ package com.cm.welfarecmcity.logic.login;
 import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.exception.entity.UserException;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,8 @@ public class LoginService {
     val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
 
     if (user == null) {
-      //throw new Error("Password is incorrect...");
-      return responseDataUtils.insertDataSuccess(Long.valueOf(0));
-    }else{
-      return responseDataUtils.insertDataSuccess(user.getId());
+      throw new UserException("User not found.");
     }
+    return responseDataUtils.insertDataSuccess(user.getId());
   }
-
 }

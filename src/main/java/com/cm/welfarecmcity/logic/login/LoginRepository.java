@@ -1,7 +1,6 @@
 package com.cm.welfarecmcity.logic.login;
 
 import com.cm.welfarecmcity.dto.UserDto;
-import com.cm.welfarecmcity.logic.register.model.CheckEmployeeCodeRes;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,8 +23,7 @@ public class LoginRepository {
       .append("' AND ")
       .append("password = '")
       .append(password)
-      .append("' ");
-      //.append(" AND user.deleted = false");
+      .append("'");
 
     return sql;
   }

@@ -1,4 +1,4 @@
-package com.cm.welfarecmcity.logic.register.model;
+package com.cm.welfarecmcity.logic.register.model.res;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,5 +9,5 @@ public class CheckEmployeeCodeRes {
   private Long id;
   private String employeeCode;
   private String idCard;
-  private String employeeStatus;
+  private int employeeStatus;
 }
