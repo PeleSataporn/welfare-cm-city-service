@@ -23,12 +23,12 @@ public class EmployeeDto extends BaseDto {
 
   @Comment("สถานภาพสมรส")
   @Column(columnDefinition = "integer default 0")
-  private int maritalStatus;
+  private String maritalStatus;
 
   private Date birthday;
 
-  @Column(columnDefinition = "integer default 0")
-  private int age = 0;
+  //  @Column(columnDefinition = "integer default 0")
+  //  private int age = 0;
 
   @Comment("ตำแหน่ง")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -67,8 +67,8 @@ public class EmployeeDto extends BaseDto {
   @Column(columnDefinition = "double default 0.0")
   private Double monthlyStockMoney;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private AddressDto address;
+  //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  private AddressDto address;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private ContactDto contact;

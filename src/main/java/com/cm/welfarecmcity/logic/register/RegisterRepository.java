@@ -43,7 +43,7 @@ public class RegisterRepository {
     } else {
       sql.append(
         " SELECT employee.id, employee.create_date, employee.first_name, employee.last_name,employee.id_card, employee.prefix , " +
-        " positions.name AS positionName, affiliation.name AS affiliationName,  contact.mobile AS tel, contact.email "
+        " positions.name AS positionName, affiliation.name AS affiliationName,  contact.tel, contact.email "
       );
     }
 

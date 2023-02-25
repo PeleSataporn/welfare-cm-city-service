@@ -11,7 +11,9 @@ public enum EmployeeStatusEnum {
   // ใช้งานปกติ ( ปัจจุบัน )
   NORMAL_EMPLOYEE(2),
   // ลาออก
-  RESIGN_EMPLOYEE(3);
+  RESIGN_EMPLOYEE(3),
+
+  ERROR_EMPLOYEE(4);
 
   private final int state;
 

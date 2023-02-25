@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.employee;
 
 import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,10 @@ public class EmployeeController {
   @GetMapping("{id}")
   public ResponseEntity<EmployeeDto> getEmployee(@PathVariable Long id) {
     return new ResponseEntity<>(employeeService.getEmployee(id), HttpStatus.OK);
+  }
+
+  @GetMapping("test/{id}")
+  public  ResponseModel<ResponseData> getEmployeeTest(@PathVariable Long id) {
+    return employeeService.getEmployeeTest(id);
   }
 }

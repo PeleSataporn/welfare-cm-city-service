@@ -53,4 +53,16 @@ public class ResponseDataUtils {
 
         return result;
     }
+
+    public ResponseModel<ResponseData> test1(Long id){
+        ResponseModel<ResponseData> result = new ResponseModel<>();
+        ResponseData data = new ResponseData();
+
+//        data.setStatusEmployee(statusEmp);
+        data.setId(id);
+        result.setData(data);
+        result.setMessage(MessageResponseConstant.RESULT_SUCCESS);
+
+        return result;
+    }
 }

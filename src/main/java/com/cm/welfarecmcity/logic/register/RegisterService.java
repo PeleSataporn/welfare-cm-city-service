@@ -48,7 +48,7 @@ public class RegisterService {
 
   public Long setModelEmployee(RegisterReq req) {
     val contact = new ContactDto();
-    contact.setMobile(req.getTel());
+    contact.setTel(req.getTel());
     contact.setEmail(req.getEmail());
 
     val employee = new EmployeeDto();
@@ -106,6 +106,11 @@ public class RegisterService {
         val findEmployee = employeeRepository.findById(idEmp).get();
         findEmployee.setApproveFlag(false);
         employeeRepository.save(findEmployee);
+      } else if (result.getEmployeeStatus() == EmployeeStatusEnum.NEW_EMPLOYEE.getState()) {
+        // ลาออก
+        //        throw new EmployeeException("ID Card has already been used.");
+        resultStatus = EmployeeStatusEnum.ERROR_EMPLOYEE.name();
+        idEmp = result.getId();
       }
     } else {
       // 3 = รอการอนุมัติ (สมัครเข้าใช้งานใหม่)
