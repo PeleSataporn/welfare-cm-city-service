@@ -21,9 +21,9 @@ public class EmployeeDto extends BaseDto {
   private String idCard;
   private String gender;
 
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @Comment("สถานภาพสมรส")
-  @Column(columnDefinition = "integer default 0")
-  private String maritalStatus;
+  private MaritalDto marital;
 
   private Date birthday;
 
