@@ -13,8 +13,9 @@ public class SearchNewRegisterRes {
   private String firstName;
   private String lastName;
   private String idCard;
-  private String agency;
-  private String position;
+  private String positionName;
+  private String affiliationName;
   private String tel;
   private String email;
+  private String prefix;
 }

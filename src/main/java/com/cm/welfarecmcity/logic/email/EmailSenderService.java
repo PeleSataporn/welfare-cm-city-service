@@ -15,8 +15,22 @@ public class EmailSenderService {
   @Value("${spring.mail.username}")
   private String sender;
 
-  public void sendSimpleEmail(String toEmail) {
-    String text = "Test Email Register";
+  public void sendSimpleEmail(String toEmail, String empCode, String idCard) {
+    String text = "Username: " + empCode + "\nPassword: " + idCard;
+    String subject = "REGISTER CM CITY";
+
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setFrom(sender);
+    message.setTo(toEmail);
+    message.setText(text);
+    message.setSubject(subject);
+    mailSender.send(message);
+
+    System.out.println("Mail Send...");
+  }
+
+  public void sendSimpleEmailCancel(String toEmail, String remark) {
+    String text = "ปฎิเสษคำขอการสมัครสมาชิก\n" + "\nรายละเอียดการปฎิเสษ: " + remark;
     String subject = "REGISTER CM CITY";
 
     SimpleMailMessage message = new SimpleMailMessage();

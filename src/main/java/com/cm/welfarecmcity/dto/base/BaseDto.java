@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.dto.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Date;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.AccessType;
 @Getter
 @Setter
 @MappedSuperclass
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class BaseDto {
 
   @Id
@@ -27,7 +29,9 @@ public class BaseDto {
   private Date lastUpdate;
 
   @Deprecated(since = "")
+  @Column(columnDefinition = "boolean default true")
   private Boolean active = true;
 
+  @Column(columnDefinition = "boolean default false")
   private Boolean deleted = false;
 }

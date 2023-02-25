@@ -7,14 +7,16 @@ import lombok.Setter;
 @Setter
 public class RegisterReq {
 
+  private int prefix;
   private String firstName;
   private String lastName;
   private String idCard;
   private String tel;
   private String email;
 
-  // หน่วยงาน
-  private String agency;
   // ตำแหน่ง
-  private String position;
+  private Long positionId;
+
+  // สังกัด
+  private Long affiliationId;
 }

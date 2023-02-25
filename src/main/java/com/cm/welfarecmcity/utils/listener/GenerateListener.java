@@ -10,7 +10,7 @@ public class GenerateListener {
   @Autowired
   private GenerateListenerRepository generateListenerRepository;
 
-  private static final String CUSTOMER_PREFIX = "CUS";
+  //  private static final String CUSTOMER_PREFIX = "CUS";
   private static final int NUMBER_MAX_DIGIT = 5;
 
   public String generateCustomerCode() {

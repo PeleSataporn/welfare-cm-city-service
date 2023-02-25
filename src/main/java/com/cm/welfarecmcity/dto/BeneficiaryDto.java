@@ -3,7 +3,6 @@ package com.cm.welfarecmcity.dto;
 import com.cm.welfarecmcity.dto.base.BaseDto;
 import jakarta.persistence.*;
 import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;

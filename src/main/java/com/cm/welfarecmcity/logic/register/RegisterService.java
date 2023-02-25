@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.logic.register;
 
+import com.cm.welfarecmcity.api.affiliation.AffiliationRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.position.PositionRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.dto.ContactDto;
 import com.cm.welfarecmcity.dto.EmployeeDto;
@@ -10,6 +12,7 @@ import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.email.EmailSenderService;
 import com.cm.welfarecmcity.logic.register.model.req.ApproveRegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.CancelRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
@@ -24,6 +27,12 @@ public class RegisterService {
 
   @Autowired
   private EmployeeRepository employeeRepository;
+
+  @Autowired
+  private PositionRepository positionRepository;
+
+  @Autowired
+  private AffiliationRepository affiliationRepository;
 
   @Autowired
   private RegisterRepository registerRepository;
@@ -49,8 +58,31 @@ public class RegisterService {
     employee.setEmployeeStatus(EmployeeStatusEnum.NEW_EMPLOYEE.getState());
     employee.setContact(contact);
     employee.setApproveFlag(false);
-    employee.setAgency(req.getAgency());
-    employee.setPosition(req.getPosition());
+
+    switch (req.getPrefix()) {
+      case 1 -> {
+        employee.setPrefix("นาย");
+        employee.setGender("ชาย");
+      }
+      case 2 -> {
+        employee.setPrefix("นางสาว");
+        employee.setGender("หญิง");
+      }
+      case 3 -> {
+        employee.setPrefix("นาง");
+        employee.setGender("หญิง");
+      }
+      default -> {
+        employee.setPrefix(null);
+        employee.setGender(null);
+      }
+    }
+
+    val position = positionRepository.findById(req.getPositionId()).get();
+    employee.setPosition(position);
+
+    val affiliation = affiliationRepository.findById(req.getAffiliationId()).get();
+    employee.setAffiliation(affiliation);
 
     return employeeRepository.save(employee).getId();
   }
@@ -94,9 +126,9 @@ public class RegisterService {
     employee.setApproveFlag(req.getApproveFlag());
 
     val emp = employeeRepository.save(employee);
-    emailSendService.sendSimpleEmail(employee.getContact().getEmail());
+    emailSendService.sendSimpleEmail(employee.getContact().getEmail(), employee.getEmployeeCode(), employee.getIdCard());
 
-    return responseDataUtils.insertDataSuccess(emp.getId());
+    return responseDataUtils.insertDataSuccess(req.getId());
   }
 
   public List<SearchNewRegisterRes> searchNewRegister() {
@@ -110,6 +142,19 @@ public class RegisterService {
 
   public Integer countNewRegister() {
     return registerRepository.countNewRegister();
+  }
+
+  public ResponseModel<ResponseId> cancelApproveRegister(CancelRegisterReq req) {
+    val findEmployee = employeeRepository.findById(req.getId());
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee id not null.");
+    }
+    val employee = findEmployee.get();
+    employee.setDeleted(true);
+    employeeRepository.save(employee);
+
+    emailSendService.sendSimpleEmailCancel(employee.getContact().getEmail(), req.getRemark());
+    return responseDataUtils.deleteDataSuccess(req.getId());
   }
   //  public ResponseModel<ResponseData> editStatusEmployeeResign(RegisterReq req) {
   //    String resultStatus = "";

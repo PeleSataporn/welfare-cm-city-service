@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.register.model.req.ApproveRegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.CancelRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import java.util.List;
@@ -35,6 +36,11 @@ public class RegisterController {
   @PostMapping("/count-register")
   public Integer countNewRegister() {
     return registerService.countNewRegister();
+  }
+
+  @PatchMapping("/cancel-approve-register")
+  public ResponseModel<ResponseId> cancelApproveRegister(@RequestBody CancelRegisterReq req) {
+    return registerService.cancelApproveRegister(req);
   }
   //  @PutMapping("/editStatusEmployeeResign")
   //  public ResponseModel<ResponseData> editStatusEmployeeResign(@RequestBody RegisterReq req) {

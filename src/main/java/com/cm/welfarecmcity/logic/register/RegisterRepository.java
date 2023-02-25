@@ -30,10 +30,9 @@ public class RegisterRepository {
     val sql = buildQuerySql(idCard);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(CheckEmployeeCodeRes.class));
-    } catch (EmptyResultDataAccessException e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      return null;
     }
-    return null;
   }
 
   public StringBuilder buildQuerySqlSearchNewRegister(Boolean count) {
@@ -43,22 +42,25 @@ public class RegisterRepository {
       sql.append(" SELECT COUNT(employee.id) ");
     } else {
       sql.append(
-        " SELECT employee.id, employee.create_date, employee.first_name, employee.last_update, " +
-        " employee.id_card, employee.agency, employee.position, contact.mobile AS tel, contact.email "
+        " SELECT employee.id, employee.create_date, employee.first_name, employee.last_name,employee.id_card, employee.prefix , " +
+        " positions.name AS positionName, affiliation.name AS affiliationName,  contact.mobile AS tel, contact.email "
       );
     }
 
-    sql.append(" FROM employee JOIN contact ON employee.contact_id = contact.id WHERE employee.approve_flag = FALSE ");
+    sql.append(
+      " FROM employee JOIN contact ON employee.contact_id = contact.id JOIN positions ON employee.position_id = positions.id JOIN affiliation ON employee.affiliation_id = affiliation.id " +
+      " WHERE employee.approve_flag = FALSE AND employee.deleted = FALSE"
+    );
     return sql;
   }
 
   public List<SearchNewRegisterRes> searchNewRegister() {
-    val sql = buildQuerySqlSearchNewRegister(null);
+    val sql = buildQuerySqlSearchNewRegister(false);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(SearchNewRegisterRes.class));
   }
 
   public Integer countNewRegister() {
-    val sql = buildQuerySqlSearchNewRegister(false);
+    val sql = buildQuerySqlSearchNewRegister(true);
     return jdbcTemplate.queryForObject(sql.toString(), Integer.class);
   }
 }

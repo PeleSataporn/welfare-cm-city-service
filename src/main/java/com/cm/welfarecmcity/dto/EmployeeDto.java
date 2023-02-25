@@ -30,8 +30,21 @@ public class EmployeeDto extends BaseDto {
   @Column(columnDefinition = "integer default 0")
   private int age = 0;
 
-  private String agency;
-  private String position;
+  @Comment("ตำแหน่ง")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private PositionsDto position;
+
+  @Comment("สังกัด")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private AffiliationDto affiliation;
+
+  @Comment("ประเภทพนักงาน")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private EmployeeTypeDto employeeType;
+
+  @Comment("ระดับ")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private LevelDto level;
 
   @Column(columnDefinition = "double default 0.0")
   private double salary;
