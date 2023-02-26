@@ -14,4 +14,8 @@ public class AffiliationService {
   public List<AffiliationDto> searchAffiliation() {
     return affiliationRepository.findAll();
   }
+
+  public List<AffiliationDto> searchByBureau(Long bureauId) {
+    return affiliationRepository.findAllByBureau_Id(bureauId);
+  }
 }

@@ -22,6 +22,10 @@ public class BeneficiaryDto extends BaseDto {
   @Comment("ความสัมพันธ์")
   private String relationship;
 
+  @Comment("สถานภาพสมรส")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private MaritalDto marital;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "employee_id")
   private EmployeeDto employee;

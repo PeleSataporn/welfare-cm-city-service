@@ -22,7 +22,11 @@ public class EmployeeController {
   }
 
   @GetMapping("test/{id}")
-  public  ResponseModel<ResponseData> getEmployeeTest(@PathVariable Long id) {
+  public ResponseModel<ResponseData> getEmployeeTest(@PathVariable Long id) {
     return employeeService.getEmployeeTest(id);
   }
+  //  @GetMapping("{id}")
+  //  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable Long id) {
+  //    return new ResponseEntity<>(employeeService.getEmployee(id), HttpStatus.OK);
+  //  }
 }
