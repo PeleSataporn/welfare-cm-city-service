@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.login;
 
+import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,30 @@ public class LoginRepository {
     val sql = buildQuerySql(username, password);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(UserDto.class));
+    }catch (EmptyResultDataAccessException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+
+  public StringBuilder buildQuerySqlForgetPassword(String email, String idCard) {
+    val sql = new StringBuilder();
+
+             sql.append(" SELECT e.id, e.id_card, c.email, e.user_id FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '")
+            .append(idCard)
+            .append("' AND ")
+            .append("c.email = '")
+            .append(email)
+            .append("'");
+
+    return sql;
+  }
+
+  public ForgetPasswordDto checkChangeForgetPassword(String email, String idCard) {
+    val sql = buildQuerySqlForgetPassword(email, idCard);
+    try {
+      return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(ForgetPasswordDto.class));
     }catch (EmptyResultDataAccessException e) {
       e.printStackTrace();
     }

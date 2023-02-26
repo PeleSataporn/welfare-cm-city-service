@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.login;
 
+import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
@@ -21,4 +22,10 @@ public class LoginController {
   public ResponseModel<ResponseId> login(@RequestBody UserDto dto) {
     return loginService.login(dto);
   }
+
+  @PostMapping("/change/forget-password")
+  public ResponseModel<ResponseData> login(@RequestBody ForgetPasswordDto dto) {
+    return loginService.changeForgetPassword(dto);
+  }
+
 }

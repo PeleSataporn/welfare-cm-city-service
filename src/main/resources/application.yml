@@ -10,9 +10,9 @@ spring:
     default-property-inclusion: non_null
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/welfare_cm_city?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+    url: jdbc:mariadb://127.0.0.1:3307/welfare_cm_city?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
     username: root
-    password: root
+    password: 1234
     hikari:
       auto-commit: false
   jpa:
@@ -46,3 +46,5 @@ management:
     web:
       exposure:
         include: mappings
+
+
