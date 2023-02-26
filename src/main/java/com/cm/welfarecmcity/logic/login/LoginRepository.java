@@ -40,21 +40,25 @@ public class LoginRepository {
   }
 
 
-  public StringBuilder buildQuerySqlForgetPassword(String email, String idCard) {
+  public StringBuilder buildQuerySqlForgetPassword(String email, String idCard, String employeeCode) {
     val sql = new StringBuilder();
 
-             sql.append(" SELECT e.id, e.id_card, c.email, e.user_id FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '")
+             sql.append(" SELECT e.id, e.id_card, c.email, e.user_id, e.employee_code FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '")
             .append(idCard)
             .append("' AND ")
             .append("c.email = '")
             .append(email)
+            .append("' AND ")
+            .append("e.employee_code = '")
+            .append(employeeCode)
             .append("'");
+
 
     return sql;
   }
 
-  public ForgetPasswordDto checkChangeForgetPassword(String email, String idCard) {
-    val sql = buildQuerySqlForgetPassword(email, idCard);
+  public ForgetPasswordDto checkChangeForgetPassword(String email, String idCard, String employeeCode) {
+    val sql = buildQuerySqlForgetPassword(email, idCard, employeeCode);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(ForgetPasswordDto.class));
     }catch (EmptyResultDataAccessException e) {

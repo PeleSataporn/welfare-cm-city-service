@@ -38,7 +38,7 @@ public class LoginService {
   public ResponseModel<ResponseData> changeForgetPassword(ForgetPasswordDto forgetPasswordDto){
     String resultStatus = "";
     Long idEmp = null;
-    val changeForgetPassword = loginRepository.checkChangeForgetPassword(forgetPasswordDto.getEmail(), forgetPasswordDto.getIdCard());
+    val changeForgetPassword = loginRepository.checkChangeForgetPassword(forgetPasswordDto.getEmail(), forgetPasswordDto.getIdCard(), forgetPasswordDto.getEmployeeCode());
     if(changeForgetPassword != null && changeForgetPassword.getUserId() != null){
       UserDto emp = userRepository.findById(changeForgetPassword.getUserId()).get();
       emp.setPassword(forgetPasswordDto.getNewPassword());
