@@ -22,7 +22,6 @@ public class AffiliationDto extends BaseDto {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bureau_id")
-  @JsonIgnore
   //  @JsonManagedReference(value = "bureau_id")
   private BureauDto bureau;
 }
