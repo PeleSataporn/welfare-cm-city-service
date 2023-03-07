@@ -115,4 +115,8 @@ public class EmployeeDto extends BaseDto {
   private List<PetitionNotificationDto> PetitionNotifications;
 
   private Boolean approveFlag;
+
+  private Boolean passwordFlag;
+
+  private Boolean profileFlag;
 }

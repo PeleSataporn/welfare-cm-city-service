@@ -25,7 +25,7 @@ spring:
   mail:
     host: smtp.gmail.com
     username: sound.nature.v1@gmail.com
-    password: azvjeqcptynijxng
+    password: gqrwqfzbiuggmlyq
     port: 587
     properties:
       mail:

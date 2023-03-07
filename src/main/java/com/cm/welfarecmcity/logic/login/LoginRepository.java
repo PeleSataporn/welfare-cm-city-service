@@ -19,7 +19,9 @@ public class LoginRepository {
     val sql = new StringBuilder();
 
     sql
-      .append(" SELECT id, username, password FROM user WHERE username = '")
+      .append(
+        " SELECT employee.id AS id, username, password FROM " + " employee JOIN user ON user.id = employee.user_id " + " WHERE username = '"
+      )
       .append(username)
       .append("' AND ")
       .append("password = '")
@@ -33,26 +35,27 @@ public class LoginRepository {
     val sql = buildQuerySql(username, password);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(UserDto.class));
-    }catch (EmptyResultDataAccessException e) {
+    } catch (EmptyResultDataAccessException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-
   public StringBuilder buildQuerySqlForgetPassword(String email, String idCard, String employeeCode) {
     val sql = new StringBuilder();
 
-             sql.append(" SELECT e.id, e.id_card, c.email, e.user_id, e.employee_code FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '")
-            .append(idCard)
-            .append("' AND ")
-            .append("c.email = '")
-            .append(email)
-            .append("' AND ")
-            .append("e.employee_code = '")
-            .append(employeeCode)
-            .append("'");
-
+    sql
+      .append(
+        " SELECT e.id, e.id_card, c.email, e.user_id, e.employee_code FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '"
+      )
+      .append(idCard)
+      .append("' AND ")
+      .append("c.email = '")
+      .append(email)
+      .append("' AND ")
+      .append("e.employee_code = '")
+      .append(employeeCode)
+      .append("'");
 
     return sql;
   }
@@ -61,7 +64,7 @@ public class LoginRepository {
     val sql = buildQuerySqlForgetPassword(email, idCard, employeeCode);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(ForgetPasswordDto.class));
-    }catch (EmptyResultDataAccessException e) {
+    } catch (EmptyResultDataAccessException e) {
       e.printStackTrace();
     }
     return null;

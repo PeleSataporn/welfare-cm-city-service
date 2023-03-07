@@ -34,7 +34,7 @@ public class EmailSenderService {
     String subject = "REGISTER CM CITY";
 
     SimpleMailMessage message = new SimpleMailMessage();
-    message.setFrom(sender);
+    message.setFrom("sound.nature.v1@gmail.com");
     message.setTo(toEmail);
     message.setText(text);
     message.setSubject(subject);

@@ -32,6 +32,13 @@ public class EmployeeService {
       throw new EmployeeException("Employee id not found");
     }
 
+    val employee = findEmployee.get();
+
+    //    EmpResemployee
+    //    for(val beneficiaries : employee.getBeneficiaries()){
+    //      beneficiaries.getGender()
+    //    }
+
     return findEmployee.get();
   }
 

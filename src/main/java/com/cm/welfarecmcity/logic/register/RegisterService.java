@@ -1,11 +1,13 @@
 package com.cm.welfarecmcity.logic.register;
 
+import com.cm.welfarecmcity.api.User.UserRepository;
 import com.cm.welfarecmcity.api.affiliation.AffiliationRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.position.PositionRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.dto.ContactDto;
 import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -36,6 +38,9 @@ public class RegisterService {
 
   @Autowired
   private RegisterRepository registerRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   private EmailSenderService emailSendService;
@@ -130,6 +135,12 @@ public class RegisterService {
     employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.ordinal());
     employee.setApproveFlag(req.getApproveFlag());
 
+    val user = new UserDto();
+    user.setUsername(employee.getEmployeeCode());
+    user.setPassword(employee.getIdCard());
+    val userTemp = userRepository.save(user);
+
+    employee.setUser(userTemp);
     val emp = employeeRepository.save(employee);
     emailSendService.sendSimpleEmail(employee.getContact().getEmail(), employee.getEmployeeCode(), employee.getIdCard());
 
