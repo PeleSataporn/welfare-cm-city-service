@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.logic.login;
 
 import com.cm.welfarecmcity.api.User.UserRepository;
+import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
@@ -25,6 +26,9 @@ public class LoginService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
+  @Autowired
+  private EmployeeRepository employeeRepository;
+
 
   public ResponseModel<ResponseId> login(UserDto dto) {
     val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
@@ -40,9 +44,14 @@ public class LoginService {
     Long idEmp = null;
     val changeForgetPassword = loginRepository.checkChangeForgetPassword(forgetPasswordDto.getEmail(), forgetPasswordDto.getIdCard(), forgetPasswordDto.getEmployeeCode());
     if(changeForgetPassword != null && changeForgetPassword.getUserId() != null){
+      // update password new
       UserDto emp = userRepository.findById(changeForgetPassword.getUserId()).get();
       emp.setPassword(forgetPasswordDto.getNewPassword());
       userRepository.save(emp);
+      // update password_flag
+      val findEmployee = employeeRepository.findById(changeForgetPassword.getUserId()).get();
+      findEmployee.setPasswordFlag(true);
+      employeeRepository.save(findEmployee);
       idEmp = changeForgetPassword.getId();
       resultStatus = "CHANGE_SUCCESS";
     }else{
