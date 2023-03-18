@@ -21,7 +21,7 @@ public class StockDetailDto extends BaseDto {
   private int stockValue;
 
   @Comment("เดือนที่ส่ง")
-  private int stockMonth;
+  private String stockMonth;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "stock_id")

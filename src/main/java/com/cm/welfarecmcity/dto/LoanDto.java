@@ -2,11 +2,10 @@ package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +27,9 @@ public class LoanDto extends BaseDto {
 
   @Comment("ดอกเบี้ย")
   private int interest;
+
+  @Comment("ดอกเบี้ย %")
+  private int interestPercent;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private GuarantorDto guarantorOne;

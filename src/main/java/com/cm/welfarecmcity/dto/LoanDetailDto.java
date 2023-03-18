@@ -18,13 +18,16 @@ public class LoanDetailDto extends BaseDto {
   private int installment;
 
   @Comment("เดือนที่ส่ง")
-  private int loanMonth;
+  private String loanMonth;
 
   @Comment("เงินกู้สามัญ")
   private int loanOrdinary;
 
   @Comment("ดอกเบี้ย")
   private int interest;
+
+  @Comment("ดอกเบี้ย %")
+  private int interestPercent;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "loan_id")
