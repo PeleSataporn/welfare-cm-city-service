@@ -13,8 +13,10 @@ public class RegisterReq {
   private String idCard;
   private String tel;
   private String email;
-  //   ตำแหน่ง
+  // ตำแหน่ง
   private Long positionId;
   // สังกัด
   private Long affiliationId;
+  // หน่วยงาน
+  private Long dapartmentId;
 }

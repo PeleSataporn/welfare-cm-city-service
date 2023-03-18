@@ -2,6 +2,7 @@ package com.cm.welfarecmcity.logic.register;
 
 import com.cm.welfarecmcity.api.affiliation.AffiliationRepository;
 import com.cm.welfarecmcity.api.contact.ContactRepository;
+import com.cm.welfarecmcity.api.department.DepartmentRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.position.PositionRepository;
 import com.cm.welfarecmcity.api.user.UserRepository;
@@ -54,6 +55,9 @@ public class RegisterService {
   @Autowired
   private GenerateListener generateListener;
 
+  @Autowired
+  private DepartmentRepository departmentRepository;
+
   //  @Transactional
   public Long setModelEmployee(RegisterReq req) {
     val contact = new ContactDto();
@@ -102,6 +106,9 @@ public class RegisterService {
 
     val affiliation = affiliationRepository.findById(req.getAffiliationId()).get();
     employee.setAffiliation(affiliation);
+
+    val department = departmentRepository.findById(req.getDapartmentId()).get();
+    employee.setDepartment(department);
 
     return employeeRepository.save(employee).getId();
   }

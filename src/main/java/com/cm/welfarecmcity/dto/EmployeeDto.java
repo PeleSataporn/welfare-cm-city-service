@@ -49,7 +49,7 @@ public class EmployeeDto extends BaseDto {
 
   @Comment("หน่วยงาน")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private DepartmentDto departmentDto;
+  private DepartmentDto department;
 
   @Column(columnDefinition = "double default 0.0")
   private double salary;
