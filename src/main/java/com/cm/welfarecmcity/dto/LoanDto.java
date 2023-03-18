@@ -6,26 +6,25 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @Table(name = "Loan")
 public class LoanDto extends BaseDto {
 
-  @Comment("เงินกู้(งวดที่)")
-  private int installment;
+  @Comment("เลขสัญญาเงินกู้")
+  private String loanNo;
 
   @Comment("มูลค่าเงินกู้")
-  private int loanValue;
+  private double loanValue;
+
+  @Comment("เงินกู้คงเหลือ")
+  private double loanBalance;
 
   @Comment("เวลากู้")
   private int loanTime;
-
-  @Comment("ดอกเบี้ย (เปอร์เซ็นต์)")
-  private int interestPercent;
-
-  @Comment("เงินกู้สามัญ")
-  private int loanOrdinary;
 
   @Comment("ดอกเบี้ย")
   private int interest;
@@ -35,4 +34,8 @@ public class LoanDto extends BaseDto {
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private GuarantorDto guarantorTwo;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "loan_id")
+  private List<LoanDetailDto> loanDetails;
 }
