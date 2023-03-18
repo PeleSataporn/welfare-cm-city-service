@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;

@@ -31,10 +31,12 @@ public class EmployeeDto extends BaseDto {
 
   @Comment("ตำแหน่ง")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  @JoinColumn(name = "position_id", referencedColumnName = "id")
   private PositionsDto position;
 
   @Comment("สังกัด")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  @JoinColumn(name = "affiliation_id", referencedColumnName = "id")
   private AffiliationDto affiliation;
 
   @Comment("ประเภทพนักงาน")
@@ -52,10 +54,10 @@ public class EmployeeDto extends BaseDto {
   private String compensation;
 
   @Comment("วันที่เริ่มทำงาน/วันที่เริมสัญญา (กรณีลูกจ้างรายวัน, ลูกจ้างโครงการเป็นต้น)")
-  private String contractStartDate;
+  private Date contractStartDate;
 
   @Comment("วันที่บรรจุเข้ารับราชการ")
-  private String civilServiceDate;
+  private Date civilServiceDate;
 
   private int employeeStatus;
 
@@ -65,9 +67,6 @@ public class EmployeeDto extends BaseDto {
   @Comment("เงินหุ้นรายเดือน (เป็นการแสดงผล)")
   @Column(columnDefinition = "double default 0.0")
   private Double monthlyStockMoney;
-
-  //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  //  private AddressDto address;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private ContactDto contact;
@@ -85,10 +84,10 @@ public class EmployeeDto extends BaseDto {
   private Date retirementDate;
 
   @Comment("เลขที่บัญชีธนาคารเงินเดือน (1 คน 1 บัญชี)")
-  private Date salaryBankAccountNumber;
+  private String salaryBankAccountNumber;
 
   @Comment("เลขที่บัญชีธนาคารรับเงิน (1 คน 1 บัญชี)")
-  private Date bankAccountReceivingNumber;
+  private String bankAccountReceivingNumber;
 
   private String reason;
   private String description;
@@ -102,6 +101,7 @@ public class EmployeeDto extends BaseDto {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "employee_id")
+  @OrderBy("create_date DESC")
   private List<BeneficiaryDto> beneficiaries;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

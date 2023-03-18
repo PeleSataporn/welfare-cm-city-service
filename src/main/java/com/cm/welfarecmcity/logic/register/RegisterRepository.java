@@ -54,6 +54,18 @@ public class RegisterRepository {
     return sql;
   }
 
+//  public StringBuilder insertRegisterEmpSql(String idCard) {
+//    val sql = new StringBuilder();
+//    sql
+//      .append(
+//        " INSERT INTO `employee` (`id`, `active`, `create_date`, `deleted`, `last_update`, `approve_flag`, `approved_resignation_date`, `bank_account_receiving_number`, `billing_start_date`, `birthday`, `civil_service_date`, `compensation`, `contract_start_date`, `date_of_death`, `description`, `employee_code`, `employee_status`, `first_name`, `gender`, `id_card`, `last_name`, `monthly_stock_money`, `prefix`, `reason`, `resignation_date`, `retirement_date`, `salary`, `salary_bank_account_number`, `affiliation_id`, `contact_id`, `employee_type_id`, `level_id`, `loan_id`, `marital`, `position_id`, `stock_id`, `user_id`, `password_flag`, `profile_flag`) "
+//      )
+//      .append(" VALUES( = '")
+//      .append(idCard)
+//      .append("'");
+//    return sql;
+//  }
+
   public List<SearchNewRegisterRes> searchNewRegister() {
     val sql = buildQuerySqlSearchNewRegister(false);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(SearchNewRegisterRes.class));

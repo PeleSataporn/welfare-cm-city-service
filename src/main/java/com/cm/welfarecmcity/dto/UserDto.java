@@ -14,6 +14,4 @@ public class UserDto extends BaseDto {
   private String username;
 
   private String password;
-
-  private Long id;
 }

@@ -1,12 +1,10 @@
 package com.cm.welfarecmcity.logic.login;
 
-import com.cm.welfarecmcity.api.User.UserRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
-import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
+import com.cm.welfarecmcity.api.user.UserRepository;
 import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
-import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.UserException;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
@@ -24,37 +22,46 @@ public class LoginService {
   private UserRepository userRepository;
 
   @Autowired
-  private ResponseDataUtils responseDataUtils;
-
-  @Autowired
   private EmployeeRepository employeeRepository;
 
+  @Autowired
+  private ResponseDataUtils responseDataUtils;
 
-  public ResponseModel<ResponseId> login(UserDto dto) {
+  public ResponseModel<Object> login(UserDto dto) {
     val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
 
     if (user == null) {
       throw new UserException("User not found.");
     }
-    return responseDataUtils.insertDataSuccess(user.getId());
+
+    val employee = employeeRepository.findById(user.getId());
+    val response = new ResponseModel<>();
+    response.setData(employee);
+
+    return response;
   }
 
-  public ResponseModel<ResponseData> changeForgetPassword(ForgetPasswordDto forgetPasswordDto){
+  public ResponseModel<ResponseData> changeForgetPassword(ForgetPasswordDto forgetPasswordDto) {
     String resultStatus = "";
     Long idEmp = null;
-    val changeForgetPassword = loginRepository.checkChangeForgetPassword(forgetPasswordDto.getEmail(), forgetPasswordDto.getIdCard(), forgetPasswordDto.getEmployeeCode());
-    if(changeForgetPassword != null && changeForgetPassword.getUserId() != null){
-      // update password new
+    val changeForgetPassword = loginRepository.checkChangeForgetPassword(
+      forgetPasswordDto.getEmail(),
+      forgetPasswordDto.getIdCard(),
+      forgetPasswordDto.getEmployeeCode()
+    );
+    if (changeForgetPassword != null && changeForgetPassword.getUserId() != null) {
       UserDto emp = userRepository.findById(changeForgetPassword.getUserId()).get();
       emp.setPassword(forgetPasswordDto.getNewPassword());
       userRepository.save(emp);
+
       // update password_flag
-      val findEmployee = employeeRepository.findById(changeForgetPassword.getUserId()).get();
+      val findEmployee = employeeRepository.findById(changeForgetPassword.getId()).get();
       findEmployee.setPasswordFlag(true);
       employeeRepository.save(findEmployee);
+
       idEmp = changeForgetPassword.getId();
       resultStatus = "CHANGE_SUCCESS";
-    }else{
+    } else {
       idEmp = null;
       resultStatus = "CHANGE_ERROR";
     }

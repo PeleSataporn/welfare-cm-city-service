@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.api.employee;
 
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
+import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
+import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
@@ -20,6 +22,12 @@ public class EmployeeService {
   private EmployeeRepository employeeRepository;
 
   @Autowired
+  private LevelRepository levelRepository;
+
+  @Autowired
+  private EmployeeTypeRepository employeeTypeRepository;
+
+  @Autowired
   private ResponseDataUtils responseDataUtils;
 
   @Autowired
@@ -32,13 +40,6 @@ public class EmployeeService {
       throw new EmployeeException("Employee id not found");
     }
 
-    val employee = findEmployee.get();
-
-    //    EmpResemployee
-    //    for(val beneficiaries : employee.getBeneficiaries()){
-    //      beneficiaries.getGender()
-    //    }
-
     return findEmployee.get();
   }
 
@@ -50,6 +51,18 @@ public class EmployeeService {
     }
 
     val employeeMapper = mapStructMapper.reqToEmployee(req);
+    employeeMapper.setBeneficiaries(findEmployee.get().getBeneficiaries());
+
+    if (req.getLevelId() != 0) {
+      employeeMapper.setLevel(levelRepository.findById(req.getLevelId()).get());
+    }
+
+    if (req.getEmployeeTypeId() != 0) {
+      employeeMapper.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
+    }
+
+    employeeMapper.setProfileFlag(true);
+
     employeeRepository.save(employeeMapper);
 
     return responseDataUtils.updateDataSuccess(req.getId());

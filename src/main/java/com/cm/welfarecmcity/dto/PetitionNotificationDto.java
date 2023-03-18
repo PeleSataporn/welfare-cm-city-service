@@ -10,10 +10,11 @@ import lombok.Setter;
 @Setter
 @Table(name = "PetitionNotification")
 public class PetitionNotificationDto extends BaseDto {
-    private String reason;
-    private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private EmployeeDto employee;
+  private String reason;
+  private String description;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "employee_id")
+  private EmployeeDto employee;
 }

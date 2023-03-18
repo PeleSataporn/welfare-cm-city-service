@@ -15,12 +15,12 @@ import org.springframework.data.annotation.AccessType;
 @Setter
 @MappedSuperclass
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BaseDto {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @AccessType(AccessType.Type.PROPERTY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Temporal(TemporalType.TIMESTAMP)

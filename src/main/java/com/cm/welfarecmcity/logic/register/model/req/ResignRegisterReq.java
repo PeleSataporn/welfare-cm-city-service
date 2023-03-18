@@ -5,8 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterReq {
+public class ResignRegisterReq {
 
+  private long id;
   private int prefix;
   private String firstName;
   private String lastName;

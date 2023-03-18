@@ -24,12 +24,7 @@ public class EmployeeController {
   }
 
   @PatchMapping
-  //@RequestMapping(path = "{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseModel<ResponseId> updateEmp(@RequestBody EmpEditReq req) {
     return employeeService.updateEmp(req);
   }
-  //  @GetMapping("{id}")
-  //  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable Long id) {
-  //    EmployeeDto
-  //  }
 }

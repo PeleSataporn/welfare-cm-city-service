@@ -6,9 +6,11 @@ import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.register.model.req.ApproveRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.CancelRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
+import com.cm.welfarecmcity.logic.register.model.req.ResignRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +20,7 @@ public class RegisterController {
   @Autowired
   private RegisterService registerService;
 
+  //  @Transactional
   @PostMapping("/add-employee")
   public ResponseModel<ResponseData> addEmployee(@RequestBody RegisterReq req) {
     return registerService.addEmployee(req);
@@ -42,12 +45,13 @@ public class RegisterController {
   public ResponseModel<ResponseId> cancelApproveRegister(@RequestBody CancelRegisterReq req) {
     return registerService.cancelApproveRegister(req);
   }
-  //  @PutMapping("/editStatusEmployeeResign")
-  //  public ResponseModel<ResponseData> editStatusEmployeeResign(@RequestBody RegisterReq req) {
-  //    try {
-  //      return registerService.editStatusEmployeeResign(req);
-  //    } catch (Exception e) {
-  //      return null;
-  //    }
-  //  }
+
+  @PutMapping("/editStatusEmployeeResign")
+  public ResponseModel<ResponseData> editStatusEmployeeResign(@RequestBody ResignRegisterReq req) {
+    try {
+      return registerService.editStatusEmployeeResign(req);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }
