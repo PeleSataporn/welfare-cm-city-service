@@ -69,4 +69,16 @@ public class EmpEditReq {
   private String bankAccountReceivingNumber;
 
   private UserDto user;
+
+  private LoanDto loan;
+
+  private StockDto stock;
+
+  private DepartmentDto department;
+
+  private Boolean approveFlag;
+
+  private Boolean passwordFlag;
+
+  private Boolean profileFlag;
 }

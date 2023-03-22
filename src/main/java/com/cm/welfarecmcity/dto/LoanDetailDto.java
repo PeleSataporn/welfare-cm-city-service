@@ -20,6 +20,9 @@ public class LoanDetailDto extends BaseDto {
   @Comment("เดือนที่ส่ง")
   private String loanMonth;
 
+  @Comment("ปีที่ส่ง")
+  private String loanYear;
+
   @Comment("เงินกู้สามัญ")
   private int loanOrdinary;
 

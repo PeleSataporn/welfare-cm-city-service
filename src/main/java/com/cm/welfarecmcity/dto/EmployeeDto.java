@@ -26,17 +26,12 @@ public class EmployeeDto extends BaseDto {
 
   private Date birthday;
 
-  //  @Column(columnDefinition = "integer default 0")
-  //  private int age = 0;
-
   @Comment("ตำแหน่ง")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  //  @JoinColumn(name = "position_id", referencedColumnName = "id")
   private PositionsDto position;
 
   @Comment("สังกัด")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  //  @JoinColumn(name = "affiliation_id", referencedColumnName = "id")
   private AffiliationDto affiliation;
 
   @Comment("ประเภทพนักงาน")

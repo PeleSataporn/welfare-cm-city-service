@@ -87,12 +87,76 @@ public class RegisterService {
         employee.setPrefix("นาง");
         employee.setGender("หญิง");
       }
-      case 4 -> {
-        employee.setPrefix("ว่าที่ร้อยตรี (ชาย)");
+      case 6 -> {
+        employee.setPrefix("ว่าที่ร้อยตรี");
         employee.setGender("ชาย");
       }
-      case 5 -> {
-        employee.setPrefix("ว่าที่ร้อยตรี (หญิง)");
+      case 7 -> {
+        employee.setPrefix("ว่าที่ร้อยตรีหญิง");
+        employee.setGender("หญิง");
+      }
+      case 8 -> {
+        employee.setPrefix("ว่าที่ร้อยโท");
+        employee.setGender("ชาย");
+      }
+      case 9 -> {
+        employee.setPrefix("ว่าที่ร้อยโทหญิง");
+        employee.setGender("หญิง");
+      }
+      case 10 -> {
+        employee.setPrefix("ว่าที่ร้อยเอก");
+        employee.setGender("ชาย");
+      }
+      case 11 -> {
+        employee.setPrefix("ว่าที่ร้อยเอกหญิง");
+        employee.setGender("หญิง");
+      }
+      case 12 -> {
+        employee.setPrefix("สิบตรี");
+        employee.setGender("ชาย");
+      }
+      case 13 -> {
+        employee.setPrefix("สิบตรีหญิง");
+        employee.setGender("หญิง");
+      }
+      case 14 -> {
+        employee.setPrefix("สิบโท");
+        employee.setGender("ชาย");
+      }
+      case 15 -> {
+        employee.setPrefix("สิบโทหญิง");
+        employee.setGender("หญิง");
+      }
+      case 16 -> {
+        employee.setPrefix("สิบเอก");
+        employee.setGender("ชาย");
+      }
+      case 17 -> {
+        employee.setPrefix("สิบเอกหญิง");
+        employee.setGender("หญิง");
+      }
+      case 18 -> {
+        employee.setPrefix("จ่าสิบตรี");
+        employee.setGender("ชาย");
+      }
+      case 19 -> {
+        employee.setPrefix("จ่าสิบตรีหญิง");
+        employee.setGender("หญิง");
+      }
+      case 20 -> {
+        employee.setPrefix("จ่าสิบโท");
+        employee.setGender("ชาย");
+      }
+      case 21 -> {
+        employee.setPrefix("จ่าสิบโทหญิง");
+        employee.setGender("หญิง");
+      }
+      case 22 -> {
+        employee.setPrefix("จ่าสิบเอก");
+        employee.setGender("ชาย");
+      }
+      case 23 -> {
+        employee.setPrefix("จ่าสิบเอกหญิง");
         employee.setGender("หญิง");
       }
       default -> {
