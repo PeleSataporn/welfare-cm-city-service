@@ -13,7 +13,10 @@ public enum EmployeeStatusEnum {
   // ลาออก
   RESIGN_EMPLOYEE(3),
 
-  ERROR_EMPLOYEE(4);
+  ERROR_EMPLOYEE(4),
+
+  // รออนุมัติลาออก
+  PENDING_RESIGN_EMPLOYEE(5);
 
   private final int state;
 

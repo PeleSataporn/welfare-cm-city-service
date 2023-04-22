@@ -109,9 +109,9 @@ public class EmployeeDto extends BaseDto {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private LoanDto loan;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "employee_id")
-  private List<PetitionNotificationDto> PetitionNotifications;
+  //  @OneToMany(cascade = CascadeType.ALL)
+  //  @JoinColumn(name = "employee_id")
+  //  private List<PetitionNotificationDto> petitionNotifications;
 
   private Boolean approveFlag;
 

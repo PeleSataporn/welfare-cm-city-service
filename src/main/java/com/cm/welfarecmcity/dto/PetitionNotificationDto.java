@@ -11,6 +11,7 @@ import lombok.Setter;
 @Table(name = "PetitionNotification")
 public class PetitionNotificationDto extends BaseDto {
 
+  private int status;
   private String reason;
   private String description;
 

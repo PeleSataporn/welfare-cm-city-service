@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.stock;
 
+import com.cm.welfarecmcity.api.stock.model.UpdateStockReq;
 import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -18,8 +19,9 @@ public class StockController {
     return stockService.add(dto);
   }
 
-//  @GetMapping
-//  public String add() {
-//    return "Hello World";
-//  }
+  @PatchMapping
+  public ResponseModel<ResponseId> update(@RequestBody UpdateStockReq req) {
+    return stockService.update(req);
+  }
+
 }

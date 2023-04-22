@@ -19,14 +19,12 @@ public class LoginRepository {
     val sql = new StringBuilder();
 
     sql
-      .append(
-        " SELECT employee.id AS id, username, password FROM " + " employee JOIN user ON user.id = employee.user_id " + " WHERE username = '"
-      )
+      .append(" SELECT employee.id AS id, username, password FROM employee JOIN user ON user.id = employee.user_id  WHERE username = '")
       .append(username)
       .append("' AND ")
       .append("password = '")
       .append(password)
-      .append("'");
+      .append("' AND employee.employee_status in (2,5) ");
 
     return sql;
   }

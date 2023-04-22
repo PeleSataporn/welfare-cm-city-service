@@ -15,7 +15,6 @@ import org.hibernate.annotations.Comment;
 @Table(name = "Beneficiary")
 public class BeneficiaryDto extends BaseDto {
 
-//  private Long id;
   private String prefix;
   private String firstName;
   private String lastName;
