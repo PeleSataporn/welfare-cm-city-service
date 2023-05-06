@@ -9,4 +9,5 @@ public class ApproveRegisterReq {
 
   private Long id;
   private Boolean approveFlag;
+  private Long noId;
 }

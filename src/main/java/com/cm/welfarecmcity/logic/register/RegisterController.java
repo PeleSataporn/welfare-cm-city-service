@@ -20,7 +20,6 @@ public class RegisterController {
   @Autowired
   private RegisterService registerService;
 
-  //  @Transactional
   @PostMapping("/add-employee")
   public ResponseModel<ResponseData> addEmployee(@RequestBody RegisterReq req) {
     return registerService.addEmployee(req);

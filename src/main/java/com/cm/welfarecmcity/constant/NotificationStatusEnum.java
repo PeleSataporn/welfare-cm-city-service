@@ -7,7 +7,9 @@ public enum NotificationStatusEnum {
   // ลาออก
   RESIGN(1),
   // หุ้นสะสม
-  STOCK_ACCUMULATE(2);
+  STOCK_ACCUMULATE(2),
+  // สมัคร
+  REGISTER(3);
 
   private final int state;
 

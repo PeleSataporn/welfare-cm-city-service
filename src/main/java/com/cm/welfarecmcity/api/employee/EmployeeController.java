@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.employee;
 
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
+import com.cm.welfarecmcity.api.employee.model.UpdateAdminReq;
 import com.cm.welfarecmcity.api.employee.model.UpdateResignReq;
 import com.cm.welfarecmcity.api.employee.model.UpdateStockValueReq;
 import com.cm.welfarecmcity.dto.EmployeeDto;
@@ -33,6 +34,11 @@ public class EmployeeController {
   @PatchMapping("/update-resign")
   public ResponseModel<ResponseId> updateResign(@RequestBody UpdateResignReq req) {
     return employeeService.updateResign(req);
+  }
+
+  @PatchMapping("/update-resign-admin")
+  public ResponseModel<ResponseId> updateResignAdmin(@RequestBody UpdateAdminReq req) {
+    return employeeService.updateResignAdmin(req);
   }
 
   @PatchMapping("/update-stock-value")

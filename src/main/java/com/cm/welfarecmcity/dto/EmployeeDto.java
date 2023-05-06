@@ -65,7 +65,7 @@ public class EmployeeDto extends BaseDto {
 
   @Comment("เงินหุ้นรายเดือน (เป็นการแสดงผล)")
   @Column(columnDefinition = "double default 0.0")
-  private Double monthlyStockMoney;
+  private int monthlyStockMoney;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private ContactDto contact;

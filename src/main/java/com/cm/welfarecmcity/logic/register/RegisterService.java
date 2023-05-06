@@ -4,9 +4,11 @@ import com.cm.welfarecmcity.api.affiliation.AffiliationRepository;
 import com.cm.welfarecmcity.api.contact.ContactRepository;
 import com.cm.welfarecmcity.api.department.DepartmentRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.position.PositionRepository;
 import com.cm.welfarecmcity.api.user.UserRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
+import com.cm.welfarecmcity.constant.NotificationStatusEnum;
 import com.cm.welfarecmcity.dto.*;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
@@ -57,6 +59,9 @@ public class RegisterService {
 
   @Autowired
   private DepartmentRepository departmentRepository;
+
+  @Autowired
+  private NotificationRepository notificationRepository;
 
   //  @Transactional
   public Long setModelEmployee(RegisterReq req) {
@@ -174,10 +179,19 @@ public class RegisterService {
     val department = departmentRepository.findById(req.getDapartmentId()).get();
     employee.setDepartment(department);
 
-    return employeeRepository.save(employee).getId();
+    val empTemp = employeeRepository.save(employee);
+
+    // notify
+    val notify = new PetitionNotificationDto();
+    notify.setStatus(NotificationStatusEnum.REGISTER.getState());
+    notify.setReason("สมัครเข้าใช้งานระบบ");
+    notify.setEmployee(empTemp);
+
+    notificationRepository.save(notify);
+
+    return empTemp.getId();
   }
 
-  //  @Transactional
   public ResponseModel<ResponseData> addEmployee(RegisterReq req) {
     String resultStatus = "";
     Long idEmp = null;
@@ -218,7 +232,7 @@ public class RegisterService {
     }
     val employee = findEmployee.get();
     employee.setEmployeeCode(generateListener.generateCustomerCode());
-    employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.ordinal());
+    employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.getState());
     employee.setApproveFlag(req.getApproveFlag());
 
     val user = new UserDto();
@@ -229,6 +243,10 @@ public class RegisterService {
     employee.setUser(userTemp);
     val emp = employeeRepository.save(employee);
     emailSendService.sendSimpleEmail(employee.getContact().getEmail(), employee.getEmployeeCode(), employee.getIdCard());
+
+    // notify
+    val notify = notificationRepository.findById(req.getNoId()).get();
+    notificationRepository.delete(notify);
 
     return responseDataUtils.insertDataSuccess(req.getId());
   }

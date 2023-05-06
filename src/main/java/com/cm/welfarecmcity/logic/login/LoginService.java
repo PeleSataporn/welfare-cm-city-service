@@ -6,7 +6,9 @@ import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.exception.entity.UserException;
+import com.cm.welfarecmcity.logic.login.model.LoginRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,24 @@ public class LoginService {
       throw new UserException("User not found.");
     }
 
-    val employee = employeeRepository.findById(user.getId());
+    val findEmployee = employeeRepository.findById(user.getId());
+
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee not found.");
+    }
+
+    val employee = findEmployee.get();
+
+    //    if (employee.getEmployeeStatus() == 2 || employee.getEmployeeStatus() == 5) {
+    //      response.setData(employee);
+    //    } else {}
+    val res = new LoginRes();
+    res.setId(employee.getId());
+    res.setEmployeeStatus(employee.getEmployeeStatus());
+    res.setPasswordFlag(employee.getPasswordFlag());
+
     val response = new ResponseModel<>();
-    response.setData(employee);
+    response.setData(res);
 
     return response;
   }

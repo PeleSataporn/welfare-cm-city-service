@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.employee;
 
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
+import com.cm.welfarecmcity.api.employee.model.UpdateAdminReq;
 import com.cm.welfarecmcity.api.employee.model.UpdateResignReq;
 import com.cm.welfarecmcity.api.employee.model.UpdateStockValueReq;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
@@ -100,6 +101,32 @@ public class EmployeeService {
     notify.setEmployee(employee);
 
     notificationRepository.save(notify);
+
+    return responseDataUtils.updateDataSuccess(req.getId());
+  }
+
+  @Transactional
+  public ResponseModel<ResponseId> updateResignAdmin(UpdateAdminReq req) {
+    val findEmployee = employeeRepository.findById(req.getId());
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee id not found");
+    }
+
+    val employee = findEmployee.get();
+
+    if (req.getType() == 1) {
+      employee.setEmployeeStatus(EmployeeStatusEnum.RESIGN_EMPLOYEE.getState());
+      employee.setApprovedResignationDate(new Date());
+    } else {
+      employee.setMonthlyStockMoney(Integer.parseInt(req.getValue()));
+      employee.getStock().setStockValue(Integer.parseInt(req.getValue()));
+    }
+
+    // notify
+    val notify = notificationRepository.findById(req.getNoId()).get();
+    notificationRepository.delete(notify);
+
+    employeeRepository.save(employee);
 
     return responseDataUtils.updateDataSuccess(req.getId());
   }

@@ -24,7 +24,8 @@ public class LoginRepository {
       .append("' AND ")
       .append("password = '")
       .append(password)
-      .append("' AND employee.employee_status in (2,5) ");
+      .append("'");
+    //      .append("' AND employee.employee_status in (2,5) ");
 
     return sql;
   }
@@ -34,9 +35,11 @@ public class LoginRepository {
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(UserDto.class));
     } catch (EmptyResultDataAccessException e) {
-      e.printStackTrace();
+      //      e.printStackTrace();
+      return null;
     }
-    return null;
+    //    return null;
+    //    return jdbcTemplate.queryForObject(sql.toString(), UserDto.class);
   }
 
   public StringBuilder buildQuerySqlForgetPassword(String email, String idCard, String employeeCode) {
