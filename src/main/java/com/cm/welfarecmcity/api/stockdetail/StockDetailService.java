@@ -2,10 +2,12 @@ package com.cm.welfarecmcity.api.stockdetail;
 
 import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+import com.cm.welfarecmcity.utils.orderby.SortOrderBy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 @Service
 public class StockDetailService {
@@ -16,7 +18,10 @@ public class StockDetailService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
-  public List<StockDetailDto> getStockDetail(Long stockId) {
-    return stockDetailRepository.findAllByStock_Id(stockId);
+  @Autowired
+  private SortOrderBy sort;
+
+  public List<StockDetailDto> getStockDetail(Long stockId, String value) {
+    return stockDetailRepository.findAllByStock_Id(stockId, Sort.by(sort.orderBy(value), "installment"));
   }
 }
