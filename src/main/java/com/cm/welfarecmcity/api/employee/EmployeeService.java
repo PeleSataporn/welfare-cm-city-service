@@ -7,6 +7,7 @@ import com.cm.welfarecmcity.api.employee.model.UpdateStockValueReq;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
 import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
+import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
 import com.cm.welfarecmcity.dto.EmployeeDto;
@@ -31,6 +32,9 @@ public class EmployeeService {
 
   @Autowired
   private LevelRepository levelRepository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Autowired
   private EmployeeTypeRepository employeeTypeRepository;
@@ -70,6 +74,19 @@ public class EmployeeService {
 
     if (req.getEmployeeTypeId() != 0) {
       employeeMapper.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
+    }
+
+    if (employeeMapper.getStock() != null) {
+      val stock = employeeMapper.getStock();
+      stock.setStockValue(req.getMonthlyStockMoney().intValue());
+      val listStockDetails = stock.getStockDetails();
+      listStockDetails.forEach(stockDetail -> stockDetail.setStock(stock));
+    }
+
+    if (employeeMapper.getLoan() != null) {
+      val loan = employeeMapper.getLoan();
+      val listLoanDetails = loan.getLoanDetails();
+      listLoanDetails.forEach(loanDetail -> loanDetail.setLoan(loan));
     }
 
     employeeMapper.setProfileFlag(true);

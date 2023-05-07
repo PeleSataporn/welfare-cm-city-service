@@ -19,6 +19,7 @@ public class EmpEditReq {
   private String lastName;
   private String idCard;
   private String gender;
+  private int employeeStatus;
 
   @Comment("สถานภาพสมรส")
   private String marital;

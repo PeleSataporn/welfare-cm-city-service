@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,7 @@ public class EmployeeDto extends BaseDto {
 
   @Comment("หน่วยงาน")
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   private DepartmentDto department;
 
   @Column(columnDefinition = "double default 0.0")
