@@ -45,4 +45,9 @@ public class EmployeeController {
   public ResponseModel<ResponseId> updateStockValue(@RequestBody UpdateStockValueReq req) {
     return employeeService.updateStockValue(req);
   }
+
+  @GetMapping("test-host")
+  public String testHost() {
+    return "-- > Test Host <--";
+  }
 }
