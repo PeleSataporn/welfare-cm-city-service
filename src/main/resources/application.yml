@@ -35,17 +35,9 @@ spring:
           starttls:
             enable: true
             required: true
-#    scheduler:
-#      persistence:
-#        enabled: true
-#        redis:
-#          embedded: true
-#          enabled: false
 
 management:
   endpoints:
     web:
       exposure:
         include: mappings
-
-
