@@ -12,7 +12,6 @@ import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
 import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
-import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
@@ -157,17 +156,9 @@ public class EmployeeService {
 
     val employee = findEmployee.get();
 
-    //    employee.setEmployeeStatus(EmployeeStatusEnum.PENDING_RESIGN_EMPLOYEE.getState());
-    //    employee.setResignationDate(new Date());
-    //    employee.setReason(req.getReason());
-    //
-    //    employeeRepository.save(employee);
-
     // notify
     val notify = new PetitionNotificationDto();
     notify.setStatus(NotificationStatusEnum.STOCK_ACCUMULATE.getState());
-    //    val ss = (String) req.getStockValue();
-    //    Integer.toString(your_int_value);
 
     notify.setReason(Integer.toString(req.getStockValue()));
     notify.setEmployee(employee);

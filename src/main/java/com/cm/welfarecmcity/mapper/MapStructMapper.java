@@ -8,10 +8,4 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", config = BaseMapperConfig.class)
 public interface MapStructMapper {
   EmployeeDto reqToEmployee(EmpEditReq req);
-  //  StockRes stockRes(StockDto dto);
-  //
-  //  EmployeeRes employeeRes(EmployeeDto dto);
-
-  //  @Mapping(target = "id", ignore = true)
-  //  BeneficiaryDto reqToBeneficiary(BeneficiaryDto req);
 }

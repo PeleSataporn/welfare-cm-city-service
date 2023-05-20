@@ -23,6 +23,8 @@ import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import com.cm.welfarecmcity.utils.listener.GenerateListener;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,13 +65,11 @@ public class RegisterService {
   @Autowired
   private NotificationRepository notificationRepository;
 
-  //  @Transactional
+  @Transactional
   public Long setModelEmployee(RegisterReq req) {
     val contact = new ContactDto();
     contact.setTel(req.getTel());
     contact.setEmail(req.getEmail());
-
-    //    val contactcontactRepository.save(contact);
 
     val employee = new EmployeeDto();
     employee.setIdCard(req.getIdCard());
@@ -192,6 +192,7 @@ public class RegisterService {
     return empTemp.getId();
   }
 
+  @Transactional
   public ResponseModel<ResponseData> addEmployee(RegisterReq req) {
     String resultStatus = "";
     Long idEmp = null;
@@ -225,6 +226,7 @@ public class RegisterService {
     return responseDataUtils.DataResourceJson(resultStatus, idEmp);
   }
 
+  @Transactional
   public ResponseModel<ResponseId> approveRegister(ApproveRegisterReq req) {
     val findEmployee = employeeRepository.findById(req.getId());
     if (findEmployee.isEmpty()) {
@@ -251,6 +253,7 @@ public class RegisterService {
     return responseDataUtils.insertDataSuccess(req.getId());
   }
 
+  @Transactional
   public List<SearchNewRegisterRes> searchNewRegister() {
     val listNewRegister = registerRepository.searchNewRegister();
     if (listNewRegister.isEmpty()) {
@@ -260,10 +263,12 @@ public class RegisterService {
     return listNewRegister;
   }
 
+  @Transactional
   public Integer countNewRegister() {
     return registerRepository.countNewRegister();
   }
 
+  @Transactional
   public ResponseModel<ResponseId> cancelApproveRegister(CancelRegisterReq req) {
     val findEmployee = employeeRepository.findById(req.getId());
     if (findEmployee.isEmpty()) {
@@ -277,6 +282,7 @@ public class RegisterService {
     return responseDataUtils.deleteDataSuccess(req.getId());
   }
 
+  @Transactional
   public ResponseModel<ResponseData> editStatusEmployeeResign(ResignRegisterReq req) {
     String resultStatus = "";
     Long idEmp = null;

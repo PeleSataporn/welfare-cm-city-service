@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.email;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,6 +16,7 @@ public class EmailSenderService {
   @Value("${spring.mail.username}")
   private String sender;
 
+  @Transactional
   public void sendSimpleEmail(String toEmail, String empCode, String idCard) {
     String text = "Username: " + empCode + "\nPassword: " + idCard;
     String subject = "REGISTER CM CITY";
@@ -29,6 +31,7 @@ public class EmailSenderService {
     System.out.println("Mail Send...");
   }
 
+  @Transactional
   public void sendSimpleEmailCancel(String toEmail, String remark) {
     String text = "ปฎิเสษคำขอการสมัครสมาชิก\n" + "\nรายละเอียดการปฎิเสษ: " + remark;
     String subject = "REGISTER CM CITY";

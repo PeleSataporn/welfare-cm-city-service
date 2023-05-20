@@ -23,6 +23,7 @@ public class BeneficiaryService {
   @Autowired
   private MapStructMapper mapStructMapper;
 
+  @Transactional
   public ResponseModel<ResponseId> add(BeneficiaryDto dto) {
     val beneficiary = beneficiaryRepository.save(dto);
     return responseDataUtils.insertDataSuccess(beneficiary.getId());

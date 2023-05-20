@@ -10,6 +10,7 @@ import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.exception.entity.UserException;
 import com.cm.welfarecmcity.logic.login.model.LoginRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
+import jakarta.transaction.Transactional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class LoginService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
+  @Transactional
   public ResponseModel<Object> login(UserDto dto) {
     val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
 
@@ -44,9 +46,6 @@ public class LoginService {
 
     val employee = findEmployee.get();
 
-    //    if (employee.getEmployeeStatus() == 2 || employee.getEmployeeStatus() == 5) {
-    //      response.setData(employee);
-    //    } else {}
     val res = new LoginRes();
     res.setId(employee.getId());
     res.setEmployeeStatus(employee.getEmployeeStatus());
@@ -58,6 +57,7 @@ public class LoginService {
     return response;
   }
 
+  @Transactional
   public ResponseModel<ResponseData> changeForgetPassword(ForgetPasswordDto forgetPasswordDto) {
     String resultStatus = "";
     Long idEmp = null;
