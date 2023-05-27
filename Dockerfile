@@ -16,7 +16,7 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 RUN mvn clean package
-COPY target/booting-web-${VERSION}.jar target/application.jar
+COPY target/welfare-cm-city-${VERSION}.jar target/application.jar
 
 FROM openjdk:11.0.19-jre-slim
 WORKDIR /app/
