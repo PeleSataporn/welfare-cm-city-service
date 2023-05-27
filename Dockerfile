@@ -1,13 +1,13 @@
-#FROM maven:3.8.3-openjdk-17 AS build
-#WORKDIR /app
-#COPY . /app/
-#RUN mvn clean package
-#
-#FROM openjdk:17-jdk-alpine
-#WORKDIR /app
-#EXPOSE 8787
-#COPY --from=build /app/target/*.jar /app/app.jar
-#ENTRYPOINT ["java","-jar","app.jar"]
+FROM maven:3.8.3-openjdk-17 AS build
+WORKDIR /app
+COPY . /app/
+RUN mvn clean package
+
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+EXPOSE 8787
+COPY --from=build /app/target/*.jar /app/app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
 
 #FROM maven:3.6.3-openjdk-11-slim as BUILDER
 #ARG VERSION=0.0.1-SNAPSHOT
@@ -84,19 +84,19 @@
 #ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
 
 # Use a base image with Java installed
-FROM openjdk:11-jdk-slim
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the application JAR file into the container
-COPY welfare-cm-city-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the port that the application listens on
-EXPOSE 8787
-
-# Set any necessary environment variables
-ENV JAVA_OPTS=""
-
-# Run the application when the container starts
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#FROM openjdk:11-jdk-slim
+#
+## Set the working directory in the container
+#WORKDIR /app
+#
+## Copy the application JAR file into the container
+#COPY welfare-cm-city-0.0.1-SNAPSHOT.jar app.jar
+#
+## Expose the port that the application listens on
+#EXPOSE 8787
+#
+## Set any necessary environment variables
+#ENV JAVA_OPTS=""
+#
+## Run the application when the container starts
+#ENTRYPOINT ["java", "-jar", "app.jar"]
