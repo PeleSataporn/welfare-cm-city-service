@@ -1,9 +1,9 @@
-FROM maven:3.6.3-openjdk:11-jdk-slim AS build
+FROM maven:3.6.3-openjdk-11 AS build
 WORKDIR /app
 COPY . /app/
 RUN mvn clean package
 
-FROM openjdk:11-jdk-slim
+FROM openjdk-11-slim
 WORKDIR /app
 EXPOSE 8787
 COPY --from=build /app/target/*.jar /app/app.jar
