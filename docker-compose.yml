@@ -1,16 +1,8 @@
-version: '3.8'
+version: '3'
 services:
-  server:
-    build: .
-    restart: always
-    ports:
-      - '8787:8787'
-    depends_on:
-      - db
   db:
     container_name: db
     image: mariadb:10.6.5
-    restart: always
     ports:
       - '3306:3306'
     environment:
@@ -18,8 +10,16 @@ services:
       - MARIADB_USER=root
       - MARIADB_PASSWORD=icoop.cmcity@2023
       - MARIADB_ROOT_PASSWORD=icoop.cmcity@2023
+      - MARIADB_ROOT_HOST=%
     volumes:
       - db:/var/lib/mysql
+
+  app:
+    build: .
+    ports:
+      - '8787:8787'
+    depends_on:
+      - db
 
 volumes:
   db:
