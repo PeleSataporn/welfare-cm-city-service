@@ -21,5 +21,27 @@ COPY target/welfare-cm-city-${VERSION}.jar target/application.jar
 FROM openjdk:11.0.19-jre-slim
 WORKDIR /app/
 
+# Expose the port that the Spring Boot application listens on
+EXPOSE 8787
+
 COPY --from=BUILDER /build/target/application.jar /app/
 CMD java -jar /app/application.jar
+
+
+## Use a base image with Java installed
+#FROM openjdk:11-jdk-slim
+#
+## Set the working directory in the container
+#WORKDIR /app
+#
+## Copy the Spring Boot application JAR file into the container
+#COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar app.jar
+#
+## Expose the port that the Spring Boot application listens on
+#EXPOSE 8787
+#
+## Set any necessary environment variables
+##ENV JAVA_OPTS=""
+#
+## Run the Spring Boot application when the container starts
+#ENTRYPOINT ["java", "-jar", "app.jar"]
