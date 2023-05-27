@@ -4,7 +4,7 @@ server:
   port: 8787
   tomcat:
     relaxed-query-chars: '|,{,},[,]'
-
+ 
 spring:
   jackson:
     default-property-inclusion: non_null
