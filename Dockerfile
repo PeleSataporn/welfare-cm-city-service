@@ -1,13 +1,13 @@
-#FROM maven:3.8.3-openjdk-17 AS build
-#WORKDIR /app
-#COPY . /app/
-#RUN mvn clean package
-#
-#FROM openjdk:17-jdk-alpine
-#WORKDIR /app
-#EXPOSE 8787
-#COPY --from=build /app/target/*.jar /app/app.jar
-#ENTRYPOINT ["java","-jar","app.jar"]
+FROM maven:3.6.3-openjdk:11-jdk-slim AS build
+WORKDIR /app
+COPY . /app/
+RUN mvn clean package
+
+FROM openjdk:11-jdk-slim
+WORKDIR /app
+EXPOSE 8787
+COPY --from=build /app/target/*.jar /app/app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
 
 #FROM maven:3.6.3-openjdk-11-slim as BUILDER
 #ARG VERSION=0.0.1-SNAPSHOT
@@ -66,19 +66,19 @@
 
 
 # Use official base image of Java Runtim
-FROM openjdk:11-jdk-slim
-
-# Set volume point to /tmp
-VOLUME /tmp
-
-# Make port 8080 available to the world outside container
-EXPOSE 8080
-
-# Set application's JAR file
-ARG JAR_FILE=target/welfare-cm-city-0.0.1-SNAPSHOT.jar
-
-# Add the application's JAR file to the container
-ADD ${JAR_FILE} app.jar
-
-# Run the JAR file
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
+#FROM openjdk:11-jdk-slim
+#
+## Set volume point to /tmp
+#VOLUME /tmp
+#
+## Make port 8080 available to the world outside container
+#EXPOSE 8080
+#
+## Set application's JAR file
+#ARG JAR_FILE=target/welfare-cm-city-0.0.1-SNAPSHOT.jar
+#
+## Add the application's JAR file to the container
+#ADD ${JAR_FILE} app.jar
+#
+## Run the JAR file
+#ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
