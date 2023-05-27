@@ -4,7 +4,7 @@ server:
   port: 8787
   tomcat:
     relaxed-query-chars: '|,{,},[,]'
- 
+
 spring:
   jackson:
     default-property-inclusion: non_null
@@ -12,7 +12,7 @@ spring:
     driverClassName: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://203.159.93.121:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
     username: root
-    password: root
+    password: icoop.cmcity@2023
     hikari:
       auto-commit: false
     initialization-mode: always
