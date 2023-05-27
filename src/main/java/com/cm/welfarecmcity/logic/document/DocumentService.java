@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
 import com.cm.welfarecmcity.logic.document.model.DocumentV2Res;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
@@ -34,4 +35,10 @@ public class DocumentService {
 
     return res;
   }
+
+  @Transactional
+  public List<DocumentInfoAllRes> documentInfoAll() {
+    return documentRepository.documentInfoAll();
+  }
+
 }

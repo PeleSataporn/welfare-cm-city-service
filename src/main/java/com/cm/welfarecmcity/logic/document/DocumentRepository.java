@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
 import com.cm.welfarecmcity.logic.document.model.DocumentV2Res;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
@@ -82,5 +83,25 @@ public class DocumentRepository {
   public GrandTotalRes grandTotal() {
     val sql = buildQuerySqlGrandTotal();
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder sqlDocumentInfoAll() {
+    val sql = new StringBuilder();
+    sql.append(
+      " SELECT employee.employee_code, CONCAT(employee.first_name,' ', employee.last_name) AS fullName, employee.create_date as regisDate, department.name as departmentName, " +
+      " employee_type.name as employeeTypeName, positions.name as positionsName, employee.salary, stock.stock_value, stock.stock_accumulate, loan.loan_value, loan.loan_time, loan.interest_percent " +
+      " FROM employee LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) " +
+      " LEFT JOIN employee_type ON (employee.employee_type_id = employee_type.id AND employee_type.deleted = FALSE) " +
+      " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
+      " LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
+      " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
+      " WHERE employee.deleted = FALSE "
+    );
+    return sql;
+  }
+
+  public List<DocumentInfoAllRes> documentInfoAll() {
+    val sql = sqlDocumentInfoAll();
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
 }

@@ -1,9 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
-import com.cm.welfarecmcity.logic.document.model.DocumentReq;
-import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
-import com.cm.welfarecmcity.logic.document.model.DocumentV2Res;
-import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
+import com.cm.welfarecmcity.logic.document.model.*;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +28,10 @@ public class DocumentController {
   @PostMapping("v1/document/grand-total")
   public GrandTotalRes grandTotal() {
     return service.grandTotal();
+  }
+
+  @PostMapping("v1/document/info-all")
+  public List<DocumentInfoAllRes> documentInfoAll() {
+    return service.documentInfoAll();
   }
 }
