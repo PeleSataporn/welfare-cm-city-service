@@ -28,7 +28,7 @@ public class WelfareCmCityApplication {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://203.159.93.121:8080/");
+        registry.addMapping("/**").allowedOrigins("http://203.159.93.121:3000/");
       }
     };
   }
