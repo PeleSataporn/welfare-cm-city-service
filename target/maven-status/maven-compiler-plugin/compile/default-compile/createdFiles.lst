@@ -39,7 +39,6 @@ com\cm\welfarecmcity\api\affiliation\AffiliationController.class
 com\cm\welfarecmcity\utils\listener\GenerateListenerRepository.class
 com\cm\welfarecmcity\logic\login\model\LoginRes.class
 com\cm\welfarecmcity\dto\StockDetailDto.class
-com\cm\welfarecmcity\WelfareCmCityApplication$1.class
 com\cm\welfarecmcity\logic\login\LoginRepository.class
 com\cm\welfarecmcity\dto\base\ResponseModel.class
 com\cm\welfarecmcity\constant\MaritalStatusEnum$MaritalStatusDto.class
