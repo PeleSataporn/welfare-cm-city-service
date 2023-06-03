@@ -102,6 +102,7 @@ com\cm\welfarecmcity\api\loandetail\LoanDetailController.class
 com\cm\welfarecmcity\api\position\PositionService.class
 com\cm\welfarecmcity\api\stock\StockController.class
 com\cm\welfarecmcity\api\notification\NotificationRepository.class
+com\cm\welfarecmcity\config\WebMvcConfig.class
 com\cm\welfarecmcity\constant\NotificationStatusEnum$NotificationStatusDto.class
 com\cm\welfarecmcity\api\employee\EmployeeRepository.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryRepository.class
