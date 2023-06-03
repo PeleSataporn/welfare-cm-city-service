@@ -24,10 +24,7 @@ public class LoginController {
 
   //  @RequestMapping(value = "/user-login", produces = "application/json", method = RequestMethod.POST, consumes = "application/json")
   @PostMapping("/user-login")
-//  @CrossOrigin("http://localhost:5000")
   public ResponseEntity<ResponseModel<Object>> login(@RequestBody UserDto dto) {
-    //    val ss = loginService.login(dto);
-    //    return ResponseEntity.ok().build(ss);
     val response = loginService.login(dto);
     return ResponseEntity.ok(response);
   }
