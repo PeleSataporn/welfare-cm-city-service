@@ -15,6 +15,7 @@ public class DocumentController {
   @Autowired
   private DocumentService service;
 
+  // stock
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
     return service.searchDocumentV1(req.getStockId());
@@ -34,4 +35,5 @@ public class DocumentController {
   public List<DocumentInfoAllRes> documentInfoAll() {
     return service.documentInfoAll();
   }
+  // loan
 }
