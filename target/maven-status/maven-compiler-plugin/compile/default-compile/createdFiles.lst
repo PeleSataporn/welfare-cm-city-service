@@ -45,6 +45,7 @@ com\cm\welfarecmcity\constant\MaritalStatusEnum$MaritalStatusDto.class
 com\cm\welfarecmcity\logic\register\model\res\CheckEmployeeCodeRes.class
 com\cm\welfarecmcity\dto\BeneficiaryDto.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryController.class
+com\cm\welfarecmcity\logic\document\model\DocumentV1ResLoan.class
 com\cm\welfarecmcity\api\level\LevelController.class
 com\cm\welfarecmcity\api\position\PositionRepository.class
 com\cm\welfarecmcity\api\employeetype\EmployeeTypeService.class
@@ -106,6 +107,7 @@ com\cm\welfarecmcity\constant\NotificationStatusEnum$NotificationStatusDto.class
 com\cm\welfarecmcity\api\employee\EmployeeRepository.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryRepository.class
 com\cm\welfarecmcity\dto\PositionsDto.class
+com\cm\welfarecmcity\logic\document\model\DocumentV2ResLoan.class
 com\cm\welfarecmcity\constant\EmployeeStatusEnum.class
 com\cm\welfarecmcity\dto\guarantor\GuarantorService.class
 com\cm\welfarecmcity\api\loan\LoanController.class

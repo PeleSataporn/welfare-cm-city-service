@@ -1,9 +1,7 @@
 package com.cm.welfarecmcity.logic.document;
 
-import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
-import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
-import com.cm.welfarecmcity.logic.document.model.DocumentV2Res;
-import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
+import com.cm.welfarecmcity.logic.document.model.*;
+
 import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,4 +106,49 @@ public class DocumentRepository {
     val sql = sqlDocumentInfoAll();
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
+
+  public StringBuilder buildQuerySqlV1Loan(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+            "SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, loan_detail.installment, " +
+                    "loan.loan_value as loanValue, loan.loan_time as loanTime, loan_detail.interest_percent as interestPercent, loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2 " +
+                    "FROM department JOIN employee ON employee.department_id = department.id JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+                    "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+    );
+    if (loanId != null) {
+      sql.append(" WHERE loan.id = ").append(loanId);
+    }
+
+    return sql;
+  }
+
+  public List<DocumentV1ResLoan> documentInfoV1Loan(Long loanId) {
+    val sql = buildQuerySqlV1Loan(loanId);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
+  }
+
+  public StringBuilder buildQuerySqlV2Loan(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT department.name as departmentName, SUM(loan.loan_value) AS loanValueTotal " +
+                    "FROM department " +
+                    "JOIN employee ON employee.department_id = department.id JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+                    "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+    );
+
+    if (loanId != null) {
+      sql.append(" WHERE loan.id = ").append(loanId);
+    }
+
+    sql.append(" GROUP BY department.id ");
+
+    return sql;
+  }
+
+  public List<DocumentV2ResLoan> documentInfoV2Loan(Long loanId) {
+    val sql = buildQuerySqlV2Loan(loanId);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV2ResLoan.class));
+  }
+
+
 }

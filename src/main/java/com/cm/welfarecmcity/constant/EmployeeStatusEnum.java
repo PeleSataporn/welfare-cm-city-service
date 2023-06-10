@@ -16,7 +16,10 @@ public enum EmployeeStatusEnum {
   ERROR_EMPLOYEE(4),
 
   // รออนุมัติลาออก
-  PENDING_RESIGN_EMPLOYEE(5);
+  PENDING_RESIGN_EMPLOYEE(5),
+
+  // เสียชีวิต
+  DIED_EMPLOYEE(6);
 
   private final int state;
 

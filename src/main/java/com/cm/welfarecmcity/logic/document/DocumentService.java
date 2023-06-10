@@ -1,9 +1,7 @@
 package com.cm.welfarecmcity.logic.document;
 
-import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
-import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
-import com.cm.welfarecmcity.logic.document.model.DocumentV2Res;
-import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
+import com.cm.welfarecmcity.logic.document.model.*;
+
 import java.util.List;
 import jakarta.transaction.Transactional;
 import lombok.val;
@@ -39,6 +37,18 @@ public class DocumentService {
   @Transactional
   public List<DocumentInfoAllRes> documentInfoAll() {
     return documentRepository.documentInfoAll();
+  }
+
+
+  // loan
+  @Transactional
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId) {
+    return documentRepository.documentInfoV1Loan(loanId);
+  }
+
+  @Transactional
+  public List<DocumentV2ResLoan> searchDocumentV2Loan(Long loanId) {
+    return documentRepository.documentInfoV2Loan(loanId);
   }
 
 }

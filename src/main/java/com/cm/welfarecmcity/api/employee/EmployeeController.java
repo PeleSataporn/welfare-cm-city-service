@@ -46,6 +46,11 @@ public class EmployeeController {
     return employeeService.updateStockValue(req);
   }
 
+  @PatchMapping("/update-emp-status")
+  public ResponseModel<ResponseId> updateEmpoyeeStatus(@RequestBody UpdateAdminReq req) {
+    return employeeService.updateEmpoyeeStatus(req);
+  }
+
   @GetMapping("test-host")
   public String testHost() {
     return "-- > Test Host <--";

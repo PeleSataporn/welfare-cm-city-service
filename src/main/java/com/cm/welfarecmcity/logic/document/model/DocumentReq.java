@@ -8,4 +8,5 @@ import lombok.Setter;
 public class DocumentReq {
 
   private Long stockId = null;
+  private Long loanId = null;
 }

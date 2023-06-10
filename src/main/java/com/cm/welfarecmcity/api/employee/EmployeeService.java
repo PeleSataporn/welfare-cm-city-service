@@ -167,4 +167,18 @@ public class EmployeeService {
 
     return responseDataUtils.updateDataSuccess(req.getId());
   }
+
+  @Transactional
+  public ResponseModel<ResponseId> updateEmpoyeeStatus(UpdateAdminReq req) {
+    val findEmployee = employeeRepository.findById(req.getId());
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee id not found");
+    }
+
+    val employee = findEmployee.get();
+    employee.setEmployeeStatus(EmployeeStatusEnum.DIED_EMPLOYEE.getState());
+
+    return responseDataUtils.updateDataSuccess(req.getId());
+  }
+
 }

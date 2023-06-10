@@ -35,5 +35,16 @@ public class DocumentController {
   public List<DocumentInfoAllRes> documentInfoAll() {
     return service.documentInfoAll();
   }
+
   // loan
+  @PostMapping("v1/document/searchLoan")
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(@RequestBody DocumentReq req) {
+    return service.searchDocumentV1Loan(req.getLoanId());
+  }
+
+  @PostMapping("v2/document/searchLoan")
+  public List<DocumentV2ResLoan> searchDocumentV2Loan(@RequestBody DocumentReq req) {
+    return service.searchDocumentV2Loan(req.getLoanId());
+  }
+
 }
