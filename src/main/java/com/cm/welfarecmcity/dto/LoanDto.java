@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;
@@ -32,9 +34,11 @@ public class LoanDto extends BaseDto {
   private int interestPercent;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   private EmployeeDto guarantorOne;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   private EmployeeDto guarantorTwo;
 
   //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
