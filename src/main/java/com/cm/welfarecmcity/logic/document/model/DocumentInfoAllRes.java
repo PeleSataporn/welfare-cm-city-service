@@ -20,4 +20,8 @@ public class DocumentInfoAllRes {
   private String loanValue = null;
   private String loanTime = null;
   private String interestPercent = null;
+  private String codeGuarantorOne = null;
+  private String fullNameGuarantorOne = null;
+  private String codeGuarantorTwo = null;
+  private String fullNameGuarantorTwo = null;
 }

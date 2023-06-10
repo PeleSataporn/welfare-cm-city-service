@@ -32,10 +32,16 @@ public class LoanDto extends BaseDto {
   private int interestPercent;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private GuarantorDto guarantorOne;
+  private EmployeeDto guarantorOne;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private GuarantorDto guarantorTwo;
+  private EmployeeDto guarantorTwo;
+
+  //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  private GuarantorDto guarantorOne;
+  //
+  //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  private GuarantorDto guarantorTwo;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "loan_id")
