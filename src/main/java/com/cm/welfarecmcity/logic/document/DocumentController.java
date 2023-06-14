@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.logic.document.model.*;
+
+import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +47,12 @@ public class DocumentController {
   @PostMapping("v2/document/searchLoan")
   public List<DocumentV2ResLoan> searchDocumentV2Loan(@RequestBody DocumentReq req) {
     return service.searchDocumentV2Loan(req.getLoanId());
+  }
+
+  // calculate Loan
+  @PostMapping("v1/document/calculate-loan")
+  public List<CalculateInstallments> calculateLoan(@RequestBody CalculateReq req) throws ParseException {
+    return service.calculateLoan(req);
   }
 
 }
