@@ -54,8 +54,46 @@ public class DocumentService {
 
   // loan
   @Transactional
-  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId) {
-    return documentRepository.documentInfoV1Loan(loanId);
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent) {
+    var resLoan = documentRepository.documentInfoV1Loan(loanId,getMonthCurrent);
+    resLoan.forEach(res -> {
+      if(res.getLoanValue() != null) {
+        CalculateReq req = new CalculateReq();
+        req.setPrincipal(Integer.parseInt(res.getLoanValue()));
+        req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+        req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+        req.setPaymentStartDate("2023-01-31");
+        try {
+          List<CalculateInstallments> resList = calculateLoan(req);
+          int sumTotalValueInterest = 0;
+          int setTotalValuePrinciple = 0;
+          int sumTotalValueInterestOfInstallment = 0;
+          int setTotalValuePrincipleOfInstallment = 0;
+          for (int i = 0; i < resList.size(); i++) {
+            sumTotalValueInterest += resList.get(i).getInterest();
+            setTotalValuePrinciple += resList.get(i).getPrincipal();
+            if (Integer.parseInt(res.getInstallment()) == resList.get(i).getInstallment()) {
+              res.setMonthInterest(String.valueOf(resList.get(i).getInterest()));
+              res.setMonthPrinciple(String.valueOf(resList.get(i).getTotalDeduction()));
+              sumTotalValueInterestOfInstallment = sumTotalValueInterest;
+              setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+              res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
+              res.setTotalValuePrinciple(String.valueOf(setTotalValuePrincipleOfInstallment));
+            }
+            if (Integer.parseInt(res.getLoanTime()) == resList.get(i).getInstallment()) {
+              res.setLastMonthInterest(String.valueOf(resList.get(i).getInterest()));
+              res.setLastMonthPrinciple(String.valueOf(resList.get(i).getTotalDeduction()));
+            }
+          }
+          res.setOutStandInterest(String.valueOf(sumTotalValueInterest - sumTotalValueInterestOfInstallment));
+          res.setOutStandPrinciple(String.valueOf(setTotalValuePrinciple - setTotalValuePrincipleOfInstallment));
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+      }
+    });
+
+    return resLoan;
   }
 
   @Transactional

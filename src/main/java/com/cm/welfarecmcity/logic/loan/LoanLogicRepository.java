@@ -19,7 +19,7 @@ public class LoanLogicRepository {
   public StringBuilder buildQuerySql() {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan.id, loan_value, loan_balance, employee_code, first_name, last_name FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) WHERE loan.deleted = FALSE "
+      " SELECT loan.id, loan_value, loan_balance, loan_time, employee_code, first_name, last_name FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) WHERE loan.deleted = FALSE "
     );
     return sql;
   }

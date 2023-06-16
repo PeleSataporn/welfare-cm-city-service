@@ -107,7 +107,7 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
 
-  public StringBuilder buildQuerySqlV1Loan(Long loanId) {
+  public StringBuilder buildQuerySqlV1Loan(Long loanId, String getMonthCurrent) {
     val sql = new StringBuilder();
     sql.append(
             "SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, loan_detail.installment, " +
@@ -122,8 +122,8 @@ public class DocumentRepository {
     return sql;
   }
 
-  public List<DocumentV1ResLoan> documentInfoV1Loan(Long loanId) {
-    val sql = buildQuerySqlV1Loan(loanId);
+  public List<DocumentV1ResLoan> documentInfoV1Loan(Long loanId,String getMonthCurrent) {
+    val sql = buildQuerySqlV1Loan(loanId,getMonthCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
   }
 
