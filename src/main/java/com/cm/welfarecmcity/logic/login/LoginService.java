@@ -50,6 +50,8 @@ public class LoginService {
     res.setId(employee.getId());
     res.setEmployeeStatus(employee.getEmployeeStatus());
     res.setPasswordFlag(employee.getPasswordFlag());
+    res.setStockId(employee.getStock().getId());
+    res.setLoanId(employee.getLoan().getId());
 
     val response = new ResponseModel<>();
     response.setData(res);

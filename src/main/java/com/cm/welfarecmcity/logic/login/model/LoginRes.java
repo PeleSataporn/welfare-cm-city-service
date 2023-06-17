@@ -6,7 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRes {
-    private Long id;
-    private int employeeStatus;
-    private Boolean passwordFlag;
+
+  private Long id;
+  private int employeeStatus;
+  private Boolean passwordFlag;
+  private Long stockId;
+  private Long loanId;
 }

@@ -1,21 +1,16 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.logic.document.model.*;
-
-import java.text.DateFormat;
+import jakarta.transaction.Transactional;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +21,15 @@ public class DocumentService {
   @Autowired
   private DocumentRepository documentRepository;
 
+  @Autowired
+  private StockDetailRepository stockDetailRepository;
+
+  @Autowired
+  private LoanDetailRepository loanDetailRepository;
+
   @Transactional
-  public List<DocumentV1Res> searchDocumentV1(Long stockId) {
-    return documentRepository.documentInfoV1(stockId);
+  public List<DocumentV1Res> searchDocumentV1(Long stockId, String monthCurrent) {
+    return documentRepository.documentInfoV1(stockId, monthCurrent);
   }
 
   @Transactional
@@ -48,16 +49,123 @@ public class DocumentService {
 
   @Transactional
   public List<DocumentInfoAllRes> documentInfoAll() {
-    return documentRepository.documentInfoAll();
-  }
+    List<DocumentInfoAllRes> listInfoAll = documentRepository.documentInfoAll();
 
+    // guarantee
+    listInfoAll.forEach(infoAll -> {
+      val guarantee = documentRepository.documentGuarantee(infoAll.getId());
+
+      guarantee
+        .stream()
+        .findFirst()
+        .ifPresent(guaranteeOne -> {
+          infoAll.setCodeGuaranteeOne(guaranteeOne.getCodeGuarantee());
+          infoAll.setFullNameGuaranteeOne(guaranteeOne.getFullNameGuarantee());
+        });
+
+      guarantee
+        .stream()
+        .reduce((first, second) -> second)
+        .ifPresent(guaranteeTwo -> {
+          infoAll.setCodeGuaranteeTwo(guaranteeTwo.getCodeGuarantee());
+          infoAll.setFullNameGuaranteeTwo(guaranteeTwo.getFullNameGuarantee());
+        });
+
+      stockDetailRepository
+        .findAllByStock_Id(infoAll.getStockId(), null)
+        .stream()
+        .findFirst()
+        .ifPresent(stockDetailDto -> infoAll.setInstallment(stockDetailDto.getInstallment()));
+
+      // loan details
+      if (infoAll.getLoanId() != null) {
+        val calculateReq = new CalculateReq();
+        calculateReq.setPrincipal(infoAll.getLoanValue());
+        calculateReq.setInterestRate(infoAll.getInterestPercent());
+        calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
+        calculateReq.setPaymentStartDate("2023-01-31");
+
+        val loan = loanDetailRepository.findAllByLoan_Id(infoAll.getLoanId());
+        loan
+          .stream()
+          .reduce((first, second) -> second)
+          .ifPresent(interest -> {
+            //            try {
+            //              int sumTotalValueInterest = 0;
+            //              int setTotalValuePrinciple = 0;
+            //              int sumTotalValueInterestOfInstallment = 0;
+            //              int setTotalValuePrincipleOfInstallment = 0;
+            //
+            //              val calculate = calculateLoan(calculateReq);
+            //              calculate.forEach(it -> {
+            //                if (it.getInstallment() == interest.getInstallment()) {
+            //                  sumTotalValueInterest += it.getInterest();
+            //                  setTotalValuePrinciple += it.getPrincipal();
+            //
+            //                  infoAll.setInterestMonth(it.getInterest());
+            //                  infoAll.setEarlyMonth(it.getPrincipal());
+            //                  infoAll.setInstallmentLoan(it.getInstallment());
+            //
+            //                  sumTotalValueInterestOfInstallment = sumTotalValueInterest;
+            //                  setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+            //                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
+            //                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrincipleOfInstallment));
+            //                }
+            //
+            //                if (it.getInstallment() == Integer.parseInt(infoAll.getLoanTime())) {
+            //                  infoAll.setInterestMonthLast(it.getInterest());
+            //                  infoAll.setEarlyMonthLast(it.getPrincipal());
+            //                }
+            //              });
+            //            } catch (ParseException e) {
+            //              throw new RuntimeException(e);
+            //            }
+
+            try {
+              val calculate = calculateLoan(calculateReq);
+
+              int sumTotalValueInterest = 0;
+              int setTotalValuePrinciple = 0;
+              int sumTotalValueInterestOfInstallment = 0;
+              int sumTotalValuePrincipleOfInstallment = 0;
+
+              for (CalculateInstallments calculation : calculate) {
+                sumTotalValueInterest += calculation.getInterest();
+                setTotalValuePrinciple += calculation.getPrincipal();
+                if (calculation.getInstallment() == interest.getInstallment()) {
+                  infoAll.setInterestMonth(calculation.getInterest());
+                  infoAll.setEarlyMonth(calculation.getPrincipal());
+                  infoAll.setInstallmentLoan(calculation.getInstallment());
+
+                  sumTotalValueInterestOfInstallment = sumTotalValueInterest;
+                  sumTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+                  infoAll.setTotalValueInterest(sumTotalValueInterestOfInstallment);
+                  infoAll.setTotalValuePrinciple(sumTotalValuePrincipleOfInstallment);
+                }
+
+                if (calculation.getInstallment() == Integer.parseInt(infoAll.getLoanTime())) {
+                  infoAll.setInterestMonthLast(calculation.getInterest());
+                  infoAll.setEarlyMonthLast(calculation.getPrincipal());
+                }
+              }
+              infoAll.setOutStandInterest(sumTotalValueInterest - sumTotalValueInterestOfInstallment);
+              infoAll.setOutStandPrinciple(setTotalValuePrinciple - sumTotalValuePrincipleOfInstallment);
+            } catch (ParseException e) {
+              throw new RuntimeException(e);
+            }
+          });
+      }
+    });
+
+    return listInfoAll;
+  }
 
   // loan
   @Transactional
   public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent) {
-    var resLoan = documentRepository.documentInfoV1Loan(loanId,getMonthCurrent);
+    var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent);
     resLoan.forEach(res -> {
-      if(res.getLoanValue() != null) {
+      if (res.getLoanValue() != null) {
         CalculateReq req = new CalculateReq();
         req.setPrincipal(Integer.parseInt(res.getLoanValue()));
         req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
@@ -98,13 +206,12 @@ public class DocumentService {
 
   @Transactional
   public List<DocumentV2ResLoan> searchDocumentV2Loan(Long loanId, String getMonthCurrent) {
-    return documentRepository.documentInfoV2Loan(loanId,getMonthCurrent);
+    return documentRepository.documentInfoV2Loan(loanId, getMonthCurrent);
   }
 
   // calculate Loan
   @Transactional
   public List<CalculateInstallments> calculateLoan(CalculateReq req) throws ParseException {
-
     double principal = req.getPrincipal();
     double interestRate = req.getInterestRate();
     int numOfPayments = req.getNumOfPayments();
@@ -115,7 +222,13 @@ public class DocumentService {
     // calculate loan
     LocalDate paymentStartDate = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     double installment = calculateLoanInstallment(principal, interestRate, numOfPayments);
-    List<CalculateInstallments> calculateInstallments = createAmortizationTable(principal, interestRate, numOfPayments, installment, paymentStartDate);
+    List<CalculateInstallments> calculateInstallments = createAmortizationTable(
+      principal,
+      interestRate,
+      numOfPayments,
+      installment,
+      paymentStartDate
+    );
 
     return calculateInstallments;
   }
@@ -126,7 +239,13 @@ public class DocumentService {
     return installment;
   }
 
-  public List<CalculateInstallments> createAmortizationTable(double principal, double interestRate, int numOfPayments, double installment, LocalDate paymentStartDate) {
+  public List<CalculateInstallments> createAmortizationTable(
+    double principal,
+    double interestRate,
+    int numOfPayments,
+    double installment,
+    LocalDate paymentStartDate
+  ) {
     List<CalculateInstallments> result = new ArrayList<>();
     DecimalFormat decimalFormat = new DecimalFormat("#");
 
@@ -139,7 +258,7 @@ public class DocumentService {
 
     for (int i = 1; i <= numOfPayments; i++) {
       CalculateInstallments cal = new CalculateInstallments();
-      LocalDate paymentDateShow = paymentStartDate.plusMonths(i-1);
+      LocalDate paymentDateShow = paymentStartDate.plusMonths(i - 1);
 
       // Balance
       YearMonth currentPaymentMonth = YearMonth.from(paymentDate);
@@ -147,7 +266,7 @@ public class DocumentService {
       double interest = Math.round((remainingBalance * (interestRate / 100) / 365) * daysInMonth);
       double principalPaid = Math.round(installment - interest);
 
-      if(i == numOfPayments){
+      if (i == numOfPayments) {
         double principalPaidLast = remainingBalance;
         double installmentSumLastMonth = principalPaidLast - interest;
         //remainingBalance -= principalPaid;
@@ -162,8 +281,7 @@ public class DocumentService {
         cal.setPrincipalBalance(0);
         cal.setTotalDeduction(Integer.parseInt(decimalFormat.format(principalPaidLast)));
         result.add(cal);
-
-      }else {
+      } else {
         remainingBalance -= principalPaid;
         if (i == 1) {
           cal.setInstallment(i);
@@ -175,7 +293,6 @@ public class DocumentService {
           cal.setPrincipalBalance(Integer.parseInt(decimalFormat.format(remainingBalance)));
           cal.setTotalDeduction(Integer.parseInt(decimalFormat.format(installment)));
           result.add(cal);
-
         } else {
           // toralDeduction
           YearMonth currentPaymentMonthDeduction = YearMonth.from(paymentDateDeduction);
@@ -194,7 +311,6 @@ public class DocumentService {
           cal.setPrincipalBalance(Integer.parseInt(decimalFormat.format(remainingBalance)));
           cal.setTotalDeduction(Integer.parseInt(decimalFormat.format(installment)));
           result.add(cal);
-
         }
       }
       paymentDate = paymentDate.plusMonths(1);
@@ -202,7 +318,4 @@ public class DocumentService {
 
     return result;
   }
-
-
-
 }

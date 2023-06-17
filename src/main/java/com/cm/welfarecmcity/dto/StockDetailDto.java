@@ -26,6 +26,9 @@ public class StockDetailDto extends BaseDto {
   @Comment("ปีที่ส่ง")
   private String stockYear;
 
+  @Comment("หุ้นสะสม")
+  private int stockAccumulate;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "stock_id")
   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

@@ -1,7 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.logic.document.model.*;
-
 import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class DocumentController {
   // stock
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
-    return service.searchDocumentV1(req.getStockId());
+    return service.searchDocumentV1(req.getStockId(), req.getMonthCurrent());
   }
 
   @PostMapping("v2/document/search")
@@ -54,5 +53,4 @@ public class DocumentController {
   public List<CalculateInstallments> calculateLoan(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoan(req);
   }
-
 }

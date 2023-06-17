@@ -1,6 +1,9 @@
 package com.cm.welfarecmcity.logic.stock;
 
+import com.cm.welfarecmcity.dto.StockDetailDto;
+import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
+import java.util.Date;
 import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,34 @@ public class StockLogicRepository {
 
   public List<StockRes> searchStock() {
     val sql = buildQuerySql();
-
-//    val ss = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockRes.class));
-
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockRes.class));
+  }
+
+  public void addStockDetailAll(String month, String year, int installment, int stockValue, Long stockId) {
+    jdbcTemplate.update(
+      "INSERT INTO `stock_detail`(`last_update`, `installment`,`stock_month`,`stock_value`,`stock_id`,`stock_year`) VALUES (?,?,?,?,?)",
+      new Date(),
+      installment,
+      month,
+      stockValue,
+      stockId,
+      year
+    );
+  }
+
+  public StringBuilder getStockDetailByMonthSql(String oldMonth, String oldYear) {
+    val sql = new StringBuilder();
+    sql
+      .append(" SELECT * FROM stock_detail WHERE stock_month = '")
+      .append(oldMonth)
+      .append("' AND stock_year = '")
+      .append(oldYear)
+      .append("' AND deleted = FALSE ");
+    return sql;
+  }
+
+  public List<StockDetailRes> getStockDetailByMonth(String oldMonth, String oldYear) {
+    val sql = getStockDetailByMonthSql(oldMonth, oldYear);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailRes.class));
   }
 }

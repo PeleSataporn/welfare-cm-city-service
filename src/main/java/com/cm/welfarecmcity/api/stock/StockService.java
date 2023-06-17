@@ -36,4 +36,10 @@ public class StockService {
 
     return responseDataUtils.updateDataSuccess(stockRepository.save(stock).getId());
   }
+
+
+  @Transactional
+  public StockDto getStock(Long stockId) {
+    return stockRepository.getById(stockId);
+  }
 }

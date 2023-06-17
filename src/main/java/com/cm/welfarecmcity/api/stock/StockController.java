@@ -24,4 +24,8 @@ public class StockController {
     return stockService.update(req);
   }
 
+  @GetMapping("{stockId}")
+  public StockDto getStock(@PathVariable Long stockId) {
+    return stockService.getStock(stockId);
+  }
 }
