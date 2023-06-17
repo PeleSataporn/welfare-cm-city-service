@@ -46,7 +46,7 @@ public class DocumentController {
 
   @PostMapping("v2/document/searchLoan")
   public List<DocumentV2ResLoan> searchDocumentV2Loan(@RequestBody DocumentReq req) {
-    return service.searchDocumentV2Loan(req.getLoanId());
+    return service.searchDocumentV2Loan(req.getLoanId(), req.getMonthCurrent());
   }
 
   // calculate Loan
