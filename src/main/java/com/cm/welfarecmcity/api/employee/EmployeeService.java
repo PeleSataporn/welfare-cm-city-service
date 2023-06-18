@@ -47,15 +47,15 @@ public class EmployeeService {
   @Autowired
   private NotificationRepository notificationRepository;
 
-  @Transactional
-  public EmployeeDto getEmployee(Long id) {
-    val findEmployee = employeeRepository.findById(id);
-    if (findEmployee.isEmpty()) {
-      throw new EmployeeException("Employee id not found");
-    }
-
-    return findEmployee.get();
-  }
+//  @Transactional
+//  public EmployeeDto getEmployee(Long id) {
+//    val findEmployee = employeeRepository.findById(id);
+//    if (findEmployee.isEmpty()) {
+//      throw new EmployeeException("Employee id not found");
+//    }
+//
+//    return findEmployee.get();
+//  }
 
   @Transactional
   public ResponseModel<ResponseId> updateEmp(EmpEditReq req) {

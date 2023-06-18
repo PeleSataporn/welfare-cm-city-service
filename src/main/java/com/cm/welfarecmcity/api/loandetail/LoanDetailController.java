@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.loandetail;
 
 import com.cm.welfarecmcity.api.loan.LoanService;
+import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.StockDetailDto;
@@ -18,8 +19,8 @@ public class LoanDetailController {
     @Autowired
     private LoanDetailService loanDetailService;
 
-    @PostMapping("search-by-loan/{loanId}")
-    public List<LoanDetailDto> getLoanDetail(@PathVariable Long loanId) {
+    @GetMapping("search-by-loan/{loanId}")
+    public List<LoanDetailRes> getLoanDetail(@PathVariable Long loanId) {
         return loanDetailService.getLoanDetail(loanId);
     }
 }

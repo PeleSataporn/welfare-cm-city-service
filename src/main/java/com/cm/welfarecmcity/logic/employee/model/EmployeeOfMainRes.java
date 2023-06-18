@@ -1,5 +1,7 @@
 package com.cm.welfarecmcity.logic.employee.model;
 
+import com.cm.welfarecmcity.dto.BeneficiaryDto;
+import java.util.List;
 import lombok.Data;
 
 @Data

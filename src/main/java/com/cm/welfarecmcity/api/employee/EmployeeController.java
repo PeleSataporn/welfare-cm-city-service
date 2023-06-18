@@ -21,11 +21,6 @@ public class EmployeeController {
   @Autowired
   private EmployeeService employeeService;
 
-  @GetMapping("{id}")
-  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable Long id) {
-    return new ResponseEntity<>(employeeService.getEmployee(id), HttpStatus.OK);
-  }
-
   @PatchMapping
   public ResponseModel<ResponseId> updateEmp(@RequestBody EmpEditReq req) {
     return employeeService.updateEmp(req);

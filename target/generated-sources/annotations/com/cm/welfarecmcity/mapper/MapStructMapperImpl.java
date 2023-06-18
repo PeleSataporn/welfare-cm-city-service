@@ -1,13 +1,21 @@
 package com.cm.welfarecmcity.mapper;
 
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
+import com.cm.welfarecmcity.api.notification.model.NotificationRes;
+import com.cm.welfarecmcity.api.notification.model.NotifyEmployeeRes;
+import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.PetitionNotificationDto;
+import com.cm.welfarecmcity.logic.employee.model.BeneficiariesRes;
+import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-17T16:47:33+0700",
+    date = "2023-06-18T15:25:30+0700",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -55,5 +63,103 @@ public class MapStructMapperImpl implements MapStructMapper {
         employeeDto.setProfileFlag( req.getProfileFlag() );
 
         return employeeDto;
+    }
+
+    @Override
+    public EmployeeRes employeeToRes(EmployeeDto dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        EmployeeRes employeeRes = new EmployeeRes();
+
+        employeeRes.setEmployeeCode( dto.getEmployeeCode() );
+        employeeRes.setPrefix( dto.getPrefix() );
+        employeeRes.setFirstName( dto.getFirstName() );
+        employeeRes.setLastName( dto.getLastName() );
+        employeeRes.setIdCard( dto.getIdCard() );
+        employeeRes.setGender( dto.getGender() );
+        employeeRes.setMarital( dto.getMarital() );
+        employeeRes.setBirthday( dto.getBirthday() );
+        employeeRes.setSalary( dto.getSalary() );
+        employeeRes.setCompensation( dto.getCompensation() );
+        employeeRes.setContractStartDate( dto.getContractStartDate() );
+        employeeRes.setCivilServiceDate( dto.getCivilServiceDate() );
+        employeeRes.setEmployeeStatus( dto.getEmployeeStatus() );
+        employeeRes.setBillingStartDate( dto.getBillingStartDate() );
+        employeeRes.setMonthlyStockMoney( dto.getMonthlyStockMoney() );
+        employeeRes.setRetirementDate( dto.getRetirementDate() );
+        employeeRes.setSalaryBankAccountNumber( dto.getSalaryBankAccountNumber() );
+        employeeRes.setBankAccountReceivingNumber( dto.getBankAccountReceivingNumber() );
+        employeeRes.setApproveFlag( dto.getApproveFlag() );
+        employeeRes.setPasswordFlag( dto.getPasswordFlag() );
+        employeeRes.setProfileFlag( dto.getProfileFlag() );
+        employeeRes.setContact( dto.getContact() );
+        employeeRes.setBeneficiaries( beneficiaryDtoListToBeneficiariesResList( dto.getBeneficiaries() ) );
+
+        return employeeRes;
+    }
+
+    @Override
+    public NotificationRes notificationToRes(PetitionNotificationDto dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        NotificationRes notificationRes = new NotificationRes();
+
+        notificationRes.setStatus( dto.getStatus() );
+        notificationRes.setReason( dto.getReason() );
+        notificationRes.setDescription( dto.getDescription() );
+        notificationRes.setCreateDate( dto.getCreateDate() );
+        notificationRes.setEmployee( employeeDtoToNotifyEmployeeRes( dto.getEmployee() ) );
+
+        return notificationRes;
+    }
+
+    protected BeneficiariesRes beneficiaryDtoToBeneficiariesRes(BeneficiaryDto beneficiaryDto) {
+        if ( beneficiaryDto == null ) {
+            return null;
+        }
+
+        BeneficiariesRes beneficiariesRes = new BeneficiariesRes();
+
+        beneficiariesRes.setPrefix( beneficiaryDto.getPrefix() );
+        beneficiariesRes.setFirstName( beneficiaryDto.getFirstName() );
+        beneficiariesRes.setLastName( beneficiaryDto.getLastName() );
+        beneficiariesRes.setGender( beneficiaryDto.getGender() );
+        beneficiariesRes.setBirthday( beneficiaryDto.getBirthday() );
+        beneficiariesRes.setRelationship( beneficiaryDto.getRelationship() );
+        beneficiariesRes.setMarital( beneficiaryDto.getMarital() );
+        beneficiariesRes.setLifeStatus( beneficiaryDto.getLifeStatus() );
+
+        return beneficiariesRes;
+    }
+
+    protected List<BeneficiariesRes> beneficiaryDtoListToBeneficiariesResList(List<BeneficiaryDto> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<BeneficiariesRes> list1 = new ArrayList<BeneficiariesRes>( list.size() );
+        for ( BeneficiaryDto beneficiaryDto : list ) {
+            list1.add( beneficiaryDtoToBeneficiariesRes( beneficiaryDto ) );
+        }
+
+        return list1;
+    }
+
+    protected NotifyEmployeeRes employeeDtoToNotifyEmployeeRes(EmployeeDto employeeDto) {
+        if ( employeeDto == null ) {
+            return null;
+        }
+
+        NotifyEmployeeRes notifyEmployeeRes = new NotifyEmployeeRes();
+
+        notifyEmployeeRes.setEmployeeCode( employeeDto.getEmployeeCode() );
+        notifyEmployeeRes.setFirstName( employeeDto.getFirstName() );
+        notifyEmployeeRes.setLastName( employeeDto.getLastName() );
+
+        return notifyEmployeeRes;
     }
 }

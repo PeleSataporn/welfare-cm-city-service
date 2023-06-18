@@ -25,6 +25,7 @@ com\cm\welfarecmcity\dto\guarantor\GuarantorRepository.class
 com\cm\welfarecmcity\dto\GuarantorDto.class
 com\cm\welfarecmcity\logic\employee\EmployeeLogicRepository.class
 com\cm\welfarecmcity\utils\listener\model\GenerateRes.class
+com\cm\welfarecmcity\api\notification\model\NotificationRes.class
 com\cm\welfarecmcity\api\stock\StockService.class
 com\cm\welfarecmcity\api\user\UserController.class
 com\cm\welfarecmcity\api\stockdetail\StockDetailController.class
@@ -65,6 +66,7 @@ com\cm\welfarecmcity\constant\MessageResponseConstant.class
 com\cm\welfarecmcity\dto\EmployeeTypeDto.class
 com\cm\welfarecmcity\mapper\MapStructMapperImpl.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryService.class
+com\cm\welfarecmcity\logic\employee\model\BeneficiariesRes.class
 com\cm\welfarecmcity\api\stock\model\UpdateStockReq.class
 com\cm\welfarecmcity\api\loandetail\LoanDetailService.class
 com\cm\welfarecmcity\dto\ForgetPasswordDto.class
@@ -74,9 +76,11 @@ com\cm\welfarecmcity\api\level\LevelRepository.class
 com\cm\welfarecmcity\api\notification\NotificationController.class
 com\cm\welfarecmcity\logic\stock\model\StockRes.class
 com\cm\welfarecmcity\api\affiliation\AffiliationService.class
+com\cm\welfarecmcity\logic\employee\model\EmployeeRes.class
 com\cm\welfarecmcity\api\stock\StockRepository.class
 com\cm\welfarecmcity\logic\register\RegisterController.class
 com\cm\welfarecmcity\logic\register\RegisterRepository.class
+com\cm\welfarecmcity\api\notification\model\NotifyEmployeeRes.class
 com\cm\welfarecmcity\dto\EmployeeDto.class
 com\cm\welfarecmcity\logic\stock\StockLogicService.class
 com\cm\welfarecmcity\api\employee\model\UpdateAdminReq.class
@@ -85,6 +89,7 @@ com\cm\welfarecmcity\api\department\DepartmentRepository.class
 com\cm\welfarecmcity\utils\ResponseDataUtils.class
 com\cm\welfarecmcity\api\notification\NotificationService.class
 com\cm\welfarecmcity\dto\base\BaseDto.class
+com\cm\welfarecmcity\api\loandetail\LoanDetailLogicRepository.class
 com\cm\welfarecmcity\dto\BureauDto.class
 com\cm\welfarecmcity\logic\email\EmailSenderService.class
 com\cm\welfarecmcity\logic\loan\LoanLogicController.class
@@ -109,6 +114,7 @@ com\cm\welfarecmcity\api\employeetype\EmployeeTypeRepository.class
 com\cm\welfarecmcity\api\affiliation\AffiliationRepository.class
 com\cm\welfarecmcity\logic\document\model\CalculateReq.class
 com\cm\welfarecmcity\api\loandetail\LoanDetailController.class
+com\cm\welfarecmcity\api\loandetail\model\LoanDetailRes.class
 com\cm\welfarecmcity\api\position\PositionService.class
 com\cm\welfarecmcity\api\stock\StockController.class
 com\cm\welfarecmcity\api\notification\NotificationRepository.class

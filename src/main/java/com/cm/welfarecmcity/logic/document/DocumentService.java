@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.logic.document.model.*;
@@ -26,6 +27,9 @@ public class DocumentService {
 
   @Autowired
   private LoanDetailRepository loanDetailRepository;
+
+  @Autowired
+  private LoanDetailLogicRepository loanDetailLogicRepository;
 
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long stockId, String monthCurrent) {
@@ -85,7 +89,7 @@ public class DocumentService {
         calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
         calculateReq.setPaymentStartDate("2023-01-31");
 
-        val loan = loanDetailRepository.findAllByLoan_Id(infoAll.getLoanId());
+        val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId());
         loan
           .stream()
           .reduce((first, second) -> second)

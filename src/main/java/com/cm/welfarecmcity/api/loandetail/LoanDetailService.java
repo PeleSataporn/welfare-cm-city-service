@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.loandetail;
 
+import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,10 @@ import java.util.List;
 public class LoanDetailService {
 
     @Autowired
-    private LoanDetailRepository loanDetailRepository;
+    private LoanDetailLogicRepository loanDetailLogicRepository;
 
     @Transactional
-    public List<LoanDetailDto> getLoanDetail(Long loanId) {
-        return loanDetailRepository.findAllByLoan_Id(loanId);
+    public List<LoanDetailRes> getLoanDetail(Long loanId) {
+        return loanDetailLogicRepository.loanDetail(loanId);
     }
 }

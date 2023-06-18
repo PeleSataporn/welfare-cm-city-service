@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.logic.employee;
 
+import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
+import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/logic/v1/employee")
 public class EmployeeLogicController {
 
-    @Autowired
-    private EmployeeLogicService employeeLogicService;
+  @Autowired
+  private EmployeeLogicService employeeLogicService;
 
-    @GetMapping("{id}")
-    public ResponseEntity<EmployeeOfMainRes> getEmployeeOfMain(@PathVariable Long id) {
-        return new ResponseEntity<>(employeeLogicService.getEmployeeOfMain(id), HttpStatus.OK);
-    }
+  //    @GetMapping("/{id}")
+  //    public ResponseEntity<EmployeeOfMainRes> getEmployee(@PathVariable Long id) {
+  //        return new ResponseEntity<>(employeeLogicService.getEmployeeOfMain(id), HttpStatus.OK);
+  //    }
+
+      @GetMapping("{id}")
+      public ResponseEntity<EmployeeRes> getEmployee(@PathVariable Long id) {
+          return new ResponseEntity<>(employeeLogicService.getEmployee(id), HttpStatus.OK);
+      }
+
+  @GetMapping("/of-main/{id}")
+  public ResponseEntity<EmployeeOfMainRes> getEmployeeOfMain(@PathVariable Long id) {
+    return new ResponseEntity<>(employeeLogicService.getEmployeeOfMain(id), HttpStatus.OK);
+  }
 }

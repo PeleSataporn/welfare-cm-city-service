@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface LoanDetailRepository extends JpaRepository<LoanDetailDto, Long>, JpaSpecificationExecutor<LoanDetailDto> {
-    List<LoanDetailDto> findAllByLoan_Id(Long loanId);
+//    List<LoanDetailDto> findAllByLoan_Id(Long loanId);
 }

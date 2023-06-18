@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.notification;
 
+import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping("search")
-    public List<PetitionNotificationDto> searchNotify() {
+    public List<NotificationRes> searchNotify() {
         return notificationService.searchNotify();
     }
 }
