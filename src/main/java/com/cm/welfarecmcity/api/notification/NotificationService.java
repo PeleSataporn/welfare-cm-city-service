@@ -29,9 +29,22 @@ public class NotificationService {
       val notification = mapStructMapper.notificationToRes(petitionNotification);
       notification.getEmployee().setPositionName(petitionNotification.getEmployee().getPosition().getName());
       notification.getEmployee().setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
+      notification.getEmployee().setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
+      notification.getEmployee().setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
+      notification.getEmployee().setLevelName(petitionNotification.getEmployee().getLevel().getName());
+      notification.getEmployee().setStockAccumulate(petitionNotification.getEmployee().getStock().getStockAccumulate());
+      notification.getEmployee().setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
+      notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
+
       notifications.add(notification);
     }
 
     return notifications;
+  }
+
+  @Transactional
+  public void cancel(Long id) {
+    val notification = notificationRepository.findById(id).get();
+    notificationRepository.delete(notification);
   }
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-18T15:25:30+0700",
+    date = "2023-06-20T09:06:20+0700",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -108,6 +108,7 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         NotificationRes notificationRes = new NotificationRes();
 
+        notificationRes.setId( dto.getId() );
         notificationRes.setStatus( dto.getStatus() );
         notificationRes.setReason( dto.getReason() );
         notificationRes.setDescription( dto.getDescription() );
@@ -156,9 +157,13 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         NotifyEmployeeRes notifyEmployeeRes = new NotifyEmployeeRes();
 
+        notifyEmployeeRes.setId( employeeDto.getId() );
         notifyEmployeeRes.setEmployeeCode( employeeDto.getEmployeeCode() );
+        notifyEmployeeRes.setPrefix( employeeDto.getPrefix() );
         notifyEmployeeRes.setFirstName( employeeDto.getFirstName() );
         notifyEmployeeRes.setLastName( employeeDto.getLastName() );
+        notifyEmployeeRes.setIdCard( employeeDto.getIdCard() );
+        notifyEmployeeRes.setGender( employeeDto.getGender() );
 
         return notifyEmployeeRes;
     }
