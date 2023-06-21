@@ -48,9 +48,24 @@ public class DocumentController {
     return service.searchDocumentV2Loan(req.getLoanId(), req.getMonthCurrent());
   }
 
+  @PostMapping("v1/document/searchLoan-add-new")
+  public EmployeeLoanNew searchEmployeeLoanNew(@RequestBody DocumentReq req) {
+    return service.searchEmployeeLoanNew(req.getEmpId());
+  }
+
+//  @PostMapping("v1/document/searchLoan-guarantor-unique")
+//  public List<EmployeeLoanNew> searchGuarantorUnique() {
+//    return service.searchGuarantorUnique();
+//  }
+
   // calculate Loan
-  @PostMapping("v1/document/calculate-loan")
-  public List<CalculateInstallments> calculateLoan(@RequestBody CalculateReq req) throws ParseException {
-    return service.calculateLoan(req);
+  @PostMapping("v1/document/calculate-loan-new")
+  public List<CalculateInstallments> calculateLoanNew(@RequestBody CalculateReq req) throws ParseException {
+    return service.calculateLoanNew(req);
+  }
+
+  @PostMapping("v1/document/calculate-loan-old")
+  public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req) throws ParseException {
+    return service.calculateLoanOld(req);
   }
 }

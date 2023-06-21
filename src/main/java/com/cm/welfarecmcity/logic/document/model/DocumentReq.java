@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class DocumentReq {
 
+  private Long empId = null;
   private Long stockId = null;
   private Long loanId = null;
   private String monthCurrent;

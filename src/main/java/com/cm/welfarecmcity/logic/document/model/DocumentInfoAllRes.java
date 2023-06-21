@@ -45,4 +45,6 @@ public class DocumentInfoAllRes {
   private int totalValuePrinciple;
   private int outStandInterest;
   private int outStandPrinciple;
+  private String interestLastMonth = null;
+  private Boolean newLoan;
 }

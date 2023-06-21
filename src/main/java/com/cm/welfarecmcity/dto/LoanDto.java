@@ -33,7 +33,7 @@ public class LoanDto extends BaseDto {
   @Comment("ดอกเบี้ย %")
   private int interestPercent;
 
-  @Comment("ดอกเบี้ยเดือนสุดท้าย")
+  @Comment("สถานะเงินกู้ใหม่")
   private boolean newLoan;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -18,6 +18,7 @@ com\cm\welfarecmcity\logic\register\model\res\SearchNewRegisterRes.class
 com\cm\welfarecmcity\api\employee\EmployeeController.class
 com\cm\welfarecmcity\Calculate.class
 com\cm\welfarecmcity\api\loan\LoanService.class
+com\cm\welfarecmcity\logic\document\model\EmployeeLoanNew.class
 com\cm\welfarecmcity\logic\document\model\CalculateInstallments.class
 com\cm\welfarecmcity\logic\document\model\GuaranteeRes.class
 com\cm\welfarecmcity\logic\stock\model\AddStockDetailAllReq.class
@@ -140,5 +141,6 @@ com\cm\welfarecmcity\logic\register\RegisterService.class
 com\cm\welfarecmcity\api\level\LevelService.class
 com\cm\welfarecmcity\logic\document\model\DocumentV1Res.class
 com\cm\welfarecmcity\api\employee\model\UpdateStockValueReq.class
+com\cm\welfarecmcity\CalloanOld.class
 com\cm\welfarecmcity\dto\LoanDetailDto.class
 com\cm\welfarecmcity\WelfareCmCityApplication.class
