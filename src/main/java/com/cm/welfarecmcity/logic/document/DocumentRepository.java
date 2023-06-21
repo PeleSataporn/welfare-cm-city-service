@@ -212,4 +212,19 @@ public class DocumentRepository {
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
   }
 
+  public StringBuilder buildQuerySqlV1GetEmpCodeOfId(String empCode) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id AS empId, employee.employee_code AS empCode " +
+                    "FROM employee "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    return sql;
+  }
+
+  public DocumentReq getEmpCodeOfId(String empCode) {
+    val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+  }
+
 }

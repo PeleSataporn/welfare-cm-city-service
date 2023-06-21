@@ -53,10 +53,10 @@ public class DocumentController {
     return service.searchEmployeeLoanNew(req.getEmpId());
   }
 
-//  @PostMapping("v1/document/searchLoan-guarantor-unique")
-//  public List<EmployeeLoanNew> searchGuarantorUnique() {
-//    return service.searchGuarantorUnique();
-//  }
+  @PostMapping("v1/document/searchLoan-guarantor-unique")
+  public List<GuaranteeRes> searchGuarantorUnique(@RequestBody DocumentReq req) {
+    return service.searchGuarantorUnique(req.getEmpCode());
+  }
 
   // calculate Loan
   @PostMapping("v1/document/calculate-loan-new")

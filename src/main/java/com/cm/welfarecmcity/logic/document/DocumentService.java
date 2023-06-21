@@ -51,10 +51,15 @@ public class DocumentService {
 
   }
 
-//  @Transactional
-//  public List<EmployeeLoanNew> searchGuarantorUnique() {
-//    return documentRepository.searchGuarantorUnique();
-//  }
+  @Transactional
+  public List<GuaranteeRes> searchGuarantorUnique(String empCode) {
+    try {
+      var result = documentRepository.getEmpCodeOfId(empCode);
+      return documentRepository.documentGuarantee(result.getEmpId());
+    }catch (Exception e){
+      return null;
+    }
+  }
 
   @Transactional
   public GrandTotalRes grandTotal() {
