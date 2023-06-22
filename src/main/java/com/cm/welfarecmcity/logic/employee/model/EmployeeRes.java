@@ -1,8 +1,6 @@
 package com.cm.welfarecmcity.logic.employee.model;
 
-import com.cm.welfarecmcity.dto.AffiliationDto;
-import com.cm.welfarecmcity.dto.BeneficiaryDto;
-import com.cm.welfarecmcity.dto.ContactDto;
+import com.cm.welfarecmcity.dto.*;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
@@ -20,12 +18,25 @@ public class EmployeeRes {
   private String marital;
   private Date birthday;
 
+  private PositionRes position;
   private String positionName;
+
+  private AffiliationRes affiliation;
   private String affiliationName;
+
+  private EmployeeTypeRes employeeType;
   private String employeeTypeName;
+
+  private LevelRes level;
   private String levelName;
+
+  private DepartmentRes department;
   private String departmentName;
+
   private String bureauName;
+  private UserDto user;
+  //  private LoanRes loan;
+  //  private StockRes stock;
 
   private double salary;
   private String compensation;
@@ -41,6 +52,7 @@ public class EmployeeRes {
   private Boolean approveFlag;
   private Boolean passwordFlag;
   private Boolean profileFlag;
+  private Boolean checkStockValueFlag;
 
   private ContactDto contact;
   private List<BeneficiariesRes> beneficiaries;

@@ -1,8 +1,10 @@
 package com.cm.welfarecmcity.logic.employee;
 
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
+import java.util.Optional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,7 +18,7 @@ public class EmployeeLogicRepository {
   public StringBuilder employeeOfMainSql(Long empId) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT employee.employee_code, employee.prefix,employee.first_name, employee.last_name, employee.gender, positions.name as positionName, stock.stock_accumulate, loan.loan_value, department.name as departmentName FROM employee " +
+      " SELECT employee.id, employee.employee_code, employee.prefix,employee.first_name, employee.last_name, employee.gender, employee.salary, positions.name as positionName, stock.stock_accumulate, loan.loan_value, loan.loan_balance, department.name as departmentName FROM employee " +
       " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) "
     );
@@ -28,8 +30,41 @@ public class EmployeeLogicRepository {
     return sql;
   }
 
+  //  public EmployeeOfMainRes getEmployeeOfMain(Long empId) {
+  //    val sql = employeeOfMainSql(empId);
+  //
+  ////    try {
+  ////      EmployeeOfMainRes employee = jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeOfMainRes.class));
+  ////      return Optional.of(employee);
+  ////    } catch (EmptyResultDataAccessException e) {
+  ////      return null;
+  ////    }
+  //    //    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeOfMainRes.class));
+  //
+  //
+  //  }
+
   public EmployeeOfMainRes getEmployeeOfMain(Long empId) {
     val sql = employeeOfMainSql(empId);
-    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeOfMainRes.class));
+
+    return jdbcTemplate.queryForObject(
+      sql.toString(),
+      (rs, rowNum) -> {
+        EmployeeOfMainRes employee = new EmployeeOfMainRes();
+        employee.setId(rs.getLong("id"));
+        employee.setEmployeeCode(rs.getString("employee_code"));
+        employee.setPrefix(rs.getString("prefix"));
+        employee.setFirstName(rs.getString("first_name"));
+        employee.setLastName(rs.getString("last_name"));
+        employee.setGender(rs.getString("gender"));
+        employee.setSalary(rs.getDouble("salary"));
+        employee.setPositionName(rs.getString("positionName"));
+        employee.setStockAccumulate(rs.getDouble("stock_accumulate"));
+        employee.setLoanValue(rs.getDouble("loan_value"));
+        employee.setLoanBalance(rs.getDouble("loan_balance"));
+        employee.setDepartmentName(rs.getString("departmentName"));
+        return employee;
+      }
+    );
   }
 }

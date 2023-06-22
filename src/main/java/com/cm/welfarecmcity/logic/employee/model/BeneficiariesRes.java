@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class BeneficiariesRes {
 
+  private Long id;
   private String prefix;
   private String firstName;
   private String lastName;

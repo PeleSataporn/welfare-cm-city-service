@@ -170,7 +170,7 @@ public class DocumentRepository {
       sql.append(" SELECT COUNT(*) ");
     } else {
       sql.append(
-        " SELECT employee.employee_code AS codeGuarantee, CONCAT(employee.first_name,' ', employee.last_name) AS fullNameGuarantee "
+        " SELECT employee.gender, employee.employee_code AS codeGuarantee, CONCAT(employee.prefix,employee.first_name,' ', employee.last_name) AS fullNameGuarantee "
       );
     }
 

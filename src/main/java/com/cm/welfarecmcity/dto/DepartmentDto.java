@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;
@@ -16,5 +17,6 @@ public class DepartmentDto extends BaseDto {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "department_id")
+  @JsonIgnore
   private List<EmployeeDto> employees;
 }

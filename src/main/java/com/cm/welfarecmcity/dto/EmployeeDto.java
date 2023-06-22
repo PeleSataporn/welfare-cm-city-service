@@ -121,4 +121,6 @@ public class EmployeeDto extends BaseDto {
   private Boolean passwordFlag;
 
   private Boolean profileFlag;
+
+  private Boolean checkStockValueFlag;
 }

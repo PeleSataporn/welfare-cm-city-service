@@ -3,11 +3,23 @@ package com.cm.welfarecmcity.mapper;
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.api.notification.model.NotifyEmployeeRes;
+import com.cm.welfarecmcity.dto.AffiliationDto;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
+import com.cm.welfarecmcity.dto.BureauDto;
+import com.cm.welfarecmcity.dto.DepartmentDto;
 import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.EmployeeTypeDto;
+import com.cm.welfarecmcity.dto.LevelDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
+import com.cm.welfarecmcity.dto.PositionsDto;
+import com.cm.welfarecmcity.logic.employee.model.AffiliationRes;
 import com.cm.welfarecmcity.logic.employee.model.BeneficiariesRes;
+import com.cm.welfarecmcity.logic.employee.model.BureauRes;
+import com.cm.welfarecmcity.logic.employee.model.DepartmentRes;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
+import com.cm.welfarecmcity.logic.employee.model.EmployeeTypeRes;
+import com.cm.welfarecmcity.logic.employee.model.LevelRes;
+import com.cm.welfarecmcity.logic.employee.model.PositionRes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -15,8 +27,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-21T22:57:39+0700",
-    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.2 (Amazon.com Inc.)"
+    date = "2023-06-22T12:53:38+0700",
+    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
 public class MapStructMapperImpl implements MapStructMapper {
@@ -81,6 +93,12 @@ public class MapStructMapperImpl implements MapStructMapper {
         employeeRes.setGender( dto.getGender() );
         employeeRes.setMarital( dto.getMarital() );
         employeeRes.setBirthday( dto.getBirthday() );
+        employeeRes.setPosition( positionsDtoToPositionRes( dto.getPosition() ) );
+        employeeRes.setAffiliation( affiliationDtoToAffiliationRes( dto.getAffiliation() ) );
+        employeeRes.setEmployeeType( employeeTypeDtoToEmployeeTypeRes( dto.getEmployeeType() ) );
+        employeeRes.setLevel( levelDtoToLevelRes( dto.getLevel() ) );
+        employeeRes.setDepartment( departmentDtoToDepartmentRes( dto.getDepartment() ) );
+        employeeRes.setUser( dto.getUser() );
         employeeRes.setSalary( dto.getSalary() );
         employeeRes.setCompensation( dto.getCompensation() );
         employeeRes.setContractStartDate( dto.getContractStartDate() );
@@ -94,6 +112,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         employeeRes.setApproveFlag( dto.getApproveFlag() );
         employeeRes.setPasswordFlag( dto.getPasswordFlag() );
         employeeRes.setProfileFlag( dto.getProfileFlag() );
+        employeeRes.setCheckStockValueFlag( dto.getCheckStockValueFlag() );
         employeeRes.setContact( dto.getContact() );
         employeeRes.setBeneficiaries( beneficiaryDtoListToBeneficiariesResList( dto.getBeneficiaries() ) );
 
@@ -118,6 +137,85 @@ public class MapStructMapperImpl implements MapStructMapper {
         return notificationRes;
     }
 
+    protected PositionRes positionsDtoToPositionRes(PositionsDto positionsDto) {
+        if ( positionsDto == null ) {
+            return null;
+        }
+
+        PositionRes positionRes = new PositionRes();
+
+        positionRes.setId( positionsDto.getId() );
+        positionRes.setName( positionsDto.getName() );
+
+        return positionRes;
+    }
+
+    protected BureauRes bureauDtoToBureauRes(BureauDto bureauDto) {
+        if ( bureauDto == null ) {
+            return null;
+        }
+
+        BureauRes bureauRes = new BureauRes();
+
+        bureauRes.setId( bureauDto.getId() );
+        bureauRes.setName( bureauDto.getName() );
+
+        return bureauRes;
+    }
+
+    protected AffiliationRes affiliationDtoToAffiliationRes(AffiliationDto affiliationDto) {
+        if ( affiliationDto == null ) {
+            return null;
+        }
+
+        AffiliationRes affiliationRes = new AffiliationRes();
+
+        affiliationRes.setId( affiliationDto.getId() );
+        affiliationRes.setName( affiliationDto.getName() );
+        affiliationRes.setBureau( bureauDtoToBureauRes( affiliationDto.getBureau() ) );
+
+        return affiliationRes;
+    }
+
+    protected EmployeeTypeRes employeeTypeDtoToEmployeeTypeRes(EmployeeTypeDto employeeTypeDto) {
+        if ( employeeTypeDto == null ) {
+            return null;
+        }
+
+        EmployeeTypeRes employeeTypeRes = new EmployeeTypeRes();
+
+        employeeTypeRes.setId( employeeTypeDto.getId() );
+        employeeTypeRes.setName( employeeTypeDto.getName() );
+
+        return employeeTypeRes;
+    }
+
+    protected LevelRes levelDtoToLevelRes(LevelDto levelDto) {
+        if ( levelDto == null ) {
+            return null;
+        }
+
+        LevelRes levelRes = new LevelRes();
+
+        levelRes.setId( levelDto.getId() );
+        levelRes.setName( levelDto.getName() );
+
+        return levelRes;
+    }
+
+    protected DepartmentRes departmentDtoToDepartmentRes(DepartmentDto departmentDto) {
+        if ( departmentDto == null ) {
+            return null;
+        }
+
+        DepartmentRes departmentRes = new DepartmentRes();
+
+        departmentRes.setId( departmentDto.getId() );
+        departmentRes.setName( departmentDto.getName() );
+
+        return departmentRes;
+    }
+
     protected BeneficiariesRes beneficiaryDtoToBeneficiariesRes(BeneficiaryDto beneficiaryDto) {
         if ( beneficiaryDto == null ) {
             return null;
@@ -125,6 +223,7 @@ public class MapStructMapperImpl implements MapStructMapper {
 
         BeneficiariesRes beneficiariesRes = new BeneficiariesRes();
 
+        beneficiariesRes.setId( beneficiaryDto.getId() );
         beneficiariesRes.setPrefix( beneficiaryDto.getPrefix() );
         beneficiariesRes.setFirstName( beneficiaryDto.getFirstName() );
         beneficiariesRes.setLastName( beneficiaryDto.getLastName() );

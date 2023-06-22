@@ -29,11 +29,33 @@ public class NotificationService {
       val notification = mapStructMapper.notificationToRes(petitionNotification);
       notification.getEmployee().setPositionName(petitionNotification.getEmployee().getPosition().getName());
       notification.getEmployee().setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
-      notification.getEmployee().setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
+
+      if (petitionNotification.getEmployee().getEmployeeType() == null) {
+        notification.getEmployee().setEmployeeTypeName(null);
+      } else {
+        notification.getEmployee().setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
+      }
+
       notification.getEmployee().setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
-      notification.getEmployee().setLevelName(petitionNotification.getEmployee().getLevel().getName());
-      notification.getEmployee().setStockAccumulate(petitionNotification.getEmployee().getStock().getStockAccumulate());
-      notification.getEmployee().setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
+
+      if (petitionNotification.getEmployee().getLevel() == null) {
+        notification.getEmployee().setLevelName(null);
+      } else {
+        notification.getEmployee().setLevelName(petitionNotification.getEmployee().getLevel().getName());
+      }
+
+      if (petitionNotification.getEmployee().getStock() == null) {
+        notification.getEmployee().setStockAccumulate(0);
+      } else {
+        notification.getEmployee().setStockAccumulate(petitionNotification.getEmployee().getStock().getStockAccumulate());
+      }
+
+      if (petitionNotification.getEmployee().getLoan() == null) {
+        notification.getEmployee().setLoanBalance(0);
+      } else {
+        notification.getEmployee().setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
+      }
+
       notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
 
       notifications.add(notification);

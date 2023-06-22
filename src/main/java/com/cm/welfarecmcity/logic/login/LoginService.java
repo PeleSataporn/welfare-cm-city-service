@@ -50,8 +50,17 @@ public class LoginService {
     res.setId(employee.getId());
     res.setEmployeeStatus(employee.getEmployeeStatus());
     res.setPasswordFlag(employee.getPasswordFlag());
-    res.setStockId(employee.getStock().getId());
-    res.setLoanId(employee.getLoan().getId());
+    if (employee.getStock() != null) {
+      res.setStockId(employee.getStock().getId());
+    } else {
+      res.setStockId(null);
+    }
+
+    if (employee.getLoan() != null) {
+      res.setLoanId(employee.getLoan().getId());
+    } else {
+      res.setLoanId(null);
+    }
 
     val response = new ResponseModel<>();
     response.setData(res);

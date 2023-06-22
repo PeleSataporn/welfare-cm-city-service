@@ -16,7 +16,7 @@ public class NotifyEmployeeRes {
   private String affiliationName;
   private String employeeTypeName;
   private String departmentName;
-  private String levelName;
+  private String levelName = null;
   private String bureauName;
   private int stockAccumulate;
   private double loanBalance;

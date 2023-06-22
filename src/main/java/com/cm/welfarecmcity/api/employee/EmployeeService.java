@@ -47,15 +47,15 @@ public class EmployeeService {
   @Autowired
   private NotificationRepository notificationRepository;
 
-//  @Transactional
-//  public EmployeeDto getEmployee(Long id) {
-//    val findEmployee = employeeRepository.findById(id);
-//    if (findEmployee.isEmpty()) {
-//      throw new EmployeeException("Employee id not found");
-//    }
-//
-//    return findEmployee.get();
-//  }
+  //  @Transactional
+  //  public EmployeeDto getEmployee(Long id) {
+  //    val findEmployee = employeeRepository.findById(id);
+  //    if (findEmployee.isEmpty()) {
+  //      throw new EmployeeException("Employee id not found");
+  //    }
+  //
+  //    return findEmployee.get();
+  //  }
 
   @Transactional
   public ResponseModel<ResponseId> updateEmp(EmpEditReq req) {
@@ -75,18 +75,29 @@ public class EmployeeService {
       employeeMapper.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
     }
 
-    if (employeeMapper.getStock() != null) {
-      val stock = employeeMapper.getStock();
-      stock.setStockValue(req.getMonthlyStockMoney().intValue());
-      val listStockDetails = stock.getStockDetails();
-      listStockDetails.forEach(stockDetail -> stockDetail.setStock(stock));
-    }
+    // TODO
+    employeeMapper.setLoan(findEmployee.get().getLoan());
+    employeeMapper.setStock(findEmployee.get().getStock());
+    employeeMapper.setDepartment(findEmployee.get().getDepartment());
 
-    if (employeeMapper.getLoan() != null) {
-      val loan = employeeMapper.getLoan();
-      val listLoanDetails = loan.getLoanDetails();
-      listLoanDetails.forEach(loanDetail -> loanDetail.setLoan(loan));
-    }
+    //    if (employeeMapper.getStock() != null) {
+    //      val stock = employeeMapper.getStock();
+    //      stock.setStockValue(req.getMonthlyStockMoney().intValue());
+    //      val listStockDetails = stock.getStockDetails();
+    //      listStockDetails.forEach(stockDetail -> stockDetail.setStock(stock));
+    //    }
+    //
+    //    if (employeeMapper.getLoan() != null) {
+    //      val loan = employeeMapper.getLoan();
+    //      val listLoanDetails = loan.getLoanDetails();
+    //      listLoanDetails.forEach(loanDetail -> loanDetail.setLoan(loan));
+    //    }
+
+    //    if (employeeMapper.getDepartment() != null) {
+    //      val department = employeeMapper.getDepartment();
+    //      val listEmployees = department.getEmployees();
+    //      listEmployees.forEach(emp -> emp.setDepartment(department));
+    //    }
 
     employeeMapper.setProfileFlag(true);
 
@@ -136,6 +147,7 @@ public class EmployeeService {
     } else {
       employee.setMonthlyStockMoney(Integer.parseInt(req.getValue()));
       employee.getStock().setStockValue(Integer.parseInt(req.getValue()));
+      employee.setCheckStockValueFlag(false);
     }
 
     // notify
@@ -155,6 +167,7 @@ public class EmployeeService {
     }
 
     val employee = findEmployee.get();
+    employee.setCheckStockValueFlag(true);
 
     // notify
     val notify = new PetitionNotificationDto();
@@ -180,5 +193,4 @@ public class EmployeeService {
 
     return responseDataUtils.updateDataSuccess(req.getId());
   }
-
 }
