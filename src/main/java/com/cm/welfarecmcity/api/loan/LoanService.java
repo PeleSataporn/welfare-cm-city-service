@@ -55,10 +55,12 @@ public class LoanService {
         loanDto.setInterest(Integer.parseInt(req.getInterestLoan()));
         loanDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
         loanDto.setNewLoan(true);
-        var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
-        loanDto.getGuarantorOne().setId(result1.getEmpId());
-        var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
-        loanDto.getGuarantorTwo().setId(result2.getEmpId());
+        if(req.getGuarantorOne() != null && req.getGuarantorTwo() != null){
+            var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
+            loanDto.getGuarantorOne().setId(result1.getEmpId());
+            var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
+            loanDto.getGuarantorTwo().setId(result2.getEmpId());
+        }
         val loan = loanRepository.save(loanDto);
 
         // inset loanDetail
