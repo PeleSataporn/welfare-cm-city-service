@@ -196,7 +196,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1LoanNew(Long empId) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
                     "employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
                     "loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId " +
                     "FROM employee JOIN department ON employee.department_id = department.id JOIN employee_type ON employee_type.id = employee.employee_type_id " +

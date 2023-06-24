@@ -41,6 +41,7 @@ com\cm\welfarecmcity\utils\orderby\SortOrderBy.class
 com\cm\welfarecmcity\logic\document\DocumentService.class
 com\cm\welfarecmcity\logic\register\model\req\ApproveRegisterReq.class
 com\cm\welfarecmcity\api\position\model\SearchPositionRes.class
+com\cm\welfarecmcity\runningNumber.class
 com\cm\welfarecmcity\logic\document\model\DocumentV2Res.class
 com\cm\welfarecmcity\logic\register\model\req\ResignRegisterReq.class
 com\cm\welfarecmcity\api\department\DepartmentService.class

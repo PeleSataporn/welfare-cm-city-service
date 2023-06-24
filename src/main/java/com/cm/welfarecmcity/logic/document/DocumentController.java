@@ -1,5 +1,8 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.dto.LoanDto;
+import com.cm.welfarecmcity.dto.base.ResponseId;
+import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.document.model.*;
 import java.text.ParseException;
 import java.util.List;
@@ -68,4 +71,5 @@ public class DocumentController {
   public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanOld(req);
   }
+
 }
