@@ -1,7 +1,10 @@
 package com.cm.welfarecmcity.api.loan;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
+import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -31,6 +34,9 @@ public class LoanService {
     @Autowired
     private DocumentRepository documentRepository;
 
+    @Autowired
+    private LoanDetailRepository loanDetailRepository;
+
     @Transactional
     public ResponseModel<ResponseId> add(LoanDto dto) {
         val loan = loanRepository.save(dto);
@@ -40,6 +46,7 @@ public class LoanService {
     @Transactional
     public ResponseModel<ResponseId> addLoanNew(EmployeeLoanNew req) {
 
+        // inset loan
         LoanDto loanDto = new LoanDto();
         //loanDto.setLoanNo("2566-0624001");
         loanDto.setLoanValue(Double.parseDouble(req.getLoanValue()));
@@ -54,7 +61,19 @@ public class LoanService {
         loanDto.getGuarantorTwo().setId(result2.getEmpId());
         val loan = loanRepository.save(loanDto);
 
-        // number running
+        // inset loanDetail
+        LoanDetailDto loanDetailDto = new LoanDetailDto();
+        loanDetailDto.setInstallment(0);
+        loanDetailDto.setInterest(Integer.parseInt(req.getInterestLoan()));
+        loanDetailDto.setLoanMonth(req.getLoanMonth());
+        loanDetailDto.setLoanOrdinary(0); //Integer.parseInt(req.getLoanOrdinary()
+        loanDetailDto.getLoan().setId(loan.getId());
+        loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
+        loanDetailDto.setLoanYear(req.getLoanYear());
+        loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+        val loanDetail = loanDetailRepository.save(loanDetailDto);
+
+        // update number running
         String runningNumber = runningNumber(loan.getId());
         val findLoan = loanRepository.findById(loan.getId());
         val loans = findLoan.get();

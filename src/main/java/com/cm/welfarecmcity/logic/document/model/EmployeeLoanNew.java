@@ -24,11 +24,15 @@ public class EmployeeLoanNew {
     private String interestLoan;
     private String guarantorOne;
     private String guarantorTwo;
-    private String loanOrdinary = null;
     // เอาไว้เชคตอนใช้หุ้นค้ำ
     private String guaranteeStock;
     private String stockValue;
 
+    // --------- loan detail-----------
+    private String loanOrdinary = null;
+    private String interestLoanLastMonth = null;
+    private String loanYear = null;
+    private String loanMonth = null;
 
 
 }
