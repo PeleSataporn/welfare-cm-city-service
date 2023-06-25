@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.loan.model.*;
+import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,15 @@ public class LoanLogicController {
   @PatchMapping("beneficiary/update")
   public void update(@RequestBody List<BeneficiaryReq> req) {
     service.update(req);
+  }
+
+  @PostMapping("add-all")
+  public void addAll(@RequestBody AddLoanDetailAllReq req) {
+    service.add(req);
+  }
+
+  @GetMapping("close/{id}")
+  public void closeLoan(@PathVariable Long id) {
+    service.closeLoan(id);
   }
 }

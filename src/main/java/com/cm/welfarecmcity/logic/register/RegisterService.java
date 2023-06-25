@@ -4,8 +4,11 @@ import com.cm.welfarecmcity.api.affiliation.AffiliationRepository;
 import com.cm.welfarecmcity.api.contact.ContactRepository;
 import com.cm.welfarecmcity.api.department.DepartmentRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
+import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.position.PositionRepository;
+import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.api.user.UserRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
@@ -22,9 +25,9 @@ import com.cm.welfarecmcity.logic.register.model.req.ResignRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import com.cm.welfarecmcity.utils.listener.GenerateListener;
-import java.util.List;
-
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,7 +66,16 @@ public class RegisterService {
   private DepartmentRepository departmentRepository;
 
   @Autowired
+  private LevelRepository levelRepository;
+
+  @Autowired
+  private EmployeeTypeRepository employeeTypeRepository;
+
+  @Autowired
   private NotificationRepository notificationRepository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Transactional
   public Long setModelEmployee(RegisterReq req) {
@@ -178,6 +190,29 @@ public class RegisterService {
 
     val department = departmentRepository.findById(req.getDapartmentId()).get();
     employee.setDepartment(department);
+
+    val level = levelRepository.findById(req.getLevelId()).get();
+    employee.setLevel(level);
+
+    val employeeType = employeeTypeRepository.findById(req.getEmployeeTypeId()).get();
+    employee.setEmployeeType(employeeType);
+
+    // stock
+    val stock = new StockDto();
+    stock.setStockValue(req.getStockValue());
+    stock.setStockAccumulate(0);
+
+    val stockDetail = new StockDetailDto();
+    stockDetail.setInstallment(0);
+    stockDetail.setStockValue(req.getStockValue());
+    stockDetail.setStockMonth(req.getStockMonth());
+    stockDetail.setStockYear(req.getStockYear());
+
+    // stockDetail
+    List<StockDetailDto> stockDetailList = new ArrayList<>();
+    stockDetailList.add(stockDetail);
+    stock.setStockDetails(stockDetailList);
+    employee.setStock(stock);
 
     val empTemp = employeeRepository.save(employee);
 

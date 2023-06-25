@@ -32,10 +32,10 @@ public class EmployeeLogicService {
     val res = mapStructMapper.employeeToRes(emp);
     res.setPositionName(emp.getPosition().getName());
     res.setAffiliationName(emp.getAffiliation().getName());
-    res.setEmployeeTypeName(emp.getEmployeeType().getName());
-    res.setLevelName(emp.getLevel().getName());
-    res.setDepartmentName(emp.getDepartment().getName());
-    res.setBureauName(emp.getAffiliation().getBureau().getName());
+    res.setEmployeeTypeName(emp.getEmployeeType() != null ? emp.getEmployeeType().getName() : null);
+    res.setLevelName(emp.getLevel() != null ? emp.getLevel().getName() : null);
+    res.setDepartmentName(emp.getDepartment() != null ? emp.getDepartment().getName() : null);
+    res.setBureauName(emp.getAffiliation() != null ? emp.getAffiliation().getBureau().getName() : null);
 
     return res;
   }

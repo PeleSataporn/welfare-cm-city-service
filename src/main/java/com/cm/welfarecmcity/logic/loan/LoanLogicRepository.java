@@ -5,7 +5,9 @@ import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
 import com.cm.welfarecmcity.logic.document.model.GuaranteeRes;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryRes;
 import com.cm.welfarecmcity.logic.loan.model.GuarantorRes;
+import com.cm.welfarecmcity.logic.loan.model.LoanDetailRes;
 import com.cm.welfarecmcity.logic.loan.model.LoanRes;
+import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
 import java.util.List;
 import lombok.val;
@@ -85,8 +87,28 @@ public class LoanLogicRepository {
 
   public void update(Long id, boolean active) {
     val sql = searchBeneficiarySql(id);
-    jdbcTemplate.update("UPDATE beneficiary SET active = ? WHERE id = ?",
-            active, id);
+    jdbcTemplate.update("UPDATE beneficiary SET active = ? WHERE id = ?", active, id);
+  }
 
+  public StringBuilder getLoanDetailByMonthSql(String oldMonth, String oldYear) {
+    val sql = new StringBuilder();
+    sql
+      .append(
+        " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.loan_id, " +
+        " loan_detail.interest_percent, loan_detail.loan_year, loan_detail.interest_last_month, loan.loan_time, loan.loan_value, loan.new_loan, loan.start_loan_date "
+      )
+      .append(
+        " FROM loan_detail LEFT JOIN loan ON (loan.id = loan_detail.loan_id AND loan.deleted = FALSE) WHERE loan_detail.loan_month = '"
+      )
+      .append(oldMonth)
+      .append("' AND loan_detail.loan_year = '")
+      .append(oldYear)
+      .append("' AND loan_detail.deleted = FALSE ");
+    return sql;
+  }
+
+  public List<LoanDetailRes> getLoanDetailByMonth(String oldMonth, String oldYear) {
+    val sql = getLoanDetailByMonthSql(oldMonth, oldYear);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
   }
 }

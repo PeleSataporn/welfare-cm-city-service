@@ -196,12 +196,12 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1LoanNew(Long empId) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-                    "employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
-                    "loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId " +
-                    "FROM employee JOIN department ON employee.department_id = department.id JOIN employee_type ON employee_type.id = employee.employee_type_id " +
-                    "JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-                    "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+      " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate,loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
+      " loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId " +
+      " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
+      " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = ").append(empId);
     return sql;
@@ -214,10 +214,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlV1GetEmpCodeOfId(String empCode) {
     val sql = new StringBuilder();
-    sql.append(
-            " SELECT employee.id AS empId, employee.employee_code AS empCode " +
-                    "FROM employee "
-    );
+    sql.append(" SELECT employee.id AS empId, employee.employee_code AS empCode FROM employee ");
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
     return sql;
   }
@@ -226,5 +223,4 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
-
 }

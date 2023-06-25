@@ -77,6 +77,7 @@ com\cm\welfarecmcity\mapper\MapStructMapperImpl.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryService.class
 com\cm\welfarecmcity\logic\employee\model\BeneficiariesRes.class
 com\cm\welfarecmcity\api\stock\model\UpdateStockReq.class
+com\cm\welfarecmcity\logic\loan\model\AddLoanDetailAllReq.class
 com\cm\welfarecmcity\api\loandetail\LoanDetailService.class
 com\cm\welfarecmcity\dto\ForgetPasswordDto.class
 com\cm\welfarecmcity\api\employee\EmployeeService.class
@@ -109,6 +110,7 @@ com\cm\welfarecmcity\logic\loan\LoanLogicRepository.class
 com\cm\welfarecmcity\logic\document\model\GrandTotalRes.class
 com\cm\welfarecmcity\exception\entity\EmployeeException.class
 com\cm\welfarecmcity\constant\EmployeeStatusEnum$EmployeeStatusDto.class
+com\cm\welfarecmcity\logic\loan\model\LoanDetailRes.class
 com\cm\welfarecmcity\dto\LoanDto.class
 com\cm\welfarecmcity\logic\loan\model\BeneficiaryRes.class
 com\cm\welfarecmcity\api\department\DepartmentController.class

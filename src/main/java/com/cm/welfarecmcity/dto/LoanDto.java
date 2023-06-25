@@ -36,6 +36,9 @@ public class LoanDto extends BaseDto {
   @Comment("สถานะเงินกู้ใหม่")
   private boolean newLoan;
 
+  @Comment("วันที่เริ่มกู้")
+  private String startLoanDate;
+
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   private EmployeeDto guarantorOne;

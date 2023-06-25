@@ -17,7 +17,9 @@ public class LoanDetailLogicRepository {
   public StringBuilder buildQuerySqlV1(Long loanId) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT installment, interest, loan_month, loan_ordinary, interest_percent, loan_year FROM loan_detail WHERE deleted = FALSE "
+      " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year " +
+      " FROM loan_detail join loan on (loan_detail.loan_id = loan.id and loan.deleted = FALSE ) " +
+      " WHERE loan_detail.deleted = FALSE "
     );
 
     sql.append(" AND loan_id = ").append(loanId);
