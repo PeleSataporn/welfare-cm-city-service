@@ -61,6 +61,11 @@ public class DocumentController {
     return service.searchGuarantorUnique(req.getEmpCode());
   }
 
+  @PostMapping("v1/document/search-emp-code-of-id")
+  public DocumentReq searchEmpCodeOfId(@RequestBody DocumentReq req) {
+    return service.searchEmpCodeOfId(req.getEmpCode());
+  }
+
   // calculate Loan
   @PostMapping("v1/document/calculate-loan-new")
   public List<CalculateInstallments> calculateLoanNew(@RequestBody CalculateReq req) throws ParseException {

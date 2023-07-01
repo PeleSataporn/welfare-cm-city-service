@@ -10,4 +10,6 @@ public class LoanDetailRes {
     private int loanOrdinary;
     private int interest;
     private int interestPercent;
+    private int loanBalance;
+    private int loanValue;
 }

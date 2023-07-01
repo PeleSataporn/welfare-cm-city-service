@@ -25,6 +25,10 @@ public class CalloanOld {
 //    }
 
     public static void main(String[] args) {
+
+        System.out.println("\nAmortization Table:");
+        System.out.println("Month\t\tMonthPaymonth\t\tInterest\t\tPrincipal\t\tRemaining Balance");
+
         double loanAmount = 450000; // Replace with the actual loan amount
         double interestRate = 0.05; // Replace with the actual interest rate
         int loanTermInMonths = 22; // Replace with the actual loan term in months
@@ -39,9 +43,11 @@ public class CalloanOld {
             double principalPayment = Math.round(monthlyPayment - interestPayment);
             loanAmount = Math.round(loanAmount - monthlyPayment);
 
-            System.out.println("Month " + month + " - Payment: " + decimalFormat.format(monthlyPayment) +
-                    ", Interest: " + decimalFormat.format(interestPayment) + ", Principal: " + decimalFormat.format(principalPayment) +
-                    ", Remaining Balance: " + decimalFormat.format(loanAmount));
+            System.out.println(month + "\t\t" +
+                    decimalFormat.format(monthlyPayment)+ "\t\t" +
+                    decimalFormat.format(interestPayment)+ "\t\t" +
+                    decimalFormat.format(principalPayment)+ "\t\t" +
+                    decimalFormat.format(loanAmount));
 
             //System.out.println(decimalFormat.format(interestPayment));
         }

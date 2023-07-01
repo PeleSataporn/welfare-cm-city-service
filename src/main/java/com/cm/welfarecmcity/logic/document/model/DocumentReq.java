@@ -12,5 +12,6 @@ public class DocumentReq {
   private Long loanId = null;
   private String monthCurrent;
   private String empCode;
+  private String fullName;
 
 }

@@ -28,6 +28,7 @@ public class EmployeeLoanNew {
   // เอาไว้เชคตอนใช้หุ้นค้ำ
   private String guaranteeStock;
   private String stockValue;
+  private int installment;
 
   // --------- loan detail-----------
   private String loanOrdinary = null;
