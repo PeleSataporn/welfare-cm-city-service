@@ -18,15 +18,10 @@ public class EmployeeLogicController {
   @Autowired
   private EmployeeLogicService employeeLogicService;
 
-  //    @GetMapping("/{id}")
-  //    public ResponseEntity<EmployeeOfMainRes> getEmployee(@PathVariable Long id) {
-  //        return new ResponseEntity<>(employeeLogicService.getEmployeeOfMain(id), HttpStatus.OK);
-  //    }
-
-      @GetMapping("{id}")
-      public ResponseEntity<EmployeeRes> getEmployee(@PathVariable Long id) {
-          return new ResponseEntity<>(employeeLogicService.getEmployee(id), HttpStatus.OK);
-      }
+  @GetMapping("{id}")
+  public ResponseEntity<EmployeeRes> getEmployee(@PathVariable Long id) {
+    return new ResponseEntity<>(employeeLogicService.getEmployee(id), HttpStatus.OK);
+  }
 
   @GetMapping("/of-main/{id}")
   public ResponseEntity<EmployeeOfMainRes> getEmployeeOfMain(@PathVariable Long id) {

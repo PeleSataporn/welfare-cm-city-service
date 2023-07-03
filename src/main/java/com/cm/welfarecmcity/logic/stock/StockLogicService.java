@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.stock;
 
+import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
@@ -14,24 +15,34 @@ import org.springframework.stereotype.Service;
 public class StockLogicService {
 
   @Autowired
-  private StockLogicRepository stockRepository;
+  private StockLogicRepository stockLogicRepository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Transactional
   public List<StockRes> searchStock() {
-    return stockRepository.searchStock();
+    return stockLogicRepository.searchStock();
   }
 
   @Transactional
   public ResponseModel<ResponseId> add(AddStockDetailAllReq req) {
-    val listStockDetail = stockRepository.getStockDetailByMonth(req.getOldMonth(), req.getOldYear());
+    val listStockDetail = stockLogicRepository.getStockDetailByMonth(req.getOldMonth(), req.getOldYear());
     listStockDetail.forEach(detail -> {
-      stockRepository.addStockDetailAll(
+      val stockAccumulate = detail.getStockAccumulate() + detail.getStockValue();
+
+      stockLogicRepository.addStockDetailAll(
         req.getNewMonth(),
         req.getNewYear(),
         detail.getInstallment() + 1,
         detail.getStockValue(),
-        detail.getStockId()
+        detail.getStockId(),
+              stockAccumulate
       );
+
+      val stock = stockRepository.findById(detail.getStockId()).get();
+      stock.setStockAccumulate(stockAccumulate);
+      stockRepository.save(stock);
     });
 
     return null;

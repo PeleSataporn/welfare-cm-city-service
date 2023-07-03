@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DocumentV1Res {
-
+  private Long empId = null;
   private String departmentName = null;
   private String employeeCode = null;
   private String fullName = null;

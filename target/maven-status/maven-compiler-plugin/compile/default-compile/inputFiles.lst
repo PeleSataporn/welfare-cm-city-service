@@ -27,6 +27,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\register\RegisterService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\bureau\BureauRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\DocumentController.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\fileresource\AddImageReq.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\stock\StockLogicRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\model\DocumentV2ResLoan.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\stock\model\StockRes.java
@@ -41,6 +42,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\employee\model\BeneficiariesRes.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\employee\model\EmpEditReq.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\model\DocumentReq.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\FileResourceDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\exception\GlobalExceptionController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\loan\LoanService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\bureau\BureauService.java
@@ -57,6 +59,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\utils\listener\GenerateListener.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\LoanDetailDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\runningNumber.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\CalinteresDividend.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\LoanLogicService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\contact\ContactController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\model\LoanDetailRes.java
@@ -70,10 +73,12 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\ForgetPasswordDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\model\GuaranteeRes.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\register\model\req\CancelRegisterReq.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\fileresource\FileResourceController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\base\ResponseData.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\GuarantorDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\DocumentService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\guarantor\GuarantorRepository.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\model\DocumentLoanV1Res.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\employee\model\EmployeeTypeRes.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\LoanLogicController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\notification\NotificationRepository.java
@@ -97,6 +102,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\utils\ResponseDataUtils.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\beneficiary\BeneficiaryController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\department\DepartmentController.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\fileresource\FileResourceService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\level\LevelController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\base\ResponseModel.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\LoanDto.java
@@ -115,6 +121,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\StockDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\employeetype\EmployeeTypeRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\loandetail\LoanDetailLogicRepository.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\fileresource\FileResourceRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\notification\NotificationController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\LoanLogicRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\employeetype\EmployeeTypeService.java

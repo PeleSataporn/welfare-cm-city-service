@@ -123,7 +123,7 @@ public class LoanLogicService {
 
         // set loan update
         val loanDto = loanRepository.findById(detail.getLoanId()).get();
-
+        loanDetailDto.setLoan(loanDto);
         calculate.forEach(calculateInstallments -> {
           if (calculateInstallments.getInstallment() == installment) {
             loanDetailDto.setInterest(calculateInstallments.getInterest());

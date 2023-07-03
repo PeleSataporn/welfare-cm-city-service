@@ -123,4 +123,7 @@ public class EmployeeDto extends BaseDto {
   private Boolean profileFlag;
 
   private Boolean checkStockValueFlag;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  private FileResourceDto profileImg;
 }

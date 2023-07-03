@@ -39,6 +39,7 @@ com\cm\welfarecmcity\api\bureau\BureauController.class
 com\cm\welfarecmcity\logic\stock\model\StockDetailRes.class
 com\cm\welfarecmcity\utils\orderby\SortOrderBy.class
 com\cm\welfarecmcity\logic\document\DocumentService.class
+com\cm\welfarecmcity\api\fileresource\AddImageReq.class
 com\cm\welfarecmcity\logic\register\model\req\ApproveRegisterReq.class
 com\cm\welfarecmcity\api\position\model\SearchPositionRes.class
 com\cm\welfarecmcity\runningNumber.class
@@ -69,6 +70,7 @@ com\cm\welfarecmcity\api\employeetype\EmployeeTypeService.class
 com\cm\welfarecmcity\api\employeetype\EmployeeTypeController.class
 com\cm\welfarecmcity\dto\base\ResponseData.class
 com\cm\welfarecmcity\logic\stock\StockLogicController.class
+com\cm\welfarecmcity\logic\document\model\DocumentLoanV1Res.class
 com\cm\welfarecmcity\constant\NotificationStatusEnum.class
 com\cm\welfarecmcity\dto\LevelDto.class
 com\cm\welfarecmcity\constant\MessageResponseConstant.class
@@ -101,6 +103,7 @@ com\cm\welfarecmcity\api\department\DepartmentRepository.class
 com\cm\welfarecmcity\utils\ResponseDataUtils.class
 com\cm\welfarecmcity\api\notification\NotificationService.class
 com\cm\welfarecmcity\dto\base\BaseDto.class
+com\cm\welfarecmcity\api\fileresource\FileResourceService.class
 com\cm\welfarecmcity\api\loandetail\LoanDetailLogicRepository.class
 com\cm\welfarecmcity\dto\BureauDto.class
 com\cm\welfarecmcity\logic\email\EmailSenderService.class
@@ -109,8 +112,10 @@ com\cm\welfarecmcity\api\bureau\BureauRepository.class
 com\cm\welfarecmcity\logic\loan\LoanLogicRepository.class
 com\cm\welfarecmcity\logic\document\model\GrandTotalRes.class
 com\cm\welfarecmcity\exception\entity\EmployeeException.class
+com\cm\welfarecmcity\api\fileresource\FileResourceController.class
 com\cm\welfarecmcity\constant\EmployeeStatusEnum$EmployeeStatusDto.class
 com\cm\welfarecmcity\logic\loan\model\LoanDetailRes.class
+com\cm\welfarecmcity\api\fileresource\FileResourceRepository.class
 com\cm\welfarecmcity\dto\LoanDto.class
 com\cm\welfarecmcity\logic\loan\model\BeneficiaryRes.class
 com\cm\welfarecmcity\api\department\DepartmentController.class
@@ -140,6 +145,7 @@ com\cm\welfarecmcity\api\beneficiary\BeneficiaryRepository.class
 com\cm\welfarecmcity\dto\PositionsDto.class
 com\cm\welfarecmcity\logic\document\model\DocumentV2ResLoan.class
 com\cm\welfarecmcity\logic\employee\model\StockDetailRes.class
+com\cm\welfarecmcity\CalinteresDividend.class
 com\cm\welfarecmcity\constant\EmployeeStatusEnum.class
 com\cm\welfarecmcity\dto\guarantor\GuarantorService.class
 com\cm\welfarecmcity\api\loan\LoanController.class
@@ -153,6 +159,7 @@ com\cm\welfarecmcity\mapper\MapStructMapper.class
 com\cm\welfarecmcity\dto\PetitionNotificationDto.class
 com\cm\welfarecmcity\dto\StockDto.class
 com\cm\welfarecmcity\dto\AffiliationDto.class
+com\cm\welfarecmcity\dto\FileResourceDto.class
 com\cm\welfarecmcity\logic\loan\model\GuarantorRes.class
 com\cm\welfarecmcity\logic\register\RegisterService.class
 com\cm\welfarecmcity\api\level\LevelService.class

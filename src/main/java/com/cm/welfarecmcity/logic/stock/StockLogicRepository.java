@@ -30,15 +30,16 @@ public class StockLogicRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockRes.class));
   }
 
-  public void addStockDetailAll(String month, String year, int installment, int stockValue, Long stockId) {
+  public void addStockDetailAll(String month, String year, int installment, int stockValue, Long stockId, int stockAccumulate) {
     jdbcTemplate.update(
-      "INSERT INTO `stock_detail`(`last_update`, `installment`,`stock_month`,`stock_value`,`stock_id`,`stock_year`) VALUES (?,?,?,?,?)",
+      "INSERT INTO `stock_detail`(`last_update`, `installment`,`stock_month`,`stock_value`,`stock_id`,`stock_year`, `stock_accumulate`) VALUES (?,?,?,?,?,?,?)",
       new Date(),
       installment,
       month,
       stockValue,
       stockId,
-      year
+      year,
+      stockAccumulate
     );
   }
 

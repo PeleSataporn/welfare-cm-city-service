@@ -22,12 +22,12 @@ public class DocumentController {
   // stock
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
-    return service.searchDocumentV1(req.getStockId(), req.getMonthCurrent());
+    return service.searchDocumentV1(req.getEmpId(), req.getMonthCurrent());
   }
 
   @PostMapping("v2/document/search")
   public List<DocumentV2Res> searchDocumentV2(@RequestBody DocumentReq req) {
-    return service.searchDocumentV2(req.getStockId());
+    return service.searchDocumentV2(req.getEmpId(), req.getMonthCurrent());
   }
 
   @PostMapping("v1/document/grand-total")
@@ -53,7 +53,7 @@ public class DocumentController {
 
   @PostMapping("v1/document/searchLoan-add-new")
   public EmployeeLoanNew searchEmployeeLoanNew(@RequestBody DocumentReq req) {
-    return service.searchEmployeeLoanNew(req.getEmpId());
+    return service.searchEmployeeLoanNew(req);
   }
 
   @PostMapping("v1/document/searchLoan-guarantor-unique")
@@ -76,5 +76,4 @@ public class DocumentController {
   public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanOld(req);
   }
-
 }

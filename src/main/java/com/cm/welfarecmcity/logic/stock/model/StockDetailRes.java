@@ -20,4 +20,6 @@ public class StockDetailRes {
   private String stockYear;
 
   private Long stockId;
+
+  private int stockAccumulate;
 }
