@@ -76,4 +76,11 @@ public class DocumentController {
   public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanOld(req);
   }
+
+  // เงินปันผล
+  @PostMapping("v1/document/calculate-dividend")
+  public List<DocumentStockDevidend> calculateStockDividend(@RequestBody DocumentReq req) throws ParseException {
+    return service.calculateStockDividend(req);
+  }
+
 }

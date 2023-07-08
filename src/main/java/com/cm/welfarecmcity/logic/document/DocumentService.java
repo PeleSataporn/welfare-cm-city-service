@@ -12,6 +12,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -630,4 +632,79 @@ public class DocumentService {
 
     return result;
   }
+
+  @Transactional
+  public List<DocumentStockDevidend> calculateStockDividend(DocumentReq req) {
+    var resDividend = documentRepository.documentInfoStockDividend(req.getEmpCode(), req.getYearCurrent(), null);
+    if(resDividend != null){
+      resDividend.forEach(res -> {
+        int totalDividend = 0;
+        // stock dividend
+        int sumYearOld = 0;
+        int sumYearCurrent = 0;
+        int stockDividend = 0;
+
+        // Dividend of employeeCode ( yearCurrent )
+        var resDividendYearCurrent = documentRepository.documentInfoStockDividendV1(res.getEmployeeCode(), req.getYearCurrent(), null);
+        // Dividend of employeeCode ( yearOld )
+        var resDividendYearOld = documentRepository.documentInfoStockDividendV1(res.getEmployeeCode(), null, req.getYearOld());
+        if(Objects.requireNonNull(resDividendYearOld).size() > 0){
+          double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
+          int stockValue = Integer.parseInt(resDividendYearOld.get(0).getStockValue());
+          int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate());
+          sumYearOld = (int) Math.round((stockValue + stockAccumulate) * stockDividendPercent); //* ((12-0) / 12)
+        }
+        for (DocumentStockDevidend documentStockDevidend : resDividendYearCurrent) {
+          String stockMonth = documentStockDevidend.getStockMonth();
+          int monthDifference = 12 - getMonthNumber(stockMonth);
+
+          if (!stockMonth.equalsIgnoreCase("ธันวาคม")) {
+            int sumMonth = 0;
+            double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
+            int stockValueMonth = Integer.parseInt(documentStockDevidend.getStockValue());
+            sumMonth = (int) Math.round((stockValueMonth * stockDividendPercent) * monthDifference / 12);
+            sumYearCurrent += sumMonth;
+          }
+        }
+        stockDividend = Math.round(sumYearOld + sumYearCurrent);
+        res.setStockDividend(String.valueOf(stockDividend));
+
+        // Interest dividend
+        int sumInterest = 0;
+        int interestDividend = 0;
+        var LoanDividendYearCurrent = documentRepository.documentInfoInterestDividend(res.getEmployeeCode(), req.getYearCurrent());
+        for(DocumentStockDevidend loanDividend : LoanDividendYearCurrent) {
+          sumInterest += Integer.parseInt(loanDividend.getInterest());
+        }
+        double interestDividendPercent = Double.parseDouble(req.getInterestDividendPercent()) / 100;
+        interestDividend = (int) Math.round(sumInterest * interestDividendPercent);
+        res.setCumulativeInterest(String.valueOf(sumInterest));
+        res.setInterestDividend(String.valueOf(interestDividend));
+
+        //  รวมปนผล = ( ปนผลหุน + ปนผลดอกเบี้ย )
+        totalDividend = stockDividend + interestDividend;
+        res.setTotalDividend(String.valueOf(totalDividend));
+      });
+    }
+
+    return resDividend;
+  }
+
+  private int getMonthNumber(String month) {
+    return switch (month) {
+      case "มกราคม" -> 1;
+      case "กุมภาพันธ์" -> 2;
+      case "มีนาคม" -> 3;
+      case "เมษายน" -> 4;
+      case "พฤษภาคม" -> 5;
+      case "มิถุนายน" -> 6;
+      case "กรกฎาคม" -> 7;
+      case "สิงหาคม" -> 8;
+      case "กันยายน" -> 9;
+      case "ตุลาคม" -> 10;
+      case "พฤศจิกายน" -> 11;
+      default -> 12; // For "ธันวาคม" month
+    };
+  }
+
 }

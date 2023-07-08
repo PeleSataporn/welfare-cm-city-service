@@ -260,4 +260,76 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
+
+  public StringBuilder buildQuerySqlStockDividend(String empCode, String getYearCurrent, String getYearOld) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+                    "employee.bank_account_receiving_number, stock.stock_accumulate " +
+                    "FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
+                    "LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+                    "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
+                    "where employee.deleted = FALSE "
+    );
+    // , stock_detail.stock_value, stock_detail.stock_year, stock_detail.stock_month
+    if (empCode != null) {
+      sql.append(" AND employee.employee_code = '").append(empCode).append("'");
+    }
+    if(getYearCurrent != null){
+      sql.append(" AND stock_detail.stock_year = '").append(getYearCurrent).append("'");
+    }
+//    if(getYearOld != null){
+//      sql.append(" AND stock_detail.stock_year = '").append(getYearOld).append("'");
+//      sql.append(" AND stock_detail.stock_month = '").append("ธันวาคม").append("'");
+//    }
+    sql.append(" GROUP BY employee.id ORDER BY department.name ");
+
+    return sql;
+  }
+
+  public List<DocumentStockDevidend> documentInfoStockDividend(String empCode, String getYearCurrent, String getYearOld) {
+    val sql = buildQuerySqlStockDividend(empCode, getYearCurrent, getYearOld);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentStockDevidend.class));
+  }
+
+  public StringBuilder buildQuerySqlInterestDividend(String empCode, String getYearCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+                    "loan_detail.interest, loan_detail.loan_year, loan_detail.loan_month " +
+                    "FROM employee JOIN loan ON employee.loan_id = loan.id JOIN loan_detail ON loan_detail.loan_id = loan.id "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    sql.append(" AND loan_detail.loan_year = '").append(getYearCurrent).append("'");
+    return sql;
+  }
+
+  public List<DocumentStockDevidend> documentInfoInterestDividend(String empCode, String getYearCurrent) {
+    val sql = buildQuerySqlInterestDividend(empCode, getYearCurrent);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentStockDevidend.class));
+  }
+
+  public StringBuilder buildQuerySqlStockDividendV2(String empCode, String getYearCurrent, String getYearOld) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+                    "stock_detail.stock_accumulate, stock_detail.stock_value, stock_detail.stock_year, stock_detail.stock_month " +
+                    "FROM employee LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id  "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    if(getYearCurrent != null){
+      sql.append(" AND stock_detail.stock_year = '").append(getYearCurrent).append("'");
+    }
+    if(getYearOld != null){
+      sql.append(" AND stock_detail.stock_year = '").append(getYearOld).append("'");
+      sql.append(" AND stock_detail.stock_month = '").append("ธันวาคม").append("'");
+    }
+    return sql;
+  }
+
+  public List<DocumentStockDevidend> documentInfoStockDividendV1(String empCode, String getYearCurrent, String getYearOld) {
+    val sql = buildQuerySqlStockDividendV2(empCode, getYearCurrent, getYearOld);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentStockDevidend.class));
+  }
+
 }

@@ -12,6 +12,13 @@ public class DocumentReq {
   private Long loanId = null;
   private String monthCurrent;
   private String yearCurrent;
+  private String yearOld;
   private String empCode;
   private String fullName;
+
+  // ปนผลหุน %
+  private String stockDividendPercent;
+  // ปนผลดอกเบี้ย %
+  private String interestDividendPercent;
+
 }
