@@ -35,6 +35,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\dto\EmployeeTypeDto.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\model\DocumentV1ResLoan.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\loan\model\LoanRes.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\stockdetail\StockDetailLoginRepository.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\register\model\res\SearchNewRegisterRes.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\employee\EmployeeService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\stock\StockService.java
@@ -95,6 +96,7 @@ C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmc
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\mapper\base\BaseMapperConfig.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\bureau\BureauController.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\loandetail\LoanDetailController.java
+C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\document\model\DocumentStockDevidend.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\employee\model\LoanRes.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\logic\login\LoginService.java
 C:\Users\sruji\Documents\welfare-cm-city-service\src\main\java\com\cm\welfarecmcity\api\stock\StockRepository.java

@@ -122,6 +122,7 @@ com\cm\welfarecmcity\api\department\DepartmentController.class
 com\cm\welfarecmcity\dto\UserDto.class
 com\cm\welfarecmcity\utils\listener\GenerateListener.class
 com\cm\welfarecmcity\dto\guarantor\GuarantorController.class
+com\cm\welfarecmcity\api\stockdetail\StockDetailLoginRepository.class
 com\cm\welfarecmcity\api\employee\model\EmpEditReq.class
 com\cm\welfarecmcity\logic\employee\model\StockRes.class
 com\cm\welfarecmcity\api\employee\model\EmpRes.class
@@ -167,5 +168,6 @@ com\cm\welfarecmcity\logic\document\model\DocumentV1Res.class
 com\cm\welfarecmcity\api\employee\model\UpdateStockValueReq.class
 com\cm\welfarecmcity\CalloanOld.class
 com\cm\welfarecmcity\dto\LoanDetailDto.class
+com\cm\welfarecmcity\logic\document\model\DocumentStockDevidend.class
 com\cm\welfarecmcity\logic\employee\model\LoanRes.class
 com\cm\welfarecmcity\WelfareCmCityApplication.class

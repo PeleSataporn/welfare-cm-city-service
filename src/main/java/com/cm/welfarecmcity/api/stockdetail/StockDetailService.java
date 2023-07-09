@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class StockDetailService {
 
   @Autowired
-  private StockDetailRepository stockDetailRepository;
+  private StockDetailLoginRepository stockDetailLoginRepository;
 
   @Autowired
   private ResponseDataUtils responseDataUtils;
@@ -23,6 +23,6 @@ public class StockDetailService {
 
   @Transactional
   public List<StockDetailDto> getStockDetail(Long stockId, String value) {
-    return stockDetailRepository.findAllByStock_Id(stockId, Sort.by(sort.orderBy(value), "installment"));
+    return stockDetailLoginRepository.documentInfoV1StockDetail(stockId, value);
   }
 }

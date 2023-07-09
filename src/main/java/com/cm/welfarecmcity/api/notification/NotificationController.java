@@ -21,8 +21,8 @@ public class NotificationController {
     return notificationService.searchNotify();
   }
 
-  @DeleteMapping("/cancel/{id}")
-  public void cancel(@PathVariable Long id) {
-    notificationService.cancel(id);
+  @DeleteMapping("/cancel/{id}/{empId}")
+  public void cancel(@PathVariable Long id, @PathVariable Long empId) {
+    notificationService.cancel(id, empId);
   }
 }

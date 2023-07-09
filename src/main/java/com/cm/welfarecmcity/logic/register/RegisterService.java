@@ -196,6 +196,7 @@ public class RegisterService {
 
     val employeeType = employeeTypeRepository.findById(req.getEmployeeTypeId()).get();
     employee.setEmployeeType(employeeType);
+    employee.setMonthlyStockMoney(req.getStockValue());
 
     // stock
     val stock = new StockDto();

@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.notification;
 
+import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
@@ -15,6 +16,9 @@ public class NotificationService {
 
   @Autowired
   private NotificationRepository notificationRepository;
+
+  @Autowired
+  private EmployeeRepository employeeRepository;
 
   @Autowired
   private MapStructMapper mapStructMapper;
@@ -65,7 +69,11 @@ public class NotificationService {
   }
 
   @Transactional
-  public void cancel(Long id) {
+  public void cancel(Long id, Long empId) {
+    val emp = employeeRepository.findById(empId).get();
+    emp.setCheckStockValueFlag(false);
+    employeeRepository.save(emp);
+
     val notification = notificationRepository.findById(id).get();
     notificationRepository.delete(notification);
   }

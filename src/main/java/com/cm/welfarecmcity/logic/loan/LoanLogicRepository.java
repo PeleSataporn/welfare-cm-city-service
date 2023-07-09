@@ -77,6 +77,7 @@ public class LoanLogicRepository {
         " SELECT id, prefix, first_name, last_name, gender, relationship, active FROM beneficiary WHERE beneficiary.deleted = FALSE AND employee_id = "
       )
       .append(id)
+      .append(" AND beneficiary.life_status = 'มีชีวิต'")
       .append(" order by prefix ");
     return sql;
   }
