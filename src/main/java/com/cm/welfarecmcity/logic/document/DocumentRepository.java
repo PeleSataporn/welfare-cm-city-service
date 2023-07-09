@@ -226,7 +226,7 @@ public class DocumentRepository {
       " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
-    sql.append(" WHERE employee.employee_code = ").append(req.getEmpCode());
+    sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     sql
       .append(" and stock_detail.stock_month = '")
       .append(req.getMonthCurrent())
