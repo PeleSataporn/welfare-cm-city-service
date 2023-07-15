@@ -14,57 +14,67 @@ public class DocumentRepository {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  public StringBuilder buildQuerySqlV1stock(Long empId, String monthCurrent) {
+  public StringBuilder buildQuerySqlV1stock(Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id as empId, department.name AS departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
       " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate FROM employee " +
       " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN stock ON employee.stock_id = stock.id " +
-      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
+      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id WHERE 1=1 "
     );
 
     if (empId != null) {
-      sql.append(" WHERE employee.id = ").append(empId);
+      sql.append(" AND employee.id = ").append(empId);
     }
 
     if (monthCurrent != null) {
-      sql.append(" WHERE stock_detail.stock_month = '").append(monthCurrent).append("'");
+      sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
     }
+
+    if (yearCurrent != null) {
+      sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
+    }
+    sql.append(" GROUP BY stockInstallment ");
 
     return sql;
   }
 
-  public List<DocumentV1Res> documentInfoV1stock(Long empId, String monthCurrent) {
-    val sql = buildQuerySqlV1stock(empId, monthCurrent);
+  public List<DocumentV1Res> documentInfoV1stock(Long empId, String monthCurrent, String yearCurrent) {
+    val sql = buildQuerySqlV1stock(empId, monthCurrent, yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1Res.class));
   }
 
-  public StringBuilder buildQuerySqlV1loan(Long empId, String monthCurrent) {
+  public StringBuilder buildQuerySqlV1loan(Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT loan_detail.installment AS loanInstallment, loan_detail.loan_ordinary, loan_detail.interest FROM employee " +
       " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN loan ON employee.loan_id = loan.id " +
-      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id WHERE 1=1"
     );
 
-    if (empId != null && monthCurrent != null) {
-      sql.append(" WHERE employee.id = ").append(empId);
+    if (empId != null && monthCurrent != null && yearCurrent!= null) {
+      sql.append(" AND employee.id = ").append(empId);
       sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     } else {
       if (empId != null) {
-        sql.append(" WHERE employee.id = ").append(empId);
+        sql.append(" AND employee.id = ").append(empId);
       }
 
       if (monthCurrent != null) {
-        sql.append(" WHERE loan_detail.loan_month = '").append(monthCurrent).append("'");
+        sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+      }
+
+      if (yearCurrent != null) {
+        sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
       }
     }
-
+    sql.append(" GROUP BY loanInstallment ");
     return sql;
   }
 
-  public List<DocumentLoanV1Res> documentInfoV1loan(Long empId, String monthCurrent) {
-    val sql = buildQuerySqlV1loan(empId, monthCurrent);
+  public List<DocumentLoanV1Res> documentInfoV1loan(Long empId, String monthCurrent, String yearCurrent) {
+    val sql = buildQuerySqlV1loan(empId, monthCurrent, yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentLoanV1Res.class));
   }
 
@@ -96,19 +106,28 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV2Res.class));
   }
 
-  public StringBuilder buildQuerySqlGrandTotal() {
+  public StringBuilder buildQuerySqlGrandTotal(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT COUNT(employee.id) AS sumEmp, COUNT(loan.id) AS sumLoan, SUM(loan.loan_balance) AS sumLoanBalance, SUM(stock.stock_accumulate) AS sumStockAccumulate, " +
       " SUM(stock_detail.stock_value) AS sumStockValue, SUM(loan_detail.interest) AS sumLoanInterest, SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
       " FROM employee JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
+      " Where employee.deleted = false AND loan.deleted = false "
     );
+    if(yearCurrent != null){
+      sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if(monthCurrent != null){
+      sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
     return sql;
   }
 
-  public GrandTotalRes grandTotal() {
-    val sql = buildQuerySqlGrandTotal();
+  public GrandTotalRes grandTotal(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlGrandTotal(yearCurrent,monthCurrent);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
 
@@ -330,6 +349,32 @@ public class DocumentRepository {
   public List<DocumentStockDevidend> documentInfoStockDividendV1(String empCode, String getYearCurrent, String getYearOld) {
     val sql = buildQuerySqlStockDividendV2(empCode, getYearCurrent, getYearOld);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentStockDevidend.class));
+  }
+
+  public StringBuilder buildQuerySqlDocumentInfoSumEmp() {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false"
+    );
+    return sql;
+  }
+
+  public GrandTotalRes documentInfoSumEmp() {
+    val sql = buildQuerySqlDocumentInfoSumEmp();
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder buildQuerySqlDocumentInfoSumLoanEmp() {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT COUNT(loan.id) AS sumLoan FROM loan where loan.deleted = false "
+    );
+    return sql;
+  }
+
+  public GrandTotalRes documentInfoSumLoanEmp() {
+    val sql = buildQuerySqlDocumentInfoSumLoanEmp();
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
 
 }

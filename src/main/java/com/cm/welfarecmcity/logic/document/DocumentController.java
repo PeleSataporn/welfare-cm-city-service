@@ -22,17 +22,17 @@ public class DocumentController {
   // stock
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
-    return service.searchDocumentV1(req.getEmpId(), req.getMonthCurrent());
+    return service.searchDocumentV1(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
   @PostMapping("v2/document/search")
   public List<DocumentV2Res> searchDocumentV2(@RequestBody DocumentReq req) {
-    return service.searchDocumentV2(req.getEmpId(), req.getMonthCurrent());
+    return service.searchDocumentV2(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
   @PostMapping("v1/document/grand-total")
-  public GrandTotalRes grandTotal() {
-    return service.grandTotal();
+  public GrandTotalRes grandTotal(@RequestBody DocumentReq req) {
+    return service.grandTotal(req);
   }
 
   @PostMapping("v1/document/info-all")

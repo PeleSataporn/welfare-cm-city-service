@@ -17,6 +17,7 @@ import java.util.Objects;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class DocumentService {
@@ -34,13 +35,13 @@ public class DocumentService {
   private LoanDetailLogicRepository loanDetailLogicRepository;
 
   @Transactional
-  public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent) {
-    val res1 = documentRepository.documentInfoV1stock(empId, monthCurrent);
+  public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
+    val res1 = documentRepository.documentInfoV1stock(empId, monthCurrent, yearCurrent);
 
     for (int i = 0; i < res1.size(); i++) {
       var res2 = new ArrayList<DocumentLoanV1Res>();
       if (monthCurrent != null) {
-        res2 = (ArrayList<DocumentLoanV1Res>) documentRepository.documentInfoV1loan(res1.get(i).getEmpId(), monthCurrent);
+        res2 = (ArrayList<DocumentLoanV1Res>) documentRepository.documentInfoV1loan(res1.get(i).getEmpId(), monthCurrent, yearCurrent);
 
         if (res2.size() > 0) {
           res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
@@ -48,7 +49,7 @@ public class DocumentService {
           res1.get(i).setInterest(res2.get(0).getInterest());
         }
       } else {
-        res2 = (ArrayList<DocumentLoanV1Res>) documentRepository.documentInfoV1loan(empId, null);
+        res2 = (ArrayList<DocumentLoanV1Res>) documentRepository.documentInfoV1loan(empId, null, yearCurrent);
 
         if (res2.size() > 0) {
           res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
@@ -86,8 +87,8 @@ public class DocumentService {
   }
 
   @Transactional
-  public List<DocumentV2Res> searchDocumentV2(Long empId, String monthCurrent) {
-    val documentV1 = searchDocumentV1(empId, monthCurrent);
+  public List<DocumentV2Res> searchDocumentV2(Long empId, String monthCurrent, String yearCurrent) {
+    val documentV1 = searchDocumentV1(empId, monthCurrent, yearCurrent);
 
     if (monthCurrent != null) {
       val list = new ArrayList<DocumentV2Res>();
@@ -199,8 +200,12 @@ public class DocumentService {
   }
 
   @Transactional
-  public GrandTotalRes grandTotal() {
-    val res = documentRepository.grandTotal();
+  public GrandTotalRes grandTotal(DocumentReq req) {
+    val res = documentRepository.grandTotal(req.getYearCurrent(), req.getMonthCurrent());
+    val resEmp = documentRepository.documentInfoSumEmp();
+    res.setSumEmp(resEmp.getSumEmp());
+    val resLoan = documentRepository.documentInfoSumLoanEmp();
+    res.setSumLoan(resLoan.getSumLoan());
 
     val sumTotal = (res.getSumStockValue() + res.getSumLoanInterest() + res.getSumLoanOrdinary());
     res.setSumTotal(sumTotal);
@@ -247,7 +252,7 @@ public class DocumentService {
           calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
           calculateReq.setPaymentStartDate("2023-01-31");
 
-          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId());
+          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),null,null);
           loan
             .stream()
             .reduce((first, second) -> second)
@@ -295,7 +300,7 @@ public class DocumentService {
           calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
           calculateReq.setPaymentStartDate("2023-01-31");
 
-          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId());
+          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),null,null);
           loan
             .stream()
             .reduce((first, second) -> second)

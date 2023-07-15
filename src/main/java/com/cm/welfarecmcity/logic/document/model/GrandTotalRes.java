@@ -14,5 +14,5 @@ public class GrandTotalRes {
   private int sumStockValue;
   private int sumLoanInterest;
   private int sumLoanOrdinary;
-    private int sumTotal;
+  private int sumTotal;
 }

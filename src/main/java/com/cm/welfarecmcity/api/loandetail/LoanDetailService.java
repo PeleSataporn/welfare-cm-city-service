@@ -2,9 +2,11 @@ package com.cm.welfarecmcity.api.loandetail;
 
 import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
+import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class LoanDetailService {
     private LoanDetailLogicRepository loanDetailLogicRepository;
 
     @Transactional
-    public List<LoanDetailRes> getLoanDetail(Long loanId) {
-        return loanDetailLogicRepository.loanDetail(loanId);
+    public List<LoanDetailRes> getLoanDetail(DocumentReq req) {
+        return loanDetailLogicRepository.loanDetail(req.getLoanId(), req.getMonthCurrent(), req.getYearCurrent());
     }
 }
