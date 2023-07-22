@@ -21,4 +21,6 @@ public class DocumentReq {
   // ปนผลดอกเบี้ย %
   private String interestDividendPercent;
 
+  private Boolean admin;
+
 }

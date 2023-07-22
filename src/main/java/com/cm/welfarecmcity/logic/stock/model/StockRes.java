@@ -12,4 +12,6 @@ public class StockRes {
     private String employeeCode;
     private String firstName;
     private String lastName;
+    private int employeeStatus;
+    private String status;
 }

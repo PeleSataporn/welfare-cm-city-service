@@ -70,13 +70,17 @@ public class LoginService {
 
   @Transactional
   public ResponseModel<ResponseData> changeForgetPassword(ForgetPasswordDto forgetPasswordDto) {
+    // data response
     String resultStatus = "";
     Long idEmp = null;
+
+    // check forget password
     val changeForgetPassword = loginRepository.checkChangeForgetPassword(
-      forgetPasswordDto.getEmail(),
+      forgetPasswordDto.getTel(),
       forgetPasswordDto.getIdCard(),
       forgetPasswordDto.getEmployeeCode()
     );
+
     if (changeForgetPassword != null && changeForgetPassword.getUserId() != null) {
       UserDto emp = userRepository.findById(changeForgetPassword.getUserId()).get();
       emp.setPassword(forgetPasswordDto.getNewPassword());
@@ -90,7 +94,6 @@ public class LoginService {
       idEmp = changeForgetPassword.getId();
       resultStatus = "CHANGE_SUCCESS";
     } else {
-      idEmp = null;
       resultStatus = "CHANGE_ERROR";
     }
     return responseDataUtils.DataResourceJson(resultStatus, idEmp);

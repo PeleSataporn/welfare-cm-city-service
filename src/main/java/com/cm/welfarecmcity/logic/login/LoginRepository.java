@@ -24,8 +24,7 @@ public class LoginRepository {
       .append("' AND ")
       .append("password = '")
       .append(password)
-      .append("'");
-    //      .append("' AND employee.employee_status in (2,5) ");
+      .append("' AND employee.employee_status not in (6,7) ");
 
     return sql;
   }
@@ -35,24 +34,21 @@ public class LoginRepository {
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(UserDto.class));
     } catch (EmptyResultDataAccessException e) {
-      //      e.printStackTrace();
       return null;
     }
-    //    return null;
-    //    return jdbcTemplate.queryForObject(sql.toString(), UserDto.class);
   }
 
-  public StringBuilder buildQuerySqlForgetPassword(String email, String idCard, String employeeCode) {
+  public StringBuilder buildQuerySqlForgetPassword(String tel, String idCard, String employeeCode) {
     val sql = new StringBuilder();
 
     sql
       .append(
-        " SELECT e.id, e.id_card, c.email, e.user_id, e.employee_code FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '"
+        " SELECT e.id, e.id_card, c.tel, e.user_id, e.employee_code FROM employee e inner join contact c on e.contact_id = c.id WHERE e.id_card = '"
       )
       .append(idCard)
       .append("' AND ")
-      .append("c.email = '")
-      .append(email)
+      .append("c.tel = '")
+      .append(tel)
       .append("' AND ")
       .append("e.employee_code = '")
       .append(employeeCode)
@@ -61,8 +57,8 @@ public class LoginRepository {
     return sql;
   }
 
-  public ForgetPasswordDto checkChangeForgetPassword(String email, String idCard, String employeeCode) {
-    val sql = buildQuerySqlForgetPassword(email, idCard, employeeCode);
+  public ForgetPasswordDto checkChangeForgetPassword(String tel, String idCard, String employeeCode) {
+    val sql = buildQuerySqlForgetPassword(tel, idCard, employeeCode);
     try {
       return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(ForgetPasswordDto.class));
     } catch (EmptyResultDataAccessException e) {

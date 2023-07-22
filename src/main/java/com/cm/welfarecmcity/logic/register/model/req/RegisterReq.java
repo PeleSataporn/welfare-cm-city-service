@@ -13,13 +13,13 @@ public class RegisterReq {
   private String lastName;
   private String idCard;
   private String tel;
-  private String email;
+  private String email = null;
   // ตำแหน่ง
   private Long positionId;
   // สังกัด
   private Long affiliationId;
   // หน่วยงาน
-  private Long dapartmentId;
+  private Long departmentId;
   private Long levelId;
   private Long employeeTypeId;
 

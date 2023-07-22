@@ -20,11 +20,13 @@ public class DocumentRepository {
       " SELECT employee.id as empId, department.name AS departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
       " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate FROM employee " +
       " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN stock ON employee.stock_id = stock.id " +
-      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id WHERE 1=1 "
+      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
     );
 
     if (empId != null) {
-      sql.append(" AND employee.id = ").append(empId);
+      //      sql.append(" AND employee.id = ").append(empId);
+      sql.append(" WHERE employee.id = ").append(empId);
+      //      sql.append(" ORDER BY stock_detail.installment ");
     }
 
     if (monthCurrent != null) {
@@ -52,7 +54,7 @@ public class DocumentRepository {
       " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id WHERE 1=1"
     );
 
-    if (empId != null && monthCurrent != null && yearCurrent!= null) {
+    if (empId != null && monthCurrent != null && yearCurrent != null) {
       sql.append(" AND employee.id = ").append(empId);
       sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -109,17 +111,16 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlGrandTotal(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT COUNT(employee.id) AS sumEmp, COUNT(loan.id) AS sumLoan, SUM(loan.loan_balance) AS sumLoanBalance, SUM(stock.stock_accumulate) AS sumStockAccumulate, " +
+      " SELECT COUNT(DISTINCT employee.id) AS sumEmp, COUNT(DISTINCT loan.id) AS sumLoan, SUM(DISTINCT loan.loan_balance) AS sumLoanBalance, SUM(DISTINCT stock.stock_accumulate) AS sumStockAccumulate, " +
       " SUM(stock_detail.stock_value) AS sumStockValue, SUM(loan_detail.interest) AS sumLoanInterest, SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
-      " FROM employee JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
-      " Where employee.deleted = false AND loan.deleted = false "
+      " FROM employee JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) " +
+      " LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) LEFT JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) WHERE employee.deleted = FALSE "
     );
-    if(yearCurrent != null){
+    if (yearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
-    if(monthCurrent != null){
+    if (monthCurrent != null) {
       sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
       sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
     }
@@ -127,7 +128,7 @@ public class DocumentRepository {
   }
 
   public GrandTotalRes grandTotal(String yearCurrent, String monthCurrent) {
-    val sql = buildQuerySqlGrandTotal(yearCurrent,monthCurrent);
+    val sql = buildQuerySqlGrandTotal(yearCurrent, monthCurrent);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
 
@@ -162,14 +163,20 @@ public class DocumentRepository {
     sql.append(
       " SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, loan_detail.installment, loan_detail.interest_last_month as interestLastMonth, " +
       " loan.new_loan as newLoan, loan.loan_value as loanValue, loan.loan_time as loanTime, loan_detail.interest_percent as interestPercent, loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2 " +
-      " FROM department JOIN employee ON employee.department_id = department.id JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " FROM department " +
+      " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) " +
+      " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
+      " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) " +
+      " JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
+      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) "
     );
+
     if (loanId != null) {
       sql.append(" WHERE loan.id = ").append(loanId);
-      sql.append(" AND stock_detail.stock_month = '").append(getMonthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     } else {
-      sql.append(" WHERE stock_detail.stock_month = '").append(getMonthCurrent).append("'");
+      sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
+      sql.append(" GROUP BY employee.id ");
     }
 
     return sql;
@@ -185,15 +192,17 @@ public class DocumentRepository {
     sql.append(
       " SELECT department.name as departmentName, SUM(loan.loan_value) AS loanValueTotal " +
       " FROM department " +
-      " JOIN employee ON employee.department_id = department.id JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " JOIN employee ON employee.department_id = department.id " +
+      " JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+      " LEFT JOIN loan ON employee.loan_id = loan.id " +
+      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
 
     if (loanId != null) {
       sql.append(" WHERE loan.id = ").append(loanId);
-      sql.append(" AND stock_detail.stock_month = '").append(getMonthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     } else {
-      sql.append(" WHERE stock_detail.stock_month = '").append(getMonthCurrent).append("'");
+      sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     }
 
     sql.append(" GROUP BY department.id ");
@@ -283,24 +292,24 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlStockDividend(String empCode, String getYearCurrent, String getYearOld) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-                    "employee.bank_account_receiving_number, stock.stock_accumulate " +
-                    "FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
-                    "LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-                    "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
-                    "where employee.deleted = FALSE "
+      " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+      "employee.bank_account_receiving_number, stock.stock_accumulate " +
+      "FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
+      "LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+      "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
+      "where employee.deleted = FALSE "
     );
     // , stock_detail.stock_value, stock_detail.stock_year, stock_detail.stock_month
     if (empCode != null) {
       sql.append(" AND employee.employee_code = '").append(empCode).append("'");
     }
-    if(getYearCurrent != null){
+    if (getYearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(getYearCurrent).append("'");
     }
-//    if(getYearOld != null){
-//      sql.append(" AND stock_detail.stock_year = '").append(getYearOld).append("'");
-//      sql.append(" AND stock_detail.stock_month = '").append("ธันวาคม").append("'");
-//    }
+    //    if(getYearOld != null){
+    //      sql.append(" AND stock_detail.stock_year = '").append(getYearOld).append("'");
+    //      sql.append(" AND stock_detail.stock_month = '").append("ธันวาคม").append("'");
+    //    }
     sql.append(" GROUP BY employee.id ORDER BY department.name ");
 
     return sql;
@@ -314,9 +323,9 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlInterestDividend(String empCode, String getYearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-                    "loan_detail.interest, loan_detail.loan_year, loan_detail.loan_month " +
-                    "FROM employee JOIN loan ON employee.loan_id = loan.id JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+      "loan_detail.interest, loan_detail.loan_year, loan_detail.loan_month " +
+      "FROM employee JOIN loan ON employee.loan_id = loan.id JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
     sql.append(" AND loan_detail.loan_year = '").append(getYearCurrent).append("'");
@@ -331,15 +340,15 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlStockDividendV2(String empCode, String getYearCurrent, String getYearOld) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-                    "stock_detail.stock_accumulate, stock_detail.stock_value, stock_detail.stock_year, stock_detail.stock_month " +
-                    "FROM employee LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id  "
+      " SELECT employee.id as empId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+      "stock_detail.stock_accumulate, stock_detail.stock_value, stock_detail.stock_year, stock_detail.stock_month " +
+      "FROM employee LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id  "
     );
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
-    if(getYearCurrent != null){
+    if (getYearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(getYearCurrent).append("'");
     }
-    if(getYearOld != null){
+    if (getYearOld != null) {
       sql.append(" AND stock_detail.stock_year = '").append(getYearOld).append("'");
       sql.append(" AND stock_detail.stock_month = '").append("ธันวาคม").append("'");
     }
@@ -353,9 +362,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlDocumentInfoSumEmp() {
     val sql = new StringBuilder();
-    sql.append(
-            " SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false"
-    );
+    sql.append(" SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false");
     return sql;
   }
 
@@ -366,9 +373,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlDocumentInfoSumLoanEmp() {
     val sql = new StringBuilder();
-    sql.append(
-            " SELECT COUNT(loan.id) AS sumLoan FROM loan where loan.deleted = false "
-    );
+    sql.append(" SELECT COUNT(loan.id) AS sumLoan FROM loan where loan.deleted = false ");
     return sql;
   }
 
@@ -376,5 +381,4 @@ public class DocumentRepository {
     val sql = buildQuerySqlDocumentInfoSumLoanEmp();
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
-
 }

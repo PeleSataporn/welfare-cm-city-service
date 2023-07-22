@@ -19,7 +19,13 @@ public enum EmployeeStatusEnum {
   PENDING_RESIGN_EMPLOYEE(5),
 
   // เสียชีวิต
-  DIED_EMPLOYEE(6);
+  DIED_EMPLOYEE(6),
+
+  // หนีหนี้
+  ESCAPE_DEBT(7),
+
+  // เกษียณ
+  RETIRE(8);
 
   private final int state;
 

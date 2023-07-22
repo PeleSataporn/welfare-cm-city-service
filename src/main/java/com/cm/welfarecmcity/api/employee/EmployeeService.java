@@ -144,6 +144,11 @@ public class EmployeeService {
     if (req.getType() == 1) {
       employee.setEmployeeStatus(EmployeeStatusEnum.RESIGN_EMPLOYEE.getState());
       employee.setApprovedResignationDate(new Date());
+
+      val stock = stockRepository.findById(employee.getStock().getId()).get();
+      stock.setStockAccumulate(0);
+      stock.setDeleted(true);
+      stockRepository.save(stock);
     } else {
       employee.setMonthlyStockMoney(Integer.parseInt(req.getValue()));
       employee.getStock().setStockValue(Integer.parseInt(req.getValue()));
@@ -182,14 +187,14 @@ public class EmployeeService {
   }
 
   @Transactional
-  public ResponseModel<ResponseId> updateEmpoyeeStatus(UpdateAdminReq req) {
+  public ResponseModel<ResponseId> updateEmployeeStatus(UpdateAdminReq req) {
     val findEmployee = employeeRepository.findById(req.getId());
     if (findEmployee.isEmpty()) {
       throw new EmployeeException("Employee id not found");
     }
 
     val employee = findEmployee.get();
-    employee.setEmployeeStatus(EmployeeStatusEnum.DIED_EMPLOYEE.getState());
+    employee.setEmployeeStatus(req.getType());
 
     return responseDataUtils.updateDataSuccess(req.getId());
   }

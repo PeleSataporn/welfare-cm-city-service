@@ -145,8 +145,10 @@ public class LoanLogicService {
     val loan = loanRepository.findById(id).get();
     loan.setLoanBalance(0);
     loan.setActive(false);
-    loan.setDeleted(true);
+    //    loan.setDeleted(true);
     loan.setInterest(0);
+    loan.setGuarantorOne(null);
+    loan.setGuarantorTwo(null);
 
     loanRepository.save(loan);
   }

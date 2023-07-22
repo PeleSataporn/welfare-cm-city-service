@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -378,7 +377,12 @@ public class DocumentService {
 
   // loan
   @Transactional
-  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent) {
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent, Boolean admin) {
+
+    if (!admin) {
+      return null;
+    }else{
+
     var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent);
     resLoan.forEach(res -> {
       //    function --> calculateLoanOld()
@@ -453,8 +457,8 @@ public class DocumentService {
         }
       }
     });
-
-    return resLoan;
+      return resLoan;
+    }
   }
 
   @Transactional
@@ -641,7 +645,7 @@ public class DocumentService {
   @Transactional
   public List<DocumentStockDevidend> calculateStockDividend(DocumentReq req) {
     var resDividend = documentRepository.documentInfoStockDividend(req.getEmpCode(), req.getYearCurrent(), null);
-    if(resDividend != null){
+    if (resDividend != null) {
       resDividend.forEach(res -> {
         int totalDividend = 0;
         // stock dividend
@@ -653,7 +657,7 @@ public class DocumentService {
         var resDividendYearCurrent = documentRepository.documentInfoStockDividendV1(res.getEmployeeCode(), req.getYearCurrent(), null);
         // Dividend of employeeCode ( yearOld )
         var resDividendYearOld = documentRepository.documentInfoStockDividendV1(res.getEmployeeCode(), null, req.getYearOld());
-        if(Objects.requireNonNull(resDividendYearOld).size() > 0){
+        if (Objects.requireNonNull(resDividendYearOld).size() > 0) {
           double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
           int stockValue = Integer.parseInt(resDividendYearOld.get(0).getStockValue());
           int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate());
@@ -678,7 +682,7 @@ public class DocumentService {
         int sumInterest = 0;
         int interestDividend = 0;
         var LoanDividendYearCurrent = documentRepository.documentInfoInterestDividend(res.getEmployeeCode(), req.getYearCurrent());
-        for(DocumentStockDevidend loanDividend : LoanDividendYearCurrent) {
+        for (DocumentStockDevidend loanDividend : LoanDividendYearCurrent) {
           sumInterest += Integer.parseInt(loanDividend.getInterest());
         }
         double interestDividendPercent = Double.parseDouble(req.getInterestDividendPercent()) / 100;
@@ -711,5 +715,4 @@ public class DocumentService {
       default -> 12; // For "ธันวาคม" month
     };
   }
-
 }

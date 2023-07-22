@@ -42,8 +42,8 @@ public class EmployeeController {
   }
 
   @PatchMapping("/update-emp-status")
-  public ResponseModel<ResponseId> updateEmpoyeeStatus(@RequestBody UpdateAdminReq req) {
-    return employeeService.updateEmpoyeeStatus(req);
+  public ResponseModel<ResponseId> updateEmployeeStatus(@RequestBody UpdateAdminReq req) {
+    return employeeService.updateEmployeeStatus(req);
   }
 
   @GetMapping("test-host")

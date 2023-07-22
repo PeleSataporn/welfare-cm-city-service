@@ -81,7 +81,9 @@ public class RegisterService {
   public Long setModelEmployee(RegisterReq req) {
     val contact = new ContactDto();
     contact.setTel(req.getTel());
-    contact.setEmail(req.getEmail());
+    if (req.getEmail() != null) {
+      contact.setEmail(req.getEmail());
+    }
 
     val employee = new EmployeeDto();
     employee.setIdCard(req.getIdCard());
@@ -188,7 +190,7 @@ public class RegisterService {
     val affiliation = affiliationRepository.findById(req.getAffiliationId()).get();
     employee.setAffiliation(affiliation);
 
-    val department = departmentRepository.findById(req.getDapartmentId()).get();
+    val department = departmentRepository.findById(req.getDepartmentId()).get();
     employee.setDepartment(department);
 
     val level = levelRepository.findById(req.getLevelId()).get();
@@ -279,8 +281,13 @@ public class RegisterService {
     val userTemp = userRepository.save(user);
 
     employee.setUser(userTemp);
-    val emp = employeeRepository.save(employee);
-    emailSendService.sendSimpleEmail(employee.getContact().getEmail(), employee.getEmployeeCode(), employee.getIdCard());
+    employeeRepository.save(employee);
+
+    // send email
+    val contact = contactRepository.findById(employee.getContact().getId()).get();
+    if (contact.getEmail() != null) {
+      emailSendService.sendSimpleEmail(contact.getEmail(), employee.getEmployeeCode(), employee.getIdCard());
+    }
 
     // notify
     val notify = notificationRepository.findById(req.getNoId()).get();
@@ -320,10 +327,127 @@ public class RegisterService {
 
   @Transactional
   public ResponseModel<ResponseData> editStatusEmployeeResign(ResignRegisterReq req) {
+    // return ResponseModel
     String resultStatus = "";
     Long idEmp = null;
+
+    // find employee
     EmployeeDto emp = employeeRepository.findById(req.getId()).get();
     emp.setEmployeeStatus(EmployeeStatusEnum.NEW_EMPLOYEE.getState());
+    emp.setFirstName(req.getFirstName());
+    emp.setLastName(req.getLastName());
+
+    val position = positionRepository.findById(req.getPositionId()).get();
+    emp.setPosition(position);
+
+    val affiliation = affiliationRepository.findById(req.getAffiliationId()).get();
+    emp.setAffiliation(affiliation);
+
+    val department = departmentRepository.findById(req.getDepartmentId()).get();
+    emp.setDepartment(department);
+
+    val level = levelRepository.findById(req.getLevelId()).get();
+    emp.setLevel(level);
+
+    val employeeType = employeeTypeRepository.findById(req.getEmployeeTypeId()).get();
+    emp.setEmployeeType(employeeType);
+    emp.setMonthlyStockMoney(req.getStockValue());
+
+    switch (req.getPrefix()) {
+      case 1 -> {
+        emp.setPrefix("นาย");
+        emp.setGender("ชาย");
+      }
+      case 2 -> {
+        emp.setPrefix("นางสาว");
+        emp.setGender("หญิง");
+      }
+      case 3 -> {
+        emp.setPrefix("นาง");
+        emp.setGender("หญิง");
+      }
+      case 6 -> {
+        emp.setPrefix("ว่าที่ร้อยตรี");
+        emp.setGender("ชาย");
+      }
+      case 7 -> {
+        emp.setPrefix("ว่าที่ร้อยตรีหญิง");
+        emp.setGender("หญิง");
+      }
+      case 8 -> {
+        emp.setPrefix("ว่าที่ร้อยโท");
+        emp.setGender("ชาย");
+      }
+      case 9 -> {
+        emp.setPrefix("ว่าที่ร้อยโทหญิง");
+        emp.setGender("หญิง");
+      }
+      case 10 -> {
+        emp.setPrefix("ว่าที่ร้อยเอก");
+        emp.setGender("ชาย");
+      }
+      case 11 -> {
+        emp.setPrefix("ว่าที่ร้อยเอกหญิง");
+        emp.setGender("หญิง");
+      }
+      case 12 -> {
+        emp.setPrefix("สิบตรี");
+        emp.setGender("ชาย");
+      }
+      case 13 -> {
+        emp.setPrefix("สิบตรีหญิง");
+        emp.setGender("หญิง");
+      }
+      case 14 -> {
+        emp.setPrefix("สิบโท");
+        emp.setGender("ชาย");
+      }
+      case 15 -> {
+        emp.setPrefix("สิบโทหญิง");
+        emp.setGender("หญิง");
+      }
+      case 16 -> {
+        emp.setPrefix("สิบเอก");
+        emp.setGender("ชาย");
+      }
+      case 17 -> {
+        emp.setPrefix("สิบเอกหญิง");
+        emp.setGender("หญิง");
+      }
+      case 18 -> {
+        emp.setPrefix("จ่าสิบตรี");
+        emp.setGender("ชาย");
+      }
+      case 19 -> {
+        emp.setPrefix("จ่าสิบตรีหญิง");
+        emp.setGender("หญิง");
+      }
+      case 20 -> {
+        emp.setPrefix("จ่าสิบโท");
+        emp.setGender("ชาย");
+      }
+      case 21 -> {
+        emp.setPrefix("จ่าสิบโทหญิง");
+        emp.setGender("หญิง");
+      }
+      case 22 -> {
+        emp.setPrefix("จ่าสิบเอก");
+        emp.setGender("ชาย");
+      }
+      case 23 -> {
+        emp.setPrefix("จ่าสิบเอกหญิง");
+        emp.setGender("หญิง");
+      }
+      default -> {
+        emp.setPrefix(null);
+        emp.setGender(null);
+      }
+    }
+
+    val contact = contactRepository.findById(emp.getContact().getId()).get();
+    contact.setEmail(req.getEmail());
+    contact.setTel(req.getTel());
+
     employeeRepository.save(emp);
     resultStatus = "NEW_EMPLOYEE";
     return responseDataUtils.DataResourceJson(resultStatus, idEmp);

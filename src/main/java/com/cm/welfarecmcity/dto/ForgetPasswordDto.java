@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class ForgetPasswordDto extends BaseDto {
 
-  private String email;
+  private String tel;
   private String newPassword;
   private String newPassword2;
   private String idCard;

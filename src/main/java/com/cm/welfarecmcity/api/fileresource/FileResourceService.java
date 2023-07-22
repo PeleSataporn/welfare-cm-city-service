@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FileResourceService {
@@ -16,19 +17,19 @@ public class FileResourceService {
   @Autowired
   private EmployeeRepository employeeRepository;
 
+  @Transactional
   public void create(FileResourceDto image, Long empId) {
     val fileResource = repository.save(image);
 
     val emp = employeeRepository.findById(empId).get();
 
-    if (emp.getProfileImg() != null) {
-      val file = emp.getProfileImg();
-
-      emp.setProfileImg(fileResource);
-      employeeRepository.save(emp);
-
+    val file = emp.getProfileImg();
+    if (file != null) {
       repository.delete(file);
     }
+
+    emp.setProfileImg(fileResource);
+    employeeRepository.save(emp);
   }
 
   public List<FileResourceDto> viewAll() {

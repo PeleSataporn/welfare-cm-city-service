@@ -22,7 +22,22 @@ public class StockLogicService {
 
   @Transactional
   public List<StockRes> searchStock() {
-    return stockLogicRepository.searchStock();
+    List<StockRes> stock = stockLogicRepository.searchStock();
+
+    for (StockRes item : stock) {
+      switch (item.getEmployeeStatus()) {
+        case 1 -> item.setStatus("สมาชิกแรกเข้า");
+        case 2 -> item.setStatus("ใช้งานปกติ");
+        case 3 -> item.setStatus("ลาออก");
+        case 4 -> item.setStatus("error");
+        case 5 -> item.setStatus("รออนุมัติลาออก");
+        case 6 -> item.setStatus("เสียชีวิต");
+        case 7 -> item.setStatus("หนีหนี้");
+        default -> item.setStatus("ไม่ทราบสถานะ");
+      }
+    }
+
+    return stock;
   }
 
   @Transactional
@@ -37,7 +52,7 @@ public class StockLogicService {
         detail.getInstallment() + 1,
         detail.getStockValue(),
         detail.getStockId(),
-              stockAccumulate
+        stockAccumulate
       );
 
       val stock = stockRepository.findById(detail.getStockId()).get();
