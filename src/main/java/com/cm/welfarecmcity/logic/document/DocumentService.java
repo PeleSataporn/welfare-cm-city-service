@@ -214,7 +214,7 @@ public class DocumentService {
   }
 
   @Transactional
-  public List<DocumentInfoAllRes> documentInfoAll() {
+  public List<DocumentInfoAllRes> documentInfoAll(DocumentReq req) {
     List<DocumentInfoAllRes> listInfoAll = documentRepository.documentInfoAll();
 
     // guarantee
@@ -252,7 +252,7 @@ public class DocumentService {
           calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
           calculateReq.setPaymentStartDate("2023-01-31");
 
-          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),null,null);
+          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),req.getMonthCurrent(),req.getYearCurrent());
           loan
             .stream()
             .reduce((first, second) -> second)
@@ -300,7 +300,7 @@ public class DocumentService {
           calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
           calculateReq.setPaymentStartDate("2023-01-31");
 
-          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),null,null);
+          val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(),req.getMonthCurrent(),req.getYearCurrent());
           loan
             .stream()
             .reduce((first, second) -> second)

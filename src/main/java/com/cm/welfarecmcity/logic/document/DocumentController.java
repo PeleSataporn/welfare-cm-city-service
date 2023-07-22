@@ -36,8 +36,8 @@ public class DocumentController {
   }
 
   @PostMapping("v1/document/info-all")
-  public List<DocumentInfoAllRes> documentInfoAll() {
-    return service.documentInfoAll();
+  public List<DocumentInfoAllRes> documentInfoAll(@RequestBody DocumentReq req) {
+    return service.documentInfoAll(req);
   }
 
   // loan
