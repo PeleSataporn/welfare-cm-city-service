@@ -114,9 +114,9 @@ public class DocumentService {
 
         loanDetailInterestTotal += loanInterest;
         loanDetailOrdinaryTotal += loanOrdinary;
-        stockValueTotal += Integer.parseInt(documentV1Res.getStockValue());
-        stockAccumulateTotal += Integer.parseInt(documentV1Res.getStockAccumulate());
-        totalMonth += Integer.parseInt(documentV1Res.getSumMonth());
+        stockValueTotal += Integer.parseInt(documentV1Res.getStockValue() != null ? documentV1Res.getStockValue() : "0");
+        stockAccumulateTotal += Integer.parseInt(documentV1Res.getStockAccumulate() != null ? documentV1Res.getStockAccumulate() : "0");
+        totalMonth += Integer.parseInt(documentV1Res.getSumMonth() != null ? documentV1Res.getSumMonth() : "0");
 
         documentV2.setLoanDetailInterestTotal(String.valueOf(loanDetailInterestTotal));
         documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanDetailOrdinaryTotal));

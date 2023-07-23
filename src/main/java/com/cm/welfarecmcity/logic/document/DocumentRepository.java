@@ -20,12 +20,12 @@ public class DocumentRepository {
       " SELECT employee.id as empId, department.name AS departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
       " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate FROM employee " +
       " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN stock ON employee.stock_id = stock.id " +
-      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
+      " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id WHERE 1=1 "
     );
 
     if (empId != null) {
       //      sql.append(" AND employee.id = ").append(empId);
-      sql.append(" WHERE employee.id = ").append(empId);
+      sql.append(" AND employee.id = ").append(empId);
       //      sql.append(" ORDER BY stock_detail.installment ");
     }
 
@@ -36,7 +36,7 @@ public class DocumentRepository {
     if (yearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
     }
-    sql.append(" GROUP BY stockInstallment ");
+    sql.append(" GROUP BY employee.employee_code ");
 
     return sql;
   }
@@ -71,7 +71,7 @@ public class DocumentRepository {
         sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
       }
     }
-    sql.append(" GROUP BY loanInstallment ");
+    sql.append(" GROUP BY employee.employee_code ");
     return sql;
   }
 
@@ -267,6 +267,7 @@ public class DocumentRepository {
       .append("' and loan_detail.loan_year = '")
       .append(req.getYearCurrent())
       .append("'");
+    sql.append(" GROUP BY employee.employee_code ");
     return sql;
   }
 
