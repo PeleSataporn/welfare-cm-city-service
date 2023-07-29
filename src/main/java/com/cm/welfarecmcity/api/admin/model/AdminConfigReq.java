@@ -8,4 +8,12 @@ public class AdminConfigReq {
     private String name;
     private String value;
     private String description;
+    private String monthCurrent;
+    private String yearCurrent;
+    private String paymentStartDate;
+
+    // emp
+    private Long empId;
+    private String employeeCode;
+    private Boolean adminFlag;
 }

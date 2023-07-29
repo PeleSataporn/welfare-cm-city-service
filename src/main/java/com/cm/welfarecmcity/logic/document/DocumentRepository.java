@@ -148,7 +148,7 @@ public class DocumentRepository {
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE "
+      " WHERE employee.deleted = FALSE GROUP BY employee.id "
     );
     return sql;
   }
@@ -168,16 +168,18 @@ public class DocumentRepository {
       " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
       " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) " +
       " JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
-      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) "
+      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) WHERE 1=1 "
     );
-
-    if (loanId != null) {
-      sql.append(" WHERE loan.id = ").append(loanId);
+    if(getMonthCurrent != null){
       sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
+    }
+    if (loanId != null) {
+      sql.append(" AND loan_detail.loan_id = ").append(loanId);
+      sql.append(" GROUP BY installment ");
     } else {
-      sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" GROUP BY employee.id ");
     }
+
 
     return sql;
   }
@@ -200,7 +202,7 @@ public class DocumentRepository {
 
     if (loanId != null) {
       sql.append(" WHERE loan.id = ").append(loanId);
-      sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
+      //sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     } else {
       sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     }
@@ -248,7 +250,7 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-      " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate,loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
+      " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
       " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId " +
       " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
       " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +

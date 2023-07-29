@@ -126,4 +126,6 @@ public class EmployeeDto extends BaseDto {
 
   @OneToOne(fetch = FetchType.LAZY)
   private FileResourceDto profileImg;
+
+  private Boolean adminFlag;
 }

@@ -20,7 +20,8 @@ public class StockDetailLoginRepository {
 
     sql.append(" WHERE stock_detail.stock_id = ").append(stockId).append(" AND stock_detail.stock_accumulate != 0 ");
 
-    sql.append(" order by id ").append(value);
+    sql.append(" order by stock_detail.installment DESC, stock_detail.stock_year ");
+    //sql.append(" order by id ").append(value);
 
     return sql;
   }

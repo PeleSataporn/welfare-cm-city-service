@@ -2,11 +2,17 @@ package com.cm.welfarecmcity.api.admin;
 
 import com.cm.welfarecmcity.api.admin.model.AdminConfigReq;
 import com.cm.welfarecmcity.api.admin.model.AdminConfigRes;
+import com.cm.welfarecmcity.api.admin.model.employeeListRes;
+import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.fileresource.AddImageReq;
+import com.cm.welfarecmcity.api.loan.LoanRepository;
+import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.dto.AdminConfigDto;
 import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.logic.document.DocumentRepository;
+import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +33,16 @@ public class AdminConfigController {
     @PostMapping("logic/document/getConfigByList")
     public List<AdminConfigRes> getConfigByList() {
         return service.getConfigByList();
+    }
+
+    @PostMapping("logic/document/getEmployeeByList")
+    public List<employeeListRes> getEmployeeByList(@RequestBody AdminConfigReq req) {
+        return service.getEmployeeByList(req);
+    }
+
+    @PostMapping("logic/document/updateRoleEmp")
+    public Boolean updateRoleEmp(@RequestBody AdminConfigReq req) {
+        return service.updateRoleEmp(req);
     }
 
     @PostMapping("logic/document/updateConfig")

@@ -20,6 +20,7 @@ public class EmployeeLoanNew {
   private String salary = null;
 
   // --------- loan -----------
+  private Long loanId;
   private int loanTime;
   private String interestLoan;
   private String guarantorOne;

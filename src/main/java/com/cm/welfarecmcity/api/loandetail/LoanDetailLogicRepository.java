@@ -29,7 +29,7 @@ public class LoanDetailLogicRepository {
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
-    //sql.append(" GROUP BY loan_detail.installment ");
+    sql.append(" ORDER BY loan_detail.loan_year , loan_detail.installment desc ");  //loan.loan_no
 
     return sql;
   }
@@ -38,4 +38,5 @@ public class LoanDetailLogicRepository {
     val sql = buildQuerySqlV1(loanId,monthCurrent,yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
   }
+
 }
