@@ -36,7 +36,7 @@ public class AdminConfigRepositoryLogic {
     public StringBuilder buildQueryDetailOfEmp(String monthCurrent, String yearCurrent) {
         val sql = new StringBuilder();
         sql.append(
-                " employee.id as empId,loan.id as loanId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+                "Select employee.id as empId,loan.id as loanId, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
                         "stock.stock_accumulate AS stockAccumulate, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance,loan.interest, " +
                         "loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan.guarantor_one_id AS guarantorOne" +
                         " , loan.guarantor_two_id AS guarantorTwo " +

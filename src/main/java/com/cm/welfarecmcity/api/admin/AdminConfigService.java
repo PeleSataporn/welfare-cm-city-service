@@ -102,25 +102,27 @@ public class AdminConfigService {
             if(req.getConfigId() == 1){
                 var result = adminConfigRepositoryLogic.getLanDetailOfEmp(req.getMonthCurrent(),req.getYearCurrent());
                 for(EmployeeLoanNew empNew : result){
-                    // set Req calculateLoanNew
-                    CalculateReq calNew = new CalculateReq();
-                    calNew.setInterestRate(Double.parseDouble(req.getValue()));
-                    calNew.setNumOfPayments(empNew.getLoanTime());
-                    calNew.setPrincipal(Double.parseDouble(empNew.getLoanBalance()));
-                    calNew.setPaymentStartDate(req.getPaymentStartDate());
-                    // get list loan new
-                    List<CalculateInstallments> listLoanNew = calculateLoanNew(calNew);
-                    // close loan
-                    closeLoan(empNew.getLoanId());
-                    // set addLoanNew
-                    empNew.setInterestPercent(req.getValue());
-                    empNew.setLoanValue(empNew.getLoanBalance());
-                    empNew.setInterestLoan(String.valueOf(0));
-                    empNew.setStartDateLoan(req.getPaymentStartDate());
-                    empNew.setLoanMonth(req.getMonthCurrent());
-                    empNew.setLoanYear(req.getYearCurrent());
-                    empNew.setLoanOrdinary(String.valueOf(listLoanNew.get(0).getTotalDeduction()));
-                    addLoanNew(empNew);
+                    if(Integer.parseInt(empNew.getLoanBalance()) > 0){
+                        // set Req calculateLoanNew
+                        CalculateReq calNew = new CalculateReq();
+                        calNew.setInterestRate(Double.parseDouble(req.getValue()));
+                        calNew.setNumOfPayments(empNew.getLoanTime());
+                        calNew.setPrincipal(Double.parseDouble(empNew.getLoanBalance()));
+                        calNew.setPaymentStartDate(req.getPaymentStartDate());
+                        // get list loan new
+                        List<CalculateInstallments> listLoanNew = calculateLoanNew(calNew);
+                        // close loan
+                        closeLoan(empNew.getLoanId());
+                        // set addLoanNew
+                        empNew.setInterestPercent(req.getValue());
+                        empNew.setLoanValue(empNew.getLoanBalance());
+                        empNew.setInterestLoan(String.valueOf(0));
+                        empNew.setStartDateLoan(req.getPaymentStartDate());
+                        empNew.setLoanMonth(req.getMonthCurrent());
+                        empNew.setLoanYear(req.getYearCurrent());
+                        empNew.setLoanOrdinary(String.valueOf(listLoanNew.get(0).getTotalDeduction()));
+                        addLoanNew(empNew);
+                    }
                 }
             }
             return responseDataUtils.insertDataSuccess(req.getConfigId());
@@ -153,12 +155,12 @@ public class AdminConfigService {
         loanDto.setNewLoan(true);
         loanDto.setStartLoanDate(req.getStartDateLoan());
         if (req.getGuarantorOne() != null && req.getGuarantorTwo() != null) {
-            var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
-            val emp1 = employeeRepository.findById(result1.getEmpId()).get();
+//            var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
+            val emp1 = employeeRepository.findById(Long.valueOf(req.getGuarantorOne())).get();
             loanDto.setGuarantorOne(emp1);
             //loanDto.getGuarantorOne().setId(result1.getEmpId());
-            var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
-            val emp2 = employeeRepository.findById(result2.getEmpId()).get();
+//          var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
+            val emp2 = employeeRepository.findById(Long.valueOf(req.getGuarantorTwo())).get();
             loanDto.setGuarantorTwo(emp2);
             //loanDto.getGuarantorTwo().setId(result2.getEmpId());
         }
