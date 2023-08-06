@@ -158,7 +158,7 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
 
-  public StringBuilder buildQuerySqlV1Loan(Long loanId, String getMonthCurrent) {
+  public StringBuilder buildQuerySqlV1Loan(Long loanId, String getMonthCurrent, String testHistory) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, loan_detail.installment, loan_detail.interest_last_month as interestLastMonth, " +
@@ -167,15 +167,19 @@ public class DocumentRepository {
       " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) " +
       " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
       " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) " +
-      " JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
-      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) WHERE 1=1 "
+      " RIGHT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
+      " RIGHT JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) WHERE 1=1 "
     );
     if(getMonthCurrent != null){
       sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     }
     if (loanId != null) {
-      sql.append(" AND loan_detail.loan_id = ").append(loanId);
-      sql.append(" GROUP BY installment ");
+      if(testHistory != null){
+        sql.append(" AND loan_detail.loan_id in (").append(testHistory).append(")");
+      }else{
+        sql.append(" AND loan_detail.loan_id in (").append(loanId).append(")");
+      }
+      sql.append(" GROUP BY loan_detail.loan_id desc, loan_detail.loan_year desc, loan_detail.installment desc ");  //installment
     } else {
       sql.append(" GROUP BY employee.id ");
     }
@@ -184,8 +188,8 @@ public class DocumentRepository {
     return sql;
   }
 
-  public List<DocumentV1ResLoan> documentInfoV1Loan(Long loanId, String getMonthCurrent) {
-    val sql = buildQuerySqlV1Loan(loanId, getMonthCurrent);
+  public List<DocumentV1ResLoan> documentInfoV1Loan(Long loanId, String getMonthCurrent, String testHistory) {
+    val sql = buildQuerySqlV1Loan(loanId, getMonthCurrent, testHistory);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
   }
 

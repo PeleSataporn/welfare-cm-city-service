@@ -77,4 +77,10 @@ public class NotificationService {
     val notification = notificationRepository.findById(id).get();
     notificationRepository.delete(notification);
   }
+
+  @Transactional
+  public void deleteNotify(Long id) {
+    val notification = notificationRepository.findById(id).get();
+    notificationRepository.delete(notification);
+  }
 }

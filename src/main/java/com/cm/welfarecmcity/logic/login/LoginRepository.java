@@ -2,6 +2,7 @@ package com.cm.welfarecmcity.logic.login;
 
 import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
+import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,7 +20,7 @@ public class LoginRepository {
     val sql = new StringBuilder();
 
     sql
-      .append(" SELECT employee.id AS id, username, password FROM employee JOIN user ON user.id = employee.user_id  WHERE username = '")
+      .append(" SELECT employee.id AS id, username, password, employee.password_flag FROM employee JOIN user ON user.id = employee.user_id  WHERE username = '")
       .append(username)
       .append("' AND ")
       .append("password = '")
@@ -66,4 +67,20 @@ public class LoginRepository {
     }
     return null;
   }
+
+  public StringBuilder buildQuerySqlV1GetEmpCodeOfId(String empCode) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName," +
+            " password_flag FROM employee "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    return sql;
+  }
+
+  public DocumentReq getEmpCodeOfId(String empCode) {
+    val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+  }
+
 }

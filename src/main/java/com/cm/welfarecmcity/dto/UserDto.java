@@ -12,6 +12,7 @@ import lombok.Setter;
 public class UserDto extends BaseDto {
 
   private String username;
-
   private String password;
+  private Boolean passwordFlag;
+
 }

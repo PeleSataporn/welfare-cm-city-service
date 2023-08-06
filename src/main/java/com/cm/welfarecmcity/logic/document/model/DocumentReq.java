@@ -22,5 +22,6 @@ public class DocumentReq {
   private String interestDividendPercent;
 
   private Boolean admin;
+  private Boolean passwordFlag;
 
 }

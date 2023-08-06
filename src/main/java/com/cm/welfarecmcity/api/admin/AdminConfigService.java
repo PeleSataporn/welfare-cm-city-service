@@ -5,11 +5,9 @@ import com.cm.welfarecmcity.api.admin.model.AdminConfigRes;
 import com.cm.welfarecmcity.api.admin.model.employeeListRes;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
+import com.cm.welfarecmcity.api.loanHistory.LoanHistoryRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
-import com.cm.welfarecmcity.dto.AdminConfigDto;
-import com.cm.welfarecmcity.dto.FileResourceDto;
-import com.cm.welfarecmcity.dto.LoanDetailDto;
-import com.cm.welfarecmcity.dto.LoanDto;
+import com.cm.welfarecmcity.dto.*;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
@@ -55,6 +53,9 @@ public class AdminConfigService {
 
     @Autowired
     private LoanDetailRepository loanDetailRepository;
+
+    @Autowired
+    private LoanHistoryRepository loanHistoryRepository;
 
     @Transactional
     public List<AdminConfigRes> getConfigByList() {
@@ -102,7 +103,7 @@ public class AdminConfigService {
             if(req.getConfigId() == 1){
                 var result = adminConfigRepositoryLogic.getLanDetailOfEmp(req.getMonthCurrent(),req.getYearCurrent());
                 for(EmployeeLoanNew empNew : result){
-                    if(Integer.parseInt(empNew.getLoanBalance()) > 0){
+                    if(Integer.parseInt(empNew.getLoanBalance()) > 0 && empNew.getEmpId() == 1){
                         // set Req calculateLoanNew
                         CalculateReq calNew = new CalculateReq();
                         calNew.setInterestRate(Double.parseDouble(req.getValue()));
@@ -111,6 +112,11 @@ public class AdminConfigService {
                         calNew.setPaymentStartDate(req.getPaymentStartDate());
                         // get list loan new
                         List<CalculateInstallments> listLoanNew = calculateLoanNew(calNew);
+                        // insert to history loan
+                        LoanHistoryDto loanHistoryDto = new LoanHistoryDto();
+                        loanHistoryDto.setEmployeeId(empNew.getEmpId());
+                        loanHistoryDto.setLoanId(empNew.getLoanId());
+                        val loanHistory = loanHistoryRepository.save(loanHistoryDto);
                         // close loan
                         closeLoan(empNew.getLoanId());
                         // set addLoanNew

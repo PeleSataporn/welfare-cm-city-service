@@ -8,12 +8,14 @@ import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.exception.entity.UserException;
+import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.login.model.LoginRes;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.commons.codec.digest.DigestUtils;
 
 @Service
 public class LoginService {
@@ -30,42 +32,72 @@ public class LoginService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
+  @Autowired
+  private DocumentRepository documentRepository;
+
   @Transactional
   public ResponseModel<Object> login(UserDto dto) {
-    val user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
+    UserDto user = new UserDto();
+    val userCode = loginRepository.getEmpCodeOfId(dto.getUsername());
+    String plainPassword = dto.getPassword();
+    String hashedPassword = hashMD5(plainPassword);
+    if(userCode.getPasswordFlag() == null || !userCode.getPasswordFlag()){
+      user = loginRepository.checkUserLogin(dto.getUsername(), dto.getPassword());
+    }else{
+      user = loginRepository.checkUserLogin(dto.getUsername(), hashedPassword);
+    }
+    String STORED_HASHED_PASSWORD = user.getPassword();
 
     if (user == null) {
       throw new UserException("User not found.");
     }
 
-    val findEmployee = employeeRepository.findById(user.getId());
+    if (checkstatusFlag(user,hashedPassword,STORED_HASHED_PASSWORD)) {
 
-    if (findEmployee.isEmpty()) {
-      throw new EmployeeException("Employee not found.");
-    }
+      val findEmployee = employeeRepository.findById(user.getId());
 
-    val employee = findEmployee.get();
+      if (findEmployee.isEmpty()) {
+        throw new EmployeeException("Employee not found.");
+      }
 
-    val res = new LoginRes();
-    res.setId(employee.getId());
-    res.setEmployeeStatus(employee.getEmployeeStatus());
-    res.setPasswordFlag(employee.getPasswordFlag());
-    if (employee.getStock() != null) {
-      res.setStockId(employee.getStock().getId());
+      val employee = findEmployee.get();
+
+      val res = new LoginRes();
+      res.setId(employee.getId());
+      res.setEmployeeStatus(employee.getEmployeeStatus());
+      res.setPasswordFlag(employee.getPasswordFlag());
+      if (employee.getStock() != null) {
+        res.setStockId(employee.getStock().getId());
+      } else {
+        res.setStockId(null);
+      }
+
+      if (employee.getLoan() != null) {
+        res.setLoanId(employee.getLoan().getId());
+      } else {
+        res.setLoanId(null);
+      }
+
+      val response = new ResponseModel<>();
+      response.setData(res);
+
+      return response;
+
     } else {
-      res.setStockId(null);
+      throw new UserException("User not found.");
     }
+  }
 
-    if (employee.getLoan() != null) {
-      res.setLoanId(employee.getLoan().getId());
-    } else {
-      res.setLoanId(null);
-    }
-
-    val response = new ResponseModel<>();
-    response.setData(res);
-
-    return response;
+  public boolean checkstatusFlag(UserDto dto, String hashedPassword,String STORED_HASHED_PASSWORD){
+      if(dto.getPasswordFlag() == null || !dto.getPasswordFlag()){
+         return true;
+      }else{
+        if(STORED_HASHED_PASSWORD.equals(hashedPassword)) {
+          return true;
+        }else {
+          return false;
+        }
+      }
   }
 
   @Transactional
@@ -82,8 +114,9 @@ public class LoginService {
     );
 
     if (changeForgetPassword != null && changeForgetPassword.getUserId() != null) {
+      String hashedPassword = hashMD5(forgetPasswordDto.getNewPassword());
       UserDto emp = userRepository.findById(changeForgetPassword.getUserId()).get();
-      emp.setPassword(forgetPasswordDto.getNewPassword());
+      emp.setPassword(hashedPassword);
       userRepository.save(emp);
 
       // update password_flag
@@ -98,4 +131,9 @@ public class LoginService {
     }
     return responseDataUtils.DataResourceJson(resultStatus, idEmp);
   }
+
+  public static String hashMD5(String input) {
+    return DigestUtils.md5Hex(input);
+  }
+
 }

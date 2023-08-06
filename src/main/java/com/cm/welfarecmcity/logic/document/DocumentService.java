@@ -377,13 +377,19 @@ public class DocumentService {
 
   // loan
   @Transactional
-  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent, Boolean admin) {
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent, Boolean admin, Long empId) {
 
     if (!admin) {
       return null;
     }else{
+      String testHistory = "";
+      testHistory = String.valueOf(loanId);
+      val loanHistory = loanDetailLogicRepository.loanHistory(empId);
+      for(int i=0; i < loanHistory.size(); i++){
+        testHistory = testHistory + ',' + loanHistory.get(i).getLoanId();
 
-    var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent);
+      }
+    var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent,testHistory);
     resLoan.forEach(res -> {
       //    function --> calculateLoanOld()
       if (res.getLoanValue() != null) {

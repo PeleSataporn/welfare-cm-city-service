@@ -1,12 +1,14 @@
 package com.cm.welfarecmcity.api.loan;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.loanHistory.LoanHistoryRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
+import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
@@ -36,6 +38,9 @@ public class LoanService {
 
   @Autowired
   private LoanDetailRepository loanDetailRepository;
+
+  @Autowired
+  private LoanHistoryRepository loanHistoryRepository;
 
   @Transactional
   public ResponseModel<ResponseId> add(LoanDto dto) {
@@ -79,6 +84,12 @@ public class LoanService {
     loanDetailDto.setLoanYear(req.getLoanYear());
     loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
     val loanDetail = loanDetailRepository.save(loanDetailDto);
+
+    // insert to history loan
+    LoanHistoryDto loanHistoryDto = new LoanHistoryDto();
+    loanHistoryDto.setEmployeeId(req.getEmpId());
+    loanHistoryDto.setLoanId(req.getLoanId());
+    val loanHistory = loanHistoryRepository.save(loanHistoryDto);
 
     // update number running
     String runningNumber = runningNumber(loan.getId());

@@ -8,11 +8,15 @@ import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/employee")
@@ -49,5 +53,10 @@ public class EmployeeController {
   @GetMapping("test-host")
   public String testHost() {
     return "-- > Test Host <--";
+  }
+
+  @PatchMapping("/update-beneficiary-id")
+  public ResponseModel<ResponseId> updateBeneficiaryId(@RequestBody List<BeneficiaryReq> req) throws JsonProcessingException {
+    return employeeService.updateBeneficiaryId(req);
   }
 }

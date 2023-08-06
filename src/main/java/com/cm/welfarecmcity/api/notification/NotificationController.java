@@ -25,4 +25,9 @@ public class NotificationController {
   public void cancel(@PathVariable Long id, @PathVariable Long empId) {
     notificationService.cancel(id, empId);
   }
+
+  @DeleteMapping("/delete-notify/{id}")
+  public void deleteNotify(@PathVariable Long id) {
+    notificationService.deleteNotify(id);
+  }
 }

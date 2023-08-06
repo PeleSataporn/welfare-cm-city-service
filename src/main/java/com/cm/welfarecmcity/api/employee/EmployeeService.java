@@ -15,13 +15,19 @@ import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
+import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class EmployeeService {
@@ -198,4 +204,33 @@ public class EmployeeService {
 
     return responseDataUtils.updateDataSuccess(req.getId());
   }
+
+  @Transactional
+  public ResponseModel<ResponseId> updateBeneficiaryId(List<BeneficiaryReq> req) throws JsonProcessingException {
+    val findEmployee = employeeRepository.findById(req.get(0).getEmpId());
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee id not found");
+    }
+
+    val employee = findEmployee.get();
+//    employee.setCheckStockValueFlag(true);
+
+    // list parse to json
+    String jsonArrayString;
+    ObjectMapper objectMapper = new ObjectMapper();
+    jsonArrayString = objectMapper.writeValueAsString(req);
+
+    // notify
+    val notify = new PetitionNotificationDto();
+    notify.setStatus(NotificationStatusEnum.BENEFICIARY.getState());
+
+    notify.setReason("เปลี่ยนผู้รับผลประโยชน์");
+    notify.setEmployee(employee);
+    notify.setDescription(jsonArrayString);
+
+    notificationRepository.save(notify);
+
+    return responseDataUtils.updateDataSuccess(req.get(0).getEmpId());
+  }
+
 }

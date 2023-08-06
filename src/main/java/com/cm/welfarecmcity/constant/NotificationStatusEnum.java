@@ -9,7 +9,9 @@ public enum NotificationStatusEnum {
   // หุ้นสะสม
   STOCK_ACCUMULATE(2),
   // สมัคร
-  REGISTER(3);
+  REGISTER(3),
+  // ผู้รับผลประโยชน์
+  BENEFICIARY(4);
 
   private final int state;
 

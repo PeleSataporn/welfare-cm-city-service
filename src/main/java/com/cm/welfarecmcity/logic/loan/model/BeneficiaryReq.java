@@ -11,4 +11,5 @@ public class BeneficiaryReq {
     private String gender;
     private String relationship;
     private Boolean active;
+    private Long empId;
 }
