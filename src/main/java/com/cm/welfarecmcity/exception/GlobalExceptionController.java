@@ -3,6 +3,7 @@ package com.cm.welfarecmcity.exception;
 import com.cm.welfarecmcity.dto.base.ErrorRes;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.exception.entity.UserException;
+import com.cm.welfarecmcity.exception.entity.UserPasswordMismatchException;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +23,11 @@ public class GlobalExceptionController {
   public ResponseEntity<ErrorRes<Void>> handleUserNotFoundException(UserException ex) {
     val res = new ErrorRes<Void>(ex.getNotFound(), ex.getMessage(), null);
     return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler
+  public ResponseEntity<ErrorRes<Void>> handleUserPasswordMismatchException(UserPasswordMismatchException ex) {
+    val res = new ErrorRes<Void>(ex.getNotFound(), ex.getMessage(), null);
+    return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
   }
 }

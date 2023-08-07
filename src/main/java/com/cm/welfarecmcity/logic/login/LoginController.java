@@ -4,6 +4,8 @@ import com.cm.welfarecmcity.dto.ForgetPasswordDto;
 import com.cm.welfarecmcity.dto.UserDto;
 import com.cm.welfarecmcity.dto.base.ResponseData;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.dto.base.ResponseTextStatus;
+import com.cm.welfarecmcity.logic.login.model.ResetPasswordReq;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,12 @@ public class LoginController {
   }
 
   @PostMapping("/change/forget-password")
-  public ResponseModel<ResponseData> login(@RequestBody ForgetPasswordDto dto) {
+  public ResponseModel<ResponseData> forgetPassword(@RequestBody ForgetPasswordDto dto) {
     return loginService.changeForgetPassword(dto);
+  }
+
+  @PutMapping("/change/reset-password")
+  public ResponseTextStatus resetPassword(@RequestBody ResetPasswordReq res) {
+     return loginService.resetPassword(res);
   }
 }

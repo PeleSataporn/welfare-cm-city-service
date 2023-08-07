@@ -1,16 +1,12 @@
 package com.cm.welfarecmcity.api.employee;
 
-import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateAdminReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateResignReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateStockValueReq;
+import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
 import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
-import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -18,16 +14,15 @@ import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
-import jakarta.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class EmployeeService {
@@ -53,15 +48,17 @@ public class EmployeeService {
   @Autowired
   private NotificationRepository notificationRepository;
 
-  //  @Transactional
-  //  public EmployeeDto getEmployee(Long id) {
-  //    val findEmployee = employeeRepository.findById(id);
-  //    if (findEmployee.isEmpty()) {
-  //      throw new EmployeeException("Employee id not found");
-  //    }
-  //
-  //    return findEmployee.get();
-  //  }
+  @Transactional
+  public List<EmpByAdminRes> searchEmployee() {
+    val listRes = new ArrayList<EmpByAdminRes>();
+
+    val list = employeeRepository.findAll();
+    list.forEach(it -> {
+      listRes.add(mapStructMapper.employeeToByAdminRes(it));
+    });
+
+    return listRes;
+  }
 
   @Transactional
   public ResponseModel<ResponseId> updateEmp(EmpEditReq req) {
@@ -213,7 +210,6 @@ public class EmployeeService {
     }
 
     val employee = findEmployee.get();
-//    employee.setCheckStockValueFlag(true);
 
     // list parse to json
     String jsonArrayString;
@@ -232,5 +228,4 @@ public class EmployeeService {
 
     return responseDataUtils.updateDataSuccess(req.get(0).getEmpId());
   }
-
 }

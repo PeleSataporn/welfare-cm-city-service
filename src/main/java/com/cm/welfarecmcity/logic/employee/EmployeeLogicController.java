@@ -1,6 +1,5 @@
 package com.cm.welfarecmcity.logic.employee;
 
-import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
 import org.springframework.beans.factory.annotation.Autowired;

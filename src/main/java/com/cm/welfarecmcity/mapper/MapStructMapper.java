@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.mapper;
 
+import com.cm.welfarecmcity.api.employee.model.EmpByAdminRes;
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.dto.EmployeeDto;
@@ -15,4 +16,6 @@ public interface MapStructMapper {
   EmployeeRes employeeToRes(EmployeeDto dto);
 
   NotificationRes notificationToRes(PetitionNotificationDto dto);
+
+  EmpByAdminRes employeeToByAdminRes(EmployeeDto dto);
 }

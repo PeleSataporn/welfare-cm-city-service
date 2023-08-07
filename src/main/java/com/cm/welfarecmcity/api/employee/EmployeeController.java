@@ -1,19 +1,11 @@
 package com.cm.welfarecmcity.api.employee;
 
-import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateAdminReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateResignReq;
-import com.cm.welfarecmcity.api.employee.model.UpdateStockValueReq;
-import com.cm.welfarecmcity.dto.EmployeeDto;
-import com.cm.welfarecmcity.dto.base.ResponseData;
+import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +20,11 @@ public class EmployeeController {
   @PatchMapping
   public ResponseModel<ResponseId> updateEmp(@RequestBody EmpEditReq req) {
     return employeeService.updateEmp(req);
+  }
+
+  @PostMapping("/search")
+  public List<EmpByAdminRes> searchEmployee() {
+    return employeeService.searchEmployee();
   }
 
   @PatchMapping("/update-resign")
@@ -48,11 +45,6 @@ public class EmployeeController {
   @PatchMapping("/update-emp-status")
   public ResponseModel<ResponseId> updateEmployeeStatus(@RequestBody UpdateAdminReq req) {
     return employeeService.updateEmployeeStatus(req);
-  }
-
-  @GetMapping("test-host")
-  public String testHost() {
-    return "-- > Test Host <--";
   }
 
   @PatchMapping("/update-beneficiary-id")

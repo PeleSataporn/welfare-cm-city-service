@@ -16,4 +16,10 @@ public class FileResourceDto extends BaseDto {
 
   @Lob
   private Blob image;
+
+  @Lob
+  private Blob imageAddress;
+
+  @Lob
+  private Blob imageIdCard;
 }

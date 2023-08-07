@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.mapper;
 
+import com.cm.welfarecmcity.api.employee.model.EmpByAdminRes;
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.api.notification.model.NotifyEmployeeRes;
@@ -27,8 +28,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-06T12:21:56+0700",
-    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.2 (Amazon.com Inc.)"
+    date = "2023-08-07T10:20:57+0700",
+    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
 public class MapStructMapperImpl implements MapStructMapper {
@@ -135,6 +136,24 @@ public class MapStructMapperImpl implements MapStructMapper {
         notificationRes.setEmployee( employeeDtoToNotifyEmployeeRes( dto.getEmployee() ) );
 
         return notificationRes;
+    }
+
+    @Override
+    public EmpByAdminRes employeeToByAdminRes(EmployeeDto dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        EmpByAdminRes empByAdminRes = new EmpByAdminRes();
+
+        empByAdminRes.setId( dto.getId() );
+        empByAdminRes.setEmployeeCode( dto.getEmployeeCode() );
+        empByAdminRes.setPrefix( dto.getPrefix() );
+        empByAdminRes.setFirstName( dto.getFirstName() );
+        empByAdminRes.setLastName( dto.getLastName() );
+        empByAdminRes.setIdCard( dto.getIdCard() );
+
+        return empByAdminRes;
     }
 
     protected PositionRes positionsDtoToPositionRes(PositionsDto positionsDto) {
