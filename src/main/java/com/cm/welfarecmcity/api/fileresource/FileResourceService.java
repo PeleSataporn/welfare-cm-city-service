@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.fileresource;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.news.NewsRepository;
 import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -24,6 +25,9 @@ public class FileResourceService {
   @Autowired
   private ResponseDataUtils responseDataUtils;
 
+  @Autowired
+  private NewsRepository newRepository;
+
   @Transactional
   public void create(Blob blob, Long empId) {
     //
@@ -46,19 +50,32 @@ public class FileResourceService {
   }
 
   @Transactional
-  public void createAddress(Blob blob, Long empId) {
+  public String createAddress(Blob blob, Long empId) {
     val emp = employeeRepository.findById(empId).get();
-    emp.getProfileImg().setImageAddress(blob);
 
+    if (emp.getProfileImg() == null) {
+      return "ProfileNull";
+    }
+
+    emp.getProfileImg().setImageAddress(blob);
     employeeRepository.save(emp);
+
+    return null;
   }
 
   @Transactional
-  public void createIdCard(Blob blob, Long empId) {
+  public String createIdCard(Blob blob, Long empId) {
     val emp = employeeRepository.findById(empId).get();
+
+    if (emp.getProfileImg() == null) {
+      return "ProfileNull";
+    }
+
     emp.getProfileImg().setImageIdCard(blob);
 
     employeeRepository.save(emp);
+
+    return null;
   }
 
   @Transactional
@@ -67,6 +84,13 @@ public class FileResourceService {
     resource.setImage(blob);
 
     return responseDataUtils.updateDataSuccess(repository.save(resource).getId());
+  }
+
+  @Transactional
+  public void updateImageNews(Blob blob, Long newsId) {
+    val news = newRepository.findById(newsId).get();
+    news.getCoverImg().setImage(blob);
+    newRepository.save(news);
   }
 
   public List<FileResourceDto> viewAll() {

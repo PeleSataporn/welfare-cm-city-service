@@ -1,6 +1,5 @@
 package com.cm.welfarecmcity.logic.employee.model;
 
-import java.sql.Blob;
 import lombok.Data;
 
 @Data
@@ -20,4 +19,6 @@ public class EmployeeOfMainRes {
   private String departmentName = null;
   private int guarantee = 0;
   private Long profileImgId;
+  private Boolean adminFlag;
+  private Boolean passwordFlag;
 }

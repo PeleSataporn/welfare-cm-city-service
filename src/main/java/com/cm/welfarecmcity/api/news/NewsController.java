@@ -1,9 +1,6 @@
 package com.cm.welfarecmcity.api.news;
 
-import com.cm.welfarecmcity.api.news.model.CreateNewsReq;
-import com.cm.welfarecmcity.api.news.model.EditNewsReq;
-import com.cm.welfarecmcity.api.news.model.GetNewsRes;
-import com.cm.welfarecmcity.api.news.model.SearchNewsRes;
+import com.cm.welfarecmcity.api.news.model.*;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import java.util.List;
@@ -25,6 +22,11 @@ public class NewsController {
   @PostMapping("/search")
   public List<SearchNewsRes> searchNews() {
     return service.searchNews();
+  }
+
+  @PostMapping("/search/main")
+  public List<SearchNewsMainRes> searchNewsMain() {
+    return service.searchNewsMain();
   }
 
   @GetMapping("/{id}")

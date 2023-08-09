@@ -65,19 +65,19 @@ public class FileResourceController {
   }
 
   @PostMapping("/add-address")
-  public void addImageAddress(@ModelAttribute AddImageReq image) throws IOException, SQLException {
+  public String addImageAddress(@ModelAttribute AddImageReq image) throws IOException, SQLException {
     byte[] bytes = image.getImage().getBytes();
     Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
 
-    service.createAddress(blob, image.getEmpId());
+    return service.createAddress(blob, image.getEmpId());
   }
 
   @PostMapping("/add-id-card")
-  public void addImageIdCard(@ModelAttribute AddImageReq image) throws IOException, SQLException {
+  public String addImageIdCard(@ModelAttribute AddImageReq image) throws IOException, SQLException {
     byte[] bytes = image.getImage().getBytes();
     Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
 
-    service.createIdCard(blob, image.getEmpId());
+    return service.createIdCard(blob, image.getEmpId());
   }
 
   @PostMapping("/add-news")
@@ -86,5 +86,12 @@ public class FileResourceController {
     Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
 
     return service.addImageNews(blob);
+  }
+
+  @PostMapping("/update-news")
+  public void updateImageNews(@ModelAttribute AddImageReq image) throws IOException, SQLException {
+    byte[] bytes = image.getImage().getBytes();
+    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+    service.updateImageNews(blob, image.getEmpId());
   }
 }

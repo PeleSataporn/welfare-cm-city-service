@@ -20,7 +20,7 @@ public class EmployeeLogicRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id, employee.employee_code, employee.prefix,employee.first_name, employee.last_name, employee.gender, employee.salary, positions.name as positionName, " +
-      " stock.stock_accumulate, loan.loan_value, loan.loan_balance, department.name as departmentName, employee.profile_img_id FROM employee " +
+      " stock.stock_accumulate, loan.loan_value, loan.loan_balance, department.name as departmentName, employee.profile_img_id, employee.admin_flag, employee.password_flag FROM employee " +
       " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) "
     );
@@ -31,20 +31,6 @@ public class EmployeeLogicRepository {
 
     return sql;
   }
-
-  //  public EmployeeOfMainRes getEmployeeOfMain(Long empId) {
-  //    val sql = employeeOfMainSql(empId);
-  //
-  ////    try {
-  ////      EmployeeOfMainRes employee = jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeOfMainRes.class));
-  ////      return Optional.of(employee);
-  ////    } catch (EmptyResultDataAccessException e) {
-  ////      return null;
-  ////    }
-  //    //    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeOfMainRes.class));
-  //
-  //
-  //  }
 
   public EmployeeOfMainRes getEmployeeOfMain(Long empId) {
     val sql = employeeOfMainSql(empId);
@@ -66,6 +52,8 @@ public class EmployeeLogicRepository {
         employee.setLoanBalance(rs.getDouble("loan_balance"));
         employee.setDepartmentName(rs.getString("departmentName"));
         employee.setProfileImgId(rs.getLong("profile_img_id"));
+        employee.setAdminFlag(rs.getBoolean("admin_flag"));
+        employee.setPasswordFlag(rs.getBoolean("password_flag"));
 
         return employee;
       }
