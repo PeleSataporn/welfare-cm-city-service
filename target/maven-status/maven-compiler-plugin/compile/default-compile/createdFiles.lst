@@ -133,6 +133,7 @@ com\cm\welfarecmcity\api\user\UserService.class
 com\cm\welfarecmcity\api\affiliation\AffiliationController.class
 com\cm\welfarecmcity\logic\login\model\LoginRes.class
 com\cm\welfarecmcity\api\admin\AdminConfigRepository.class
+com\cm\welfarecmcity\api\employee\model\UpdateUserReq.class
 com\cm\welfarecmcity\logic\login\LoginRepository.class
 com\cm\welfarecmcity\dto\base\ResponseModel.class
 com\cm\welfarecmcity\logic\register\model\res\CheckEmployeeCodeRes.class

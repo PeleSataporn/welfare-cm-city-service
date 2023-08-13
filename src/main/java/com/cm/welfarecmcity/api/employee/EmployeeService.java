@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.employee;
 
+import com.cm.welfarecmcity.api.admin.model.AdminUpdateInfoReq;
 import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
 import com.cm.welfarecmcity.api.level.LevelRepository;
@@ -227,5 +228,54 @@ public class EmployeeService {
     notificationRepository.save(notify);
 
     return responseDataUtils.updateDataSuccess(req.get(0).getEmpId());
+  }
+
+  @Transactional
+  public void updateByUser(UpdateUserReq req) throws JsonProcessingException {
+    val emp = employeeRepository.findById(req.getId()).get();
+    // check notification
+    if (
+      !req.getFirstName().equals(emp.getFirstName()) ||
+      !req.getLastName().equals(emp.getLastName()) ||
+      !req.getMarital().equals(emp.getMarital())
+    ) {
+      // list parse to json
+      String jsonArrayString;
+      ObjectMapper objectMapper = new ObjectMapper();
+      jsonArrayString = objectMapper.writeValueAsString(req);
+
+      val notify = new PetitionNotificationDto();
+      notify.setStatus(NotificationStatusEnum.UPDATE_BY_USER.getState());
+      notify.setReason("แก้ไขข้อมูลส่วนตัว");
+      notify.setEmployee(emp);
+      notify.setDescription(jsonArrayString);
+
+      notificationRepository.save(notify);
+    }
+
+    emp.setBirthday(req.getBirthday());
+    // contact
+    val contact = emp.getContact();
+    contact.setTel(req.getTel());
+    contact.setLineId(req.getLineId());
+    contact.setFacebook(req.getFacebook());
+    contact.setEmail(req.getEmail());
+    contact.setAddress(req.getAddress());
+
+    emp.setContractStartDate(req.getContractStartDate());
+    emp.setCivilServiceDate(req.getCivilServiceDate());
+    emp.setBillingStartDate(req.getBillingStartDate());
+
+    employeeRepository.save(emp);
+  }
+
+  @Transactional
+  public void approveUpdateByUser(UpdateUserReq req) {
+    val emp = employeeRepository.findById(req.getId()).get();
+        emp.setFirstName(req.getFirstName());
+        emp.setLastName(req.getLastName());
+        emp.setMarital(req.getMarital());
+
+    employeeRepository.save(emp);
   }
 }

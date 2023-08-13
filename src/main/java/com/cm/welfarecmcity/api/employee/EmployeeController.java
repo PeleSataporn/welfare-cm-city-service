@@ -5,10 +5,9 @@ import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/employee")
@@ -50,5 +49,15 @@ public class EmployeeController {
   @PatchMapping("/update-beneficiary-id")
   public ResponseModel<ResponseId> updateBeneficiaryId(@RequestBody List<BeneficiaryReq> req) throws JsonProcessingException {
     return employeeService.updateBeneficiaryId(req);
+  }
+
+  @PatchMapping("/update-by-user")
+  public void updateByUser(@RequestBody UpdateUserReq req) throws JsonProcessingException {
+    employeeService.updateByUser(req);
+  }
+
+  @PatchMapping("/approve-update-by-user")
+  public void approveUpdateByUser(@RequestBody UpdateUserReq req) {
+    employeeService.approveUpdateByUser(req);
   }
 }

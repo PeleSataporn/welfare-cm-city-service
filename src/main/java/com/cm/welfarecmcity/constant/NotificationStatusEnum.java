@@ -11,7 +11,8 @@ public enum NotificationStatusEnum {
   // สมัคร
   REGISTER(3),
   // ผู้รับผลประโยชน์
-  BENEFICIARY(4);
+  BENEFICIARY(4),
+  UPDATE_BY_USER(5);
 
   private final int state;
 
