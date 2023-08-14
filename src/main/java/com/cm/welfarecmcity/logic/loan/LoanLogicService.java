@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.logic.loan;
 
 import com.cm.welfarecmcity.api.beneficiary.BeneficiaryRepository;
+import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
@@ -8,13 +9,14 @@ import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.document.DocumentService;
-import com.cm.welfarecmcity.logic.document.model.CalculateInstallments;
-import com.cm.welfarecmcity.logic.document.model.CalculateReq;
-import com.cm.welfarecmcity.logic.document.model.DocumentV1Res;
+import com.cm.welfarecmcity.logic.document.model.*;
 import com.cm.welfarecmcity.logic.loan.model.*;
+import com.cm.welfarecmcity.logic.loan.model.GuaranteeRes;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
+import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,9 +46,33 @@ public class LoanLogicService {
   @Autowired
   private DocumentService documentService;
 
+  @Autowired
+  private ResponseDataUtils responseDataUtils;
+
+  @Autowired
+  private EmployeeRepository employeeRepository;
+
   @Transactional
   public List<LoanRes> searchLoan() {
-    return repository.searchLoan();
+    val result = repository.searchLoan();
+//    result.forEach(infoAll -> {
+//
+//      if(infoAll.getGuarantorOne() != null){
+//        DocumentReq doc1 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorOne());
+//        infoAll.setGuarantorOneValue(doc1.getEmpCode());
+//      }else{
+//        infoAll.setGuarantorOneValue(null);
+//      }
+//
+//      if(infoAll.getGuarantorTwo() != null){
+//        DocumentReq doc2 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorTwo());
+//        infoAll.setGuarantorTwoValue(doc2.getEmpCode());
+//      }else{
+//        infoAll.setGuarantorTwoValue(null);
+//      }
+//
+//    });
+    return result;
   }
 
   @Transactional
@@ -152,4 +178,43 @@ public class LoanLogicService {
 
     loanRepository.save(loan);
   }
+
+  @Transactional
+  public ResponseModel<ResponseId> updateLoanEmpOfGuarantor(EmployeeLoanNew req){
+    try {
+      val findConfig = loanRepository.findById(req.getLoanId());
+      if (findConfig.isEmpty()) {
+        throw new EmployeeException("Loan not found");
+      }
+      val config = findConfig.get();
+      if(req.getGuaranteeStockFlag()){
+        config.setStockFlag(req.getGuaranteeStockFlag());
+        config.setGuarantorOne(null);
+        config.setGuarantorTwo(null);
+      }else{
+        if (req.getGuarantorOne() != null) {
+          var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
+          val emp1 = employeeRepository.findById(result1.getEmpId()).get();
+          config.setGuarantorOne(emp1);
+          //loanDto.getGuarantorOne().setId(result1.getEmpId());
+        }else{
+          config.setGuarantorOne(null);
+        }
+
+        if(req.getGuarantorTwo() != null){
+          var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
+          val emp2 = employeeRepository.findById(result2.getEmpId()).get();
+          config.setGuarantorTwo(emp2);
+          //loanDto.getGuarantorTwo().setId(result2.getEmpId());
+        }else{
+          config.setGuarantorTwo(null);
+        }
+
+      }
+      return responseDataUtils.insertDataSuccess(req.getLoanId());
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
 }

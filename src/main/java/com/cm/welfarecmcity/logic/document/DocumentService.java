@@ -199,6 +199,15 @@ public class DocumentService {
   }
 
   @Transactional
+  public DocumentReq searchIdOfEmpCode(Long empCode) {
+    try {
+      return documentRepository.getIdOfEmpCode(empCode);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @Transactional
   public GrandTotalRes grandTotal(DocumentReq req) {
     val res = documentRepository.grandTotal(req.getYearCurrent(), req.getMonthCurrent());
     val resEmp = documentRepository.documentInfoSumEmp();

@@ -296,6 +296,20 @@ public class DocumentRepository {
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
 
+  public StringBuilder buildQuerySqlV1GetIdOfEmpCode(Long empId) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName  FROM employee "
+    );
+    sql.append(" WHERE employee.id = ").append(empId);
+    return sql;
+  }
+
+  public DocumentReq getIdOfEmpCode(Long empId) {
+    val sql = buildQuerySqlV1GetIdOfEmpCode(empId);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+  }
+
   public StringBuilder buildQuerySqlStockDividend(String empCode, String getYearCurrent, String getYearOld) {
     val sql = new StringBuilder();
     sql.append(

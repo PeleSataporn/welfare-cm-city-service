@@ -59,6 +59,7 @@ public class LoanService {
     loanDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDto.setNewLoan(true);
+    loanDto.setStockFlag(req.getGuaranteeStockFlag());
     loanDto.setStartLoanDate(req.getStartDateLoan());
     if (req.getGuarantorOne() != null && req.getGuarantorTwo() != null) {
       var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());

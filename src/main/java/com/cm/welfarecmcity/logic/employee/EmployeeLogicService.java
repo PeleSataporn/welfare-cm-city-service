@@ -40,7 +40,6 @@ public class EmployeeLogicService {
     return res;
   }
 
-  @Transactional
   public EmployeeOfMainRes getEmployeeOfMain(Long id) {
     val emp = employeeLogicRepository.getEmployeeOfMain(id);
     emp.setGuarantee(documentRepository.countGuarantee(id));

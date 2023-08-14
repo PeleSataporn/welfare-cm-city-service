@@ -13,4 +13,13 @@ public class LoanRes {
     private String employeeCode;
     private String firstName;
     private String lastName;
+    private Boolean stockFlag;
+    private String startLoanDate;
+    private Long guarantorOne;
+    private Long guarantorTwo;
+    private int loanOrdinary;
+    private int interestPercent;
+    private String prefix;
+    private String guarantorOneValue;
+    private String guarantorTwoValue;
 }

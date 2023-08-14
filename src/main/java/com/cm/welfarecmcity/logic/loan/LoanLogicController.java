@@ -3,6 +3,8 @@ package com.cm.welfarecmcity.logic.loan;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.logic.document.model.DocumentReq;
+import com.cm.welfarecmcity.logic.document.model.EmployeeLoanNew;
 import com.cm.welfarecmcity.logic.loan.model.*;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import java.util.List;
@@ -54,5 +56,10 @@ public class LoanLogicController {
   @GetMapping("close/{id}")
   public void closeLoan(@PathVariable Long id) {
     service.closeLoan(id);
+  }
+
+  @PostMapping("update-loan-emp-guarantor")
+  public ResponseModel<ResponseId> updateLoanEmpOfGuarantor(@RequestBody EmployeeLoanNew req) {
+    return service.updateLoanEmpOfGuarantor(req);
   }
 }

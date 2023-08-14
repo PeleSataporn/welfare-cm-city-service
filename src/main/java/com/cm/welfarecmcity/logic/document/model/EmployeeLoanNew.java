@@ -26,6 +26,7 @@ public class EmployeeLoanNew {
   private String guarantorOne;
   private String guarantorTwo;
   private boolean loanActive;
+  private Boolean guaranteeStockFlag;
   // เอาไว้เชคตอนใช้หุ้นค้ำ
   private String guaranteeStock;
   private String stockValue;
