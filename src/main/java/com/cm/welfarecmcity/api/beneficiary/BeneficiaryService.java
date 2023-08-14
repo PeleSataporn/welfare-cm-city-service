@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.beneficiary;
 
+import com.cm.welfarecmcity.api.beneficiary.model.BeneficiaryRes;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -59,13 +60,14 @@ public class BeneficiaryService {
   }
 
   @Transactional
-  public BeneficiaryDto getBeneficiary(Long id) {
+  public BeneficiaryRes getBeneficiary(Long id) {
     val findBeneficiary = beneficiaryRepository.findById(id);
+
     if (findBeneficiary.isEmpty()) {
       throw new EmployeeException("Employee id not found");
     }
 
-    return findBeneficiary.get();
+    return mapStructMapper.beneficiaryToRes(findBeneficiary.get());
   }
 
   @Transactional

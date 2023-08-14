@@ -52,8 +52,8 @@ public class EmployeeController {
   }
 
   @PatchMapping("/update-by-user")
-  public void updateByUser(@RequestBody UpdateUserReq req) throws JsonProcessingException {
-    employeeService.updateByUser(req);
+  public ResponseModel<String> updateByUser(@RequestBody UpdateUserReq req) throws JsonProcessingException {
+    return employeeService.updateByUser(req);
   }
 
   @PatchMapping("/approve-update-by-user")

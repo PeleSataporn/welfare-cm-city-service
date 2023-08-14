@@ -35,6 +35,15 @@ public class ResponseDataUtils {
     }
 
     @Transactional
+    public ResponseModel<String> updateDataSuccessString(String data){
+        ResponseModel<String> result = new ResponseModel<>();
+        result.setData(data);
+        result.setMessage(MessageResponseConstant.UPDATE_DATA_SUCCESS);
+
+        return  result;
+    }
+
+    @Transactional
     public ResponseModel<ResponseId> deleteDataSuccess(Long id){
         ResponseModel<ResponseId> result = new ResponseModel<>();
         ResponseId resId = new ResponseId();

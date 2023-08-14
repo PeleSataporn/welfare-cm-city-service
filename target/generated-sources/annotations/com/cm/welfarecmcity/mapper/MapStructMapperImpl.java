@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.mapper;
 
+import com.cm.welfarecmcity.api.beneficiary.model.BeneficiaryRes;
 import com.cm.welfarecmcity.api.employee.model.EmpByAdminRes;
 import com.cm.welfarecmcity.api.employee.model.EmpEditReq;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-13T14:55:01+0700",
+    date = "2023-08-15T01:48:05+0700",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -154,6 +155,27 @@ public class MapStructMapperImpl implements MapStructMapper {
         empByAdminRes.setIdCard( dto.getIdCard() );
 
         return empByAdminRes;
+    }
+
+    @Override
+    public BeneficiaryRes beneficiaryToRes(BeneficiaryDto dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        BeneficiaryRes beneficiaryRes = new BeneficiaryRes();
+
+        beneficiaryRes.setId( dto.getId() );
+        beneficiaryRes.setPrefix( dto.getPrefix() );
+        beneficiaryRes.setFirstName( dto.getFirstName() );
+        beneficiaryRes.setLastName( dto.getLastName() );
+        beneficiaryRes.setGender( dto.getGender() );
+        beneficiaryRes.setBirthday( dto.getBirthday() );
+        beneficiaryRes.setRelationship( dto.getRelationship() );
+        beneficiaryRes.setMarital( dto.getMarital() );
+        beneficiaryRes.setLifeStatus( dto.getLifeStatus() );
+
+        return beneficiaryRes;
     }
 
     protected PositionRes positionsDtoToPositionRes(PositionsDto positionsDto) {

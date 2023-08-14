@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.api.beneficiary;
 
+import com.cm.welfarecmcity.api.beneficiary.model.BeneficiaryRes;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -24,7 +25,7 @@ public class BeneficiaryController {
   }
 
   @GetMapping("{id}")
-  public BeneficiaryDto getBeneficiary(@PathVariable Long id) {
+  public BeneficiaryRes getBeneficiary(@PathVariable Long id) {
     return beneficiaryService.getBeneficiary(id);
   }
 

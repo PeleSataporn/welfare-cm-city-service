@@ -30,6 +30,7 @@ com\cm\welfarecmcity\logic\document\model\DocumentV2Res.class
 com\cm\welfarecmcity\logic\register\model\req\ResignRegisterReq.class
 com\cm\welfarecmcity\utils\listener\GenerateListenerRepository.class
 com\cm\welfarecmcity\dto\StockDetailDto.class
+com\cm\welfarecmcity\api\beneficiary\model\BeneficiaryRes.class
 com\cm\welfarecmcity\constant\MaritalStatusEnum$MaritalStatusDto.class
 com\cm\welfarecmcity\api\news\NewsController.class
 com\cm\welfarecmcity\dto\BeneficiaryDto.class

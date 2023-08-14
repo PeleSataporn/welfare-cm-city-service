@@ -231,7 +231,7 @@ public class EmployeeService {
   }
 
   @Transactional
-  public void updateByUser(UpdateUserReq req) throws JsonProcessingException {
+  public ResponseModel<String> updateByUser(UpdateUserReq req) throws JsonProcessingException {
     val emp = employeeRepository.findById(req.getId()).get();
     // check notification
     if (
@@ -254,6 +254,12 @@ public class EmployeeService {
     }
 
     emp.setBirthday(req.getBirthday());
+    emp.setContractStartDate(req.getContractStartDate());
+    emp.setCivilServiceDate(req.getCivilServiceDate());
+    emp.setBillingStartDate(req.getBillingStartDate());
+    emp.setSalaryBankAccountNumber(req.getSalaryBankAccountNumber());
+    emp.setBankAccountReceivingNumber(req.getBankAccountReceivingNumber());
+
     // contact
     val contact = emp.getContact();
     contact.setTel(req.getTel());
@@ -262,19 +268,25 @@ public class EmployeeService {
     contact.setEmail(req.getEmail());
     contact.setAddress(req.getAddress());
 
-    emp.setContractStartDate(req.getContractStartDate());
-    emp.setCivilServiceDate(req.getCivilServiceDate());
-    emp.setBillingStartDate(req.getBillingStartDate());
-
     employeeRepository.save(emp);
+
+    if (
+      !req.getFirstName().equals(emp.getFirstName()) ||
+      !req.getLastName().equals(emp.getLastName()) ||
+      !req.getMarital().equals(emp.getMarital())
+    ) {
+      return responseDataUtils.updateDataSuccessString("PENDING");
+    } else {
+      return responseDataUtils.updateDataSuccessString("UPDATE");
+    }
   }
 
   @Transactional
   public void approveUpdateByUser(UpdateUserReq req) {
     val emp = employeeRepository.findById(req.getId()).get();
-        emp.setFirstName(req.getFirstName());
-        emp.setLastName(req.getLastName());
-        emp.setMarital(req.getMarital());
+    emp.setFirstName(req.getFirstName());
+    emp.setLastName(req.getLastName());
+    emp.setMarital(req.getMarital());
 
     employeeRepository.save(emp);
   }
