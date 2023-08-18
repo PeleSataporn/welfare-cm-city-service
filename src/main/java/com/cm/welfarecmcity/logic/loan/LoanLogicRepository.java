@@ -26,11 +26,11 @@ public class LoanLogicRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT loan.id, loan_value, loan_balance, loan_time, prefix, employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
-              "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, loan_detail.loan_ordinary, loan.interest_percent " +
-              "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) " +
-              "JOIN loan_detail ON loan_detail.loan_id = loan.id " +
-              "WHERE loan.deleted = FALSE " +
-              "GROUP BY loan.id "
+      "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, loan_detail.loan_ordinary, loan.interest_percent " +
+      "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) " +
+      "JOIN loan_detail ON loan_detail.loan_id = loan.id " +
+      "WHERE loan.deleted = FALSE " +
+      "GROUP BY loan.id "
     );
     return sql;
   }
@@ -79,7 +79,7 @@ public class LoanLogicRepository {
     val sql = new StringBuilder();
     sql
       .append(
-        " SELECT id, prefix, first_name, last_name, gender, relationship, active,  FROM beneficiary WHERE beneficiary.deleted = FALSE AND employee_id = "
+        " SELECT id, prefix, first_name, last_name, gender, relationship, active FROM beneficiary WHERE beneficiary.deleted = FALSE AND employee_id = "
       )
       .append(id)
       .append(" AND beneficiary.life_status = 'มีชีวิต'")
