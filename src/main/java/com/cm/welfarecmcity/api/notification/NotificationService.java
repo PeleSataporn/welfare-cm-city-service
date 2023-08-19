@@ -62,6 +62,14 @@ public class NotificationService {
 
       notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
 
+      notification.getEmployee().setMarital(petitionNotification.getEmployee().getMarital());
+
+      if (petitionNotification.getEmployee().getProfileImg() == null) {
+        notification.getEmployee().setProfileImgId(null);
+      } else {
+        notification.getEmployee().setProfileImgId(petitionNotification.getEmployee().getProfileImg().getId());
+      }
+
       notifications.add(notification);
     }
 

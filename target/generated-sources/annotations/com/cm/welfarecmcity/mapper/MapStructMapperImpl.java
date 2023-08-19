@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-19T02:12:11+0700",
+    date = "2023-08-20T03:52:16+0700",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -304,6 +304,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         notifyEmployeeRes.setLastName( employeeDto.getLastName() );
         notifyEmployeeRes.setIdCard( employeeDto.getIdCard() );
         notifyEmployeeRes.setGender( employeeDto.getGender() );
+        notifyEmployeeRes.setMarital( employeeDto.getMarital() );
 
         return notifyEmployeeRes;
     }

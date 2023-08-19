@@ -18,6 +18,8 @@ public class NotifyEmployeeRes {
   private String departmentName;
   private String levelName = null;
   private String bureauName;
+  private String marital;
   private int stockAccumulate;
   private double loanBalance;
+  private Long profileImgId;
 }
