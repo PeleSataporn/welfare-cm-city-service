@@ -14,6 +14,8 @@ public class DocumentV1ResLoan {
     private String interestPercent = null;
     private String guarantor1 = null;
     private String guarantor2 = null;
+    private String guarantorCode1 = null;
+    private String guarantorCode2 = null;
     private String interestLastMonth = null;
     private Boolean newLoan;
     // เดือนนี้(ดอก)

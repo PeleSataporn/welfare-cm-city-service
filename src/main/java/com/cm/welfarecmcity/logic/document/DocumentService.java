@@ -400,6 +400,10 @@ public class DocumentService {
       }
     var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent,testHistory);
     resLoan.forEach(res -> {
+      val empCode1 = searchIdOfEmpCode(Long.valueOf(res.getGuarantor1()));
+      val empCode2 = searchIdOfEmpCode(Long.valueOf(res.getGuarantor2()));
+      res.setGuarantorCode1(empCode1.getEmpCode());
+      res.setGuarantorCode2(empCode2.getEmpCode());
       //    function --> calculateLoanOld()
       if (res.getLoanValue() != null) {
         if (!res.getNewLoan() || res.getNewLoan() == null) {
