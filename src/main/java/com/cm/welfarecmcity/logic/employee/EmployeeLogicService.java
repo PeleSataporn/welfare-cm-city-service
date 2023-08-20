@@ -30,8 +30,8 @@ public class EmployeeLogicService {
     val emp = employeeRepository.findById(id).get();
 
     val res = mapStructMapper.employeeToRes(emp);
-    res.setPositionName(emp.getPosition().getName());
-    res.setAffiliationName(emp.getAffiliation().getName());
+    res.setPositionName(emp.getPosition() != null ? emp.getPosition().getName() : null);
+    res.setAffiliationName(emp.getAffiliation() != null ? emp.getAffiliation().getName() : null);
     res.setEmployeeTypeName(emp.getEmployeeType() != null ? emp.getEmployeeType().getName() : null);
     res.setLevelName(emp.getLevel() != null ? emp.getLevel().getName() : null);
     res.setDepartmentName(emp.getDepartment() != null ? emp.getDepartment().getName() : null);
