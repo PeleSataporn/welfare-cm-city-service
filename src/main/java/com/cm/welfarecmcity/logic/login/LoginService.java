@@ -150,7 +150,8 @@ public class LoginService {
       return response;
     }
 
-    user.setPassword(req.getNewPassword());
+    String hashedPassword = hashMD5(req.getNewPassword());
+    user.setPassword(hashedPassword);
 
     employeeRepository.save(emp);
     response.setStatusEmployee("success");
