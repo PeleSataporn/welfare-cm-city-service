@@ -184,7 +184,6 @@ public class DocumentRepository {
       sql.append(" GROUP BY employee.id ");
     }
 
-
     return sql;
   }
 

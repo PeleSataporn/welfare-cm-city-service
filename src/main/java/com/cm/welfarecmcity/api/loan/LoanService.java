@@ -2,10 +2,7 @@ package com.cm.welfarecmcity.api.loan;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.loanHistory.LoanHistoryRepository;
-import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
-import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
-import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
@@ -41,6 +38,9 @@ public class LoanService {
 
   @Autowired
   private LoanHistoryRepository loanHistoryRepository;
+
+  @Autowired
+  private LoanLogic01Repository loanLogicRepository;
 
   @Transactional
   public ResponseModel<ResponseId> add(LoanDto dto) {
@@ -93,7 +93,9 @@ public class LoanService {
     val loanHistory = loanHistoryRepository.save(loanHistoryDto);
 
     // update number running
-    String runningNumber = runningNumber(loan.getId());
+    val numberMax = loanLogicRepository.getNumberMaxLoan();
+    int numberCheckMax = numberMax.getNumberMax() != 0 ? numberMax.getNumberMax() + 1 : 1;
+    String runningNumber = runningNumber(loan.getId(),numberCheckMax);
     val findLoan = loanRepository.findById(loan.getId());
     val loans = findLoan.get();
     loans.setLoanNo(runningNumber);
@@ -112,17 +114,15 @@ public class LoanService {
     return responseDataUtils.insertDataSuccess(loan.getId());
   }
 
-  public String runningNumber(Long numberRun) {
+  public String runningNumber(Long numberRun, int numberMax) {
     LocalDate currentDate = LocalDate.now();
     int currentYear = currentDate.getYear();
     int currentMonth = currentDate.getMonthValue();
     int currentDay = currentDate.getDayOfMonth();
 
-    int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
-    String formattedRunningNumber = String.format("%04d", runningNumber);
-    String runningNumberString = currentYear + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
-    System.out.println(runningNumberString);
-
-    return runningNumberString;
+    //int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
+    String formattedRunningNumber = String.format("%04d", numberMax);
+    return (currentYear + 543) + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
+    //System.out.println(runningNumberString);
   }
 }

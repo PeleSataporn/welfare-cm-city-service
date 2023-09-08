@@ -115,6 +115,7 @@ com\cm\welfarecmcity\logic\register\model\res\SearchNewRegisterRes.class
 com\cm\welfarecmcity\Calculate.class
 com\cm\welfarecmcity\api\loan\LoanService.class
 com\cm\welfarecmcity\logic\document\model\GuaranteeRes.class
+com\cm\welfarecmcity\api\loan\LoanLogic01Repository.class
 com\cm\welfarecmcity\dto\guarantor\GuarantorRepository.class
 com\cm\welfarecmcity\dto\GuarantorDto.class
 com\cm\welfarecmcity\logic\employee\model\EmpRes.class
@@ -125,6 +126,7 @@ com\cm\welfarecmcity\api\bureau\BureauController.class
 com\cm\welfarecmcity\logic\stock\model\StockDetailRes.class
 com\cm\welfarecmcity\api\loanHistory\LoanHistoryController.class
 com\cm\welfarecmcity\api\news\model\EditNewsReq.class
+com\cm\welfarecmcity\dto\MaxNumber.class
 com\cm\welfarecmcity\api\department\DepartmentService.class
 com\cm\welfarecmcity\api\stockdetail\StockDetailRepository.class
 com\cm\welfarecmcity\logic\register\model\req\RegisterReq.class

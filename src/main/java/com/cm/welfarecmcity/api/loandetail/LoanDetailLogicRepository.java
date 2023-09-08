@@ -59,7 +59,7 @@ public class LoanDetailLogicRepository {
     val sql = new StringBuilder();
     sql.append(
             " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year," +
-                    "loan.loan_balance, loan.loan_value " +
+                    "loan.loan_balance, loan.loan_value, loan.loan_no " +
                     "FROM loan_detail join loan on loan_detail.loan_id = loan.id " +
                     "WHERE loan_detail.deleted = FALSE "
     );
