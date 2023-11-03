@@ -17,7 +17,7 @@ spring:
 
     url: jdbc:mariadb://db:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
     username: root
-    password: icoop.cmcity@2023
+    password: icoop.cmcity.db@2023$
 
 #    url: jdbc:mariadb://127.0.0.1:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
 #    username: root
