@@ -11,12 +11,12 @@ spring:
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
 
-#    url: jdbc:mariadb://203.159.93.121:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-#    username: root
-#    password: icoop.cmcity@2023
+#    url: jdbc:mariadb://103.253.72.208:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+#    username: icoop
+#    password: icoop.cmcity.db@2023$
 
     url: jdbc:mariadb://db:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-    username: root
+    username: icoop
     password: icoop.cmcity.db@2023$
 
 #    url: jdbc:mariadb://127.0.0.1:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
