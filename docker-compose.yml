@@ -4,7 +4,7 @@ services:
     container_name: db
     image: mariadb:10.6.12
     ports:
-      - '3307:3306'
+      - '3306:3306'
     environment:
       - MARIADB_DATABASE=icoop_system
       - MARIADB_USER=icoop
