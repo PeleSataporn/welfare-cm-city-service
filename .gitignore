@@ -1,14 +1,19 @@
+# Ignore generated documentation
 HELP.md
+
+# Ignore target directory, but allow Maven wrapper
 target/
 !.mvn/wrapper/maven-wrapper.jar
+
+# Allow target directories in source code folders
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### ubuntu ###
-./db-data
-./init-db
+# Ignore Ubuntu-specific directories
+/db-data
+/init-db
 
-### STS ###
+# STS (Spring Tool Suite) IDE
 .apt_generated
 .classpath
 .factorypath
@@ -17,13 +22,14 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
+application.properties
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -33,5 +39,5 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# Visual Studio Code
 .vscode/

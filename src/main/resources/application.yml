@@ -10,19 +10,9 @@ spring:
     default-property-inclusion: non_null
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-
-    url: jdbc:mariadb://103.253.72.208:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-    username: icoop
-    password: icoop.cmcity.db@2023$
-
-#    url: jdbc:mariadb://db:3307/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-#    username: icoop
-#    password: icoop.cmcity.db@2023$
-
-#    url: jdbc:mariadb://127.0.0.1:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-#    username: root
-#    password: root
-
+    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     hikari:
       auto-commit: false
     initialization-mode: always
@@ -34,10 +24,10 @@ spring:
   main:
     allow-circular-references: true
   mail:
-    host: smtp.gmail.com
-    username: sound.nature.v1@gmail.com
-    password: gqrwqfzbiuggmlyq
-    port: 587
+    host: ${MAIL_HOST}
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}
+    port: ${MAIL_PORT}
     properties:
       mail:
         smtp:
