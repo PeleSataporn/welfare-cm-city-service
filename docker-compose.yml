@@ -6,10 +6,10 @@ services:
     ports:
       - '3307:3306'
     environment:
-      - MARIADB_DATABASE=icoop_system
-      - MARIADB_USER=icoop
-      - MARIADB_PASSWORD=icoop.cmcity.db@2023$
-      - MARIADB_ROOT_PASSWORD=icoop.cmcity.db@2023$
+      - MARIADB_DATABASE=${DATABASE_HOST}
+      - MARIADB_USER=${DATABASE_USER}
+      - MARIADB_PASSWORD=${DATABASE_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DATABASE_PASSWORD}
       - MARIADB_ROOT_HOST=%
     volumes:
       - ./db-data:/var/lib/mysql
