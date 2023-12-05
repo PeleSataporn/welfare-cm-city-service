@@ -128,7 +128,7 @@ public class AdminConfigService {
             // set Req calculateLoanNew
             CalculateReq calNew = new CalculateReq();
             calNew.setInterestRate(Double.parseDouble(req.getValue()));
-            calNew.setNumOfPayments(empNew.getLoanTime());
+            calNew.setNumOfPayments(Long.valueOf(empNew.getLoanTime()).intValue());
             calNew.setPrincipal(Double.parseDouble(empNew.getLoanBalance()));
             calNew.setPaymentStartDate(req.getPaymentStartDate());
             // get list loan new
@@ -171,7 +171,7 @@ public class AdminConfigService {
     //loanDto.setLoanNo("2566-0624001");
     loanDto.setLoanValue(Double.parseDouble(req.getLoanValue()));
     loanDto.setLoanBalance(Double.parseDouble(req.getLoanValue()));
-    loanDto.setLoanTime(req.getLoanTime());
+    loanDto.setLoanTime(Long.valueOf(req.getLoanTime()).intValue());
     loanDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDto.setNewLoan(true);

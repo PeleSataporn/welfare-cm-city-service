@@ -95,6 +95,7 @@ public class EmployeeDto extends BaseDto {
   private String description;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "id")
   private UserDto user;
 
   @OneToMany(cascade = CascadeType.ALL)

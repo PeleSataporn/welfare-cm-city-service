@@ -173,7 +173,7 @@ public class DocumentService {
   @Transactional
   public EmployeeLoanNew searchEmployeeLoanNew(DocumentReq req) {
     try {
-      return documentRepository.searchEmployeeLoanNew(req);
+      return documentRepository.searchEmployeeLoanNew(req); //searchEmployeeLoanNewOfNull
     } catch (Exception e) {
       return null;
     }

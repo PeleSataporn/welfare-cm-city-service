@@ -12,12 +12,17 @@ import com.cm.welfarecmcity.exception.entity.UserException;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.login.model.LoginRes;
 import com.cm.welfarecmcity.logic.login.model.ResetPasswordReq;
+import com.cm.welfarecmcity.mapper.MapStructMapper;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import lombok.val;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class LoginService {
@@ -36,6 +41,9 @@ public class LoginService {
 
   @Autowired
   private DocumentRepository documentRepository;
+
+  @Autowired
+  private MapStructMapper mapStructMapper;
 
   @Transactional
   public ResponseModel<Object> login(UserDto dto) {
@@ -144,8 +152,9 @@ public class LoginService {
     emp.setPasswordFlag(true);
 
     val user = emp.getUser();
+    String passwordOldEncrypt = hashMD5(req.getOldPassword());
 
-    if (!user.getPassword().equals(req.getOldPassword())) {
+    if (!user.getPassword().equals(passwordOldEncrypt) && user.getPassword() != null) {
       response.setStatusEmployee("password mismatch");
       return response;
     }
@@ -158,4 +167,5 @@ public class LoginService {
 
     return response;
   }
+
 }

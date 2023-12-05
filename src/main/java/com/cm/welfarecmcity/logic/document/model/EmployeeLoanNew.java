@@ -20,17 +20,17 @@ public class EmployeeLoanNew {
   private String salary = null;
 
   // --------- loan -----------
-  private Long loanId;
-  private int loanTime;
-  private String interestLoan;
-  private String guarantorOne;
-  private String guarantorTwo;
-  private boolean loanActive;
-  private Boolean guaranteeStockFlag;
+  private Long loanId = null;
+  private Long loanTime = null;
+  private String interestLoan = null;
+  private String guarantorOne = null;
+  private String guarantorTwo = null;
+  private Boolean loanActive = null;
+  private Boolean guaranteeStockFlag = null;
   // เอาไว้เชคตอนใช้หุ้นค้ำ
-  private String guaranteeStock;
-  private String stockValue;
-  private int installment;
+  private String guaranteeStock = null;
+  private String stockValue = null;
+  private Long installment = null;
 
   // --------- loan detail-----------
   private String loanOrdinary = null;

@@ -260,24 +260,67 @@ public class DocumentRepository {
       " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
-    sql
-      .append(" and stock_detail.stock_month = '")
-      .append(req.getMonthCurrent())
-      .append("' and stock_detail.stock_year = '")
-      .append(req.getYearCurrent())
-      .append("'");
-    sql
-      .append(" and loan_detail.loan_month = '")
-      .append(req.getMonthCurrent())
-      .append("' and loan_detail.loan_year = '")
-      .append(req.getYearCurrent())
-      .append("'");
+    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+      sql
+              .append(" and stock_detail.stock_month = '")
+              .append(req.getMonthCurrent())
+              .append("' and stock_detail.stock_year = '")
+              .append(req.getYearCurrent())
+              .append("'");
+      sql
+              .append(" and loan_detail.loan_month = '")
+              .append(req.getMonthCurrent())
+              .append("' and loan_detail.loan_year = '")
+              .append(req.getYearCurrent())
+              .append("'");
+    }
     sql.append(" GROUP BY employee.employee_code ");
     return sql;
   }
 
   public EmployeeLoanNew searchEmployeeLoanNew(DocumentReq req) {
     val sql = buildQuerySqlV1LoanNew(req);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+  }
+
+  public StringBuilder buildQuerySqlV1LoanNewOfNull(DocumentReq req) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+                    " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate, employee.salary, employee.employee_type_id AS employeeTypeId "
+    );
+    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+      sql.append(
+              " loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
+                      " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent "
+      );
+    }
+    sql.append(
+            " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
+            + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
+            + " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
+    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+      sql
+              .append(" and stock_detail.stock_month = '")
+              .append(req.getMonthCurrent())
+              .append("' and stock_detail.stock_year = '")
+              .append(req.getYearCurrent())
+              .append("'");
+      sql
+              .append(" and loan_detail.loan_month = '")
+              .append(req.getMonthCurrent())
+              .append("' and loan_detail.loan_year = '")
+              .append(req.getYearCurrent())
+              .append("'");
+    }
+    sql.append(" GROUP BY employee.employee_code ");
+    return sql;
+  }
+
+  public EmployeeLoanNew searchEmployeeLoanNewOfNull(DocumentReq req) {
+    val sql = buildQuerySqlV1LoanNewOfNull(req);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
   }
 
