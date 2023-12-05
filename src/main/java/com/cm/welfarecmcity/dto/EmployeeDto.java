@@ -94,8 +94,9 @@ public class EmployeeDto extends BaseDto {
   private String reason;
   private String description;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "id")
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   private UserDto user;
 
   @OneToMany(cascade = CascadeType.ALL)

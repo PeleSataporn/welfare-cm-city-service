@@ -17,9 +17,4 @@ public class UserDto extends BaseDto {
   private String password;
   private Boolean passwordFlag;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id")
-  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-  private EmployeeDto employee;
-
 }
