@@ -223,7 +223,7 @@ public class DocumentService {
 
   @Transactional
   public List<DocumentInfoAllRes> documentInfoAll(DocumentReq req) {
-    List<DocumentInfoAllRes> listInfoAll = documentRepository.documentInfoAll();
+    List<DocumentInfoAllRes> listInfoAll = documentRepository.documentInfoAll(req.getMonthCurrent(),req.getYearCurrent());
 
     // guarantee
     listInfoAll.forEach(infoAll -> {

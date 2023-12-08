@@ -29,7 +29,7 @@ public class LoanLogicRepository {
       "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, loan_detail.loan_ordinary, loan.interest_percent " +
       "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) " +
       "JOIN loan_detail ON loan_detail.loan_id = loan.id " +
-      "WHERE loan.deleted = FALSE " +
+      "WHERE loan.deleted = FALSE and loan.active = TRUE " +
       "GROUP BY loan.id "
     );
     return sql;

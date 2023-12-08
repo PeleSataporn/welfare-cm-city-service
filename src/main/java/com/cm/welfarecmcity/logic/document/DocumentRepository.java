@@ -132,7 +132,7 @@ public class DocumentRepository {
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
 
-  public StringBuilder sqlDocumentInfoAll() {
+  public StringBuilder sqlDocumentInfoAll(String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id, employee.employee_code, CONCAT(employee.first_name,' ', employee.last_name) AS fullName, employee.create_date as regisDate, " +
@@ -148,13 +148,22 @@ public class DocumentRepository {
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE GROUP BY employee.id "
+      " WHERE employee.deleted = FALSE "
     );
+    if(monthCurrent != null && yearCurrent != null){
+      sql
+              .append(" and loan_detail.loan_month = '")
+              .append(monthCurrent)
+              .append("' and loan_detail.loan_year = '")
+              .append(yearCurrent)
+              .append("'");
+    }
+    sql.append(" GROUP BY employee.id  ");
     return sql;
   }
 
-  public List<DocumentInfoAllRes> documentInfoAll() {
-    val sql = sqlDocumentInfoAll();
+  public List<DocumentInfoAllRes> documentInfoAll(String monthCurrent, String yearCurrent) {
+    val sql = sqlDocumentInfoAll(monthCurrent,yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
 

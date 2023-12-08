@@ -9,4 +9,6 @@ public class UpdateStockValueReq {
 
   private Long id;
   private int stockValue;
+  private int stockOldValue;
+
 }

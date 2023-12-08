@@ -181,8 +181,8 @@ public class EmployeeService {
     // notify
     val notify = new PetitionNotificationDto();
     notify.setStatus(NotificationStatusEnum.STOCK_ACCUMULATE.getState());
-
     notify.setReason(Integer.toString(req.getStockValue()));
+    notify.setDescription(Integer.toString(req.getStockOldValue()));
     notify.setEmployee(employee);
 
     notificationRepository.save(notify);

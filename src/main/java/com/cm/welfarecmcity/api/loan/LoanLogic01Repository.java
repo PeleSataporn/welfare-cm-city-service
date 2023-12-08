@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.api.loan;
 
+import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.MaxNumber;
+import com.cm.welfarecmcity.logic.document.model.EmployeeLoanNew;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -24,6 +26,19 @@ public class LoanLogic01Repository {
     public MaxNumber getNumberMaxLoan() {
         val sql = buildQuerySqlGetMaxNumber();
         return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(MaxNumber.class));
+    }
+
+    public StringBuilder buildQueryGetLoanDetailByLoanId(Long loanId) {
+        val sql = new StringBuilder();
+        sql.append(
+                " select * from loan_detail WHERE loan_id = " + loanId
+        );
+        return sql;
+    }
+
+    public LoanDto getLoanDetailByLoanId(Long loanId) {
+        val sql = buildQueryGetLoanDetailByLoanId(loanId);
+        return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(LoanDto.class));
     }
 
 }

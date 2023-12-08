@@ -89,7 +89,7 @@ public class LoanService {
     // insert to history loan
     LoanHistoryDto loanHistoryDto = new LoanHistoryDto();
     loanHistoryDto.setEmployeeId(req.getEmpId());
-    loanHistoryDto.setLoanId(req.getLoanId());
+    loanHistoryDto.setLoanId(loan.getId());
     val loanHistory = loanHistoryRepository.save(loanHistoryDto);
 
     // update number running
@@ -121,8 +121,22 @@ public class LoanService {
     int currentDay = currentDate.getDayOfMonth();
 
     //int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
-    String formattedRunningNumber = String.format("%04d", numberMax);
+    String formattedRunningNumber = String.format("%02d", numberMax);
     return (currentYear + 543) + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
     //System.out.println(runningNumberString);
   }
+
+  @Transactional
+  public void deleteLoanNew(EmployeeLoanNew req) {
+    // delete loan
+    val lone = loanRepository.findById(req.getLoanId()).get();
+    val result = loanLogicRepository.getLoanDetailByLoanId(lone.getId());
+    loanRepository.delete(lone);
+
+    // delete loanDetail
+    val loneDetail = loanDetailRepository.findById(result.getId()).get();
+    loanDetailRepository.delete(loneDetail);
+
+  }
+
 }

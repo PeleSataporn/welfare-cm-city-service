@@ -28,4 +28,9 @@ public class LoanController {
         return loanService.addLoanNew(req);
     }
 
+    @PostMapping("delete-loan-New")
+    public void deleteLoanNew(@RequestBody EmployeeLoanNew req) {
+        loanService.deleteLoanNew(req);
+    }
+
 }
