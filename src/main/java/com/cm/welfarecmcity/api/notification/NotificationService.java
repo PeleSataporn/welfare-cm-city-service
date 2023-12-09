@@ -21,6 +21,9 @@ public class NotificationService {
   private EmployeeRepository employeeRepository;
 
   @Autowired
+  private NotificationLogicRepository notificationLogicRepository;
+
+  @Autowired
   private MapStructMapper mapStructMapper;
 
   @Transactional
@@ -91,4 +94,15 @@ public class NotificationService {
     val notification = notificationRepository.findById(id).get();
     notificationRepository.delete(notification);
   }
+
+  @Transactional
+  public List<NotificationRes> getNotifyByEmpId(NotificationRes req) {
+    val notifyDataList = notificationLogicRepository.getNotificationByEmpId(req.getEmployeeId());
+    if(notifyDataList != null && notifyDataList.size() > 0){
+      return notifyDataList;
+    }else{
+      return null;
+    }
+  }
+
 }

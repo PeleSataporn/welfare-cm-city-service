@@ -21,6 +21,11 @@ public class NotificationController {
     return notificationService.searchNotify();
   }
 
+  @PostMapping("getNotifyByEmpId")
+  public List<NotificationRes> getNotifyByEmpId(@RequestBody NotificationRes req) {
+    return notificationService.getNotifyByEmpId(req);
+  }
+
   @DeleteMapping("/cancel/{id}/{empId}")
   public void cancel(@PathVariable Long id, @PathVariable Long empId) {
     notificationService.cancel(id, empId);

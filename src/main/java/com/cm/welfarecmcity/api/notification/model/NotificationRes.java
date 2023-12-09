@@ -12,4 +12,5 @@ public class NotificationRes {
   private String description;
   private Date createDate;
   private NotifyEmployeeRes employee;
+  private Long employeeId;
 }
