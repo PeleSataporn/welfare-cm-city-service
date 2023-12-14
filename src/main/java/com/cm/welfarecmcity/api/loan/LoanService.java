@@ -128,14 +128,21 @@ public class LoanService {
 
   @Transactional
   public void deleteLoanNew(EmployeeLoanNew req) {
-    // delete loan
+
+    var empData = documentRepository.getEmpCodeOfId(req.getEmployeeCode());
+    val employee = employeeRepository.findById(empData.getEmpId()).get();
+    employee.setLoan(null);
+    employeeRepository.save(employee);
+
     val lone = loanRepository.findById(req.getLoanId()).get();
     val result = loanLogicRepository.getLoanDetailByLoanId(lone.getId());
-    loanRepository.delete(lone);
 
     // delete loanDetail
-    val loneDetail = loanDetailRepository.findById(result.getId()).get();
+    val loneDetail = loanDetailRepository.findById(result.getLoanId()).get();
     loanDetailRepository.delete(loneDetail);
+
+    // delete loan
+    loanRepository.delete(lone);
 
   }
 
