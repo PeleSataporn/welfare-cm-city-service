@@ -5,6 +5,8 @@ import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import com.cm.welfarecmcity.utils.orderby.SortOrderBy;
 import jakarta.transaction.Transactional;
 import java.util.List;
+
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,18 @@ public class StockDetailService {
   private SortOrderBy sort;
 
   @Transactional
-  public List<StockDetailDto> getStockDetail(Long stockId, String value) {
+  public List<StockDetailDto> searchStockDetail(Long stockId, String value) {
     return stockDetailLoginRepository.documentInfoV1StockDetail(stockId, value);
   }
+
+  @Transactional
+  public StockDetailDto getStockDetail(StockDetailDto req) {
+    val stockDetailList = stockDetailLoginRepository.documentInfoV2StockDetail(req);
+    if(stockDetailList.isEmpty()){
+      return null;
+    }else{
+      return stockDetailList.get(stockDetailList.size() - 1);
+    }
+  }
+
 }

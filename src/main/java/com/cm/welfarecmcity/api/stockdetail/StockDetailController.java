@@ -14,6 +14,11 @@ public class StockDetailController {
 
   @PostMapping("search-by-stock/{stockId}/{value}")
   public List<StockDetailDto> getStockDetail(@PathVariable Long stockId, @PathVariable String value) {
-    return stockDetailService.getStockDetail(stockId, value);
+    return stockDetailService.searchStockDetail(stockId, value);
+  }
+
+  @PostMapping("getStockDetail")
+  public StockDetailDto getStockDetail(@RequestBody StockDetailDto req) {
+    return stockDetailService.getStockDetail(req);
   }
 }

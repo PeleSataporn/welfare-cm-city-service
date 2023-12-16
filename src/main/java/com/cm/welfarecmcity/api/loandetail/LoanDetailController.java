@@ -21,7 +21,12 @@ public class LoanDetailController {
     private LoanDetailService loanDetailService;
 
     @PostMapping("search-by-loan")
-    public List<LoanDetailRes> getLoanDetail(@RequestBody DocumentReq req) {
+    public List<LoanDetailRes> searchLoanDetail(@RequestBody DocumentReq req) {
+        return loanDetailService.searchLoanDetail(req);
+    }
+
+    @PostMapping("getLoanDetail")
+    public LoanDetailDto getLoanDetail(@RequestBody DocumentReq req) {
         return loanDetailService.getLoanDetail(req);
     }
 }

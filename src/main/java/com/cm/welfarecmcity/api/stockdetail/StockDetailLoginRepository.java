@@ -30,4 +30,19 @@ public class StockDetailLoginRepository {
     val sql = buildQuerySqlV1StockDetail(stockId, value);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
   }
+
+  public StringBuilder buildQuerySqlV2StockDetail(StockDetailDto req) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT * FROM stock_detail ");
+    sql.append(" WHERE stock_month = '").append(req.getStockMonth()).append("' AND stock_year = '").append(req.getStockYear()).append("'");
+    sql.append(" order by id ");
+    //sql.append(" order by id ").append(value);
+
+    return sql;
+  }
+
+  public List<StockDetailDto> documentInfoV2StockDetail(StockDetailDto req) {
+    val sql = buildQuerySqlV2StockDetail(req);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
+  }
 }

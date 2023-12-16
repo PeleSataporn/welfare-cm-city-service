@@ -3,7 +3,9 @@ package com.cm.welfarecmcity.api.loandetail;
 import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import java.util.List;
 
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
+import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -78,6 +80,20 @@ public class LoanDetailLogicRepository {
   public List<LoanDetailRes> loanDetailHistory(String loanId, String monthCurrent, String yearCurrent) {
     val sql = buildQuerySqlV1LoanDetailHistory(loanId,monthCurrent,yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
+  }
+
+  public StringBuilder buildQuerySqlV1LoanDetailList(DocumentReq req) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT * FROM loan_detail ");
+    sql.append(" WHERE loan_month = '").append(req.getMonthCurrent()).append("' AND loan_year = '").append(req.getYearCurrent()).append("'");
+    sql.append(" order by id ");
+
+    return sql;
+  }
+
+  public List<LoanDetailDto> loanDetailList(DocumentReq req) {
+    val sql = buildQuerySqlV1LoanDetailList(req);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
 
 }
