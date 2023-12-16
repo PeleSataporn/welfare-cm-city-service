@@ -141,6 +141,7 @@ com\cm\welfarecmcity\logic\login\LoginRepository.class
 com\cm\welfarecmcity\dto\base\ResponseModel.class
 com\cm\welfarecmcity\logic\register\model\res\CheckEmployeeCodeRes.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryController.class
+com\cm\welfarecmcity\api\notification\NotificationLogicRepository.class
 com\cm\welfarecmcity\logic\document\model\DocumentV1ResLoan.class
 com\cm\welfarecmcity\logic\employee\model\LoanDetailRes.class
 com\cm\welfarecmcity\api\position\PositionRepository.class
