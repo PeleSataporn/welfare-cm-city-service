@@ -235,9 +235,8 @@ public class EmployeeService {
     val emp = employeeRepository.findById(req.getId()).get();
     // check notification
     if (
-      !req.getFirstName().equals(emp.getFirstName()) ||
-      !req.getLastName().equals(emp.getLastName()) ||
-      !req.getMarital().equals(emp.getMarital())
+      !req.getFirstName().equals(emp.getFirstName()) || !req.getLastName().equals(emp.getLastName())
+      //      !req.getMarital().equals(emp.getMarital())
     ) {
       // list parse to json
       String jsonArrayString;
@@ -271,9 +270,8 @@ public class EmployeeService {
     employeeRepository.save(emp);
 
     if (
-      !req.getFirstName().equals(emp.getFirstName()) ||
-      !req.getLastName().equals(emp.getLastName()) ||
-      !req.getMarital().equals(emp.getMarital())
+      !req.getFirstName().equals(emp.getFirstName()) || !req.getLastName().equals(emp.getLastName())
+      //      !req.getMarital().equals(emp.getMarital())
     ) {
       return responseDataUtils.updateDataSuccessString("PENDING");
     } else {
