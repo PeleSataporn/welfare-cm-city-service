@@ -147,25 +147,29 @@ public class LoginService {
   @Transactional
   public ResponseTextStatus resetPassword(ResetPasswordReq req) {
     val response = new ResponseTextStatus();
+    String passwordOldEncrypt = "";
 
     val emp = employeeRepository.findById(req.getId()).get();
-    emp.setPasswordFlag(true);
-
     val user = emp.getUser();
-    String passwordOldEncrypt = hashMD5(req.getOldPassword());
+    if(emp.getPasswordFlag() != null && emp.getPasswordFlag()){
+      passwordOldEncrypt = hashMD5(req.getOldPassword());
+    }else{
+      passwordOldEncrypt = req.getOldPassword();
+    }
 
     if (!user.getPassword().equals(passwordOldEncrypt) && user.getPassword() != null) {
       response.setStatusEmployee("password mismatch");
       return response;
+    }else{
+      emp.setPasswordFlag(true);
+      String hashedPassword = hashMD5(req.getNewPassword());
+      user.setPassword(hashedPassword);
+
+      employeeRepository.save(emp);
+      response.setStatusEmployee("success");
+      return response;
     }
 
-    String hashedPassword = hashMD5(req.getNewPassword());
-    user.setPassword(hashedPassword);
-
-    employeeRepository.save(emp);
-    response.setStatusEmployee("success");
-
-    return response;
   }
 
 }

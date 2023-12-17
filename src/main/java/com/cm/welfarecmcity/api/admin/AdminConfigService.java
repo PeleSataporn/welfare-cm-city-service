@@ -369,16 +369,27 @@ public class AdminConfigService {
     contact.setFacebook(req.getFacebook());
     contact.setEmail(req.getEmail());
     contact.setAddress(req.getAddress());
-    // level
-    emp.setLevel(levelRepository.findById(req.getLevelId()).get());
-    // employeeType
-    emp.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
-    // position
-    emp.setPosition(positionRepository.findById(req.getPositionId()).get());
-    // department
-    emp.setDepartment(departmentRepository.findById(req.getDepartmentId()).get());
-    // affiliation
-    emp.setAffiliation(affiliationRepository.findById(req.getAffiliationId()).get());
+
+    if(req.getLevelId() != null){
+      // level
+      emp.setLevel(levelRepository.findById(req.getLevelId()).get());
+    }
+    if(req.getEmployeeTypeId() != null){
+      // employeeType
+      emp.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
+    }
+    if(req.getPositionId() != null){
+      // position
+      emp.setPosition(positionRepository.findById(req.getPositionId()).get());
+    }
+    if(req.getDepartmentId() != null){
+      // department
+      emp.setDepartment(departmentRepository.findById(req.getDepartmentId()).get());
+    }
+    if(req.getAffiliationId() != null){
+      // affiliation
+      emp.setAffiliation(affiliationRepository.findById(req.getAffiliationId()).get());
+    }
     emp.setMarital(req.getMarital());
     emp.setSalary(req.getSalary());
     emp.setCompensation(req.getCompensation());

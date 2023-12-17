@@ -27,7 +27,6 @@ public class LoanLogicController {
   public GuarantorRes guarantor(@PathVariable Long id) {
     return service.guarantor(id);
   }
-
   @GetMapping("guarantee/{id}")
   public GuaranteeRes guarantee(@PathVariable Long id) {
     return service.guarantee(id);
