@@ -148,22 +148,22 @@ public class DocumentRepository {
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE "
+      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) "
     );
-//    if(monthCurrent != null && yearCurrent != null){
-//      sql
-//              .append(" and loan_detail.loan_month = '")
-//              .append(monthCurrent)
-//              .append("' and loan_detail.loan_year = '")
-//              .append(yearCurrent)
-//              .append("'");
-//    }
+    //    if(monthCurrent != null && yearCurrent != null){
+    //      sql
+    //              .append(" and loan_detail.loan_month = '")
+    //              .append(monthCurrent)
+    //              .append("' and loan_detail.loan_year = '")
+    //              .append(yearCurrent)
+    //              .append("'");
+    //    }
     sql.append(" GROUP BY employee.id  ");
     return sql;
   }
 
   public List<DocumentInfoAllRes> documentInfoAll(String monthCurrent, String yearCurrent) {
-    val sql = sqlDocumentInfoAll(monthCurrent,yearCurrent);
+    val sql = sqlDocumentInfoAll(monthCurrent, yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllRes.class));
   }
 
@@ -179,16 +179,16 @@ public class DocumentRepository {
       " RIGHT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
       " RIGHT JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) WHERE 1=1 "
     );
-    if(getMonthCurrent != null){
+    if (getMonthCurrent != null) {
       sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     }
     if (loanId != null) {
-      if(testHistory != null){
+      if (testHistory != null) {
         sql.append(" AND loan_detail.loan_id in (").append(testHistory).append(")");
-      }else{
+      } else {
         sql.append(" AND loan_detail.loan_id in (").append(loanId).append(")");
       }
-      sql.append(" GROUP BY loan_detail.loan_id desc, loan_detail.loan_year desc, loan_detail.installment desc ");  //installment
+      sql.append(" GROUP BY loan_detail.loan_id desc, loan_detail.loan_year desc, loan_detail.installment desc "); //installment
     } else {
       sql.append(" GROUP BY employee.id ");
     }
@@ -205,10 +205,10 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT department.name as departmentName, SUM(loan.loan_value) AS loanValueTotal " +
-              " FROM department " +
-              " LEFT JOIN employee ON employee.department_id = department.id " +
-              " LEFT JOIN loan ON employee.loan_id = loan.id  " +
-              " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " FROM department " +
+      " LEFT JOIN employee ON employee.department_id = department.id " +
+      " LEFT JOIN loan ON employee.loan_id = loan.id  " +
+      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
 
     if (loanId != null) {
@@ -225,7 +225,7 @@ public class DocumentRepository {
   }
 
   public List<DocumentV2ResLoan> documentInfoV2Loan(Long loanId, String getMonthCurrent, String yearCurrent) {
-    val sql = buildQuerySqlV2Loan(loanId, getMonthCurrent,yearCurrent);
+    val sql = buildQuerySqlV2Loan(loanId, getMonthCurrent, yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV2ResLoan.class));
   }
 
@@ -270,19 +270,19 @@ public class DocumentRepository {
       " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
-    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+    if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
       sql
-              .append(" and stock_detail.stock_month = '")
-              .append(req.getMonthCurrent())
-              .append("' and stock_detail.stock_year = '")
-              .append(req.getYearCurrent())
-              .append("'");
+        .append(" and stock_detail.stock_month = '")
+        .append(req.getMonthCurrent())
+        .append("' and stock_detail.stock_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
       sql
-              .append(" and loan_detail.loan_month = '")
-              .append(req.getMonthCurrent())
-              .append("' and loan_detail.loan_year = '")
-              .append(req.getYearCurrent())
-              .append("'");
+        .append(" and loan_detail.loan_month = '")
+        .append(req.getMonthCurrent())
+        .append("' and loan_detail.loan_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
     }
     sql.append(" GROUP BY employee.employee_code ");
     return sql;
@@ -296,34 +296,34 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1LoanNewOfNull(DocumentReq req) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
-                    " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate, employee.salary, employee.employee_type_id AS employeeTypeId "
+      " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
+      " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate, employee.salary, employee.employee_type_id AS employeeTypeId "
     );
-    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+    if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
       sql.append(
-              " loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
-                      " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent "
+        " loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
+        " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent "
       );
     }
     sql.append(
-            " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
-            + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
-            + " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
+      " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
+      " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
-    if(req.getMonthCurrent() != null && req.getYearCurrent() != null){
+    if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
       sql
-              .append(" and stock_detail.stock_month = '")
-              .append(req.getMonthCurrent())
-              .append("' and stock_detail.stock_year = '")
-              .append(req.getYearCurrent())
-              .append("'");
+        .append(" and stock_detail.stock_month = '")
+        .append(req.getMonthCurrent())
+        .append("' and stock_detail.stock_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
       sql
-              .append(" and loan_detail.loan_month = '")
-              .append(req.getMonthCurrent())
-              .append("' and loan_detail.loan_year = '")
-              .append(req.getYearCurrent())
-              .append("'");
+        .append(" and loan_detail.loan_month = '")
+        .append(req.getMonthCurrent())
+        .append("' and loan_detail.loan_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
     }
     sql.append(" GROUP BY employee.employee_code ");
     return sql;
@@ -351,7 +351,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1GetIdOfEmpCode(Long empId) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName  FROM employee "
+      " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName  FROM employee "
     );
     sql.append(" WHERE employee.id = ").append(empId);
     return sql;
@@ -435,7 +435,9 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlDocumentInfoSumEmp() {
     val sql = new StringBuilder();
-    sql.append(" SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false ");
+    sql.append(
+      " SELECT COUNT(employee.id) AS sumEmp FROM employee WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
+    );
     return sql;
   }
 
@@ -446,7 +448,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlDocumentInfoSumLoanEmp() {
     val sql = new StringBuilder();
-    sql.append(" SELECT COUNT(loan.id) AS sumLoan FROM loan where loan.deleted = false ");
+    sql.append(" SELECT COUNT(loan.id) AS sumLoan FROM loan where loan.deleted = false AND loan.active = true ");
     return sql;
   }
 
