@@ -201,15 +201,14 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
   }
 
-  public StringBuilder buildQuerySqlV2Loan(Long loanId, String getMonthCurrent) {
+  public StringBuilder buildQuerySqlV2Loan(Long loanId, String getMonthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT department.name as departmentName, SUM(loan.loan_value) AS loanValueTotal " +
-      " FROM department " +
-      " JOIN employee ON employee.department_id = department.id " +
-      " JOIN stock ON employee.stock_id = stock.id JOIN stock_detail ON stock_detail.stock_id = stock.id " +
-      " LEFT JOIN loan ON employee.loan_id = loan.id " +
-      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+              " FROM department " +
+              " LEFT JOIN employee ON employee.department_id = department.id " +
+              " LEFT JOIN loan ON employee.loan_id = loan.id  " +
+              " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
 
     if (loanId != null) {
@@ -217,15 +216,16 @@ public class DocumentRepository {
       //sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     } else {
       sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
 
-    sql.append(" GROUP BY department.id ");
+    sql.append(" GROUP BY department.name ");
 
     return sql;
   }
 
-  public List<DocumentV2ResLoan> documentInfoV2Loan(Long loanId, String getMonthCurrent) {
-    val sql = buildQuerySqlV2Loan(loanId, getMonthCurrent);
+  public List<DocumentV2ResLoan> documentInfoV2Loan(Long loanId, String getMonthCurrent, String yearCurrent) {
+    val sql = buildQuerySqlV2Loan(loanId, getMonthCurrent,yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV2ResLoan.class));
   }
 

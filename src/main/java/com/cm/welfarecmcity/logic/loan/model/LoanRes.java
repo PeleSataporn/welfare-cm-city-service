@@ -10,6 +10,7 @@ public class LoanRes {
     private int loanValue;
     private int loanBalance;
     private int loanTime;
+    private int stockAccumulate;
     private String loanNo;
     private String employeeCode;
     private String firstName;

@@ -485,8 +485,8 @@ public class DocumentService {
   }
 
   @Transactional
-  public List<DocumentV2ResLoan> searchDocumentV2Loan(Long loanId, String getMonthCurrent) {
-    return documentRepository.documentInfoV2Loan(loanId, getMonthCurrent);
+  public List<DocumentV2ResLoan> searchDocumentV2Loan(Long loanId, String getMonthCurrent, String yearCurrent) {
+    return documentRepository.documentInfoV2Loan(loanId, getMonthCurrent, yearCurrent);
   }
 
   // calculate Loan
