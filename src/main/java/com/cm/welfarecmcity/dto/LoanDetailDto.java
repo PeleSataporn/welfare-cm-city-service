@@ -32,6 +32,9 @@ public class LoanDetailDto extends BaseDto {
   @Comment("ดอกเบี้ย %")
   private int interestPercent;
 
+  @Comment("ดอกเบี้ยเดือนสุดท้าย")
+  private int interestLastMonth;
+
   @Comment("เงินกู้คงเหลือ")
   private double loanBalance;
 

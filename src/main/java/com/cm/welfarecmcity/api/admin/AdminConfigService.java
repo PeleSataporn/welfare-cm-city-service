@@ -198,7 +198,7 @@ public class AdminConfigService {
     loanDetailDto.setLoan(lone);
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDetailDto.setLoanYear(req.getLoanYear());
-    //    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
     val loanDetail = loanDetailRepository.save(loanDetailDto);
 
     // update number running
@@ -370,23 +370,23 @@ public class AdminConfigService {
     contact.setEmail(req.getEmail());
     contact.setAddress(req.getAddress());
 
-    if (req.getLevelId() != null) {
+    if(req.getLevelId() != null){
       // level
       emp.setLevel(levelRepository.findById(req.getLevelId()).get());
     }
-    if (req.getEmployeeTypeId() != null) {
+    if(req.getEmployeeTypeId() != null){
       // employeeType
       emp.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
     }
-    if (req.getPositionId() != null) {
+    if(req.getPositionId() != null){
       // position
       emp.setPosition(positionRepository.findById(req.getPositionId()).get());
     }
-    if (req.getDepartmentId() != null) {
+    if(req.getDepartmentId() != null){
       // department
       emp.setDepartment(departmentRepository.findById(req.getDepartmentId()).get());
     }
-    if (req.getAffiliationId() != null) {
+    if(req.getAffiliationId() != null){
       // affiliation
       emp.setAffiliation(affiliationRepository.findById(req.getAffiliationId()).get());
     }
