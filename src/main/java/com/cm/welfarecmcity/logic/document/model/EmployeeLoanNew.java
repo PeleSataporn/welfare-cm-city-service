@@ -18,6 +18,7 @@ public class EmployeeLoanNew {
   private String loanBalance = null;
   private String interestPercent = null;
   private String salary = null;
+  private Long stockDetailInstallment = null;
 
   // --------- loan -----------
   private Long loanId = null;

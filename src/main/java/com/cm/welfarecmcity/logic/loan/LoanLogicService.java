@@ -155,6 +155,7 @@ public class LoanLogicService {
             loanDetailDto.setInterest(calculateInstallments.getInterest());
             loanDto.setLoanBalance(calculateInstallments.getPrincipalBalance());
             loanDto.setInterest(calculateInstallments.getInterest());
+            loanDetailDto.setLoanBalance(calculateInstallments.getPrincipalBalance());
           }
         });
 

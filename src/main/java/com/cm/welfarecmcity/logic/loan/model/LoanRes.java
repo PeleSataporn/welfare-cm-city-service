@@ -13,6 +13,7 @@ public class LoanRes {
     private int stockAccumulate;
     private String loanNo;
     private String employeeCode;
+    private String employeeStatus;
     private String firstName;
     private String lastName;
     private Boolean stockFlag;

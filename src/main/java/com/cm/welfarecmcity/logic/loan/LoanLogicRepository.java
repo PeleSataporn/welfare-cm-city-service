@@ -25,9 +25,9 @@ public class LoanLogicRepository {
   public StringBuilder buildQuerySql() {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan.id, loan_value, loan_balance, loan_time, loan.loan_no, prefix, employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
+      " SELECT loan.id, loan_value, loan_detail.loan_balance, loan_time, loan.loan_no, prefix, employee.employee_status , employee.employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
       "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, loan_detail.loan_ordinary, loan.interest_percent, stock.stock_accumulate " +
-      "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE) " +
+      "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE ) " +
       "JOIN loan_detail ON loan_detail.loan_id = loan.id " +
       "JOIN stock ON employee.stock_id = stock.id " +
       "JOIN stock_detail ON stock_detail.stock_id = stock.id " +

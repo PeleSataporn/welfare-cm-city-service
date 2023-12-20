@@ -2,6 +2,7 @@ package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailLoginRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.logic.document.model.*;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,9 @@ public class DocumentService {
 
   @Autowired
   private StockDetailRepository stockDetailRepository;
+
+  @Autowired
+  private StockDetailLoginRepository stockDetailLoginRepository;
 
   @Autowired
   private LoanDetailRepository loanDetailRepository;
@@ -245,8 +249,12 @@ public class DocumentService {
           infoAll.setFullNameGuaranteeTwo(guaranteeTwo.getFullNameGuarantee());
         });
 
-      stockDetailRepository
-        .findAllByStock_Id(infoAll.getStockId(), null)
+      DocumentReq reqStock = new DocumentReq();
+      reqStock.setStockId(infoAll.getStockId());
+      reqStock.setMonthCurrent(req.getMonthCurrent());
+      reqStock.setYearCurrent(req.getYearCurrent());
+      stockDetailLoginRepository
+        .documentInfoV3StockDetail(reqStock)
         .stream()
         .findFirst()
         .ifPresent(stockDetailDto -> infoAll.setInstallment(stockDetailDto.getInstallment()));

@@ -150,14 +150,14 @@ public class DocumentRepository {
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
       " WHERE employee.deleted = FALSE "
     );
-    if(monthCurrent != null && yearCurrent != null){
-      sql
-              .append(" and loan_detail.loan_month = '")
-              .append(monthCurrent)
-              .append("' and loan_detail.loan_year = '")
-              .append(yearCurrent)
-              .append("'");
-    }
+//    if(monthCurrent != null && yearCurrent != null){
+//      sql
+//              .append(" and loan_detail.loan_month = '")
+//              .append(monthCurrent)
+//              .append("' and loan_detail.loan_year = '")
+//              .append(yearCurrent)
+//              .append("'");
+//    }
     sql.append(" GROUP BY employee.id  ");
     return sql;
   }
@@ -263,7 +263,8 @@ public class DocumentRepository {
     sql.append(
       " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
       " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
-      " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId " +
+      " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId, " +
+      " stock_detail.installment as stockDetailInstallment " +
       " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
       " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
@@ -434,7 +435,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlDocumentInfoSumEmp() {
     val sql = new StringBuilder();
-    sql.append(" SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false");
+    sql.append(" SELECT COUNT(employee.id) AS sumEmp FROM employee where employee.deleted = false ");
     return sql;
   }
 

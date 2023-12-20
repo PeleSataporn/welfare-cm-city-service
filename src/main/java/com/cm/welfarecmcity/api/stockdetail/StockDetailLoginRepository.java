@@ -2,6 +2,8 @@ package com.cm.welfarecmcity.api.stockdetail;
 
 import com.cm.welfarecmcity.dto.StockDetailDto;
 import java.util.List;
+
+import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -45,4 +47,19 @@ public class StockDetailLoginRepository {
     val sql = buildQuerySqlV2StockDetail(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
   }
+
+  public StringBuilder buildQuerySqlV3StockDetail(DocumentReq req) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT * FROM stock_detail ");
+    sql.append(" WHERE stock_id = ").append(req.getStockId());
+    sql.append(" AND stock_month = '").append(req.getMonthCurrent()).append("' AND stock_year = '").append(req.getYearCurrent()).append("'");
+    // sql.append(" order by id ");
+    return sql;
+  }
+
+  public List<StockDetailDto> documentInfoV3StockDetail(DocumentReq req) {
+    val sql = buildQuerySqlV3StockDetail(req);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
+  }
+
 }
