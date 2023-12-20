@@ -54,7 +54,10 @@ public class LoanDto extends BaseDto {
   //  private GuarantorDto guarantorOne;
   //
   //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  //  private GuarantorDto guarantorTwo;
+  //  private GuarantorDto guarantorTwo
+
+  @Comment("ดอกเบี้ยเดือนสุดท้าย")
+  private int interestLastMonth;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "loan_id")

@@ -83,7 +83,7 @@ public class LoanService {
     loanDetailDto.setLoan(lone);
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDetailDto.setLoanYear(req.getLoanYear());
-    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+    //    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
     val loanDetail = loanDetailRepository.save(loanDetailDto);
 
     // insert to history loan
@@ -95,7 +95,7 @@ public class LoanService {
     // update number running
     val numberMax = loanLogicRepository.getNumberMaxLoan();
     int numberCheckMax = numberMax.getNumberMax() != 0 ? numberMax.getNumberMax() + 1 : 1;
-    String runningNumber = runningNumber(loan.getId(),numberCheckMax);
+    String runningNumber = runningNumber(loan.getId(), numberCheckMax);
     val findLoan = loanRepository.findById(loan.getId());
     val loans = findLoan.get();
     loans.setLoanNo(runningNumber);
@@ -128,7 +128,6 @@ public class LoanService {
 
   @Transactional
   public void deleteLoanNew(EmployeeLoanNew req) {
-
     var empData = documentRepository.getEmpCodeOfId(req.getEmployeeCode());
     val employee = employeeRepository.findById(empData.getEmpId()).get();
     employee.setLoan(null);
@@ -143,7 +142,5 @@ public class LoanService {
 
     // delete loan
     loanRepository.delete(lone);
-
   }
-
 }

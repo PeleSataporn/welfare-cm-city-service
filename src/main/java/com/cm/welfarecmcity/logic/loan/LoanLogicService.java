@@ -55,23 +55,23 @@ public class LoanLogicService {
   @Transactional
   public List<LoanRes> searchLoan() {
     val result = repository.searchLoan();
-//    result.forEach(infoAll -> {
-//
-//      if(infoAll.getGuarantorOne() != null){
-//        DocumentReq doc1 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorOne());
-//        infoAll.setGuarantorOneValue(doc1.getEmpCode());
-//      }else{
-//        infoAll.setGuarantorOneValue(null);
-//      }
-//
-//      if(infoAll.getGuarantorTwo() != null){
-//        DocumentReq doc2 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorTwo());
-//        infoAll.setGuarantorTwoValue(doc2.getEmpCode());
-//      }else{
-//        infoAll.setGuarantorTwoValue(null);
-//      }
-//
-//    });
+    //    result.forEach(infoAll -> {
+    //
+    //      if(infoAll.getGuarantorOne() != null){
+    //        DocumentReq doc1 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorOne());
+    //        infoAll.setGuarantorOneValue(doc1.getEmpCode());
+    //      }else{
+    //        infoAll.setGuarantorOneValue(null);
+    //      }
+    //
+    //      if(infoAll.getGuarantorTwo() != null){
+    //        DocumentReq doc2 = documentRepository.getIdOfEmpCode(infoAll.getGuarantorTwo());
+    //        infoAll.setGuarantorTwoValue(doc2.getEmpCode());
+    //      }else{
+    //        infoAll.setGuarantorTwoValue(null);
+    //      }
+    //
+    //    });
     return result;
   }
 
@@ -145,7 +145,7 @@ public class LoanLogicService {
         loanDetailDto.setLoanYear(req.getNewYear());
         loanDetailDto.setLoanOrdinary(detail.getLoanOrdinary());
         loanDetailDto.setInterestPercent(detail.getInterestPercent());
-        loanDetailDto.setInterestLastMonth(detail.getInterestLastMonth());
+        //        loanDetailDto.setInterestLastMonth(detail.getInterestLastMonth());
 
         // set loan update
         val loanDto = loanRepository.findById(detail.getLoanId()).get();
@@ -180,41 +180,39 @@ public class LoanLogicService {
   }
 
   @Transactional
-  public ResponseModel<ResponseId> updateLoanEmpOfGuarantor(EmployeeLoanNew req){
+  public ResponseModel<ResponseId> updateLoanEmpOfGuarantor(EmployeeLoanNew req) {
     try {
       val findConfig = loanRepository.findById(req.getLoanId());
       if (findConfig.isEmpty()) {
         throw new EmployeeException("Loan not found");
       }
       val config = findConfig.get();
-      if(req.getGuaranteeStockFlag()){
+      if (req.getGuaranteeStockFlag()) {
         config.setStockFlag(req.getGuaranteeStockFlag());
         config.setGuarantorOne(null);
         config.setGuarantorTwo(null);
-      }else{
+      } else {
         if (req.getGuarantorOne() != null) {
           var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
           val emp1 = employeeRepository.findById(result1.getEmpId()).get();
           config.setGuarantorOne(emp1);
           //loanDto.getGuarantorOne().setId(result1.getEmpId());
-        }else{
+        } else {
           config.setGuarantorOne(null);
         }
 
-        if(req.getGuarantorTwo() != null){
+        if (req.getGuarantorTwo() != null) {
           var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
           val emp2 = employeeRepository.findById(result2.getEmpId()).get();
           config.setGuarantorTwo(emp2);
           //loanDto.getGuarantorTwo().setId(result2.getEmpId());
-        }else{
+        } else {
           config.setGuarantorTwo(null);
         }
-
       }
       return responseDataUtils.insertDataSuccess(req.getLoanId());
     } catch (Exception e) {
       return null;
     }
   }
-
 }
