@@ -56,4 +56,10 @@ public class EmployeeRes {
 
   private ContactDto contact;
   private List<BeneficiariesRes> beneficiaries;
+
+  @Comment("หุ้นสะสม")
+  private int stockAccumulate;
+
+  @Comment("เงินกู้คงเหลือ")
+  private double loanBalance;
 }

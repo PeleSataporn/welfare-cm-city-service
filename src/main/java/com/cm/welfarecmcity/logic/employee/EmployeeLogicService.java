@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.logic.employee;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
+import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
@@ -36,6 +37,9 @@ public class EmployeeLogicService {
     res.setLevelName(emp.getLevel() != null ? emp.getLevel().getName() : null);
     res.setDepartmentName(emp.getDepartment() != null ? emp.getDepartment().getName() : null);
     res.setBureauName(emp.getAffiliation() != null ? emp.getAffiliation().getBureau().getName() : null);
+
+    res.setStockAccumulate(emp.getStock() != null ? emp.getStock().getStockAccumulate() : 0);
+    res.setLoanBalance(emp.getLoan() != null ? emp.getLoan().getLoanBalance() : 0);
 
     return res;
   }

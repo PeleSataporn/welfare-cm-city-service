@@ -35,6 +35,9 @@ public class LoanDetailDto extends BaseDto {
   @Comment("ดอกเบี้ยเดือนสุดท้าย")
   private int interestLastMonth;
 
+  @Comment("เงินกู้คงเหลือ")
+  private double loanBalance;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "loan_id")
   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
