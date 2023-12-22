@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.api.admin.model.AdminUpdateInfoReq;
 import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
 import com.cm.welfarecmcity.api.level.LevelRepository;
+import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
@@ -48,6 +49,9 @@ public class EmployeeService {
 
   @Autowired
   private NotificationRepository notificationRepository;
+
+  @Autowired
+  private LoanRepository loanRepository;
 
   @Transactional
   public List<EmpByAdminRes> searchEmployee() {
@@ -198,8 +202,32 @@ public class EmployeeService {
     }
 
     val employee = findEmployee.get();
-    employee.setEmployeeStatus(req.getType());
+    if(req.getType() == EmployeeStatusEnum.ESCAPE_DEBT.getState()){
+      employee.setEmployeeStatus(req.getType());
+    }else{
+      employee.setEmployeeStatus(req.getType());
+      // set loan
+      val loan = loanRepository.findById(employee.getLoan().getId()).get();
+      loan.setLoanBalance(0);
+      loan.setActive(false);
+      //loan.setDeleted(true);
+      loan.setInterest(0);
+      loan.setGuarantorOne(null);
+      loan.setGuarantorTwo(null);
+      loanRepository.save(loan);
 
+      // set stock
+      val stock = stockRepository.findById(employee.getStock().getId()).get();
+      stock.setStockAccumulate(0);
+      stock.setActive(false);
+      stock.setStockValue(0);
+      //stock.setDeleted(true);
+      stockRepository.save(stock);
+
+      employee.setLoan(null);
+      employee.setStock(null);
+    }
+    employeeRepository.save(employee);
     return responseDataUtils.updateDataSuccess(req.getId());
   }
 

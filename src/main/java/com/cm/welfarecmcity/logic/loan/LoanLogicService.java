@@ -53,8 +53,8 @@ public class LoanLogicService {
   private EmployeeRepository employeeRepository;
 
   @Transactional
-  public List<LoanRes> searchLoan() {
-    val result = repository.searchLoan();
+  public List<LoanRes> searchLoan(AddLoanDetailAllReq req) {
+    val result = repository.searchLoan(req);
 //    result.forEach(infoAll -> {
 //
 //      if(infoAll.getGuarantorOne() != null){

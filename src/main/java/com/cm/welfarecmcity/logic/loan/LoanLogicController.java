@@ -19,8 +19,8 @@ public class LoanLogicController {
   private LoanLogicService service;
 
   @PostMapping("search")
-  public List<LoanRes> searchLoan() {
-    return service.searchLoan();
+  public List<LoanRes> searchLoan(@RequestBody AddLoanDetailAllReq req) {
+    return service.searchLoan(req);
   }
 
   @GetMapping("guarantor/{id}")

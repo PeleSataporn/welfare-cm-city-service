@@ -3,10 +3,7 @@ package com.cm.welfarecmcity.logic.loan;
 import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
 import com.cm.welfarecmcity.logic.document.model.GuaranteeRes;
-import com.cm.welfarecmcity.logic.loan.model.BeneficiaryRes;
-import com.cm.welfarecmcity.logic.loan.model.GuarantorRes;
-import com.cm.welfarecmcity.logic.loan.model.LoanDetailRes;
-import com.cm.welfarecmcity.logic.loan.model.LoanRes;
+import com.cm.welfarecmcity.logic.loan.model.*;
 import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
 import java.util.List;
@@ -22,7 +19,7 @@ public class LoanLogicRepository {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  public StringBuilder buildQuerySql() {
+  public StringBuilder buildQuerySql(String currentMonth, String currentYear) {
     val sql = new StringBuilder();
     sql.append(
       " SELECT loan.id, loan_value, loan_detail.loan_balance, loan_time, loan.loan_no, prefix, employee.employee_status , employee.employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
@@ -32,13 +29,16 @@ public class LoanLogicRepository {
       "JOIN stock ON employee.stock_id = stock.id " +
       "JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       "WHERE loan.deleted = FALSE and loan.active = TRUE " +
-      "GROUP BY loan.id "
-    );
+      " and loan_detail.loan_month = '" )
+            .append(currentMonth)
+            .append("' AND loan_detail.loan_year = '")
+            .append(currentYear)
+            .append("' GROUP BY loan.id ");
     return sql;
   }
 
-  public List<LoanRes> searchLoan() {
-    val sql = buildQuerySql();
+  public List<LoanRes> searchLoan(AddLoanDetailAllReq req) {
+    val sql = buildQuerySql(req.getNewMonth(), req.getNewYear());
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanRes.class));
   }
 
