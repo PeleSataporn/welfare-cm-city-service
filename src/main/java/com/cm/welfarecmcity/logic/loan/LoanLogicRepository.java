@@ -1,5 +1,7 @@
 package com.cm.welfarecmcity.logic.loan;
 
+import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
 import com.cm.welfarecmcity.logic.document.model.GuaranteeRes;
@@ -107,7 +109,7 @@ public class LoanLogicRepository {
         " loan_detail.interest_percent, loan_detail.loan_year, loan_detail.interest_last_month, loan.loan_time, loan.loan_value, loan.new_loan, loan.start_loan_date "
       )
       .append(
-        " FROM loan_detail LEFT JOIN loan ON (loan.id = loan_detail.loan_id AND loan.deleted = FALSE) WHERE loan_detail.loan_month = '"
+        " FROM loan_detail LEFT JOIN loan ON (loan.id = loan_detail.loan_id AND loan.deleted = FALSE AND loan.active = TRUE ) WHERE loan_detail.loan_month = '"
       )
       .append(oldMonth)
       .append("' AND loan_detail.loan_year = '")
@@ -121,4 +123,33 @@ public class LoanLogicRepository {
     val sql = getLoanDetailByMonthSql(oldMonth, oldYear);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
   }
+
+  public StringBuilder buildQuerySqlLoanOfEmployee(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+                    " SELECT id, employee_code, loan_id FROM employee WHERE loan_id = " )
+            .append(loanId);
+            //.append("' GROUP BY loan.id ");
+    return sql;
+  }
+
+  public EmployeeDto searchLoanOfEmployee(Long loanId) {
+    val sql = buildQuerySqlLoanOfEmployee(loanId);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(EmployeeDto.class));
+  }
+
+  public StringBuilder buildQuerySqlLoanOfLoanDetail(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+                    " SELECT id , loan_id FROM loan_detail WHERE loan_id = " )
+            .append(loanId);
+    return sql;
+  }
+
+  public List<LoanDetailDto> searchLoanOfLoanDetail(Long loanId) {
+    val sql = buildQuerySqlLoanOfLoanDetail(loanId);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
+  }
+
+
 }

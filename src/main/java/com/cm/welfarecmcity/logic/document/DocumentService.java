@@ -213,11 +213,23 @@ public class DocumentService {
 
   @Transactional
   public GrandTotalRes grandTotal(DocumentReq req) {
-    val res = documentRepository.grandTotal(req.getYearCurrent(), req.getMonthCurrent());
+    //val res = documentRepository.grandTotal(req.getYearCurrent(), req.getMonthCurrent());
+    GrandTotalRes res = new GrandTotalRes();
     val resEmp = documentRepository.documentInfoSumEmp();
     res.setSumEmp(resEmp.getSumEmp());
     val resLoan = documentRepository.documentInfoSumLoanEmp();
     res.setSumLoan(resLoan.getSumLoan());
+    val resLoanBalance = documentRepository.getSumLoanBalance(req.getYearCurrent(), req.getMonthCurrent());
+    res.setSumLoanBalance(resLoanBalance.getSumLoanBalance());
+    val resStockAccumulate = documentRepository.getSumStockAccumulate(req.getYearCurrent(), req.getMonthCurrent());
+    res.setSumStockAccumulate(resStockAccumulate.getSumStockAccumulate());
+
+    val resStockValue = documentRepository.getSumStockValue(req.getYearCurrent(), req.getMonthCurrent());
+    res.setSumStockValue(resStockValue.getSumStockValue());
+    val resLoanInterest = documentRepository.getSumLoanInterest(req.getYearCurrent(), req.getMonthCurrent());
+    res.setSumLoanInterest(resLoanInterest.getSumLoanInterest());
+    val resLoanOrdinary = documentRepository.getSumLoanOrdinary(req.getYearCurrent(), req.getMonthCurrent());
+    res.setSumLoanOrdinary(resLoanOrdinary.getSumLoanOrdinary());
 
     val sumTotal = (res.getSumStockValue() + res.getSumLoanInterest() + res.getSumLoanOrdinary());
     res.setSumTotal(sumTotal);

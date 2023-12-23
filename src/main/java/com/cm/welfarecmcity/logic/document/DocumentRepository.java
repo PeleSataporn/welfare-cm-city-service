@@ -456,4 +456,116 @@ public class DocumentRepository {
     val sql = buildQuerySqlDocumentInfoSumLoanEmp();
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
+
+  public StringBuilder buildQuerySqlSumLoanBalance(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SUM(loan_detail.loan_balance) AS sumLoanBalance FROM loan " +
+            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public GrandTotalRes getSumLoanBalance(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumLoanBalance(yearCurrent, monthCurrent);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder buildQuerySqlSumStockAccumulate(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SUM(stock.stock_accumulate) AS sumStockAccumulate " +
+                    " FROM employee " +
+                    " JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
+                    " JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
+                    " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public GrandTotalRes getSumStockAccumulate(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumStockAccumulate(yearCurrent, monthCurrent);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder buildQuerySqlSumStockValue(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SUM(stock_detail.stock_value) AS sumStockValue " +
+                    "FROM employee " +
+                    "JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
+                    "JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
+                    "WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public GrandTotalRes getSumStockValue(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumStockValue(yearCurrent, monthCurrent);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder buildQuerySqlSumLoanInterest(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SUM(loan_detail.interest) AS sumLoanInterest " +
+                    " FROM loan " +
+                    " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+                    " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE  "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public GrandTotalRes getSumLoanInterest(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumLoanInterest(yearCurrent, monthCurrent);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
+  public StringBuilder buildQuerySqlSumLoanOrdinary(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
+                    " FROM loan " +
+                    " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+                    " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public GrandTotalRes getSumLoanOrdinary(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumLoanOrdinary(yearCurrent, monthCurrent);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
+  }
+
 }

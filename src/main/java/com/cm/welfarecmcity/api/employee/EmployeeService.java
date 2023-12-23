@@ -5,14 +5,17 @@ import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
 import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
+import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
+import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
@@ -52,6 +55,12 @@ public class EmployeeService {
 
   @Autowired
   private LoanRepository loanRepository;
+
+  @Autowired
+  private LoanLogicRepository repository;
+
+  @Autowired
+  private LoanDetailRepository loanDetailRepository;
 
   @Transactional
   public List<EmpByAdminRes> searchEmployee() {
@@ -207,14 +216,26 @@ public class EmployeeService {
     }else{
       employee.setEmployeeStatus(req.getType());
       // set loan
-      val loan = loanRepository.findById(employee.getLoan().getId()).get();
-      loan.setLoanBalance(0);
-      loan.setActive(false);
-      //loan.setDeleted(true);
-      loan.setInterest(0);
-      loan.setGuarantorOne(null);
-      loan.setGuarantorTwo(null);
-      loanRepository.save(loan);
+      if(employee.getLoan().getId() != null){
+        val loan = loanRepository.findById(employee.getLoan().getId()).get();
+        loan.setLoanBalance(0);
+        loan.setActive(false);
+        //loan.setDeleted(true);
+        loan.setInterest(0);
+        loan.setGuarantorOne(null);
+        loan.setGuarantorTwo(null);
+        loanRepository.save(loan);
+
+        // set loan_detail
+        val detailLoan = repository.searchLoanOfLoanDetail(employee.getLoan().getId());
+        if(!detailLoan.isEmpty()){
+          for(LoanDetailDto list : detailLoan){
+            val detail1 = loanDetailRepository.findById(list.getId()).get();
+            detail1.setActive(false);
+            loanDetailRepository.save(detail1);
+          }
+        }
+      }
 
       // set stock
       val stock = stockRepository.findById(employee.getStock().getId()).get();

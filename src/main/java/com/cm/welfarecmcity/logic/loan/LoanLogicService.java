@@ -177,6 +177,18 @@ public class LoanLogicService {
     loan.setGuarantorOne(null);
     loan.setGuarantorTwo(null);
 
+    val empLoan = repository.searchLoanOfEmployee(id);
+    val emp1 = employeeRepository.findById(empLoan.getId()).get();
+    emp1.setLoan(null);
+    employeeRepository.save(emp1);
+
+    val detailLoan = repository.searchLoanOfLoanDetail(id);
+    for(LoanDetailDto list : detailLoan){
+      val detail1 = loanDetailRepository.findById(list.getId()).get();
+      detail1.setActive(false);
+      loanDetailRepository.save(detail1);
+    }
+
     loanRepository.save(loan);
   }
 
