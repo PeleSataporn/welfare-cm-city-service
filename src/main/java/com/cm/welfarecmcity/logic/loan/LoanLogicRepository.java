@@ -113,7 +113,7 @@ public class LoanLogicRepository {
       .append("' AND loan_detail.loan_year = '")
       .append(oldYear)
       .append("' AND loan_detail.deleted = FALSE ")
-      .append("' AND loan_detail.active = TRUE ");
+      .append(" AND loan_detail.active = TRUE ");
     return sql;
   }
 
