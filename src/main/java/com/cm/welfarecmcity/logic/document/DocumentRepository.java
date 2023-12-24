@@ -36,7 +36,7 @@ public class DocumentRepository {
     if (yearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
     }
-    sql.append(" AND employee.employee_status IN (2,5) GROUP BY employee.employee_code ");
+    sql.append(" GROUP BY employee.employee_code ");
 
     return sql;
   }
@@ -460,9 +460,9 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanBalance(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.loan_balance) AS sumLoanBalance FROM loan " +
-      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
-      " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+            " SELECT SUM(loan_detail.loan_balance) AS sumLoanBalance FROM loan " +
+            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -481,11 +481,11 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumStockAccumulate(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(stock.stock_accumulate) AS sumStockAccumulate " +
-      " FROM employee " +
-      " JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
-      " JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
+            " SELECT SUM(stock.stock_accumulate) AS sumStockAccumulate " +
+                    " FROM employee " +
+                    " JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
+                    " JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
+                    " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
     if (yearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
@@ -504,11 +504,11 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumStockValue(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(stock_detail.stock_value) AS sumStockValue " +
-      "FROM employee " +
-      "JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
-      "JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
-      "WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
+            " SELECT SUM(stock_detail.stock_value) AS sumStockValue " +
+                    "FROM employee " +
+                    "JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
+                    "JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
+                    "WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
     if (yearCurrent != null) {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
@@ -527,10 +527,10 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanInterest(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.interest) AS sumLoanInterest " +
-      " FROM loan " +
-      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
-      " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE  "
+            " SELECT SUM(loan_detail.interest) AS sumLoanInterest " +
+                    " FROM loan " +
+                    " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+                    " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE  "
     );
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -549,10 +549,10 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanOrdinary(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
-      " FROM loan " +
-      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
-      " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+            " SELECT SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
+                    " FROM loan " +
+                    " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+                    " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -567,4 +567,5 @@ public class DocumentRepository {
     val sql = buildQuerySqlSumLoanOrdinary(yearCurrent, monthCurrent);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
+
 }
