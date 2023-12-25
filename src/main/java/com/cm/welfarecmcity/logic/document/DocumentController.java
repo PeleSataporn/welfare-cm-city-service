@@ -43,7 +43,7 @@ public class DocumentController {
   // loan
   @PostMapping("v1/document/searchLoan")
   public List<DocumentV1ResLoan> searchDocumentV1Loan(@RequestBody DocumentReq req) {
-    return service.searchDocumentV1Loan(req.getLoanId(), req.getMonthCurrent(), req.getAdmin(), req.getEmpId());
+    return service.searchDocumentV1Loan(req.getLoanId(), req.getMonthCurrent(), req.getAdmin(), req.getEmpId(), req.getYearCurrent());
   }
 
   @PostMapping("v2/document/searchLoan")

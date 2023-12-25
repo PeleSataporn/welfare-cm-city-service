@@ -406,7 +406,7 @@ public class DocumentService {
 
   // loan
   @Transactional
-  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent, Boolean admin, Long empId) {
+  public List<DocumentV1ResLoan> searchDocumentV1Loan(Long loanId, String getMonthCurrent, Boolean admin, Long empId, String yearCurrent) {
 
     if (!admin) {
       return null;
@@ -418,7 +418,7 @@ public class DocumentService {
         testHistory = testHistory + ',' + loanHistory.get(i).getLoanId();
 
       }
-    var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent,testHistory);
+    var resLoan = documentRepository.documentInfoV1Loan(loanId, getMonthCurrent,testHistory, yearCurrent);
     resLoan.forEach(res -> {
       if(res.getGuarantor1() != null){
         val empCode1 = searchIdOfEmpCode(Long.valueOf(res.getGuarantor1()));
