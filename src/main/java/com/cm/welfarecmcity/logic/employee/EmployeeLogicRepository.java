@@ -20,7 +20,8 @@ public class EmployeeLogicRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id, employee.employee_code, employee.prefix,employee.first_name, employee.last_name, employee.gender, employee.salary, positions.name as positionName, " +
-      " stock.stock_accumulate, loan.loan_value, loan.loan_balance, department.name as departmentName, employee.profile_img_id, employee.admin_flag, employee.password_flag FROM employee " +
+      " stock.stock_accumulate, loan.loan_value, loan.loan_balance, department.name as departmentName, employee.profile_img_id, employee.admin_flag, employee.password_flag, " +
+      " employee.billing_start_date FROM employee " +
       " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) "
     );
@@ -54,6 +55,7 @@ public class EmployeeLogicRepository {
         employee.setProfileImgId(rs.getLong("profile_img_id"));
         employee.setAdminFlag(rs.getBoolean("admin_flag"));
         employee.setPasswordFlag(rs.getBoolean("password_flag"));
+        employee.setBillingStartDate(rs.getDate("billing_start_date"));
 
         return employee;
       }

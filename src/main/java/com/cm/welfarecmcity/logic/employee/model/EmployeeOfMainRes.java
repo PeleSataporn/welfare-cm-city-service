@@ -2,6 +2,8 @@ package com.cm.welfarecmcity.logic.employee.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class EmployeeOfMainRes {
 
@@ -21,4 +23,6 @@ public class EmployeeOfMainRes {
   private Long profileImgId;
   private Boolean adminFlag;
   private Boolean passwordFlag;
+  private Date billingStartDate;
+
 }

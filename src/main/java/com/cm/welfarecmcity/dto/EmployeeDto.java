@@ -85,7 +85,7 @@ public class EmployeeDto extends BaseDto {
   @Comment("วันที่ครบอายุการเกษียณวันที่สิ้นสุดสัญญา (กรณีลูกจ้างรายวัน, ลูกจ้างโครงการ  เป็นต้น)")
   private Date retirementDate;
 
-  @Comment("เลขที่บัญชีธนาคารเงินเดือน (1 คน 1 บัญชี)")
+  @Comment("เลขที่บัญชีธนาคารเงินเดือน (1 คน 1 บัญชี) / ชื่อบัญชีธนาคาร")
   private String salaryBankAccountNumber;
 
   @Comment("เลขที่บัญชีธนาคารรับเงิน (1 คน 1 บัญชี)")
