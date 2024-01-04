@@ -205,6 +205,7 @@ public class LoanLogicService {
         config.setGuarantorOne(null);
         config.setGuarantorTwo(null);
       }else{
+        config.setStockFlag(req.getGuaranteeStockFlag());
         if (req.getGuarantorOne() != null) {
           var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
           val emp1 = employeeRepository.findById(result1.getEmpId()).get();
@@ -222,8 +223,8 @@ public class LoanLogicService {
         }else{
           config.setGuarantorTwo(null);
         }
-
       }
+      loanRepository.save(config);
       return responseDataUtils.insertDataSuccess(req.getLoanId());
     } catch (Exception e) {
       return null;

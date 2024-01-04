@@ -13,6 +13,7 @@ import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.position.PositionRepository;
+import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.dto.AdminConfigDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
@@ -77,6 +78,9 @@ public class AdminConfigService {
 
   @Autowired
   private BureauRepository bureauRepository;
+
+  @Autowired
+  private StockRepository stockRepository;
 
   @Transactional
   public List<AdminConfigRes> getConfigByList() {
@@ -393,7 +397,11 @@ public class AdminConfigService {
     emp.setMarital(req.getMarital());
     emp.setSalary(req.getSalary());
     emp.setCompensation(req.getCompensation());
-    emp.setMonthlyStockMoney(req.getMonthlyStockMoney());
+    if (req.getMonthlyStockMoney() != 0) {
+      val stock = stockRepository.findById(emp.getStock().getId()).get();
+      stock.setStockValue(req.getMonthlyStockMoney());
+      emp.setMonthlyStockMoney(req.getMonthlyStockMoney());
+    }
     emp.setContractStartDate(req.getContractStartDate());
     emp.setCivilServiceDate(req.getCivilServiceDate());
     emp.setBillingStartDate(req.getBillingStartDate());

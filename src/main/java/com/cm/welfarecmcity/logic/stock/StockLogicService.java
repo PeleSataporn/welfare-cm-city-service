@@ -33,6 +33,7 @@ public class StockLogicService {
         case 5 -> item.setStatus("รออนุมัติลาออก");
         case 6 -> item.setStatus("เสียชีวิต");
         case 7 -> item.setStatus("หนีหนี้");
+        case 8 -> item.setStatus("เกษียณ");
         default -> item.setStatus("ไม่ทราบสถานะ");
       }
     }

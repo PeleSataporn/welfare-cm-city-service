@@ -46,11 +46,16 @@ public class StockLogicRepository {
   public StringBuilder getStockDetailByMonthSql(String oldMonth, String oldYear) {
     val sql = new StringBuilder();
     sql
-      .append(" SELECT * FROM stock_detail WHERE stock_month = '")
+      .append(" SELECT stock.id , stock_detail.stock_id, stock.stock_value, stock_detail.id as stockDetailId, stock_detail.installment, stock_detail.stock_month, " +
+              " stock_detail.stock_year, stock_detail.stock_value as stockValueDetail, stock_detail.stock_accumulate " +
+              " FROM stock JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ) " +
+              " JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE AND employee.active = TRUE) " +
+              " WHERE stock.deleted = FALSE AND stock.active = TRUE AND stock_detail.stock_month = '")
       .append(oldMonth)
-      .append("' AND stock_year = '")
+      .append("' AND stock_detail.stock_year = '")
       .append(oldYear)
-      .append("' AND deleted = FALSE ");
+      .append("' AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ")
+      .append(" AND employee.employee_status IN (2,5) AND employee.id != 0 ");
     return sql;
   }
 

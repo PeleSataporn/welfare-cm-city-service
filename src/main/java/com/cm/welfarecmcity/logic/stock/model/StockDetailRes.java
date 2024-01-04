@@ -12,6 +12,7 @@ public class StockDetailRes {
 
   @Comment("เงินหุ้นส่งรายเดือน")
   private int stockValue;
+  private int stockValueDetail;
 
   @Comment("เดือนที่ส่ง")
   private String stockMonth;
@@ -20,6 +21,7 @@ public class StockDetailRes {
   private String stockYear;
 
   private Long stockId;
+  private Long stockDetailId;
 
   private int stockAccumulate;
 }

@@ -8,10 +8,12 @@ import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.stock.StockRepository;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
+import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
@@ -23,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import lombok.val;
@@ -61,6 +64,9 @@ public class EmployeeService {
 
   @Autowired
   private LoanDetailRepository loanDetailRepository;
+
+  @Autowired
+  private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public List<EmpByAdminRes> searchEmployee() {
@@ -216,7 +222,7 @@ public class EmployeeService {
     }else{
       employee.setEmployeeStatus(req.getType());
       // set loan
-      if(employee.getLoan().getId() != null){
+      if(employee.getLoan() != null){
         val loan = loanRepository.findById(employee.getLoan().getId()).get();
         loan.setLoanBalance(0);
         loan.setActive(false);
@@ -238,12 +244,23 @@ public class EmployeeService {
       }
 
       // set stock
-      val stock = stockRepository.findById(employee.getStock().getId()).get();
-      stock.setStockAccumulate(0);
-      stock.setActive(false);
-      stock.setStockValue(0);
-      //stock.setDeleted(true);
-      stockRepository.save(stock);
+      if(employee.getStock() != null){
+        val stock = stockRepository.findById(employee.getStock().getId()).get();
+        stock.setStockAccumulate(0);
+        stock.setActive(false);
+        stock.setStockValue(0);
+        //stock.setDeleted(true);
+        stockRepository.save(stock);
+
+        val stockDetail = stockDetailRepository.findAllByStock_Id(stock.getId());
+        if(stockDetail.size() > 0){
+          for(StockDetailDto listStock: stockDetail){
+            listStock.setActive(false);
+            stockDetailRepository.save(listStock);
+          }
+        }
+
+      }
 
       employee.setLoan(null);
       employee.setStock(null);
