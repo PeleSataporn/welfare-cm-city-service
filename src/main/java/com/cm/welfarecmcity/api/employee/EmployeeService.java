@@ -263,7 +263,7 @@ public class EmployeeService {
       }
 
       employee.setLoan(null);
-      employee.setStock(null);
+      //employee.setStock(null);
     }
     employeeRepository.save(employee);
     return responseDataUtils.updateDataSuccess(req.getId());
