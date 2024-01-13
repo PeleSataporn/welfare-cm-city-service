@@ -10,9 +10,12 @@ import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
+import com.cm.welfarecmcity.logic.document.DocumentService;
+import com.cm.welfarecmcity.logic.document.model.CalculateReq;
 import com.cm.welfarecmcity.logic.document.model.EmployeeLoanNew;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
+import java.text.ParseException;
 import java.time.LocalDate;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ public class LoanService {
 
   @Autowired
   private LoanLogic01Repository loanLogicRepository;
+
+  @Autowired
+  private DocumentService documentService;
 
   @Transactional
   public ResponseModel<ResponseId> add(LoanDto dto) {
@@ -95,7 +101,7 @@ public class LoanService {
     // update number running
     val numberMax = loanLogicRepository.getNumberMaxLoan();
     int numberCheckMax = numberMax.getNumberMax() != 0 ? numberMax.getNumberMax() + 1 : 1;
-    String runningNumber = runningNumber(loan.getId(),numberCheckMax);
+    String runningNumber = runningNumber(loan.getId(), numberCheckMax);
     val findLoan = loanRepository.findById(loan.getId());
     val loans = findLoan.get();
     loans.setLoanNo(runningNumber);
@@ -121,14 +127,13 @@ public class LoanService {
     int currentDay = currentDate.getDayOfMonth();
 
     //int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
-    String formattedRunningNumber = String.format("%02d", numberMax);
+    String formattedRunningNumber = String.format("%04d", numberMax);
     return (currentYear + 543) + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
     //System.out.println(runningNumberString);
   }
 
   @Transactional
   public void deleteLoanNew(EmployeeLoanNew req) {
-
     var empData = documentRepository.getEmpCodeOfId(req.getEmployeeCode());
     val employee = employeeRepository.findById(empData.getEmpId()).get();
     employee.setLoan(null);
@@ -143,7 +148,37 @@ public class LoanService {
 
     // delete loan
     loanRepository.delete(lone);
-
   }
 
+  @Transactional
+  public void updateLoanAndDetail() throws ParseException {
+    val loan = loanLogicRepository.getLoanAndDetail();
+
+    for (LoanDto list : loan) {
+      val cal = new CalculateReq();
+      cal.setPrincipal(list.getLoanValue());
+      cal.setInterestRate(list.getInterestPercent());
+      cal.setNumOfPayments(list.getLoanTime());
+      cal.setPaymentStartDate(list.getStartLoanDate());
+
+      val doc = documentService.calculateLoanNew(cal);
+
+      //      list.setInterest(doc.get(0).getInterest());
+      //      list.setLoanBalance(doc.get(0).getPrincipalBalance());
+      //      loanRepository.save(list);
+      //
+      //      // inset loanDetail
+      LoanDetailDto loanDetailDto = new LoanDetailDto();
+      loanDetailDto.setInstallment(doc.get(0).getInstallment());
+      loanDetailDto.setInterest(doc.get(0).getInterest());
+      loanDetailDto.setLoanMonth("มกราคม");
+      loanDetailDto.setLoanOrdinary(doc.get(0).getTotalDeduction());
+      loanDetailDto.setLoan(list);
+      loanDetailDto.setInterestPercent(5);
+      loanDetailDto.setLoanYear("2567");
+      loanDetailDto.setInterestLastMonth(0);
+      loanDetailDto.setLoanBalance(doc.get(0).getPrincipalBalance());
+      loanDetailRepository.save(loanDetailDto);
+    }
+  }
 }
