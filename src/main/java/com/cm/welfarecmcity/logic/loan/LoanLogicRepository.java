@@ -31,9 +31,9 @@ public class LoanLogicRepository {
       "JOIN stock ON employee.stock_id = stock.id " +
       "JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       "WHERE loan.deleted = FALSE and loan.active = TRUE " )
-//            .append(" and loan_detail.loan_month = '" + currentMonth)
-//            .append("' AND loan_detail.loan_year = '")
-//            .append(currentYear + "'")
+            .append(" and loan_detail.loan_month = '" + currentMonth)
+            .append("' AND loan_detail.loan_year = '")
+            .append(currentYear + "'")
             .append(" GROUP BY loan.id ");
      return sql;
   }
