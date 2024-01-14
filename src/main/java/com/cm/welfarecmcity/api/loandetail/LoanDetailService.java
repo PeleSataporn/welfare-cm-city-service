@@ -20,8 +20,7 @@ public class LoanDetailService {
 
   @Transactional
   public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
-    StringBuilder testHistory = new StringBuilder();
-    testHistory = new StringBuilder(String.valueOf(req.getLoanId()));
+    StringBuilder testHistory = new StringBuilder(String.valueOf(req.getLoanId()));
     val loanHistory = loanDetailLogicRepository.loanHistory(req.getEmpId());
     for (LoanHistoryDto loanHistoryDto : loanHistory) {
       testHistory.append(',').append(loanHistoryDto.getLoanId());
