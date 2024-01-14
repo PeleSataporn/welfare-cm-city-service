@@ -55,6 +55,19 @@ public class LoanLogicService {
   @Transactional
   public List<LoanRes> searchLoan(AddLoanDetailAllReq req) {
     val result = repository.searchLoan(req);
+
+    for(LoanRes list: result){
+      Integer sum = 0;
+      if(Integer.parseInt(list.getLoanYear()) >= 2567){
+        if(list.getLoanBalance() > 0){
+          sum = ( list.getLoanBalanceDetail() + Math.round((list.getLoanOrdinary() - list.getInterestDetail())) );
+        }else{
+          sum = list.getLoanOrdinary();
+        }
+        list.setLoanBalance(sum);
+      }
+    }
+
 //    result.forEach(infoAll -> {
 //
 //      if(infoAll.getGuarantorOne() != null){

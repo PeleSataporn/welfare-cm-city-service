@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailLoginRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.*;
 import jakarta.transaction.Transactional;
 import java.text.DecimalFormat;
@@ -219,8 +220,10 @@ public class DocumentService {
     res.setSumEmp(resEmp.getSumEmp());
     val resLoan = documentRepository.documentInfoSumLoanEmp();
     res.setSumLoan(resLoan.getSumLoan());
-    val resLoanBalance = documentRepository.getSumLoanBalance(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumLoanBalance(resLoanBalance.getSumLoanBalance());
+//    val resLoanBalance = documentRepository.getSumLoanBalance(req.getYearCurrent(), req.getMonthCurrent());
+//    res.setSumLoanBalance(resLoanBalance.getSumLoanBalance());
+    val listLoanBalance = documentRepository.getSumLoanBalanceList(req.getYearCurrent(), req.getMonthCurrent());
+    calculateSumLoanBalance(listLoanBalance,res);
     val resStockAccumulate = documentRepository.getSumStockAccumulate(req.getYearCurrent(), req.getMonthCurrent());
     res.setSumStockAccumulate(resStockAccumulate.getSumStockAccumulate());
 
@@ -228,13 +231,43 @@ public class DocumentService {
     res.setSumStockValue(resStockValue.getSumStockValue());
     val resLoanInterest = documentRepository.getSumLoanInterest(req.getYearCurrent(), req.getMonthCurrent());
     res.setSumLoanInterest(resLoanInterest.getSumLoanInterest());
-    val resLoanOrdinary = documentRepository.getSumLoanOrdinary(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumLoanOrdinary(resLoanOrdinary.getSumLoanOrdinary());
+//    val resLoanOrdinary = documentRepository.getSumLoanOrdinary(req.getYearCurrent(), req.getMonthCurrent());
+//    res.setSumLoanOrdinary(resLoanOrdinary.getSumLoanOrdinary());
+    val listLoanOrdinary = documentRepository.getSumLoanOrdinaryList(req.getYearCurrent(), req.getMonthCurrent());
+    calculateSumLoanOrdinary(listLoanOrdinary,res);
 
     val sumTotal = (res.getSumStockValue() + res.getSumLoanInterest() + res.getSumLoanOrdinary());
     res.setSumTotal(sumTotal);
 
     return res;
+  }
+
+  public void calculateSumLoanBalance(List<LoanDetailDto> loanBalanceList, GrandTotalRes res) {
+      if(loanBalanceList.size() > 0){
+        double sumLoanBalance = 0;
+         for(LoanDetailDto list: loanBalanceList){
+           if(list.getLoanBalance() > 0){
+             sumLoanBalance = sumLoanBalance + ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+           }else{
+             sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+           }
+         }
+        res.setSumLoanBalance((int) sumLoanBalance);
+      }
+  }
+
+  public void calculateSumLoanOrdinary(List<LoanDetailDto> loanBalanceList, GrandTotalRes res) {
+    if(loanBalanceList.size() > 0){
+      double sumLoanBalance = 0;
+      for(LoanDetailDto list: loanBalanceList){
+        if(list.getLoanBalance() > 0){
+          sumLoanBalance = sumLoanBalance + Math.round((list.getLoanOrdinary() - list.getInterest()));
+        }else{
+          sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+        }
+      }
+      res.setSumLoanOrdinary((int) sumLoanBalance);
+    }
   }
 
   @Transactional

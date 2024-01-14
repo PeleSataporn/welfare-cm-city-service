@@ -25,4 +25,8 @@ public class LoanRes {
     private String prefix;
     private String guarantorOneValue;
     private String guarantorTwoValue;
+    private int interestDetail;
+    private int loanBalanceDetail;
+    private String loanMonth;
+    private String loanYear;
 }

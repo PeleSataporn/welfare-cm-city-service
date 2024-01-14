@@ -25,13 +25,15 @@ public class LoanLogicRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT loan.id, loan_value, loan.loan_balance, loan_time, loan.loan_no, prefix, employee.employee_status , employee.employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
-      "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, loan_detail.loan_ordinary, loan.interest_percent, stock.stock_accumulate " +
+      "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, " +
+      "loan_detail.loan_ordinary , loan_detail.interest as interestDetail, loan_detail.loan_balance as loanBalanceDetail, loan_detail.loan_year, loan_detail.loan_month, " +
+      "loan.interest_percent, stock.stock_accumulate " +
       "FROM loan JOIN employee ON (employee.loan_id = loan.id AND employee.deleted = FALSE ) " +
       "JOIN loan_detail ON loan_detail.loan_id = loan.id " +
       "JOIN stock ON employee.stock_id = stock.id " +
       "JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       "WHERE loan.deleted = FALSE and loan.active = TRUE " )
-            .append(" and loan_detail.loan_month = '" + currentMonth)
+            .append(" AND loan_detail.loan_month = '" + currentMonth)
             .append("' AND loan_detail.loan_year = '")
             .append(currentYear + "'")
             .append(" GROUP BY loan.id ");

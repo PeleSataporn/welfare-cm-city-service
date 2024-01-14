@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.*;
 import java.util.List;
 import lombok.val;
@@ -462,7 +463,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanBalance(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.loan_balance) AS sumLoanBalance FROM loan " +
+      " SELECT SUM(loan_detail.loan_balance + (loan_detail.loan_ordinary - loan_detail.interest)) AS sumLoanBalance FROM loan " +
       " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
       " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
@@ -479,6 +480,29 @@ public class DocumentRepository {
     val sql = buildQuerySqlSumLoanBalance(yearCurrent, monthCurrent);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
+
+  // list calulate loanBalance total //
+  public StringBuilder buildQuerySqlSumLoanBalanceList(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT loan.id , loan_detail.loan_balance , loan_detail.loan_ordinary, loan_detail.interest FROM loan " +
+            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public List<LoanDetailDto> getSumLoanBalanceList(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumLoanBalanceList(yearCurrent, monthCurrent);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
+  }
+  // list calulate loanBalance total //
 
   public StringBuilder buildQuerySqlSumStockAccumulate(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
@@ -551,7 +575,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanOrdinary(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.loan_ordinary) AS sumLoanOrdinary " +
+      " SELECT SUM(loan_detail.loan_ordinary - loan_detail.interest) AS sumLoanOrdinary " +
       " FROM loan " +
       " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
       " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
@@ -569,4 +593,29 @@ public class DocumentRepository {
     val sql = buildQuerySqlSumLoanOrdinary(yearCurrent, monthCurrent);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(GrandTotalRes.class));
   }
+
+  // list calulate loanOrdinary total //
+  public StringBuilder buildQuerySqlSumLoanOrdinaryList(String yearCurrent, String monthCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT loan.id , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.loan_balance " +
+            " FROM loan " +
+            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+    );
+    if (yearCurrent != null) {
+      sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
+    }
+    if (monthCurrent != null) {
+      sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
+    }
+    return sql;
+  }
+
+  public List<LoanDetailDto> getSumLoanOrdinaryList(String yearCurrent, String monthCurrent) {
+    val sql = buildQuerySqlSumLoanOrdinaryList(yearCurrent, monthCurrent);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
+  }
+  // list calulate loanOrdinary total //
+
 }

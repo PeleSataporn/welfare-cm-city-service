@@ -25,7 +25,15 @@ public class LoanDetailService {
     for (LoanHistoryDto loanHistoryDto : loanHistory) {
       testHistory.append(',').append(loanHistoryDto.getLoanId());
     }
-    return loanDetailLogicRepository.loanDetailHistory(testHistory.toString(), req.getMonthCurrent(), req.getYearCurrent());
+    val listLoanDetail = loanDetailLogicRepository.loanDetailHistory(testHistory.toString(), req.getMonthCurrent(), req.getYearCurrent());
+    for(LoanDetailRes list : listLoanDetail){
+       if(Integer.parseInt(list.getLoanYear()) >= 2567){
+          Integer sum = 0;
+          sum = ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+          list.setLoanBalance(sum);
+       }
+    }
+    return listLoanDetail;
   }
 
   @Transactional
