@@ -84,7 +84,7 @@ public class LoanService {
     loanDetailDto.setInstallment(0);
     loanDetailDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDetailDto.setLoanMonth(req.getLoanMonth());
-    loanDetailDto.setLoanOrdinary(0); //Integer.parseInt(req.getLoanOrdinary()
+    loanDetailDto.setLoanOrdinary(Integer.parseInt(req.getLoanOrdinary())); //Integer.parseInt(req.getLoanOrdinary())
     val lone = loanRepository.findById(loan.getId()).get();
     loanDetailDto.setLoan(lone);
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));

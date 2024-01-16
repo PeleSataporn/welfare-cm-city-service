@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.logic.stock;
 
 import com.cm.welfarecmcity.dto.StockDetailDto;
+import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
 import java.util.Date;
@@ -63,4 +64,23 @@ public class StockLogicRepository {
     val sql = getStockDetailByMonthSql(oldMonth, oldYear);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailRes.class));
   }
+
+  public StringBuilder buildQueryDetailSql(AddStockDetailAllReq req) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT * " +
+            "FROM stock_detail " +
+            "WHERE stock_detail.stock_month = '")
+            .append(req.getNewMonth())
+            .append("' AND stock_detail.stock_year = '")
+            .append(req.getNewYear())
+            .append("'");
+    return sql;
+  }
+
+  public List<StockDetailDto> searchStockDetail(AddStockDetailAllReq req) {
+    val sql = buildQueryDetailSql(req);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
+  }
+
 }

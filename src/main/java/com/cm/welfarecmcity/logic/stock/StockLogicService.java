@@ -1,6 +1,8 @@
 package com.cm.welfarecmcity.logic.stock;
 
 import com.cm.welfarecmcity.api.stock.StockRepository;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
+import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
@@ -19,6 +21,9 @@ public class StockLogicService {
 
   @Autowired
   private StockRepository stockRepository;
+
+  @Autowired
+  private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public List<StockRes> searchStock() {
@@ -63,4 +68,18 @@ public class StockLogicService {
 
     return null;
   }
+
+  @Transactional
+  public String settingStockDetailAll(AddStockDetailAllReq req) {
+    val dataList = stockLogicRepository.searchStockDetail(req);
+
+    for (StockDetailDto item : dataList) {
+      val stockDetail = stockDetailRepository.findById(item.getId()).get();
+      stockDetail.setInstallment(item.getInstallment() - 1);
+      stockDetailRepository.save(stockDetail);
+    }
+
+    return "success";
+  }
+
 }

@@ -223,19 +223,26 @@ public class DocumentService {
 //    val resLoanBalance = documentRepository.getSumLoanBalance(req.getYearCurrent(), req.getMonthCurrent());
 //    res.setSumLoanBalance(resLoanBalance.getSumLoanBalance());
     val listLoanBalance = documentRepository.getSumLoanBalanceList(req.getYearCurrent(), req.getMonthCurrent());
-    calculateSumLoanBalance(listLoanBalance,res);
+    if(listLoanBalance.size() > 0){
+      calculateSumLoanBalance(listLoanBalance,res);
+    }else{
+      res.setSumLoanBalance(0L);
+    }
     val resStockAccumulate = documentRepository.getSumStockAccumulate(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumStockAccumulate(resStockAccumulate.getSumStockAccumulate());
+    res.setSumStockAccumulate(resStockAccumulate.getSumStockAccumulate() != null ? resStockAccumulate.getSumStockAccumulate() : 0);
 
     val resStockValue = documentRepository.getSumStockValue(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumStockValue(resStockValue.getSumStockValue());
+    res.setSumStockValue(resStockValue.getSumStockValue() != null ? resStockValue.getSumStockValue() : 0);
     val resLoanInterest = documentRepository.getSumLoanInterest(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumLoanInterest(resLoanInterest.getSumLoanInterest());
+    res.setSumLoanInterest(resLoanInterest.getSumLoanInterest() != null ? resLoanInterest.getSumLoanInterest() : 0);
 //    val resLoanOrdinary = documentRepository.getSumLoanOrdinary(req.getYearCurrent(), req.getMonthCurrent());
 //    res.setSumLoanOrdinary(resLoanOrdinary.getSumLoanOrdinary());
     val listLoanOrdinary = documentRepository.getSumLoanOrdinaryList(req.getYearCurrent(), req.getMonthCurrent());
-    calculateSumLoanOrdinary(listLoanOrdinary,res);
-
+    if(listLoanOrdinary.size() > 0){
+      calculateSumLoanOrdinary(listLoanOrdinary,res);
+    }else{
+      res.setSumLoanOrdinary(0L);
+    }
     val sumTotal = (res.getSumStockValue() + res.getSumLoanInterest() + res.getSumLoanOrdinary());
     res.setSumTotal(sumTotal);
 
@@ -246,13 +253,17 @@ public class DocumentService {
       if(loanBalanceList.size() > 0){
         double sumLoanBalance = 0;
          for(LoanDetailDto list: loanBalanceList){
-           if(list.getLoanBalance() > 0){
-             sumLoanBalance = sumLoanBalance + ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+           if(list.getInstallment() > 0){
+             if(list.getLoanBalance() > 0){
+               sumLoanBalance = sumLoanBalance + ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+             }else{
+               sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+             }
            }else{
-             sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+             sumLoanBalance = sumLoanBalance + 0;
            }
          }
-        res.setSumLoanBalance((int) sumLoanBalance);
+        res.setSumLoanBalance((long) sumLoanBalance);
       }
   }
 
@@ -260,13 +271,17 @@ public class DocumentService {
     if(loanBalanceList.size() > 0){
       double sumLoanBalance = 0;
       for(LoanDetailDto list: loanBalanceList){
-        if(list.getLoanBalance() > 0){
-          sumLoanBalance = sumLoanBalance + Math.round((list.getLoanOrdinary() - list.getInterest()));
+        if(list.getInstallment() > 0){
+          if(list.getLoanBalance() > 0){
+            sumLoanBalance = sumLoanBalance + Math.round((list.getLoanOrdinary() - list.getInterest()));
+          }else{
+            sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+          }
         }else{
-          sumLoanBalance = sumLoanBalance + list.getLoanOrdinary();
+          sumLoanBalance = sumLoanBalance + 0;
         }
       }
-      res.setSumLoanOrdinary((int) sumLoanBalance);
+      res.setSumLoanOrdinary((long) sumLoanBalance);
     }
   }
 

@@ -485,7 +485,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanBalanceList(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT loan.id , loan_detail.loan_balance , loan_detail.loan_ordinary, loan_detail.interest FROM loan " +
+            " SELECT loan.id , loan_detail.loan_balance , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.installment FROM loan " +
             " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
             " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
@@ -507,7 +507,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumStockAccumulate(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(stock.stock_accumulate) AS sumStockAccumulate " +
+      " SELECT SUM(COALESCE(stock.stock_accumulate,0)) AS sumStockAccumulate " +
       " FROM employee " +
       " JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
       " JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
@@ -530,7 +530,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumStockValue(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(stock_detail.stock_value) AS sumStockValue " +
+      " SELECT SUM(COALESCE(stock_detail.stock_value,0)) AS sumStockValue " +
       "FROM employee " +
       "JOIN stock ON (stock.id = employee.stock_id AND stock.deleted = FALSE) " +
       "JOIN stock_detail ON (stock.id = stock_detail.stock_id AND stock_detail.deleted = FALSE) " +
@@ -553,7 +553,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanInterest(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT SUM(loan_detail.interest) AS sumLoanInterest " +
+      " SELECT SUM(COALESCE(loan_detail.interest,0)) AS sumLoanInterest " +
       " FROM loan " +
       " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
       " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE  "
@@ -598,7 +598,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanOrdinaryList(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT loan.id , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.loan_balance " +
+            " SELECT loan.id , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.loan_balance, loan_detail.installment " +
             " FROM loan " +
             " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
             " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "

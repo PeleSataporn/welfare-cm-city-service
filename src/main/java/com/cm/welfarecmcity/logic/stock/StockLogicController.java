@@ -27,4 +27,10 @@ public class StockLogicController {
   public ResponseModel<ResponseId> addAll(@RequestBody AddStockDetailAllReq req) {
     return stockService.add(req);
   }
+
+  @PostMapping("setting-stock-detail")
+  public String settingStockDetailAll(@RequestBody AddStockDetailAllReq req) {
+    return stockService.settingStockDetailAll(req);
+  }
+
 }

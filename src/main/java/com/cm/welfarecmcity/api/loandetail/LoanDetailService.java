@@ -22,15 +22,19 @@ public class LoanDetailService {
   public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
     StringBuilder testHistory = new StringBuilder(String.valueOf(req.getLoanId()));
     val loanHistory = loanDetailLogicRepository.loanHistory(req.getEmpId());
-    for (LoanHistoryDto loanHistoryDto : loanHistory) {
-      testHistory.append(',').append(loanHistoryDto.getLoanId());
-    }
+//    for (LoanHistoryDto loanHistoryDto : loanHistory) {
+//      testHistory.append(',').append(loanHistoryDto.getLoanId());
+//    }
     val listLoanDetail = loanDetailLogicRepository.loanDetailHistory(testHistory.toString(), req.getMonthCurrent(), req.getYearCurrent());
     for(LoanDetailRes list : listLoanDetail){
        if(Integer.parseInt(list.getLoanYear()) >= 2567){
-          Integer sum = 0;
-          sum = ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
-          list.setLoanBalance(sum);
+         Integer sum = 0;
+         if(list.getLoanBalance() > 0 && list.getInstallment() > 0){
+           sum = ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+         }else{
+           sum = list.getLoanValue();
+         }
+         list.setLoanBalance(sum);
        }
     }
     return listLoanDetail;

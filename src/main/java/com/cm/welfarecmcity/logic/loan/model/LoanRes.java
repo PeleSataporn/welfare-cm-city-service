@@ -29,4 +29,5 @@ public class LoanRes {
     private int loanBalanceDetail;
     private String loanMonth;
     private String loanYear;
+    private int installment;
 }

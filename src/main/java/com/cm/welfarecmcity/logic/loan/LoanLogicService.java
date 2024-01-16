@@ -59,10 +59,10 @@ public class LoanLogicService {
     for(LoanRes list: result){
       Integer sum = 0;
       if(Integer.parseInt(list.getLoanYear()) >= 2567){
-        if(list.getLoanBalance() > 0){
+        if(list.getLoanBalance() > 0 && list.getInstallment() > 0){
           sum = ( list.getLoanBalanceDetail() + Math.round((list.getLoanOrdinary() - list.getInterestDetail())) );
         }else{
-          sum = list.getLoanOrdinary();
+          sum = list.getLoanValue();
         }
         list.setLoanBalance(sum);
       }

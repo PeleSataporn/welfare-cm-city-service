@@ -7,12 +7,12 @@ import lombok.Setter;
 @Setter
 public class GrandTotalRes {
 
-  private int sumEmp;
-  private int sumLoan;
-  private int sumLoanBalance;
-  private int sumStockAccumulate;
-  private int sumStockValue;
-  private int sumLoanInterest;
-  private int sumLoanOrdinary;
-  private int sumTotal;
+  private Long sumEmp;
+  private Long sumLoan;
+  private Long sumLoanBalance;
+  private Long sumStockAccumulate;
+  private Long sumStockValue;
+  private Long sumLoanInterest;
+  private Long sumLoanOrdinary;
+  private Long sumTotal;
 }
