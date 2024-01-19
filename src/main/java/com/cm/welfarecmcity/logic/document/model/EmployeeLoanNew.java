@@ -32,6 +32,7 @@ public class EmployeeLoanNew {
   private String guaranteeStock = null;
   private String stockValue = null;
   private Long installment = null;
+  private Boolean newLoan = null;
 
   // --------- loan detail-----------
   private String loanOrdinary = null;
@@ -39,4 +40,7 @@ public class EmployeeLoanNew {
   private String loanYear = null;
   private String loanMonth = null;
   private String startDateLoan = null;
+
+  // --------- stock -----------
+  private Long stockId = null;
 }

@@ -178,7 +178,11 @@ public class DocumentService {
   @Transactional
   public EmployeeLoanNew searchEmployeeLoanNew(DocumentReq req) {
     try {
-      return documentRepository.searchEmployeeLoanNew(req); //searchEmployeeLoanNewOfNull
+      val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
+      req.setStockId(empFullData.getStockId());
+      req.setLoanId(empFullData.getLoanId());
+      val employeeLoanNew = documentRepository.searchEmployeeLoanNew(req); //searchEmployeeLoanNewOfNull
+      return employeeLoanNew;
     } catch (Exception e) {
       return null;
     }

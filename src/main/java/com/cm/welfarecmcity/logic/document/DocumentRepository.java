@@ -267,25 +267,29 @@ public class DocumentRepository {
       " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, " +
       " employee_type.name AS employeeTypeName, stock.stock_accumulate AS stockAccumulate,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
       " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, employee.salary, employee.employee_type_id AS employeeTypeId, " +
-      " stock_detail.installment as stockDetailInstallment " +
+      " stock_detail.installment as stockDetailInstallment, loan.id as loanId, stock.id as stockId, loan.start_loan_date as startDateLoan, loan.new_loan " +
       " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id " +
       " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id " +
       " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
     );
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
-      sql
-        .append(" and stock_detail.stock_month = '")
-        .append(req.getMonthCurrent())
-        .append("' and stock_detail.stock_year = '")
-        .append(req.getYearCurrent())
-        .append("'");
-      sql
-        .append(" and loan_detail.loan_month = '")
-        .append(req.getMonthCurrent())
-        .append("' and loan_detail.loan_year = '")
-        .append(req.getYearCurrent())
-        .append("'");
+      if(req.getStockId() != null){
+        sql
+                .append(" and stock_detail.stock_month = '")
+                .append(req.getMonthCurrent())
+                .append("' and stock_detail.stock_year = '")
+                .append(req.getYearCurrent())
+                .append("'");
+      }
+      if(req.getLoanId() != null){
+        sql
+                .append(" and loan_detail.loan_month = '")
+                .append(req.getMonthCurrent())
+                .append("' and loan_detail.loan_year = '")
+                .append(req.getYearCurrent())
+                .append("'");
+      }
     }
     sql.append(" GROUP BY employee.employee_code ");
     return sql;
@@ -340,7 +344,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1GetEmpCodeOfId(String empCode) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName  FROM employee "
+      " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName,   FROM employee "
     );
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
     return sql;
@@ -617,5 +621,23 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
   // list calulate loanOrdinary total //
+
+  public StringBuilder buildQuerySqlV1GetEmpFull(String empCode) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT id as empId, active, create_date, deleted, last_update, approve_flag, approved_resignation_date, bank_account_receiving_number, " +
+            " billing_start_date, birthday, civil_service_date, compensation, contract_start_date, date_of_death, description, employee_code as empCode, " +
+            " employee_status, first_name, gender, id_card, last_name, marital, monthly_stock_money, password_flag, prefix, profile_flag, reason, " +
+            " resignation_date, retirement_date, salary, salary_bank_account_number, affiliation_id, contact_id, employee_type_id, level_id, loan_id, " +
+            " position_id, stock_id, user_id, department_id, check_stock_value_flag, profile_img_id, admin_flag FROM employee "
+    );
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    return sql;
+  }
+
+  public DocumentReq getEmpFullData(String empCode) {
+    val sql = buildQuerySqlV1GetEmpFull(empCode);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+  }
 
 }
