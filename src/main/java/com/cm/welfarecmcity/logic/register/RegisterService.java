@@ -193,8 +193,10 @@ public class RegisterService {
     val department = departmentRepository.findById(req.getDepartmentId()).get();
     employee.setDepartment(department);
 
-    val level = levelRepository.findById(req.getLevelId()).get();
-    employee.setLevel(level);
+    if (req.getLevelId() != 0) {
+      val level = levelRepository.findById(req.getLevelId()).get();
+      employee.setLevel(level);
+    }
 
     val employeeType = employeeTypeRepository.findById(req.getEmployeeTypeId()).get();
     employee.setEmployeeType(employeeType);
