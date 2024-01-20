@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateStockReq {
-    private Long id;
-    private int stockValue;
+
+  private Long id;
+  private int stockValue;
 }

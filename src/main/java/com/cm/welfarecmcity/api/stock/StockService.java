@@ -2,7 +2,9 @@ package com.cm.welfarecmcity.api.stock;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.stock.model.UpdateStockReq;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.EmployeeDto;
+import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -24,6 +26,9 @@ public class StockService {
   @Autowired
   private EmployeeRepository employeeRepository;
 
+  @Autowired
+  private StockDetailRepository stockDetailRepository;
+
   @Transactional
   public ResponseModel<ResponseId> add(StockDto dto) {
     val stock = stockRepository.save(dto);
@@ -36,10 +41,20 @@ public class StockService {
     val employee = employeeRepository.getByStockId(req.getId());
 
     if (req.getStockValue() != 0) {
-      stock.setStockValue(req.getStockValue());
-
       employee.setMonthlyStockMoney(req.getStockValue());
       employeeRepository.save(employee);
+
+      val stockDetailLast = stock.getStockDetails().stream().reduce((first, second) -> second).get();
+      val sumValue = stockDetailLast.getStockAccumulate() - stockDetailLast.getStockValue();
+      val totalValue = sumValue + req.getStockValue();
+
+      stockDetailLast.setStockValue(req.getStockValue());
+      stockDetailLast.setStockAccumulate(totalValue);
+      stockDetailRepository.save(stockDetailLast);
+
+      stock.setStockValue(req.getStockValue());
+      stock.setStockAccumulate(totalValue);
+      stockRepository.save(stock);
     }
 
     return responseDataUtils.updateDataSuccess(stockRepository.save(stock).getId());
