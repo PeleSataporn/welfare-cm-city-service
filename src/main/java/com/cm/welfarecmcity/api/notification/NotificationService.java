@@ -34,8 +34,18 @@ public class NotificationService {
 
     for (PetitionNotificationDto petitionNotification : listNotification) {
       val notification = mapStructMapper.notificationToRes(petitionNotification);
-      notification.getEmployee().setPositionName(petitionNotification.getEmployee().getPosition().getName());
-      notification.getEmployee().setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
+
+      if (petitionNotification.getEmployee().getPosition() == null) {
+        notification.getEmployee().setPositionName(null);
+      } else {
+        notification.getEmployee().setPositionName(petitionNotification.getEmployee().getPosition().getName());
+      }
+
+      if (petitionNotification.getEmployee().getAffiliation() == null) {
+        notification.getEmployee().setAffiliationName(null);
+      } else {
+        notification.getEmployee().setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
+      }
 
       if (petitionNotification.getEmployee().getEmployeeType() == null) {
         notification.getEmployee().setEmployeeTypeName(null);
@@ -43,7 +53,11 @@ public class NotificationService {
         notification.getEmployee().setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
       }
 
-      notification.getEmployee().setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
+      if (petitionNotification.getEmployee().getDepartment() == null) {
+        notification.getEmployee().setDepartmentName(null);
+      } else {
+        notification.getEmployee().setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
+      }
 
       if (petitionNotification.getEmployee().getLevel() == null) {
         notification.getEmployee().setLevelName(null);
@@ -63,9 +77,17 @@ public class NotificationService {
         notification.getEmployee().setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
       }
 
-      notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
+      if (petitionNotification.getEmployee().getAffiliation() == null) {
+        notification.getEmployee().setBureauName(null);
+      } else {
+        notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
+      }
 
-      notification.getEmployee().setMarital(petitionNotification.getEmployee().getMarital());
+      if (petitionNotification.getEmployee().getMarital() == null) {
+        notification.getEmployee().setMarital(null);
+      } else {
+        notification.getEmployee().setMarital(petitionNotification.getEmployee().getMarital());
+      }
 
       if (petitionNotification.getEmployee().getProfileImg() == null) {
         notification.getEmployee().setProfileImgId(null);
@@ -98,11 +120,10 @@ public class NotificationService {
   @Transactional
   public List<NotificationRes> getNotifyByEmpId(NotificationRes req) {
     val notifyDataList = notificationLogicRepository.getNotificationByEmpId(req.getEmployeeId());
-    if(notifyDataList != null && notifyDataList.size() > 0){
+    if (notifyDataList != null && notifyDataList.size() > 0) {
       return notifyDataList;
-    }else{
+    } else {
       return null;
     }
   }
-
 }
