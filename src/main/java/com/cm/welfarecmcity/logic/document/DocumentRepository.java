@@ -344,7 +344,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1GetEmpCodeOfId(String empCode) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName,   FROM employee "
+      " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM employee "
     );
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
     return sql;
