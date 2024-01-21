@@ -27,4 +27,5 @@ public class RegisterReq {
   private int stockValue;
   private String stockMonth;
   private String stockYear;
+  private int installment;
 }

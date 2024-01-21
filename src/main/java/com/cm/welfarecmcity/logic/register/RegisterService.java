@@ -205,13 +205,25 @@ public class RegisterService {
     // stock
     val stock = new StockDto();
     stock.setStockValue(req.getStockValue());
-    stock.setStockAccumulate(0);
+
+    if (req.getInstallment() == 1) {
+      stock.setStockAccumulate(req.getStockValue());
+    } else {
+      stock.setStockAccumulate(0);
+    }
 
     val stockDetail = new StockDetailDto();
-    stockDetail.setInstallment(0);
     stockDetail.setStockValue(req.getStockValue());
     stockDetail.setStockMonth(req.getStockMonth());
     stockDetail.setStockYear(req.getStockYear());
+
+    if (req.getInstallment() == 1) {
+      stockDetail.setInstallment(1);
+      stockDetail.setStockAccumulate(req.getStockValue());
+    } else {
+      stockDetail.setInstallment(0);
+      stockDetail.setStockAccumulate(0);
+    }
 
     // stockDetail
     List<StockDetailDto> stockDetailList = new ArrayList<>();

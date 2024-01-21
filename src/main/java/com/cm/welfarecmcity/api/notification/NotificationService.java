@@ -2,7 +2,10 @@ package com.cm.welfarecmcity.api.notification;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.notification.model.NotificationRes;
+import com.cm.welfarecmcity.api.stock.StockRepository;
+import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
+import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -25,6 +28,12 @@ public class NotificationService {
 
   @Autowired
   private MapStructMapper mapStructMapper;
+
+  @Autowired
+  private StockRepository stockRepository;
+
+  @Autowired
+  private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public List<NotificationRes> searchNotify() {
@@ -125,5 +134,23 @@ public class NotificationService {
     } else {
       return null;
     }
+  }
+
+  @Transactional
+  public void rejectRegister(Long id, Long empId) {
+    val notification = notificationRepository.findById(id).get(); //    employeeRepository.save(emp);
+    notificationRepository.delete(notification);
+    //    val emp = employeeRepository.findById(empId).get();
+    //
+    //    val stock = new StockDto();
+    //    stock.setId(emp.getStock().getId());
+    //
+    //    val stockDetail = stockDetailRepository.findAllByStock_Id(emp.getStock().getId()).get(0);
+    //    stockDetailRepository.delete(stockDetail);
+    //
+    //    employeeRepository.deleteById(emp.getId());
+    //
+    //    val stockTemp = stockRepository.findById(stock.getId()).get();
+    //    stockRepository.delete(stockTemp);
   }
 }

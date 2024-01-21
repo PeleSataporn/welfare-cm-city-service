@@ -31,6 +31,11 @@ public class NotificationController {
     notificationService.cancel(id, empId);
   }
 
+  @DeleteMapping("/reject-register/{id}/{empId}")
+  public void rejectRegister(@PathVariable Long id, @PathVariable Long empId) {
+    notificationService.rejectRegister(id, empId);
+  }
+
   @DeleteMapping("/delete-notify/{id}")
   public void deleteNotify(@PathVariable Long id) {
     notificationService.deleteNotify(id);
