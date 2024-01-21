@@ -81,7 +81,7 @@ public class LoanService {
 
     // inset loanDetail
     LoanDetailDto loanDetailDto = new LoanDetailDto();
-    loanDetailDto.setInstallment(0);
+    loanDetailDto.setInstallment(Math.toIntExact(req.getInstallment()));
     loanDetailDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDetailDto.setLoanMonth(req.getLoanMonth());
     loanDetailDto.setLoanOrdinary(Integer.parseInt(req.getLoanOrdinary())); //Integer.parseInt(req.getLoanOrdinary())
@@ -90,6 +90,7 @@ public class LoanService {
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDetailDto.setLoanYear(req.getLoanYear());
     loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+    loanDetailDto.setLoanBalance(Double.parseDouble(req.getLoanBalance()));
     val loanDetail = loanDetailRepository.save(loanDetailDto);
 
     // insert to history loan
