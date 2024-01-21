@@ -172,7 +172,8 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
       " SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, loan_detail.installment, loan_detail.interest_last_month as interestLastMonth, " +
-      " loan.new_loan as newLoan, loan.loan_value as loanValue, loan.loan_time as loanTime, loan_detail.interest_percent as interestPercent, loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2 " +
+      " loan.new_loan as newLoan, loan.loan_value as loanValue, loan.loan_time as loanTime, loan_detail.interest_percent as interestPercent, loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2, " +
+      " loan.start_loan_date " +
       " FROM department " +
       " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) " +
       " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +

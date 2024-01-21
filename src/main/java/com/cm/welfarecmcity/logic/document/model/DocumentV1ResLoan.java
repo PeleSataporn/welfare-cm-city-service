@@ -35,5 +35,5 @@ public class DocumentV1ResLoan {
     private String totalValuePrinciple;
     // คงคาง(ต้น)
     private String outStandPrinciple;
-
+    private String startLoanDate;
 }

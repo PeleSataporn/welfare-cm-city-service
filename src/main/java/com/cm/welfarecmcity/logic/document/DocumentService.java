@@ -487,7 +487,7 @@ public class DocumentService {
           req.setPrincipal(Integer.parseInt(res.getLoanValue()));
           req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
           req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
-          req.setPaymentStartDate("2023-01-31");
+          req.setPaymentStartDate("2024-01-01");
           try {
             List<CalculateInstallments> resList = calculateLoanOld(req); // ** function --> calculateLoanNew() , calculateLoanOld
             int sumTotalValueInterest = 0;
@@ -521,7 +521,7 @@ public class DocumentService {
           req.setPrincipal(Integer.parseInt(res.getLoanValue()));
           req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
           req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
-          req.setPaymentStartDate("2023-01-31");
+          req.setPaymentStartDate(res.getStartLoanDate());
           try {
             List<CalculateInstallments> resList = calculateLoanNew(req); // ** function --> calculateLoanNew() , calculateLoanOld()
             int sumTotalValueInterest = 0;
