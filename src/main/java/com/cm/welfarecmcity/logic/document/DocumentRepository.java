@@ -212,14 +212,15 @@ public class DocumentRepository {
       " FROM department " +
       " LEFT JOIN employee ON employee.department_id = department.id " +
       " LEFT JOIN loan ON employee.loan_id = loan.id  " +
-      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "
+      " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id " +
+      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND loan.active = TRUE  "
     );
 
     if (loanId != null) {
-      sql.append(" WHERE loan.id = ").append(loanId);
+      sql.append(" AND loan.id = ").append(loanId);
       //sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
     } else {
-      sql.append(" WHERE loan_detail.loan_month = '").append(getMonthCurrent).append("'");
+      sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
 
