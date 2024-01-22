@@ -67,7 +67,7 @@ public class DocumentService {
         val stockValue = Integer.parseInt(res1.get(i).getStockValue());
         val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
         val interest = Integer.parseInt(res1.get(i).getInterest());
-        val sum = stockValue + loanOrdinary + interest;
+        val sum = stockValue + (loanOrdinary - interest) + interest;
 
         res1.get(i).setSumMonth(String.valueOf(sum));
       } else if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() == null) {
