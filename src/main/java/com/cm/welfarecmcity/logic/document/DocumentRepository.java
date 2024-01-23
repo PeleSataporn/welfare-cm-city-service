@@ -149,7 +149,7 @@ public class DocumentRepository {
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) "
+      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
     //    if(monthCurrent != null && yearCurrent != null){
     //      sql
@@ -276,21 +276,21 @@ public class DocumentRepository {
     );
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
-      if(req.getStockId() != null){
+      if (req.getStockId() != null) {
         sql
-                .append(" and stock_detail.stock_month = '")
-                .append(req.getMonthCurrent())
-                .append("' and stock_detail.stock_year = '")
-                .append(req.getYearCurrent())
-                .append("'");
+          .append(" and stock_detail.stock_month = '")
+          .append(req.getMonthCurrent())
+          .append("' and stock_detail.stock_year = '")
+          .append(req.getYearCurrent())
+          .append("'");
       }
-      if(req.getLoanId() != null){
+      if (req.getLoanId() != null) {
         sql
-                .append(" and loan_detail.loan_month = '")
-                .append(req.getMonthCurrent())
-                .append("' and loan_detail.loan_year = '")
-                .append(req.getYearCurrent())
-                .append("'");
+          .append(" and loan_detail.loan_month = '")
+          .append(req.getMonthCurrent())
+          .append("' and loan_detail.loan_year = '")
+          .append(req.getYearCurrent())
+          .append("'");
       }
     }
     sql.append(" GROUP BY employee.employee_code ");
@@ -491,9 +491,9 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanBalanceList(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT loan.id , loan_detail.loan_balance , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.installment FROM loan " +
-            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
-            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+      " SELECT loan.id , loan_detail.loan_balance , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.installment FROM loan " +
+      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+      " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -508,6 +508,7 @@ public class DocumentRepository {
     val sql = buildQuerySqlSumLoanBalanceList(yearCurrent, monthCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
+
   // list calulate loanBalance total //
 
   public StringBuilder buildQuerySqlSumStockAccumulate(String yearCurrent, String monthCurrent) {
@@ -604,10 +605,10 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlSumLoanOrdinaryList(String yearCurrent, String monthCurrent) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT loan.id , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.loan_balance, loan_detail.installment " +
-            " FROM loan " +
-            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
-            " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
+      " SELECT loan.id , loan_detail.loan_ordinary, loan_detail.interest, loan_detail.loan_balance, loan_detail.installment " +
+      " FROM loan " +
+      " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE) " +
+      " WHERE loan.deleted = FALSE AND loan.active = TRUE AND loan_detail.active = TRUE "
     );
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
@@ -622,16 +623,17 @@ public class DocumentRepository {
     val sql = buildQuerySqlSumLoanOrdinaryList(yearCurrent, monthCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
+
   // list calulate loanOrdinary total //
 
   public StringBuilder buildQuerySqlV1GetEmpFull(String empCode) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT id as empId, active, create_date, deleted, last_update, approve_flag, approved_resignation_date, bank_account_receiving_number, " +
-            " billing_start_date, birthday, civil_service_date, compensation, contract_start_date, date_of_death, description, employee_code as empCode, " +
-            " employee_status, first_name, gender, id_card, last_name, marital, monthly_stock_money, password_flag, prefix, profile_flag, reason, " +
-            " resignation_date, retirement_date, salary, salary_bank_account_number, affiliation_id, contact_id, employee_type_id, level_id, loan_id, " +
-            " position_id, stock_id, user_id, department_id, check_stock_value_flag, profile_img_id, admin_flag FROM employee "
+      " SELECT id as empId, active, create_date, deleted, last_update, approve_flag, approved_resignation_date, bank_account_receiving_number, " +
+      " billing_start_date, birthday, civil_service_date, compensation, contract_start_date, date_of_death, description, employee_code as empCode, " +
+      " employee_status, first_name, gender, id_card, last_name, marital, monthly_stock_money, password_flag, prefix, profile_flag, reason, " +
+      " resignation_date, retirement_date, salary, salary_bank_account_number, affiliation_id, contact_id, employee_type_id, level_id, loan_id, " +
+      " position_id, stock_id, user_id, department_id, check_stock_value_flag, profile_img_id, admin_flag FROM employee "
     );
     sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
     return sql;
@@ -641,5 +643,4 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1GetEmpFull(empCode);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
-
 }
