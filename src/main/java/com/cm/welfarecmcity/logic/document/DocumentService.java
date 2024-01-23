@@ -388,44 +388,13 @@ public class DocumentService {
           calculateReq.setPrincipal(infoAll.getLoanValue());
           calculateReq.setInterestRate(infoAll.getInterestPercent());
           calculateReq.setNumOfPayments(Integer.parseInt(infoAll.getLoanTime()));
-          calculateReq.setPaymentStartDate("2023-01-31");
+          calculateReq.setPaymentStartDate(infoAll.getStartLoanDate());
 
           val loan = loanDetailLogicRepository.loanDetail(infoAll.getLoanId(), req.getMonthCurrent(), req.getYearCurrent());
           loan
             .stream()
             .reduce((first, second) -> second)
             .ifPresent(interest -> {
-              //            try {
-              //              int sumTotalValueInterest = 0;
-              //              int setTotalValuePrinciple = 0;
-              //              int sumTotalValueInterestOfInstallment = 0;
-              //              int setTotalValuePrincipleOfInstallment = 0;
-              //
-              //              val calculate = calculateLoan(calculateReq);
-              //              calculate.forEach(it -> {
-              //                if (it.getInstallment() == interest.getInstallment()) {
-              //                  sumTotalValueInterest += it.getInterest();
-              //                  setTotalValuePrinciple += it.getPrincipal();
-              //
-              //                  infoAll.setInterestMonth(it.getInterest());
-              //                  infoAll.setEarlyMonth(it.getPrincipal());
-              //                  infoAll.setInstallmentLoan(it.getInstallment());
-              //
-              //                  sumTotalValueInterestOfInstallment = sumTotalValueInterest;
-              //                  setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
-              //                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
-              //                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrincipleOfInstallment));
-              //                }
-              //
-              //                if (it.getInstallment() == Integer.parseInt(infoAll.getLoanTime())) {
-              //                  infoAll.setInterestMonthLast(it.getInterest());
-              //                  infoAll.setEarlyMonthLast(it.getPrincipal());
-              //                }
-              //              });
-              //            } catch (ParseException e) {
-              //              throw new RuntimeException(e);
-              //            }
-
               try {
                 val calculate = calculateLoanNew(calculateReq);
 
@@ -436,7 +405,7 @@ public class DocumentService {
 
                 for (CalculateInstallments calculation : calculate) {
                   sumTotalValueInterest += calculation.getInterest();
-                  setTotalValuePrinciple += calculation.getTotalDeduction();
+                  setTotalValuePrinciple += calculation.getPrincipal();  //getTotalDeduction
                   if (calculation.getInstallment() == interest.getInstallment()) {
                     infoAll.setInterestMonth(calculation.getInterest());
                     infoAll.setEarlyMonth(calculation.getTotalDeduction());
@@ -446,6 +415,7 @@ public class DocumentService {
                     sumTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
                     infoAll.setTotalValueInterest(sumTotalValueInterestOfInstallment);
                     infoAll.setTotalValuePrinciple(sumTotalValuePrincipleOfInstallment);
+                    infoAll.setOutStandPrinciple(calculation.getPrincipalBalance());  // getBalanceLoan
                   }
 
                   if (calculation.getInstallment() == Integer.parseInt(infoAll.getLoanTime())) {
@@ -453,8 +423,8 @@ public class DocumentService {
                     infoAll.setEarlyMonthLast(calculation.getTotalDeduction());
                   }
                 }
-                infoAll.setOutStandInterest(sumTotalValueInterest - sumTotalValueInterestOfInstallment);
-                infoAll.setOutStandPrinciple(setTotalValuePrinciple - sumTotalValuePrincipleOfInstallment);
+                infoAll.setOutStandInterest(sumTotalValueInterest);  //sumTotalValueInterest - sumTotalValueInterestOfInstallment,
+                //infoAll.setOutStandPrinciple(setTotalValuePrinciple);  //setTotalValuePrinciple - sumTotalValuePrincipleOfInstallment,
               } catch (ParseException e) {
                 throw new RuntimeException(e);
               }
@@ -818,4 +788,24 @@ public class DocumentService {
       default -> 12; // For "ธันวาคม" month
     };
   }
+
+  @Transactional
+  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(Long loanId, String getMonthCurrent, Boolean admin, Long empId, String yearCurrent) {
+    if (!admin) {
+      return null;
+    } else {
+      val empData = documentRepository.employeeById(empId);
+      val loanData = documentRepository.loanById(loanId);
+      for(DocumentInfoAllLoanEmpRes list: loanData){
+          list.setDepartmentName(empData.getDepartmentName());
+          list.setEmployeeCode(empData.getEmployeeCode());
+          list.setFullName(empData.getFullName());
+          if(Integer.parseInt(list.getLoanYear()) >= 2567){
+            list.setLoanBalance(list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
+          }
+      }
+      return loanData;
+    }
+  }
+
 }

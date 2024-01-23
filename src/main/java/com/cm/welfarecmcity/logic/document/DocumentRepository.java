@@ -140,7 +140,7 @@ public class DocumentRepository {
       " department.name as departmentName, loan_detail.interest_last_month as interestLastMonth, loan.new_loan as newLoan, " +
       " employee_type.name as employeeTypeName, positions.name as positionsName, employee.salary, stock.id AS stockId, stock.stock_value, stock.stock_accumulate, loan.id as loanId, loan.loan_value, loan.loan_time, loan.interest_percent, " +
       " guarantor_one.employee_code AS codeGuarantorOne, CONCAT(guarantor_one.first_name,' ', guarantor_one.last_name) AS fullNameGuarantorOne, " +
-      " guarantor_two.employee_code AS codeGuarantorTwo, CONCAT(guarantor_two.first_name,' ', guarantor_two.last_name) AS fullNameGuarantorTwo " +
+      " guarantor_two.employee_code AS codeGuarantorTwo, CONCAT(guarantor_two.first_name,' ', guarantor_two.last_name) AS fullNameGuarantorTwo, loan.start_loan_date " +
       " FROM employee LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) " +
       " LEFT JOIN employee_type ON (employee.employee_type_id = employee_type.id AND employee_type.deleted = FALSE) " +
       " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
@@ -151,14 +151,14 @@ public class DocumentRepository {
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
       " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
-    //    if(monthCurrent != null && yearCurrent != null){
-    //      sql
-    //              .append(" and loan_detail.loan_month = '")
-    //              .append(monthCurrent)
-    //              .append("' and loan_detail.loan_year = '")
-    //              .append(yearCurrent)
-    //              .append("'");
-    //    }
+        if(monthCurrent != null && yearCurrent != null){
+          sql
+                  .append(" and loan_detail.loan_month = '")
+                  .append(monthCurrent)
+                  .append("' and loan_detail.loan_year = '")
+                  .append(yearCurrent)
+                  .append("'");
+        }
     sql.append(" GROUP BY employee.id  ");
     return sql;
   }
@@ -643,4 +643,37 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1GetEmpFull(empCode);
     return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
+
+  public StringBuilder buildQuerySqlV1OfLoanById(Long empId) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT loan_detail.installment, loan_detail.interest_last_month as interestLastMonth, loan.loan_balance, " +
+            " loan.new_loan as newLoan, loan.loan_value as loanValue, loan.loan_time as loanTime, loan_detail.interest_percent as interestPercent, " +
+            " loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2, loan.start_loan_date, loan_detail.loan_month, loan_detail.loan_year, " +
+            " loan_detail.loan_ordinary, loan_detail.loan_balance, loan_detail.interest, loan.loan_no " +
+            " FROM loan " +
+            " JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE AND loan_detail.active = TRUE ) ");
+    sql.append(" where loan.id = ").append(empId).append(" and loan.active = true ").append(" order by loan_detail.id desc ");
+    return sql;
+  }
+
+  public List<DocumentInfoAllLoanEmpRes> loanById(Long empId) {
+    val sql = buildQuerySqlV1OfLoanById(empId);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
+  }
+
+  public StringBuilder buildQuerySqlV1OfEmpById(Long empId) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName " +
+            " FROM employee " +
+            " JOIN department ON (employee.department_id = department.id) ");
+    sql.append(" where employee.id = ").append(empId);
+    sql.append(" and employee.deleted = FALSE AND employee.employee_status IN (2,5) ");
+    return sql;
+  }
+
+  public DocumentV1ResLoan employeeById(Long empId) {
+    val sql = buildQuerySqlV1OfEmpById(empId);
+    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
+  }
+
 }

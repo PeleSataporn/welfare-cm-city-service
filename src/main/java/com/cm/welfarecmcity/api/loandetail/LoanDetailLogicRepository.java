@@ -96,4 +96,5 @@ public class LoanDetailLogicRepository {
     val sql = buildQuerySqlV1LoanDetailList(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
+
 }

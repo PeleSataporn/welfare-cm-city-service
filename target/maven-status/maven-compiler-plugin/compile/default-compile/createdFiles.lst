@@ -114,6 +114,7 @@ com\cm\welfarecmcity\api\loandetail\LoanDetailRepository.class
 com\cm\welfarecmcity\logic\register\model\res\SearchNewRegisterRes.class
 com\cm\welfarecmcity\Calculate.class
 com\cm\welfarecmcity\api\loan\LoanService.class
+com\cm\welfarecmcity\logic\document\model\DocumentInfoAllLoanEmpRes.class
 com\cm\welfarecmcity\logic\document\model\GuaranteeRes.class
 com\cm\welfarecmcity\api\loan\LoanLogic01Repository.class
 com\cm\welfarecmcity\dto\guarantor\GuarantorRepository.class
