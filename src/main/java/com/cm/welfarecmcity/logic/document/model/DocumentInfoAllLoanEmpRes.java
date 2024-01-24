@@ -29,7 +29,9 @@ public class DocumentInfoAllLoanEmpRes {
   private String loanYear;
   private int loanOrdinary;
   private Double loanBalanceDetail;
-  private int interest;
+  private int interest = 0;
   private String loanNo;
+  private int principal = 0;
+  private int sumOrdinary = 0;
 
 }

@@ -42,7 +42,7 @@ public class DocumentController {
 
   // loan
   @PostMapping("v1/document/searchLoanById")
-  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(@RequestBody DocumentReq req) {
+  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(@RequestBody DocumentReq req) throws ParseException {
     return service.searchDocumentV1LoanById(req.getLoanId(), req.getMonthCurrent(), req.getAdmin(), req.getEmpId(), req.getYearCurrent());
   }
 
