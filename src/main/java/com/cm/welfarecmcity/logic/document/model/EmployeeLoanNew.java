@@ -30,7 +30,7 @@ public class EmployeeLoanNew {
   private Boolean guaranteeStockFlag = null;
   // เอาไว้เชคตอนใช้หุ้นค้ำ
   private String guaranteeStock = null;
-  private String stockValue = null;
+  // private String stockValue = null;
   private Long installment = null;
   private Boolean newLoan = null;
 
@@ -43,4 +43,5 @@ public class EmployeeLoanNew {
 
   // --------- stock -----------
   private Long stockId = null;
+  private Long stockValue = null;
 }

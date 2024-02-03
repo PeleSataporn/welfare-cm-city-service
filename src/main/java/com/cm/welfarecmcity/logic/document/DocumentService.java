@@ -181,6 +181,16 @@ public class DocumentService {
       val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
       req.setStockId(empFullData.getStockId());
       req.setLoanId(empFullData.getLoanId());
+      if(req.getLoanId() != null){
+        val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
+        if(loadDetail.size() > 0){
+          req.setLoanId(empFullData.getLoanId());
+        }else{
+          req.setLoanId(null);
+        }
+      }else{
+        req.setLoanId(null);
+      }
       val employeeLoanNew = documentRepository.searchEmployeeLoanNew(req); //searchEmployeeLoanNewOfNull
       return employeeLoanNew;
     } catch (Exception e) {
