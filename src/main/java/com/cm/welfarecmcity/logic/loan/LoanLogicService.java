@@ -156,7 +156,6 @@ public class LoanLogicService {
         loanDetailDto.setInstallment(installment);
         loanDetailDto.setLoanMonth(req.getNewMonth());
         loanDetailDto.setLoanYear(req.getNewYear());
-        loanDetailDto.setLoanOrdinary(detail.getLoanOrdinary());
         loanDetailDto.setInterestPercent(detail.getInterestPercent());
         loanDetailDto.setInterestLastMonth(detail.getInterestLastMonth());
 
@@ -169,6 +168,7 @@ public class LoanLogicService {
             loanDto.setLoanBalance(calculateInstallments.getPrincipalBalance());
             loanDto.setInterest(calculateInstallments.getInterest());
             loanDetailDto.setLoanBalance(calculateInstallments.getPrincipalBalance());
+            loanDetailDto.setLoanOrdinary(calculateInstallments.getTotalDeduction());
           }
         });
 
