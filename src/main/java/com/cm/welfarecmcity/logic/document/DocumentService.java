@@ -284,10 +284,9 @@ public class DocumentService {
   public void calculateSumLoanOrdinary(List<LoanDetailDto> loanBalanceList, GrandTotalRes res) {
     if (loanBalanceList.size() > 0) {
       double sumLoanBalance = 0;
-      double sumTotalLoanOrdinary = 0;
+      //      double sumTotalLoanOrdinary = 0;
       for (LoanDetailDto list : loanBalanceList) {
-        double sumLoanBalanceBox = 0;
-
+        //        double sumLoanBalanceBox = 0;
         if (list.getInstallment() > 0) {
           if (list.getLoanBalance() > 0) {
             sumLoanBalance = sumLoanBalance + Math.round((list.getLoanOrdinary() - list.getInterest()));
@@ -297,11 +296,10 @@ public class DocumentService {
         } else {
           sumLoanBalance = sumLoanBalance + 0;
         }
-
-        sumLoanBalanceBox = list.getLoanOrdinary() - list.getInterest();
-        sumTotalLoanOrdinary += sumLoanBalanceBox;
+        //        sumLoanBalanceBox = list.getLoanOrdinary() - list.getInterest();
+        //        sumTotalLoanOrdinary += sumLoanBalanceBox;
       }
-      res.setSumLoanOrdinary((long) sumTotalLoanOrdinary);
+      res.setSumLoanOrdinary((long) sumLoanBalance);
     }
   }
 
