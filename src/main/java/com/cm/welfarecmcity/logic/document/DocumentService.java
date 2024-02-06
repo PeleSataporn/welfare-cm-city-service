@@ -51,6 +51,7 @@ public class DocumentService {
           res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
+          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
         }
       } else {
         res2 = (ArrayList<DocumentLoanV1Res>) documentRepository.documentInfoV1loan(empId, null, yearCurrent);
@@ -59,6 +60,7 @@ public class DocumentService {
           res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
           res1.get(i).setLoanInstallment(res2.get(i).getLoanInstallment());
           res1.get(i).setInterest(res2.get(i).getInterest());
+          res1.get(i).setLoanTime(res2.get(i).getLoanTime());
         }
       }
 
@@ -67,8 +69,12 @@ public class DocumentService {
         val stockValue = Integer.parseInt(res1.get(i).getStockValue());
         val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
         val interest = Integer.parseInt(res1.get(i).getInterest());
-        val sum = stockValue + (loanOrdinary - interest) + interest;
-
+        int sum = 0;
+        if(res1.get(i).getLoanTime().equals(res1.get(i).getLoanInstallment())){
+          sum = stockValue + (loanOrdinary + interest);
+        }else{
+          sum = stockValue + (loanOrdinary - interest) + interest;
+        }
         res1.get(i).setSumMonth(String.valueOf(sum));
       } else if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() == null) {
         val stockValue = Integer.parseInt(res1.get(i).getStockValue());

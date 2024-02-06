@@ -10,4 +10,5 @@ public class DocumentLoanV1Res {
   private String loanInstallment = null;
   private String loanOrdinary = null;
   private String interest = null;
+  private String loanTime = null;
 }

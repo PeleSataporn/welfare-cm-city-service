@@ -50,7 +50,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1loan(Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan_detail.installment AS loanInstallment, loan_detail.loan_ordinary, loan_detail.interest FROM employee " +
+      " SELECT loan_detail.installment AS loanInstallment, loan_detail.loan_ordinary, loan_detail.interest, loan.loan_time FROM employee " +
       " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN loan ON employee.loan_id = loan.id " +
       " LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id WHERE 1=1"
     );
