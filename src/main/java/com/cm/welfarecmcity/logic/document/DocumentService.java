@@ -181,14 +181,14 @@ public class DocumentService {
       val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
       req.setStockId(empFullData.getStockId());
       req.setLoanId(empFullData.getLoanId());
-      if(req.getLoanId() != null){
+      if (req.getLoanId() != null) {
         val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
-        if(loadDetail.size() > 0){
+        if (loadDetail.size() > 0) {
           req.setLoanId(empFullData.getLoanId());
-        }else{
+        } else {
           req.setLoanId(null);
         }
-      }else{
+      } else {
         req.setLoanId(null);
       }
       val employeeLoanNew = documentRepository.searchEmployeeLoanNew(req); //searchEmployeeLoanNewOfNull
@@ -284,7 +284,10 @@ public class DocumentService {
   public void calculateSumLoanOrdinary(List<LoanDetailDto> loanBalanceList, GrandTotalRes res) {
     if (loanBalanceList.size() > 0) {
       double sumLoanBalance = 0;
+      double sumTotalLoanOrdinary = 0;
       for (LoanDetailDto list : loanBalanceList) {
+        double sumLoanBalanceBox = 0;
+
         if (list.getInstallment() > 0) {
           if (list.getLoanBalance() > 0) {
             sumLoanBalance = sumLoanBalance + Math.round((list.getLoanOrdinary() - list.getInterest()));
@@ -294,8 +297,11 @@ public class DocumentService {
         } else {
           sumLoanBalance = sumLoanBalance + 0;
         }
+
+        sumLoanBalanceBox = list.getLoanOrdinary() - list.getInterest();
+        sumTotalLoanOrdinary += sumLoanBalanceBox;
       }
-      res.setSumLoanOrdinary((long) sumLoanBalance);
+      res.setSumLoanOrdinary((long) sumTotalLoanOrdinary);
     }
   }
 
@@ -415,7 +421,7 @@ public class DocumentService {
 
                 for (CalculateInstallments calculation : calculate) {
                   sumTotalValueInterest += calculation.getInterest();
-                  setTotalValuePrinciple += calculation.getPrincipal();  //getTotalDeduction
+                  setTotalValuePrinciple += calculation.getPrincipal(); //getTotalDeduction
                   if (calculation.getInstallment() == interest.getInstallment()) {
                     infoAll.setInterestMonth(calculation.getInterest());
                     infoAll.setEarlyMonth(calculation.getTotalDeduction());
@@ -425,7 +431,7 @@ public class DocumentService {
                     sumTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
                     infoAll.setTotalValueInterest(sumTotalValueInterestOfInstallment);
                     infoAll.setTotalValuePrinciple(sumTotalValuePrincipleOfInstallment);
-                    infoAll.setOutStandPrinciple(calculation.getPrincipalBalance());  // getBalanceLoan
+                    infoAll.setOutStandPrinciple(calculation.getPrincipalBalance()); // getBalanceLoan
                   }
 
                   if (calculation.getInstallment() == Integer.parseInt(infoAll.getLoanTime())) {
@@ -433,7 +439,7 @@ public class DocumentService {
                     infoAll.setEarlyMonthLast(calculation.getTotalDeduction());
                   }
                 }
-                infoAll.setOutStandInterest(sumTotalValueInterest);  //sumTotalValueInterest - sumTotalValueInterestOfInstallment,
+                infoAll.setOutStandInterest(sumTotalValueInterest); //sumTotalValueInterest - sumTotalValueInterestOfInstallment,
                 //infoAll.setOutStandPrinciple(setTotalValuePrinciple);  //setTotalValuePrinciple - sumTotalValuePrincipleOfInstallment,
               } catch (ParseException e) {
                 throw new RuntimeException(e);
@@ -800,42 +806,47 @@ public class DocumentService {
   }
 
   @Transactional
-  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(Long loanId, String getMonthCurrent, Boolean admin, Long empId, String yearCurrent) throws ParseException {
+  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(
+    Long loanId,
+    String getMonthCurrent,
+    Boolean admin,
+    Long empId,
+    String yearCurrent
+  ) throws ParseException {
     if (!admin) {
       return null;
     } else {
       val empData = documentRepository.employeeById(empId);
       val loanData = documentRepository.loanById(loanId);
 
-      for(DocumentInfoAllLoanEmpRes list: loanData){
-          int sumOrdinary = 0;
-          list.setDepartmentName(empData.getDepartmentName());
-          list.setEmployeeCode(empData.getEmployeeCode());
-          list.setFullName(empData.getFullName());
-          if(Integer.parseInt(list.getLoanYear()) >= 2567){
-            list.setLoanBalance(list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
-            val calculateReq = new CalculateReq();
-            calculateReq.setPrincipal(list.getLoanValue());
-            calculateReq.setInterestRate(list.getInterestPercent());
-            calculateReq.setNumOfPayments(Integer.parseInt(list.getLoanTime()));
-            calculateReq.setPaymentStartDate(list.getStartLoanDate());
-            val calculate = calculateLoanNew(calculateReq);
-            for (CalculateInstallments calculation : calculate) {
-                if(calculation.getInstallment() <= list.getInstallment()){
-                  sumOrdinary += calculation.getPrincipal();
-                }
-                if(calculation.getInstallment() == list.getInstallment()){
-                  list.setPrincipal(calculation.getPrincipal());
-                }
+      for (DocumentInfoAllLoanEmpRes list : loanData) {
+        int sumOrdinary = 0;
+        list.setDepartmentName(empData.getDepartmentName());
+        list.setEmployeeCode(empData.getEmployeeCode());
+        list.setFullName(empData.getFullName());
+        if (Integer.parseInt(list.getLoanYear()) >= 2567) {
+          list.setLoanBalance(list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
+          val calculateReq = new CalculateReq();
+          calculateReq.setPrincipal(list.getLoanValue());
+          calculateReq.setInterestRate(list.getInterestPercent());
+          calculateReq.setNumOfPayments(Integer.parseInt(list.getLoanTime()));
+          calculateReq.setPaymentStartDate(list.getStartLoanDate());
+          val calculate = calculateLoanNew(calculateReq);
+          for (CalculateInstallments calculation : calculate) {
+            if (calculation.getInstallment() <= list.getInstallment()) {
+              sumOrdinary += calculation.getPrincipal();
             }
-            list.setSumOrdinary(sumOrdinary);
-          }else{
-            list.setSumOrdinary((int) (list.getLoanOrdinary() * list.getInstallment()));
-            list.setPrincipal(0);
+            if (calculation.getInstallment() == list.getInstallment()) {
+              list.setPrincipal(calculation.getPrincipal());
+            }
           }
+          list.setSumOrdinary(sumOrdinary);
+        } else {
+          list.setSumOrdinary((int) (list.getLoanOrdinary() * list.getInstallment()));
+          list.setPrincipal(0);
+        }
       }
       return loanData;
     }
   }
-
 }
