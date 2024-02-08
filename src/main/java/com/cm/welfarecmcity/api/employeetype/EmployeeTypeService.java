@@ -2,10 +2,10 @@ package com.cm.welfarecmcity.api.employeetype;
 
 import com.cm.welfarecmcity.dto.EmployeeTypeDto;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeTypeService {
@@ -15,6 +15,7 @@ public class EmployeeTypeService {
 
   @Transactional
   public List<EmployeeTypeDto> searchEmployeeType() {
-    return employeeTypeRepository.findAll();
+    Sort sort = Sort.by("name");
+    return employeeTypeRepository.findAll(sort);
   }
 }

@@ -1,10 +1,10 @@
 package com.cm.welfarecmcity.api.bureau;
 
 import com.cm.welfarecmcity.dto.BureauDto;
-import java.util.List;
-
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +15,7 @@ public class BureauService {
 
   @Transactional
   public List<BureauDto> searchBureau() {
-    return bureauRepository.findAll();
+    Sort sort = Sort.by("name");
+    return bureauRepository.findAll(sort);
   }
 }
