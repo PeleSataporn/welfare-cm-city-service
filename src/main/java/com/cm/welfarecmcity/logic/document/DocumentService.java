@@ -482,10 +482,10 @@ public class DocumentService {
         if (res.getLoanValue() != null) {
           if (!res.getNewLoan() || res.getNewLoan() == null) {
             CalculateReq req = new CalculateReq();
-            req.setPrincipal(Integer.parseInt(res.getLoanValue()));
+            req.setPrincipal(Double.parseDouble(res.getLoanValue()));
             req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
             req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
-            req.setPaymentStartDate("2024-01-01");
+            req.setPaymentStartDate(res.getStartLoanDate());
             try {
               List<CalculateInstallments> resList = calculateLoanOld(req); // ** function --> calculateLoanNew() , calculateLoanOld
               int sumTotalValueInterest = 0;
@@ -516,34 +516,53 @@ public class DocumentService {
             }
           } else {
             CalculateReq req = new CalculateReq();
-            req.setPrincipal(Integer.parseInt(res.getLoanValue()));
+            req.setPrincipal(Double.parseDouble(res.getLoanValue()));
             req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
             req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
-            req.setPaymentStartDate(res.getStartLoanDate());
+            req.setPaymentStartDate(res.getStartLoanDate()); // "2024-01-01"
+//            if(res.getEmployeeCode().equals("05220")){
+//              System.out.println(res.getLoanValue() + "<----- getLoanValue");
+//              System.out.println(res.getInterestPercent() + " <---- getInterestPercent");
+//              System.out.println(res.getLoanTime() + " <---- getLoanTime");
+//              System.out.println(res.getStartLoanDate() + " <---- getStartLoanDate");
+//            }
             try {
               List<CalculateInstallments> resList = calculateLoanNew(req); // ** function --> calculateLoanNew() , calculateLoanOld()
               int sumTotalValueInterest = 0;
               int setTotalValuePrinciple = 0;
               int sumTotalValueInterestOfInstallment = 0;
               int setTotalValuePrincipleOfInstallment = 0;
+              int sumOutStandInterest = 0;
+              int setOutStandPrinciple = 0;
               for (int i = 0; i < resList.size(); i++) {
-                sumTotalValueInterest += resList.get(i).getInterest();
-                setTotalValuePrinciple += resList.get(i).getPrincipal();
+//                if(res.getEmployeeCode().equals("05220")){
+//                   System.out.println(resList.get(i).getInterest() + "<----- Interest");
+//                   System.out.println(resList.get(i).getPrincipal() + " <---- Principal");
+//                }
+                sumOutStandInterest += resList.get(i).getInterest();
+                setOutStandPrinciple += resList.get(i).getPrincipal();
                 if (Integer.parseInt(res.getInstallment()) == resList.get(i).getInstallment()) {
                   res.setMonthInterest(String.valueOf(resList.get(i).getInterest()));
                   res.setMonthPrinciple(String.valueOf(resList.get(i).getTotalDeduction()));
+//                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
+//                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrincipleOfInstallment));
+                }
+                int installmentCurrent = Integer.parseInt(res.getInstallment()) - 1;
+                if (resList.get(i).getInstallment() <= installmentCurrent) {
+                  sumTotalValueInterest += resList.get(i).getInterest();
+                  setTotalValuePrinciple += resList.get(i).getPrincipal();
                   sumTotalValueInterestOfInstallment = sumTotalValueInterest;
                   setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
-                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
-                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrincipleOfInstallment));
+                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterest));
+                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrinciple));
                 }
                 if (Integer.parseInt(res.getLoanTime()) == resList.get(i).getInstallment()) {
                   res.setLastMonthInterest(String.valueOf(resList.get(i).getInterest()));
                   res.setLastMonthPrinciple(String.valueOf(resList.get(i).getTotalDeduction()));
                 }
               }
-              res.setOutStandInterest(String.valueOf(sumTotalValueInterest - sumTotalValueInterestOfInstallment));
-              res.setOutStandPrinciple(String.valueOf(setTotalValuePrinciple - setTotalValuePrincipleOfInstallment));
+              res.setOutStandInterest(String.valueOf(sumOutStandInterest - sumTotalValueInterestOfInstallment));
+              res.setOutStandPrinciple(String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
             } catch (ParseException e) {
               e.printStackTrace();
             }
