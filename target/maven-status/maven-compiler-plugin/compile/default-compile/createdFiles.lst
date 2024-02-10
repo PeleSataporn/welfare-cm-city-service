@@ -145,6 +145,7 @@ com\cm\welfarecmcity\api\beneficiary\BeneficiaryController.class
 com\cm\welfarecmcity\api\notification\NotificationLogicRepository.class
 com\cm\welfarecmcity\logic\document\model\DocumentV1ResLoan.class
 com\cm\welfarecmcity\logic\employee\model\LoanDetailRes.class
+com\cm\welfarecmcity\api\summary\SummaryService.class
 com\cm\welfarecmcity\api\position\PositionRepository.class
 com\cm\welfarecmcity\api\loanHistory\LoanHistoryService.class
 com\cm\welfarecmcity\dto\base\ResponseData.class
@@ -152,6 +153,7 @@ com\cm\welfarecmcity\dto\LevelDto.class
 com\cm\welfarecmcity\dto\EmployeeTypeDto.class
 com\cm\welfarecmcity\api\beneficiary\BeneficiaryService.class
 com\cm\welfarecmcity\logic\employee\model\BeneficiariesRes.class
+com\cm\welfarecmcity\api\summary\SummaryRepository.class
 com\cm\welfarecmcity\api\news\model\SearchNewsMainRes.class
 com\cm\welfarecmcity\logic\loan\model\AddLoanDetailAllReq.class
 com\cm\welfarecmcity\api\employee\EmployeeService.class
@@ -169,6 +171,7 @@ com\cm\welfarecmcity\exception\entity\UserPasswordMismatchException.class
 com\cm\welfarecmcity\logic\loan\LoanLogicController.class
 com\cm\welfarecmcity\api\bureau\BureauRepository.class
 com\cm\welfarecmcity\logic\loan\LoanLogicRepository.class
+com\cm\welfarecmcity\api\summary\model\GetSummaryReq.class
 com\cm\welfarecmcity\logic\document\model\GrandTotalRes.class
 com\cm\welfarecmcity\constant\EmployeeStatusEnum$EmployeeStatusDto.class
 com\cm\welfarecmcity\logic\loan\model\LoanDetailRes.class
@@ -177,6 +180,7 @@ com\cm\welfarecmcity\api\department\DepartmentController.class
 com\cm\welfarecmcity\api\stockdetail\StockDetailLoginRepository.class
 com\cm\welfarecmcity\api\employee\model\EmpEditReq.class
 com\cm\welfarecmcity\api\position\PositionController.class
+com\cm\welfarecmcity\dto\SummaryDto.class
 com\cm\welfarecmcity\api\employeetype\EmployeeTypeRepository.class
 com\cm\welfarecmcity\api\admin\AdminConfigController.class
 com\cm\welfarecmcity\api\loandetail\model\LoanDetailRes.class
@@ -202,6 +206,7 @@ com\cm\welfarecmcity\logic\loan\model\GuarantorRes.class
 com\cm\welfarecmcity\logic\login\model\ResetPasswordReq.class
 com\cm\welfarecmcity\CalloanOld.class
 com\cm\welfarecmcity\dto\LoanDetailDto.class
+com\cm\welfarecmcity\api\summary\SummaryController.class
 com\cm\welfarecmcity\logic\document\model\DocumentStockDevidend.class
 com\cm\welfarecmcity\logic\employee\model\LoanRes.class
 com\cm\welfarecmcity\WelfareCmCityApplication.class
