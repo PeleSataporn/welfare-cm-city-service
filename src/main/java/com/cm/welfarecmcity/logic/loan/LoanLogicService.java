@@ -159,10 +159,12 @@ public class LoanLogicService {
         loanDetailDto.setInterestPercent(detail.getInterestPercent());
         loanDetailDto.setInterestLastMonth(detail.getInterestLastMonth());
 
+        CalculateInstallments calLast = new CalculateInstallments();
         // set loan update
         val loanDto = loanRepository.findById(detail.getLoanId()).get();
         loanDetailDto.setLoan(loanDto);
         calculate.forEach(calculateInstallments -> {
+          calLast.setInstallment(calculateInstallments.getInstallment());
           if (calculateInstallments.getInstallment() == installment) {
             loanDetailDto.setInterest(calculateInstallments.getInterest());
             loanDto.setLoanBalance(calculateInstallments.getPrincipalBalance());
@@ -174,6 +176,10 @@ public class LoanLogicService {
 
         loanDetailRepository.save(loanDetailDto);
         loanRepository.save(loanDto);
+        // close loan
+        if(installment == calLast.getInstallment()){
+          closeLoan(detail.getLoanId());
+        }
       } catch (ParseException e) {
         throw new RuntimeException(e);
       }

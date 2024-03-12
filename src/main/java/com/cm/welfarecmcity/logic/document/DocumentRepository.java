@@ -149,6 +149,22 @@ public class DocumentRepository {
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
+      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 " +
+      " and loan_detail.loan_month is null and loan_detail.loan_year is null " +
+      " UNION " +
+      " SELECT employee.id, employee.employee_code, CONCAT(employee.first_name,' ', employee.last_name) AS fullName, employee.create_date as regisDate, " +
+      " department.name as departmentName, loan_detail.interest_last_month as interestLastMonth, loan.new_loan as newLoan, " +
+      " employee_type.name as employeeTypeName, positions.name as positionsName, employee.salary, stock.id AS stockId, stock.stock_value, stock.stock_accumulate, loan.id as loanId, loan.loan_value, loan.loan_time, loan.interest_percent, " +
+      " guarantor_one.employee_code AS codeGuarantorOne, CONCAT(guarantor_one.first_name,' ', guarantor_one.last_name) AS fullNameGuarantorOne, " +
+      " guarantor_two.employee_code AS codeGuarantorTwo, CONCAT(guarantor_two.first_name,' ', guarantor_two.last_name) AS fullNameGuarantorTwo, loan.start_loan_date " +
+      " FROM employee LEFT JOIN department ON (employee.department_id = department.id AND department.deleted = FALSE) " +
+      " LEFT JOIN employee_type ON (employee.employee_type_id = employee_type.id AND employee_type.deleted = FALSE) " +
+      " LEFT JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) " +
+      " LEFT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) " +
+      " LEFT JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan.deleted = FALSE) " +
+      " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
+      " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
+      " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
       " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
         if(monthCurrent != null && yearCurrent != null){
