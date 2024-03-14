@@ -134,6 +134,7 @@ com\cm\welfarecmcity\logic\register\model\req\RegisterReq.class
 com\cm\welfarecmcity\logic\register\model\req\CancelRegisterReq.class
 com\cm\welfarecmcity\api\news\model\GetNewsRes.class
 com\cm\welfarecmcity\api\user\UserService.class
+com\cm\welfarecmcity\Scheduled\MonthlyTotalJob.class
 com\cm\welfarecmcity\api\affiliation\AffiliationController.class
 com\cm\welfarecmcity\logic\login\model\LoginRes.class
 com\cm\welfarecmcity\api\admin\AdminConfigRepository.class
