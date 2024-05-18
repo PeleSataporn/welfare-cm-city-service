@@ -32,7 +32,11 @@ public class LoanDetailService {
          if(list.getLoanBalance() > 0 && list.getInstallment() > 0){
            sum = ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
          }else{
-           sum = list.getLoanValue();
+           if(list.getInstallment() < 0){
+             sum = ( list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())) );
+           }else{
+             sum = list.getLoanValue();
+           }
          }
          list.setLoanBalance(sum);
        }
