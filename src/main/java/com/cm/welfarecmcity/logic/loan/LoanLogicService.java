@@ -177,7 +177,7 @@ public class LoanLogicService {
         loanDetailRepository.save(loanDetailDto);
         loanRepository.save(loanDto);
         // close loan
-        if(installment == calLast.getInstallment()){
+        if(installment == (calLast.getInstallment() + 1)){
           closeLoan(detail.getLoanId());
         }
       } catch (ParseException e) {
