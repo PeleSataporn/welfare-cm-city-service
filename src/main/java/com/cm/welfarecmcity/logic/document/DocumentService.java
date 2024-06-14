@@ -863,7 +863,7 @@ public class DocumentService {
               list.setPrincipal(calculation.getPrincipal());
             }
           }
-          list.setSumOrdinary(sumOrdinary);
+          list.setSumOrdinary(sumOrdinary - list.getPrincipal());
         } else {
           list.setSumOrdinary((int) (list.getLoanOrdinary() * list.getInstallment()));
           list.setPrincipal(0);
