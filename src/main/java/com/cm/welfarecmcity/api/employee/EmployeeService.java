@@ -95,7 +95,7 @@ public class EmployeeService {
       empMap.setAffiliationName(employee.getAffiliation() != null ? employee.getAffiliation().getName() : null);
       empMap.setBureauName(employee.getAffiliation() != null ? employee.getAffiliation().getBureau().getName() : null);
       empMap.setAge(empMap.getBirthday() != null ? DateUtils.convertToAge(LocalDate.now(),empMap.getBirthday()): 0);
-      empMap.setImage(getDisplayImage(empMap.getId()));
+      empMap.setImage(employee.getProfileImg() != null ? getDisplayImage(employee.getProfileImg().getId()): null);
 
       listRes.add(empMap);
     }
@@ -107,7 +107,7 @@ public class EmployeeService {
     val image = service.viewById(id);
 //    byte[] imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
 //    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
-    return image != null ? image.getImage().getBytes(1, (int) image.getImage().length()) : null;
+    return image.getImage().getBytes(1, (int) image.getImage().length());
   }
 
   @Transactional
