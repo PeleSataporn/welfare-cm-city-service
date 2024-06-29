@@ -3,6 +3,7 @@ package com.cm.welfarecmcity.api.employee;
 import com.cm.welfarecmcity.api.admin.model.AdminUpdateInfoReq;
 import com.cm.welfarecmcity.api.employee.model.*;
 import com.cm.welfarecmcity.api.employeetype.EmployeeTypeRepository;
+import com.cm.welfarecmcity.api.fileresource.FileResourceService;
 import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
@@ -11,6 +12,7 @@ import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
+import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
 import com.cm.welfarecmcity.dto.StockDetailDto;
@@ -20,17 +22,25 @@ import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
+import com.cm.welfarecmcity.utils.DateUtils;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class EmployeeService {
@@ -68,16 +78,36 @@ public class EmployeeService {
   @Autowired
   private StockDetailRepository stockDetailRepository;
 
+  @Autowired
+  private FileResourceService service;
+
   @Transactional
-  public List<EmpByAdminRes> searchEmployee() {
+  public List<EmpByAdminRes> searchEmployee() throws SQLException {
     val listRes = new ArrayList<EmpByAdminRes>();
 
-    val list = employeeRepository.findAll();
-    list.forEach(it -> {
-      listRes.add(mapStructMapper.employeeToByAdminRes(it));
-    });
+    val employees = employeeRepository.findAll();
+    for (val employee : employees) {
+      val empMap = mapStructMapper.employeeToByAdminRes(employee);
+      empMap.setLevelName(employee.getLevel() != null ? employee.getLevel().getName() : null);
+      empMap.setEmployeeTypeName(employee.getEmployeeType() != null ? employee.getEmployeeType().getName() : null);
+      empMap.setPositionName(employee.getPosition() != null ? employee.getPosition().getName() : null);
+      empMap.setDepartmentName(employee.getDepartment() != null ? employee.getDepartment().getName() : null);
+      empMap.setAffiliationName(employee.getAffiliation() != null ? employee.getAffiliation().getName() : null);
+      empMap.setBureauName(employee.getAffiliation() != null ? employee.getAffiliation().getBureau().getName() : null);
+      empMap.setAge(empMap.getBirthday() != null ? DateUtils.convertToAge(LocalDate.now(),empMap.getBirthday()): 0);
+      empMap.setImage(getDisplayImage(empMap.getId()));
+
+      listRes.add(empMap);
+    }
 
     return listRes;
+  }
+
+  public byte[] getDisplayImage(Long id) throws SQLException {
+    val image = service.viewById(id);
+//    byte[] imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
+//    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    return image != null ? image.getImage().getBytes(1, (int) image.getImage().length()) : null;
   }
 
   @Transactional

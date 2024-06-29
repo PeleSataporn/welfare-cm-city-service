@@ -5,6 +5,8 @@ import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class EmployeeController {
   }
 
   @PostMapping("/search")
-  public List<EmpByAdminRes> searchEmployee() {
+  public List<EmpByAdminRes> searchEmployee() throws SQLException {
     return employeeService.searchEmployee();
   }
 

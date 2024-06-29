@@ -98,6 +98,8 @@ public class FileResourceService {
   }
 
   public FileResourceDto viewById(long id) {
-    return repository.findById(id).get();
+    val findFile = repository.findById(id);
+
+    return findFile.orElse(null);
   }
 }
