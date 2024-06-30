@@ -22,5 +22,5 @@ public class EmpByAdminRes {
     private String departmentName;
     private String affiliationName;
     private String bureauName;
-    private byte[] image;
+    private String image;
 }

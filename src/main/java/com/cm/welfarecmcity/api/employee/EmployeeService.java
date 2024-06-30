@@ -31,10 +31,8 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -95,7 +93,12 @@ public class EmployeeService {
       empMap.setAffiliationName(employee.getAffiliation() != null ? employee.getAffiliation().getName() : null);
       empMap.setBureauName(employee.getAffiliation() != null ? employee.getAffiliation().getBureau().getName() : null);
       empMap.setAge(empMap.getBirthday() != null ? DateUtils.convertToAge(LocalDate.now(),empMap.getBirthday()): 0);
-      empMap.setImage(employee.getProfileImg() != null ? getDisplayImage(employee.getProfileImg().getId()): null);
+
+      if (employee.getProfileImg() != null) {
+        byte[] imageBytes = getDisplayImage(employee.getProfileImg().getId());
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        empMap.setImage(base64Image);
+      }
 
       listRes.add(empMap);
     }
@@ -105,8 +108,6 @@ public class EmployeeService {
 
   public byte[] getDisplayImage(Long id) throws SQLException {
     val image = service.viewById(id);
-//    byte[] imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
-//    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     return image.getImage().getBytes(1, (int) image.getImage().length());
   }
 
