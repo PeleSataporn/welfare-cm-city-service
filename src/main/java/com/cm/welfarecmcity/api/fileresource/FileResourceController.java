@@ -9,6 +9,8 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import javax.sql.rowset.serial.SerialException;
+
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,37 +27,30 @@ public class FileResourceController {
 
   // display image
   @GetMapping("/display/{id}")
-  public ResponseEntity<byte[]> displayImage(@PathVariable Long id) throws IOException, SQLException {
-    FileResourceDto image = service.viewById(id);
-    byte[] imageBytes = null;
-    imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  public ResponseEntity<byte[]> displayImage(@PathVariable Long id) throws SQLException {
+    val image = service.viewImageById(id, "PROFILE");
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
   }
 
   @GetMapping("/display/address/{id}")
-  public ResponseEntity<byte[]> displayImageAddress(@PathVariable Long id) throws IOException, SQLException {
-    FileResourceDto image = service.viewById(id);
-    byte[] imageBytes = null;
-    imageBytes = image.getImageAddress().getBytes(1, (int) image.getImageAddress().length());
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  public ResponseEntity<byte[]> displayImageAddress(@PathVariable Long id) throws SQLException {
+    val image = service.viewImageById(id, "ADDRESS");
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
   }
 
   @GetMapping("/display/id-card/{id}")
-  public ResponseEntity<byte[]> displayImageIdCard(@PathVariable Long id) throws IOException, SQLException {
-    FileResourceDto image = service.viewById(id);
-    byte[] imageBytes = null;
-    imageBytes = image.getImageIdCard().getBytes(1, (int) image.getImageIdCard().length());
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  public ResponseEntity<byte[]> displayImageIdCard(@PathVariable Long id) throws SQLException {
+    val image = service.viewImageById(id, "ID-CARD");
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
   }
 
   @GetMapping("/display/news/{id}")
-  public ResponseEntity<byte[]> displayImageNews(@PathVariable Long id) throws IOException, SQLException {
-    FileResourceDto image = service.viewById(id);
-    byte[] imageBytes = null;
-    imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
-    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  public ResponseEntity<byte[]> displayImageNews(@PathVariable Long id) throws SQLException {
+    val image = service.viewImageById(id, "NEWS");
+    return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
   }
 
+  // add
   @PostMapping("/add")
   public void addImagePost(@ModelAttribute AddImageReq image) throws IOException, SQLException {
     byte[] bytes = image.getImage().getBytes();

@@ -7,6 +7,7 @@ import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,9 +98,28 @@ public class FileResourceService {
     return repository.findAll();
   }
 
-  public FileResourceDto viewById(long id) {
+  public byte[] viewImageById(Long id, String type) throws SQLException {
     val findFile = repository.findById(id);
 
-    return findFile.orElse(null);
+    if (findFile.isEmpty()) {
+      return null;
+    }
+
+    val image = findFile.get();
+
+    return switch (type) {
+      case "PROFILE", "NEWS" -> getImageBytes(image.getImage());
+      case "ADDRESS" -> getImageBytes(image.getImageAddress());
+      case "ID-CARD" -> getImageBytes(image.getImageIdCard());
+      default -> null;
+    };
   }
+
+  private byte[] getImageBytes(Blob imageBlob) throws SQLException {
+    if (imageBlob == null) {
+      return null;
+    }
+    return imageBlob.getBytes(1, (int) imageBlob.length());
+  }
+
 }

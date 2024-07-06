@@ -107,8 +107,7 @@ public class EmployeeService {
   }
 
   public byte[] getDisplayImage(Long id) throws SQLException {
-    val image = service.viewById(id);
-    return image.getImage().getBytes(1, (int) image.getImage().length());
+    return service.viewImageById(id, "PROFILE");
   }
 
   @Transactional
