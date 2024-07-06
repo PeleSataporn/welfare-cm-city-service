@@ -32,7 +32,7 @@ public class StockLogicService {
     for (StockRes item : stock) {
       switch (item.getEmployeeStatus()) {
         case 1 -> item.setStatus("สมาชิกแรกเข้า");
-        case 2 -> item.setStatus("ใช้งานปกติ");
+        case 2 -> item.setStatus("พนังงาน");
         case 3 -> item.setStatus("ลาออก");
         case 4 -> item.setStatus("error");
         case 5 -> item.setStatus("รออนุมัติลาออก");
