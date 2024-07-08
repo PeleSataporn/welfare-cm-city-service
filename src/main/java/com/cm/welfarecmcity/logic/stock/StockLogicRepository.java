@@ -21,7 +21,7 @@ public class StockLogicRepository {
   public StringBuilder buildQuerySql() {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT stock.id, stock_value, stock_accumulate, employee_code, first_name, last_name, employee_status, prefix, id_card FROM stock JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE) WHERE stock.deleted = FALSE "
+      " SELECT stock.id, stock_value, stock_accumulate, employee_code, first_name, last_name, employee_status, prefix, id_card, employee.id as employeeId FROM stock JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE) WHERE stock.deleted = FALSE "
     );
     return sql;
   }

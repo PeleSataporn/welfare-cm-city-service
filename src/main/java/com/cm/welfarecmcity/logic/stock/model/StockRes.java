@@ -16,4 +16,5 @@ public class StockRes {
     private int employeeStatus;
     private String idCard;
     private String status;
+    private Long employeeId;
 }
