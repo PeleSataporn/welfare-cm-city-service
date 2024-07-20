@@ -75,7 +75,7 @@ public class NewsService {
     res.setId(finNews.getId());
     res.setName(finNews.getName());
     res.setDescription(finNews.getDescription());
-    res.setCoverImgId(finNews.getCoverImg().getId());
+    res.setCoverImgId(finNews.getCoverImg() != null ? finNews.getCoverImg().getId(): null);
 
     return res;
   }
