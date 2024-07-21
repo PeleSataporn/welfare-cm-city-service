@@ -1,13 +1,16 @@
 package com.cm.welfarecmcity.api.fileresource;
 
+import com.cm.welfarecmcity.constant.SizeImageEnum;
 import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.utils.image.ImageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import lombok.val;
@@ -52,41 +55,37 @@ public class FileResourceController {
 
   // add
   @PostMapping("/add")
-  public void addImagePost(@ModelAttribute AddImageReq image) throws IOException, SQLException {
-    byte[] bytes = image.getImage().getBytes();
-    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-
-    service.create(blob, image.getEmpId());
+  public void addImagePost(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+    val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.M.getWidth());
+    val blob = new SerialBlob(resizedImage);
+    service.create(blob, req.getEmpId());
   }
 
   @PostMapping("/add-address")
-  public String addImageAddress(@ModelAttribute AddImageReq image) throws IOException, SQLException {
-    byte[] bytes = image.getImage().getBytes();
-    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-
-    return service.createAddress(blob, image.getEmpId());
+  public String addImageAddress(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+    val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.L.getWidth());
+    val blob = new SerialBlob(resizedImage);
+    return service.createAddress(blob, req.getEmpId());
   }
 
   @PostMapping("/add-id-card")
-  public String addImageIdCard(@ModelAttribute AddImageReq image) throws IOException, SQLException {
-    byte[] bytes = image.getImage().getBytes();
-    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-
-    return service.createIdCard(blob, image.getEmpId());
+  public String addImageIdCard(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+    val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.L.getWidth());
+    val blob = new SerialBlob(resizedImage);
+    return service.createIdCard(blob, req.getEmpId());
   }
 
   @PostMapping("/add-news")
-  public ResponseModel<ResponseId> addImageNews(@ModelAttribute AddImageReq image) throws IOException, SQLException {
-    byte[] bytes = image.getImage().getBytes();
-    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-
+  public ResponseModel<ResponseId> addImageNews(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+    val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
+    val blob = new SerialBlob(resizedImage);
     return service.addImageNews(blob);
   }
 
   @PostMapping("/update-news")
-  public void updateImageNews(@ModelAttribute AddImageReq image) throws IOException, SQLException {
-    byte[] bytes = image.getImage().getBytes();
-    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-    service.updateImageNews(blob, image.getEmpId());
+  public void updateImageNews(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+    val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
+    val blob = new SerialBlob(resizedImage);
+    service.updateImageNews(blob, req.getEmpId());
   }
 }

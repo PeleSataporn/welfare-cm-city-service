@@ -44,6 +44,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/AdminConfigDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loanHistory/LoanHistoryService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/employee/model/BureauRes.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/image/ImageUtils.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/DateUtils.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/user/UserService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/mapper/base/BaseMapperConfig.java
@@ -65,6 +66,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/stockdetail/StockDetailRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/register/model/req/ApproveRegisterReq.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/CalculateInstallments.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/constant/SizeImageEnum.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/GrandTotalRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/admin/AdminConfigController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/news/model/CreateNewsReq.java

@@ -31,16 +31,14 @@ public class FileResourceService {
 
   @Transactional
   public void create(Blob blob, Long empId) {
-    //
-
     val emp = employeeRepository.findById(empId).get();
-
     val file = emp.getProfileImg();
+
     if (file != null) {
       val img = repository.findById(file.getId()).get();
       img.setImage(blob);
     } else {
-      FileResourceDto resource = new FileResourceDto();
+      val resource = new FileResourceDto();
       resource.setImage(blob);
 
       val fileResource = repository.save(resource);
@@ -53,13 +51,28 @@ public class FileResourceService {
   @Transactional
   public String createAddress(Blob blob, Long empId) {
     val emp = employeeRepository.findById(empId).get();
+    val file = emp.getProfileImg();
 
-    if (emp.getProfileImg() == null) {
+    if (file == null) {
       return "ProfileNull";
     }
 
-    emp.getProfileImg().setImageAddress(blob);
-    employeeRepository.save(emp);
+    val img = repository.findById(file.getId()).get();
+    img.setImageAddress(blob);
+
+    repository.save(img);
+
+//    if (img.getImageAddress() != null) {
+//      img.setImageAddress(blob);
+//    } else {
+////      val resource = new FileResourceDto();
+////      resource.setImage(blob);
+//
+////      val fileResource = repository.save(resource);
+//      emp.setProfileImg(fileResource);
+//    }
+//    emp.getProfileImg().setImageAddress(blob);
+//    employeeRepository.save(emp);
 
     return null;
   }
@@ -67,14 +80,19 @@ public class FileResourceService {
   @Transactional
   public String createIdCard(Blob blob, Long empId) {
     val emp = employeeRepository.findById(empId).get();
+    val file = emp.getProfileImg();
 
-    if (emp.getProfileImg() == null) {
+    if (file == null) {
       return "ProfileNull";
     }
 
-    emp.getProfileImg().setImageIdCard(blob);
+//    emp.getProfileImg().setImageIdCard(blob);
+//    employeeRepository.save(emp);
 
-    employeeRepository.save(emp);
+    val img = repository.findById(file.getId()).get();
+    img.setImageIdCard(blob);
+
+    repository.save(img);
 
     return null;
   }
@@ -90,7 +108,16 @@ public class FileResourceService {
   @Transactional
   public void updateImageNews(Blob blob, Long newsId) {
     val news = newRepository.findById(newsId).get();
-    news.getCoverImg().setImage(blob);
+    if (news.getCoverImg() != null) {
+      news.getCoverImg().setImage(blob);
+    } else {
+      val file = new FileResourceDto();
+      file.setImage(blob);
+      val fileResource = repository.save(file);
+
+      news.setCoverImg(fileResource);
+    }
+
     newRepository.save(news);
   }
 

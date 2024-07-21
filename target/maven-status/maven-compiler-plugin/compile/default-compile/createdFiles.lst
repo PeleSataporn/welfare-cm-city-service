@@ -208,7 +208,9 @@ com/cm/welfarecmcity/utils/listener/GenerateListener.class
 com/cm/welfarecmcity/api/admin/model/AdminConfigRes.class
 com/cm/welfarecmcity/api/employee/EmployeeRepository.class
 com/cm/welfarecmcity/logic/employee/model/LoanDetailRes.class
+com/cm/welfarecmcity/constant/SizeImageEnum.class
 com/cm/welfarecmcity/api/employee/model/EmpRes.class
 com/cm/welfarecmcity/logic/stock/StockLogicService.class
+com/cm/welfarecmcity/utils/image/ImageUtils.class
 com/cm/welfarecmcity/api/beneficiary/model/BeneficiaryRes.class
 com/cm/welfarecmcity/api/employeetype/EmployeeTypeRepository.class
