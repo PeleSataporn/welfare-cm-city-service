@@ -1,8 +1,11 @@
 package com.cm.welfarecmcity.api.news;
 
+import com.cm.welfarecmcity.api.fileresource.model.AddImageReq;
+import com.cm.welfarecmcity.api.news.model.SearchImagesRes;
 import com.cm.welfarecmcity.api.news.model.*;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,13 @@ public class NewsController {
   private NewsService service;
 
   @PostMapping
-  public ResponseModel<ResponseId> createNews(@RequestBody CreateNewsReq req) {
-    return service.createNews(req);
+  public ResponseModel<ResponseId> createNews() {
+    return service.createNews();
+  }
+
+  @PostMapping
+  public ResponseModel<ResponseId> createNewsUp(@RequestBody CreateNewsReq req) {
+    return service.createNewsUp(req);
   }
 
   @PostMapping("/search")
@@ -42,5 +50,10 @@ public class NewsController {
   @DeleteMapping("/{id}")
   public void deleteNews(@PathVariable Long id) {
     service.deleteNews(id);
+  }
+
+  @GetMapping("/{id}/files/images")
+  public List<SearchImagesRes> getNewsFiles(@PathVariable Long id) {
+    return service.getNewsFiles(id);
   }
 }

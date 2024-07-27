@@ -1,14 +1,22 @@
 package com.cm.welfarecmcity.api.news;
 
 import com.cm.welfarecmcity.api.fileresource.FileResourceRepository;
+import com.cm.welfarecmcity.api.fileresource.FileResourceService;
 import com.cm.welfarecmcity.api.news.model.*;
+import com.cm.welfarecmcity.api.newsfiledetail.NewsFileDetailRepository;
 import com.cm.welfarecmcity.dto.NewsDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
+
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -29,9 +37,24 @@ public class NewsService {
   @Autowired
   private NewsLogicRepository newsLogicRepository;
 
+  @Autowired
+  private NewsFileDetailRepository newsFileDetailRepository;
+
+  @Autowired
+  private FileResourceService fileResourceService;
+
   @Transactional
-  public ResponseModel<ResponseId> createNews(CreateNewsReq req) {
+  public ResponseModel<ResponseId> createNews() {
     val news = new NewsDto();
+    news.setName(null);
+    news.setDescription(null);
+
+    return responseDataUtils.updateDataSuccess(newsRepository.save(news).getId());
+  }
+
+  @Transactional
+  public ResponseModel<ResponseId> createNewsUp(CreateNewsReq req) {
+    val news = newsRepository.findById(req.getNewsId()).get();
     news.setName(req.getName());
     news.setDescription(req.getDescription());
 
@@ -97,5 +120,26 @@ public class NewsService {
   public void deleteNews(Long id) {
     val news = newsRepository.findById(id).get();
     newsRepository.delete(news);
+  }
+
+  @Transactional
+  public List<SearchImagesRes> getNewsFiles(Long id) {
+    val newsFiles = newsFileDetailRepository.findByNewsId(id).get();
+
+    return newsFiles.stream()
+            .map(newsFile -> {
+                try {
+                    return SearchImagesRes.builder().id(newsFile.getFileResource().getId()).image(moveFileToString(newsFile.getFileResource().getImage())).build();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            })
+            .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public String moveFileToString(Blob blob) throws SQLException {
+    val imageBytes = fileResourceService.getImageBytes(blob);
+    return Base64.getEncoder().encodeToString(imageBytes);
   }
 }

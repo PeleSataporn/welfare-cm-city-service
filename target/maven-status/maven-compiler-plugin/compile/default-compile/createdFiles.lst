@@ -21,6 +21,7 @@ com/cm/welfarecmcity/dto/guarantor/GuarantorRepository.class
 com/cm/welfarecmcity/api/bureau/BureauService.class
 com/cm/welfarecmcity/logic/document/DocumentRepository.class
 com/cm/welfarecmcity/logic/loan/model/LoanDetailRes.class
+com/cm/welfarecmcity/api/news/model/SearchImagesRes$SearchImagesResBuilder.class
 com/cm/welfarecmcity/api/news/model/SearchNewsMainRes.class
 com/cm/welfarecmcity/logic/document/model/DocumentInfoAllRes.class
 com/cm/welfarecmcity/api/employee/EmployeeController.class
@@ -60,6 +61,7 @@ com/cm/welfarecmcity/api/bureau/BureauController.class
 com/cm/welfarecmcity/logic/employee/model/DepartmentRes.class
 com/cm/welfarecmcity/api/bureau/BureauRepository.class
 com/cm/welfarecmcity/dto/LoanHistoryDto.class
+com/cm/welfarecmcity/api/newsfiledetail/NewsFileDetailRepository.class
 com/cm/welfarecmcity/api/loanHistory/model/LoanHistoryRes.class
 com/cm/welfarecmcity/exception/entity/UserException.class
 com/cm/welfarecmcity/api/notification/model/NotifyEmployeeRes.class
@@ -204,10 +206,10 @@ com/cm/welfarecmcity/constant/MessageResponseConstant.class
 com/cm/welfarecmcity/constant/NotificationStatusEnum$NotificationStatusDto.class
 com/cm/welfarecmcity/api/summary/SummaryService.class
 com/cm/welfarecmcity/Scheduled/MonthlyTotalJob.class
-com/cm/welfarecmcity/api/fileresource/AddImageReq.class
 com/cm/welfarecmcity/api/admin/AdminConfigController.class
 com/cm/welfarecmcity/logic/loan/model/GuarantorRes.class
 com/cm/welfarecmcity/api/loanHistory/LoanHistoryService.class
+com/cm/welfarecmcity/api/news/model/SearchImagesRes.class
 com/cm/welfarecmcity/utils/listener/GenerateListener.class
 com/cm/welfarecmcity/api/admin/model/AdminConfigRes.class
 com/cm/welfarecmcity/api/employee/EmployeeRepository.class
@@ -218,3 +220,4 @@ com/cm/welfarecmcity/logic/stock/StockLogicService.class
 com/cm/welfarecmcity/utils/image/ImageUtils.class
 com/cm/welfarecmcity/api/beneficiary/model/BeneficiaryRes.class
 com/cm/welfarecmcity/api/employeetype/EmployeeTypeRepository.class
+com/cm/welfarecmcity/api/fileresource/model/AddImageReq.class

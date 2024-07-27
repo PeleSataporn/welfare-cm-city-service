@@ -2,7 +2,9 @@ package com.cm.welfarecmcity.api.fileresource;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.news.NewsRepository;
+import com.cm.welfarecmcity.api.newsfiledetail.NewsFileDetailRepository;
 import com.cm.welfarecmcity.dto.FileResourceDto;
+import com.cm.welfarecmcity.dto.NewsFileDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
@@ -28,6 +30,9 @@ public class FileResourceService {
 
   @Autowired
   private NewsRepository newRepository;
+
+  @Autowired
+  private NewsFileDetailRepository newsFileDetailRepository;
 
   @Transactional
   public void create(Blob blob, Long empId) {
@@ -86,9 +91,6 @@ public class FileResourceService {
       return "ProfileNull";
     }
 
-//    emp.getProfileImg().setImageIdCard(blob);
-//    employeeRepository.save(emp);
-
     val img = repository.findById(file.getId()).get();
     img.setImageIdCard(blob);
 
@@ -99,19 +101,31 @@ public class FileResourceService {
 
   @Transactional
   public ResponseModel<ResponseId> addImageNews(Blob blob) {
-    FileResourceDto resource = new FileResourceDto();
+    val resource = new FileResourceDto();
     resource.setImage(blob);
 
     return responseDataUtils.updateDataSuccess(repository.save(resource).getId());
   }
 
   @Transactional
-  public ResponseModel<ResponseId> addImageNewsDetail(Blob blob) {
-    FileResourceDto resource = new FileResourceDto();
+  public void addImageNewsDetail(Blob blob, Long newsId) {
+    val resource = new FileResourceDto();
     resource.setImage(blob);
+    val file = repository.save(resource);
 
+    val news = newRepository.findById(newsId).get();
 
-    return responseDataUtils.updateDataSuccess(repository.save(resource).getId());
+    val fileDetail = new NewsFileDetailDto();
+    fileDetail.setFileResource(file);
+    fileDetail.setNews(news);
+
+    newsFileDetailRepository.save(fileDetail);
+  }
+
+  @Transactional
+  public void deleted(Long id) {
+    val file = repository.findById(id).get();
+    repository.delete(file);
   }
 
   @Transactional
@@ -151,11 +165,10 @@ public class FileResourceService {
     };
   }
 
-  private byte[] getImageBytes(Blob imageBlob) throws SQLException {
+  public byte[] getImageBytes(Blob imageBlob) throws SQLException {
     if (imageBlob == null) {
       return null;
     }
     return imageBlob.getBytes(1, (int) imageBlob.length());
   }
-
 }

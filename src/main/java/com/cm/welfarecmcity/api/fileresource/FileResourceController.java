@@ -1,25 +1,20 @@
 package com.cm.welfarecmcity.api.fileresource;
 
+import com.cm.welfarecmcity.api.fileresource.model.AddImageReq;
 import com.cm.welfarecmcity.constant.SizeImageEnum;
-import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.image.ImageUtils;
-import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("api/v1/file-resource")
@@ -83,10 +78,10 @@ public class FileResourceController {
   }
 
   @PostMapping("/add-news-detail")
-  public ResponseModel<ResponseId> addImageNewsDetail(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+  public void addImageNewsDetail(@ModelAttribute AddImageReq req) throws IOException, SQLException {
     val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
     val blob = new SerialBlob(resizedImage);
-    return service.addImageNewsDetail(blob);
+    service.addImageNewsDetail(blob, req.getEmpId());
   }
 
   @PostMapping("/update-news")
@@ -94,5 +89,10 @@ public class FileResourceController {
     val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
     val blob = new SerialBlob(resizedImage);
     service.updateImageNews(blob, req.getEmpId());
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleted(@PathVariable Long id) throws IOException, SQLException {
+    service.deleted(id);
   }
 }
