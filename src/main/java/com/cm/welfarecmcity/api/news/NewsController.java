@@ -22,7 +22,7 @@ public class NewsController {
     return service.createNews();
   }
 
-  @PostMapping
+  @PutMapping("/create-up")
   public ResponseModel<ResponseId> createNewsUp(@RequestBody CreateNewsReq req) {
     return service.createNewsUp(req);
   }
