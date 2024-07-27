@@ -20,6 +20,6 @@ public class NewsDto extends BaseDto {
   @OneToOne(fetch = FetchType.LAZY)
   private FileResourceDto coverImg;
 
-  @OneToMany(fetch = FetchType.LAZY)
-  private List<FileResourceDto> listImg;
+//  @OneToMany(fetch = FetchType.LAZY)
+//  private List<FileResourceDto> listImg;
 }

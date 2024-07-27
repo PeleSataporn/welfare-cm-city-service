@@ -106,6 +106,15 @@ public class FileResourceService {
   }
 
   @Transactional
+  public ResponseModel<ResponseId> addImageNewsDetail(Blob blob) {
+    FileResourceDto resource = new FileResourceDto();
+    resource.setImage(blob);
+
+
+    return responseDataUtils.updateDataSuccess(repository.save(resource).getId());
+  }
+
+  @Transactional
   public void updateImageNews(Blob blob, Long newsId) {
     val news = newRepository.findById(newsId).get();
     if (news.getCoverImg() != null) {

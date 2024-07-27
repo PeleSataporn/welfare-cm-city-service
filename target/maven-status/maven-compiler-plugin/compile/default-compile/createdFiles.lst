@@ -36,6 +36,7 @@ com/cm/welfarecmcity/logic/stock/model/StockDetailRes.class
 com/cm/welfarecmcity/api/stockdetail/StockDetailLoginRepository.class
 com/cm/welfarecmcity/api/loanHistory/LoanHistoryController.class
 com/cm/welfarecmcity/api/affiliation/AffiliationService.class
+com/cm/welfarecmcity/dto/NewsFileDetailDto$NewsFileDetailDtoBuilder.class
 com/cm/welfarecmcity/logic/login/model/ResetPasswordReq.class
 com/cm/welfarecmcity/logic/login/LoginService.class
 com/cm/welfarecmcity/mapper/MapStructMapperImpl.class
@@ -93,6 +94,7 @@ com/cm/welfarecmcity/api/notification/NotificationRepository.class
 com/cm/welfarecmcity/logic/document/model/CalculateInstallments.class
 com/cm/welfarecmcity/logic/employee/model/EmployeeTypeRes.class
 com/cm/welfarecmcity/api/stock/StockController.class
+com/cm/welfarecmcity/dto/NewsFileDetailDto.class
 com/cm/welfarecmcity/dto/AffiliationDto.class
 com/cm/welfarecmcity/api/summary/model/GetSummaryReq.class
 com/cm/welfarecmcity/logic/employee/EmployeeLogicRepository.class
@@ -127,6 +129,7 @@ com/cm/welfarecmcity/dto/base/ResponseTextStatus.class
 com/cm/welfarecmcity/utils/orderby/SortOrderBy.class
 com/cm/welfarecmcity/api/employeetype/EmployeeTypeService.class
 com/cm/welfarecmcity/logic/stock/StockLogicRepository.class
+com/cm/welfarecmcity/dto/embeddable/NewsFileDetailKey.class
 com/cm/welfarecmcity/logic/document/model/EmployeeLoanNew.class
 com/cm/welfarecmcity/logic/register/RegisterController.class
 com/cm/welfarecmcity/logic/employee/model/PositionRes.class
@@ -134,6 +137,7 @@ com/cm/welfarecmcity/logic/document/model/DocumentV1Res.class
 com/cm/welfarecmcity/dto/LevelDto.class
 com/cm/welfarecmcity/api/news/NewsService.class
 com/cm/welfarecmcity/api/loandetail/LoanDetailController.class
+com/cm/welfarecmcity/dto/NewsFileDetailDto$NewsFileDetailDtoBuilderImpl.class
 com/cm/welfarecmcity/logic/document/model/DocumentLoanV1Res.class
 com/cm/welfarecmcity/logic/login/model/LoginRes.class
 com/cm/welfarecmcity/api/employee/model/UpdateAdminReq.class
