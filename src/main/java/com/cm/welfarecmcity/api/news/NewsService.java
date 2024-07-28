@@ -6,6 +6,7 @@ import com.cm.welfarecmcity.api.news.model.*;
 import com.cm.welfarecmcity.api.newsfiledetail.NewsFileDetailRepository;
 import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.NewsDto;
+import com.cm.welfarecmcity.dto.NewsFileDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
@@ -131,8 +132,8 @@ public class NewsService {
       newsFileDetailRepository.deleteAll(newsFiles);
 
       val files = newsFiles.stream()
-              .map(newsFile -> new FileResourceDto(newsFile.getFileResource().getId()))
-              .toList();
+              .map(NewsFileDetailDto::getFileResource) // directly get the FileResourceDto object
+              .collect(Collectors.toList());
 
       fileResourceRepository.deleteAll(files);
     }

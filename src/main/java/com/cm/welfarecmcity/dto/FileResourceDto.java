@@ -15,8 +15,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "FileResource")
-@NoArgsConstructor
-@AllArgsConstructor
 public class FileResourceDto extends BaseDto {
 
   @Lob
@@ -27,8 +25,4 @@ public class FileResourceDto extends BaseDto {
 
   @Lob
   private Blob imageIdCard;
-
-  public FileResourceDto(Long id) {
-    super();
-  }
 }
