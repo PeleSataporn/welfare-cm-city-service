@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.sql.Blob;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "FileResource")
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileResourceDto extends BaseDto {
 
   @Lob
@@ -22,4 +27,8 @@ public class FileResourceDto extends BaseDto {
 
   @Lob
   private Blob imageIdCard;
+
+  public FileResourceDto(Long id) {
+    super();
+  }
 }

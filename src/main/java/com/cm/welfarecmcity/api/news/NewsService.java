@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.api.fileresource.FileResourceRepository;
 import com.cm.welfarecmcity.api.fileresource.FileResourceService;
 import com.cm.welfarecmcity.api.news.model.*;
 import com.cm.welfarecmcity.api.newsfiledetail.NewsFileDetailRepository;
+import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.NewsDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -128,6 +129,12 @@ public class NewsService {
     val newsFiles = newsFileDetailRepository.findByNewsId(id).get();
     if (!newsFiles.isEmpty()) {
       newsFileDetailRepository.deleteAll(newsFiles);
+
+      val files = newsFiles.stream()
+              .map(newsFile -> new FileResourceDto(newsFile.getFileResource().getId()))
+              .toList();
+
+      fileResourceRepository.deleteAll(files);
     }
 
     newsRepository.delete(news);
