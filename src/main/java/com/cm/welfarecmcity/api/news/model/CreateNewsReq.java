@@ -8,6 +8,6 @@ public class CreateNewsReq {
   private Long newsId;
   private String name;
   private String description;
-  private Long coverImgId;
+//  private Long coverImgId;
   //    private List<Long> listImg;
 }

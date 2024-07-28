@@ -74,7 +74,7 @@ public class FileResourceController {
   public ResponseModel<ResponseId> addImageNews(@ModelAttribute AddImageReq req) throws IOException, SQLException {
     val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
     val blob = new SerialBlob(resizedImage);
-    return service.addImageNews(blob);
+    return service.addImageNews(blob, req.getEmpId());
   }
 
   @PostMapping("/add-news-detail")

@@ -7,6 +7,7 @@ import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.NewsFileDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.dto.embeddable.NewsFileDetailKey;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -100,12 +101,32 @@ public class FileResourceService {
   }
 
   @Transactional
-  public ResponseModel<ResponseId> addImageNews(Blob blob) {
+  public ResponseModel<ResponseId> addImageNews(Blob blob, Long newsId) {
     val resource = new FileResourceDto();
     resource.setImage(blob);
+    val file = repository.save(resource);
 
-    return responseDataUtils.updateDataSuccess(repository.save(resource).getId());
+    val news = newRepository.findById(newsId).get();
+    news.setCoverImg(file);
+    newRepository.save(news);
+
+    return responseDataUtils.updateDataSuccess(file.getId());
   }
+
+//  @Transactional
+//  public void addImageNewsDetail(Blob blob, Long newsId) {
+//    val resource = new FileResourceDto();
+//    resource.setImage(blob);
+//    val file = repository.save(resource);
+//
+//    val news = newRepository.findById(newsId).get();
+//
+//    val fileDetail = new NewsFileDetailDto();
+//    fileDetail.setFileResource(file);
+//    fileDetail.setNews(news);
+//
+//    newsFileDetailRepository.save(fileDetail);
+//  }
 
   @Transactional
   public void addImageNewsDetail(Blob blob, Long newsId) {
@@ -116,8 +137,13 @@ public class FileResourceService {
     val news = newRepository.findById(newsId).get();
 
     val fileDetail = new NewsFileDetailDto();
-    fileDetail.setFileResource(file);
     fileDetail.setNews(news);
+    fileDetail.setFileResource(file);
+
+    val id = new NewsFileDetailKey();
+    id.setNews_id(newsId);
+    id.setFile_resource_id(file.getId());
+    fileDetail.setId(id);
 
     newsFileDetailRepository.save(fileDetail);
   }

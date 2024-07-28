@@ -58,9 +58,9 @@ public class NewsService {
     news.setName(req.getName());
     news.setDescription(req.getDescription());
 
-    if (req.getCoverImgId() != 0) {
-      news.setCoverImg(fileResourceRepository.findById(req.getCoverImgId()).get());
-    }
+//    if (req.getCoverImgId() != 0) {
+//      news.setCoverImg(fileResourceRepository.findById(req.getCoverImgId()).get());
+//    }
 
     return responseDataUtils.updateDataSuccess(newsRepository.save(news).getId());
   }
@@ -119,6 +119,17 @@ public class NewsService {
   @Transactional
   public void deleteNews(Long id) {
     val news = newsRepository.findById(id).get();
+
+    if (news.getCoverImg() != null) {
+      val file = fileResourceRepository.findById(news.getCoverImg().getId()).get();
+      fileResourceRepository.delete(file);
+    }
+
+    val newsFiles = newsFileDetailRepository.findByNewsId(id).get();
+    if (!newsFiles.isEmpty()) {
+      newsFileDetailRepository.deleteAll(newsFiles);
+    }
+
     newsRepository.delete(news);
   }
 
