@@ -95,4 +95,9 @@ public class FileResourceController {
   public void deleted(@PathVariable Long id) throws IOException, SQLException {
     service.deleted(id);
   }
+
+  @DeleteMapping("/detail/{id}")
+  public void deletedNewsFile(@PathVariable Long id) {
+    service.deletedNewsFile(id);
+  }
 }
