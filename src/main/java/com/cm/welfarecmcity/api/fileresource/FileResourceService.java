@@ -155,6 +155,15 @@ public class FileResourceService {
   }
 
   @Transactional
+  public void deletedNewsFile(Long id) {
+    val newsFile = newsFileDetailRepository.findByFileResourceId(id).get();
+    newsFileDetailRepository.delete(newsFile);
+
+    val file = repository.findById(id).get();
+    repository.delete(file);
+  }
+
+  @Transactional
   public void updateImageNews(Blob blob, Long newsId) {
     val news = newRepository.findById(newsId).get();
     if (news.getCoverImg() != null) {
