@@ -1,7 +1,9 @@
 package com.cm.welfarecmcity.logic.employee;
 
+import com.cm.welfarecmcity.api.employee.model.EmpByAdminRes;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
 import java.sql.Blob;
+import java.util.List;
 import java.util.Optional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,30 @@ public class EmployeeLogicRepository {
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
+
+    public StringBuilder searchEmployeeQuerySql() {
+        val sql = new StringBuilder();
+        sql.append(
+                " SELECT e.id , e.employee_code , e.prefix , e.first_name , e.last_name , e.id_card , e.gender , e.birthday , e.employee_status , l.name as levelName , " +
+                        " et.name as employeeTypeName , p.name as positionName , d.name as departmentName , a.name as affiliationName , b.name as bureauName, e.profile_img_id as imageId " +
+                        " FROM employee e " +
+                        " LEFT JOIN `level` l on l.id = e.employee_type_id " +
+                        " LEFT JOIN employee_type et on et.id = e.employee_type_id " +
+                        " LEFT JOIN positions p on p.id = e.position_id " +
+                        " LEFT JOIN department d on d.id = e.department_id " +
+                        " LEFT JOIN affiliation a on a.id = e.affiliation_id " +
+                        " LEFT JOIN bureau b on b.id  = a.bureau_id "
+        );
+
+        return sql;
+    }
+
+    public List<EmpByAdminRes> searchEmployee() {
+        val sql = searchEmployeeQuerySql();
+
+        return jdbcTemplate.query(
+                sql.toString(), new BeanPropertyRowMapper<>(EmpByAdminRes.class));
+    }
 
   public StringBuilder employeeOfMainSql(Long empId) {
     val sql = new StringBuilder();

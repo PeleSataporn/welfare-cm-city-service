@@ -19,6 +19,7 @@ import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
+import com.cm.welfarecmcity.logic.employee.EmployeeLogicRepository;
 import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
 import com.cm.welfarecmcity.logic.loan.model.BeneficiaryReq;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
@@ -79,31 +80,23 @@ public class EmployeeService {
   @Autowired
   private FileResourceService service;
 
+  @Autowired
+  private EmployeeLogicRepository employeeLogicRepository;
+
   @Transactional
   public List<EmpByAdminRes> searchEmployee() throws SQLException {
-    val listRes = new ArrayList<EmpByAdminRes>();
-
-    val employees = employeeRepository.findAll();
+    val employees = employeeLogicRepository.searchEmployee();
     for (val employee : employees) {
-      val empMap = mapStructMapper.employeeToByAdminRes(employee);
-      empMap.setLevelName(employee.getLevel() != null ? employee.getLevel().getName() : null);
-      empMap.setEmployeeTypeName(employee.getEmployeeType() != null ? employee.getEmployeeType().getName() : null);
-      empMap.setPositionName(employee.getPosition() != null ? employee.getPosition().getName() : null);
-      empMap.setDepartmentName(employee.getDepartment() != null ? employee.getDepartment().getName() : null);
-      empMap.setAffiliationName(employee.getAffiliation() != null ? employee.getAffiliation().getName() : null);
-      empMap.setBureauName(employee.getAffiliation() != null ? employee.getAffiliation().getBureau().getName() : null);
-      empMap.setAge(empMap.getBirthday() != null ? DateUtils.convertToAge(LocalDate.now(),empMap.getBirthday()): 0);
+      employee.setAge(employee.getBirthday() != null ? DateUtils.convertToAge(LocalDate.now(), employee.getBirthday()): 0);
 
-      if (employee.getProfileImg() != null) {
-        byte[] imageBytes = getDisplayImage(employee.getProfileImg().getId());
+      if (employee.getImageId() != null) {
+        byte[] imageBytes = getDisplayImage(employee.getImageId());
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-        empMap.setImage(base64Image);
+        employee.setImage(base64Image);
       }
-
-      listRes.add(empMap);
     }
 
-    return listRes;
+    return employees;
   }
 
   public byte[] getDisplayImage(Long id) throws SQLException {
