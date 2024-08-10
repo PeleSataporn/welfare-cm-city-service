@@ -16,6 +16,7 @@ public class LoanRes {
     private String employeeStatus;
     private String firstName;
     private String lastName;
+    private String idCard;
     private Boolean stockFlag;
     private String startLoanDate;
     private Long guarantorOne;

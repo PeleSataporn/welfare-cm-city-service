@@ -24,7 +24,7 @@ public class LoanLogicRepository {
   public StringBuilder buildQuerySql(String currentMonth, String currentYear) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan.id, loan_value, loan.loan_balance, loan_time, loan.loan_no, prefix, employee.employee_status , employee.employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
+      " SELECT loan.id, loan_value, loan.loan_balance, loan_time, loan.loan_no, prefix, employee.employee_status, employee.id_card, employee.employee_code, first_name, last_name, loan.stock_flag, loan.start_loan_date, " +
       "loan.guarantor_one_id AS guarantorOne , loan.guarantor_two_id AS guarantorTwo, " +
       "loan_detail.loan_ordinary , loan_detail.interest as interestDetail, loan_detail.loan_balance as loanBalanceDetail, loan_detail.loan_year, loan_detail.loan_month, " +
       "loan.interest_percent, stock.stock_accumulate, loan_detail.installment " +
