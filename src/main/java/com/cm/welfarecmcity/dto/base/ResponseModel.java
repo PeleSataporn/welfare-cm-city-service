@@ -1,12 +1,12 @@
 package com.cm.welfarecmcity.dto.base;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class ResponseModel<T>  {
-    private final String result = "OK";
-    private String message;
-    private T data;
+    String result = "OK";
+    String message = "";
+    T data;
 }
