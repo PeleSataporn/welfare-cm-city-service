@@ -122,15 +122,15 @@ public class EmployeeLogicRepository {
         }
 
         if (criteria.firstName() != null) {
-            statements.add(" e.first_name ILIKE '%" + criteria.firstName() + "%' ");
+            statements.add(" e.first_name LIKE '%" + criteria.firstName() + "%' ");
         }
 
         if (criteria.lastName() != null) {
-            statements.add(" e.last_name ILIKE '%" + criteria.lastName() + "%' ");
+            statements.add(" e.last_name LIKE '%" + criteria.lastName() + "%' ");
         }
 
         if (criteria.idCard() != null) {
-            statements.add(" e.id_card ILIKE '%" + criteria.idCard() + "%' ");
+            statements.add(" e.id_card = '" + criteria.idCard() + "' ");
         }
 
         return " WHERE " + statements;
