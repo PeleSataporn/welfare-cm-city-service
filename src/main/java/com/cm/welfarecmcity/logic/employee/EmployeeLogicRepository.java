@@ -85,15 +85,12 @@ public class EmployeeLogicRepository {
 
         // from cause
         sql.append(" FROM employee e ");
-
-        if (!isCount) {
-            sql.append(" LEFT JOIN `level` l on l.id = e.employee_type_id ");
-            sql.append(" LEFT JOIN employee_type et on et.id = e.employee_type_id ");
-            sql.append(" LEFT JOIN positions p on p.id = e.position_id ");
-            sql.append(" LEFT JOIN department d on d.id = e.department_id ");
-            sql.append(" LEFT JOIN affiliation a on a.id = e.affiliation_id ");
-            sql.append(" LEFT JOIN bureau b on b.id  = a.bureau_id ");
-        }
+        sql.append(" LEFT JOIN `level` l on l.id = e.employee_type_id ");
+        sql.append(" LEFT JOIN employee_type et on et.id = e.employee_type_id ");
+        sql.append(" LEFT JOIN positions p on p.id = e.position_id ");
+        sql.append(" LEFT JOIN department d on d.id = e.department_id ");
+        sql.append(" LEFT JOIN affiliation a on a.id = e.affiliation_id ");
+        sql.append(" LEFT JOIN bureau b on b.id  = a.bureau_id ");
 
         if (criteria != null) {
             sql.append(this.buildCriteriaSQL(criteria));

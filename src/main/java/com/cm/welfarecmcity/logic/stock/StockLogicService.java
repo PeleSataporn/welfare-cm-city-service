@@ -3,10 +3,14 @@ package com.cm.welfarecmcity.logic.stock;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.StockDetailDto;
+import com.cm.welfarecmcity.dto.base.RequestModel;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.dto.base.SearchDataResponse;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
+import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
+import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.val;
@@ -44,6 +48,34 @@ public class StockLogicService {
     }
 
     return stock;
+  }
+
+  @Transactional
+  public SearchDataResponse<StockRes> searchStockByAdmin(RequestModel<StockByAdminReqDto, StockByAdminOrderReqDto> req) {
+    val criteria = req.getCriteria();
+    val order = req.getOrder();
+    val pageReq = req.getPageReq();
+
+    val stocks = stockLogicRepository.searchStockByAdmin(criteria, order, pageReq);
+
+    for (val stock : stocks) {
+      switch (stock.getEmployeeStatus()) {
+        case 1 -> stock.setStatus("สมาชิกแรกเข้า");
+        case 2 -> stock.setStatus("ใช้งานปกติ");
+        case 3 -> stock.setStatus("ลาออก");
+        case 4 -> stock.setStatus("error");
+        case 5 -> stock.setStatus("รออนุมัติลาออก");
+        case 6 -> stock.setStatus("เสียชีวิต");
+        case 7 -> stock.setStatus("หนีหนี้");
+        case 8 -> stock.setStatus("เกษียณ");
+        default -> stock.setStatus("ไม่ทราบสถานะ");
+      }
+    }
+
+    val totalElements = stockLogicRepository.count(criteria);
+    val totalPage = totalElements / pageReq.getPageSize();
+
+    return new SearchDataResponse<>(stocks, totalPage, totalElements);
   }
 
   @Transactional

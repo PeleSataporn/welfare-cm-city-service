@@ -2,13 +2,18 @@ package com.cm.welfarecmcity.logic.loan;
 
 import com.cm.welfarecmcity.dto.EmployeeDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
+import com.cm.welfarecmcity.dto.base.PageReq;
 import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
 import com.cm.welfarecmcity.logic.document.model.GuaranteeRes;
 import com.cm.welfarecmcity.logic.loan.model.*;
+import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminOrderReqDto;
+import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminReqDto;
 import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
 import java.util.List;
+import java.util.StringJoiner;
+import com.cm.welfarecmcity.utils.PaginationUtils;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -43,6 +48,109 @@ public class LoanLogicRepository {
   public List<LoanRes> searchLoan(AddLoanDetailAllReq req) {
     val sql = buildQuerySql(req.getNewMonth(), req.getNewYear());
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanRes.class));
+  }
+
+  private StringBuilder searchLoanByAdminQuerySql(
+          boolean isCount,
+          LoanByAdminReqDto criteria,
+          LoanByAdminOrderReqDto order,
+          PageReq page) {
+    val sql = new StringBuilder();
+
+    // select cause
+    if (isCount) {
+      sql.append(" SELECT COUNT(*) ");
+    } else {
+      sql.append(
+              " SELECT l.id, l.loan_value, l.loan_balance, l.loan_time, l.loan_no, e.prefix, e.employee_status, e.id_card, e.employee_code, ");
+      sql.append(
+              " e.first_name, e.last_name, l.stock_flag, l.start_loan_date, l.guarantor_one_id AS guarantorOne, l.guarantor_two_id AS guarantorTwo, ");
+      sql.append(" ld.loan_ordinary, ld.interest as interestDetail, ld.loan_balance as loanBalanceDetail, ld.loan_year, ");
+      sql.append(" ld.loan_month, l.interest_percent, s.stock_accumulate, ld.installment ");
+    }
+
+    // from cause
+    sql.append(" FROM loan l ");
+    sql.append(" JOIN employee e ON (e.loan_id = l.id AND e.deleted = FALSE ) ");
+    sql.append(" JOIN loan_detail ld ON ld.loan_id = l.id ");
+
+    if (!isCount) {
+      sql.append(" JOIN stock s ON e.stock_id = s.id ");
+      sql.append(" JOIN stock_detail sd ON sd.stock_id = s.id ");
+    }
+
+    if (criteria != null) {
+      sql.append(this.buildCriteriaSQL(criteria));
+    }
+
+    if (!isCount) {
+      sql.append(" GROUP BY l.id ");
+    }
+
+    // order by cause
+    if (!isCount && order != null) {
+      sql.append(this.buildOrderSQL(order));
+    }
+
+    // pagination
+    if (!isCount && page != null) {
+      sql.append(PaginationUtils.pagination(page));
+    }
+
+    return sql;
+  }
+
+  public String buildCriteriaSQL(LoanByAdminReqDto criteria) {
+    val statements = new StringJoiner(" AND ");
+
+    statements.add(" l.deleted = FALSE AND l.active = TRUE ");
+    statements.add(" ld.loan_month = '" + criteria.newMonth() + "' AND ld.loan_year = '" + criteria.newYear() + "' ");
+
+    if (criteria.employeeCode() != null) {
+      statements.add(" e.employee_code = '" + criteria.employeeCode() + "' ");
+    }
+
+    if (criteria.firstName() != null) {
+      statements.add(" e.first_name LIKE '%" + criteria.firstName() + "%' ");
+    }
+
+    if (criteria.lastName() != null) {
+      statements.add(" e.last_name LIKE '%" + criteria.lastName() + "%' ");
+    }
+
+    if (criteria.idCard() != null) {
+      statements.add(" e.id_card = '" + criteria.idCard() + "' ");
+    }
+
+    return " WHERE " + statements;
+  }
+
+  private String buildOrderSQL(LoanByAdminOrderReqDto order) {
+    val statements = new StringJoiner(",");
+
+    if (order.id() != null) {
+      statements.add(" l.id " + order.id());
+    }
+
+    if (order.createDate() != null) {
+      statements.add(" e.create_date " + order.createDate());
+    }
+
+    return " ORDER BY " + statements;
+  }
+
+  public List<LoanRes> searchLoanByAdmin(
+          LoanByAdminReqDto criteria,
+          LoanByAdminOrderReqDto order,
+          PageReq page) {
+    val sql = searchLoanByAdminQuerySql(false, criteria, order, page);
+    return jdbcTemplate.query(
+            sql.toString(), new BeanPropertyRowMapper<>(LoanRes.class));
+  }
+
+  public Long count(LoanByAdminReqDto criteria) {
+    val sql = searchLoanByAdminQuerySql(true, criteria, null, null);
+    return jdbcTemplate.queryForObject(sql.toString(), Long.class);
   }
 
   public StringBuilder sqlGuarantor(Long employeeId) {

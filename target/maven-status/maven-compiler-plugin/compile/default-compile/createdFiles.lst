@@ -43,6 +43,7 @@ com/cm/welfarecmcity/api/affiliation/AffiliationService.class
 com/cm/welfarecmcity/dto/NewsFileDetailDto$NewsFileDetailDtoBuilder.class
 com/cm/welfarecmcity/logic/login/model/ResetPasswordReq.class
 com/cm/welfarecmcity/logic/login/LoginService.class
+com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminReqDto.class
 com/cm/welfarecmcity/dto/base/PageReq.class
 com/cm/welfarecmcity/mapper/MapStructMapperImpl.class
 com/cm/welfarecmcity/logic/employee/EmployeeLogicController.class
@@ -87,6 +88,7 @@ com/cm/welfarecmcity/api/summary/SummaryController.class
 com/cm/welfarecmcity/dto/base/RequestModel.class
 com/cm/welfarecmcity/api/loan/LoanRepository.class
 com/cm/welfarecmcity/api/loan/LoanController.class
+com/cm/welfarecmcity/logic/stock/model/search/StockByAdminReqDto.class
 com/cm/welfarecmcity/logic/document/model/GrandTotalRes.class
 com/cm/welfarecmcity/api/news/model/SearchNewsRes.class
 com/cm/welfarecmcity/api/beneficiary/BeneficiaryRepository.class
@@ -180,6 +182,7 @@ com/cm/welfarecmcity/WelfareCmCityApplication.class
 com/cm/welfarecmcity/logic/employee/model/EmpRes.class
 com/cm/welfarecmcity/logic/register/model/res/CheckEmployeeCodeRes.class
 com/cm/welfarecmcity/exception/entity/UserPasswordMismatchException.class
+com/cm/welfarecmcity/logic/stock/model/search/StockByAdminOrderReqDto.class
 com/cm/welfarecmcity/api/loandetail/model/LoanDetailRes.class
 com/cm/welfarecmcity/api/department/DepartmentController.class
 com/cm/welfarecmcity/logic/login/LoginController.class
@@ -225,6 +228,7 @@ com/cm/welfarecmcity/api/admin/model/AdminConfigRes.class
 com/cm/welfarecmcity/api/employee/EmployeeRepository.class
 com/cm/welfarecmcity/logic/employee/model/LoanDetailRes.class
 com/cm/welfarecmcity/constant/SizeImageEnum.class
+com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminOrderReqDto.class
 com/cm/welfarecmcity/api/employee/model/EmpRes.class
 com/cm/welfarecmcity/logic/stock/StockLogicService.class
 com/cm/welfarecmcity/utils/image/ImageUtils.class

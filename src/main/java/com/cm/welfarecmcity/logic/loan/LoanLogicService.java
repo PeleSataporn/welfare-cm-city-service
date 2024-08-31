@@ -7,15 +7,22 @@ import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDto;
+import com.cm.welfarecmcity.dto.base.RequestModel;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
+import com.cm.welfarecmcity.dto.base.SearchDataResponse;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.document.DocumentService;
 import com.cm.welfarecmcity.logic.document.model.*;
 import com.cm.welfarecmcity.logic.loan.model.*;
 import com.cm.welfarecmcity.logic.loan.model.GuaranteeRes;
+import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminOrderReqDto;
+import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminReqDto;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
+import com.cm.welfarecmcity.logic.stock.model.StockRes;
+import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
+import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
@@ -86,6 +93,32 @@ public class LoanLogicService {
 //
 //    });
     return result;
+  }
+
+  @Transactional
+  public SearchDataResponse<LoanRes> searchLoanByAdmin(RequestModel<LoanByAdminReqDto, LoanByAdminOrderReqDto> req) {
+    val criteria = req.getCriteria();
+    val order = req.getOrder();
+    val pageReq = req.getPageReq();
+
+    val loans = repository.searchLoanByAdmin(criteria, order, pageReq);
+
+    for(val loan: loans){
+      int sum = 0;
+      if(Integer.parseInt(loan.getLoanYear()) >= 2567){
+        if(loan.getLoanBalance() > 0 && loan.getInstallment() > 0){
+          sum = ( loan.getLoanBalanceDetail() + Math.round((loan.getLoanOrdinary() - loan.getInterestDetail())) );
+        }else{
+          sum = loan.getLoanValue();
+        }
+        loan.setLoanBalance(sum);
+      }
+    }
+
+    val totalElements = repository.count(criteria);
+    val totalPage = totalElements / pageReq.getPageSize();
+
+    return new SearchDataResponse<>(loans, totalPage, totalElements);
   }
 
   @Transactional
