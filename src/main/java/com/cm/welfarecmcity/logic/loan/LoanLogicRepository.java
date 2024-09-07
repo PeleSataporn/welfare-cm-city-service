@@ -122,6 +122,10 @@ public class LoanLogicRepository {
       statements.add(" e.id_card = '" + criteria.idCard() + "' ");
     }
 
+    if (criteria.loanNo() != null) {
+      statements.add(" l.loan_no = '" + criteria.loanNo() + "' ");
+    }
+
     return " WHERE " + statements;
   }
 
