@@ -20,4 +20,22 @@ public class DateUtils {
 
         return (int) years;
     }
+
+    public static String getThaiMonth(String monthNumber) {
+        return switch (monthNumber) {
+            case "01" -> "มกราคม";
+            case "02" -> "กุมภาพันธ์";
+            case "03" -> "มีนาคม";
+            case "04" -> "เมษายน";
+            case "05" -> "พฤษภาคม";
+            case "06" -> "มิถุนายน";
+            case "07" -> "กรกฎาคม";
+            case "08" -> "สิงหาคม";
+            case "09" -> "กันยายน";
+            case "10" -> "ตุลาคม";
+            case "11" -> "พฤศจิกายน";
+            case "12" -> "ธันวาคม";
+            default -> "Invalid month";
+        };
+    }
 }

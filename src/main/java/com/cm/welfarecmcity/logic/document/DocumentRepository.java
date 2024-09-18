@@ -2,7 +2,12 @@ package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import com.cm.welfarecmcity.utils.DateUtils;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -134,6 +139,8 @@ public class DocumentRepository {
   }
 
   public StringBuilder sqlDocumentInfoAll(String monthCurrent, String yearCurrent) {
+    val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
+
     val sql = new StringBuilder();
     sql.append(
       " SELECT employee.id, employee.employee_code, CONCAT(employee.first_name,' ', employee.last_name) AS fullName, employee.create_date as regisDate, " +
@@ -148,8 +155,15 @@ public class DocumentRepository {
       " LEFT JOIN loan_detail ON (loan_detail.loan_id = loan.id AND loan.deleted = FALSE) " +
       " LEFT JOIN positions ON (employee.position_id = positions.id AND positions.deleted = FALSE) " +
       " LEFT JOIN employee guarantor_one ON (loan.guarantor_one_id = guarantor_one.id AND guarantor_one.deleted = FALSE) " +
-      " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
-      " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 " +
+      " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) WHERE ");
+
+    if (!monthCurrent.equals(DateUtils.getThaiMonth(currentMonth))) {
+      sql.append(" employee.employee_status IN (2,3,5) ");
+    } else {
+      sql.append(" employee.employee_status IN (2,5) ");
+    }
+
+    sql.append(" AND employee.deleted = FALSE AND employee.id != 0 " +
       " and loan_detail.loan_month is null and loan_detail.loan_year is null " +
       " UNION " +
       " SELECT employee.id, employee.employee_code, CONCAT(employee.first_name,' ', employee.last_name) AS fullName, employee.create_date as regisDate, " +
@@ -167,14 +181,15 @@ public class DocumentRepository {
       " LEFT JOIN employee guarantor_two ON (loan.guarantor_two_id = guarantor_two.id AND guarantor_two.deleted = FALSE) " +
       " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND employee.id != 0 "
     );
-        if(monthCurrent != null && yearCurrent != null){
-          sql
-                  .append(" and loan_detail.loan_month = '")
-                  .append(monthCurrent)
-                  .append("' and loan_detail.loan_year = '")
-                  .append(yearCurrent)
-                  .append("'");
-        }
+
+    if(monthCurrent != null && yearCurrent != null){
+      sql.append(" and loan_detail.loan_month = '")
+              .append(monthCurrent)
+              .append("' and loan_detail.loan_year = '")
+              .append(yearCurrent)
+              .append("'");
+    }
+
     sql.append(" GROUP BY employee.id  ");
     return sql;
   }
