@@ -117,6 +117,7 @@ com/cm/welfarecmcity/api/stock/StockService.class
 com/cm/welfarecmcity/constant/EmployeeStatusEnum.class
 com/cm/welfarecmcity/api/loan/LoanLogic01Repository.class
 com/cm/welfarecmcity/api/admin/AdminConfigService.class
+com/cm/welfarecmcity/dto/DocumentDto.class
 com/cm/welfarecmcity/logic/document/model/DocumentInfoAllLoanEmpRes.class
 com/cm/welfarecmcity/logic/register/model/req/ApproveRegisterReq.class
 com/cm/welfarecmcity/utils/DateUtils.class
