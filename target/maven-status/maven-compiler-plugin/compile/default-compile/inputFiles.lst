@@ -80,6 +80,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminReqDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/beneficiary/BeneficiaryService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/register/model/res/CheckEmployeeCodeRes.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/exception/entity/DocumentException.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/bureau/BureauController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/SummaryDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/admin/model/employeeListRes.java
@@ -121,6 +122,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/stock/model/search/StockByAdminReqDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/employee/model/StockRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/listener/GenerateListenerRepository.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/exception/ResourceNotFoundException.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/CalinteresDividend.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/stockdetail/StockDetailLoginRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/DocumentV1ResLoan.java
@@ -140,6 +142,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/BeneficiaryRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/fileresource/FileResourceService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/level/LevelRepository.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/document/model/DocumentRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/employee/model/EmpRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/summary/SummaryRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/summary/SummaryService.java
