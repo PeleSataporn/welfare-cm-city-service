@@ -54,6 +54,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/login/model/ResetPasswordReq.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/level/LevelController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/FileResourceDto.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/document/DocumentsService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/fileresource/FileResourceController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/listener/GenerateListener.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/WelfareCmCityApplication.java
@@ -69,6 +70,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/stockdetail/StockDetailRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/register/model/req/ApproveRegisterReq.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/CalculateInstallments.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/document/DocumentsRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/constant/SizeImageEnum.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/GrandTotalRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/admin/AdminConfigController.java
@@ -173,6 +175,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/DocumentV2Res.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/summary/model/GetSummaryReq.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/news/NewsLogicRepository.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/document/DocumentsController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetail/LoanDetailLogicRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/news/NewsRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/admin/AdminConfigRepository.java

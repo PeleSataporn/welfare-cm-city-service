@@ -137,6 +137,7 @@ com/cm/welfarecmcity/logic/loan/LoanLogicService.class
 com/cm/welfarecmcity/logic/document/model/DocumentV2ResLoan.class
 com/cm/welfarecmcity/dto/guarantor/GuarantorController.class
 com/cm/welfarecmcity/api/employee/EmployeeService.class
+com/cm/welfarecmcity/api/document/DocumentsRepository.class
 com/cm/welfarecmcity/api/department/DepartmentService.class
 com/cm/welfarecmcity/dto/base/ResponseTextStatus.class
 com/cm/welfarecmcity/utils/orderby/SortOrderBy.class
@@ -164,6 +165,7 @@ com/cm/welfarecmcity/dto/base/ResponseData.class
 com/cm/welfarecmcity/logic/register/model/res/SearchNewRegisterRes.class
 com/cm/welfarecmcity/dto/LoanDetailDto.class
 com/cm/welfarecmcity/api/employee/model/UpdateStockValueReq.class
+com/cm/welfarecmcity/api/document/DocumentsService.class
 com/cm/welfarecmcity/CalloanOld.class
 com/cm/welfarecmcity/dto/GuarantorDto.class
 com/cm/welfarecmcity/api/user/UserRepository.class
@@ -221,6 +223,7 @@ com/cm/welfarecmcity/api/summary/SummaryService.class
 com/cm/welfarecmcity/Scheduled/MonthlyTotalJob.class
 com/cm/welfarecmcity/api/admin/AdminConfigController.class
 com/cm/welfarecmcity/logic/loan/model/GuarantorRes.class
+com/cm/welfarecmcity/api/document/DocumentsController.class
 com/cm/welfarecmcity/api/loanHistory/LoanHistoryService.class
 com/cm/welfarecmcity/api/news/model/SearchImagesRes.class
 com/cm/welfarecmcity/dto/base/ResponseIds.class

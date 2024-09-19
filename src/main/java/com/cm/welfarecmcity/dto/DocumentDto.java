@@ -17,6 +17,6 @@ public class DocumentDto extends BaseDto {
     private String name;
 
     @Lob
-    @Column(name = "pdf_file")
+    @Column(name = "pdf_file", columnDefinition="LONGBLOB")
     private byte[] pdfFile;
 }
