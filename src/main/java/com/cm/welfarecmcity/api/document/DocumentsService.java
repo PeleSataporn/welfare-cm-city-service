@@ -42,5 +42,10 @@ public class DocumentsService {
                                         .build())
                 .collect(Collectors.toList());
     }
+
+    public void deleted(Long id) throws IOException {
+        val doc = getDocument(id);
+        documentRepository.deleteById(doc.getId());
+    }
 }
 

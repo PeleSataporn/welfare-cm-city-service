@@ -39,4 +39,9 @@ public class DocumentsController {
     public List<DocumentRes> search() {
         return documentService.search();
     }
+
+    @DeleteMapping("/{id}")
+    public void deleted(@PathVariable Long id) throws IOException {
+        documentService.deleted(id);
+    }
 }
