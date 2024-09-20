@@ -3,6 +3,7 @@ package com.cm.welfarecmcity.api.document;
 import com.cm.welfarecmcity.api.document.model.DocumentRes;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +34,20 @@ public class DocumentsController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getName() + ".pdf\"")
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(document.getPdfFile());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<byte[]> getDocumentV2(@PathVariable Long id) {
+        val document = documentService.getDocument(id);
+
+        val headers = new HttpHeaders();
+        headers.add(
+                HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=doc-" + document.getId() + ".pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(document.getPdfFile());
     }
 
     @PostMapping("/search")
