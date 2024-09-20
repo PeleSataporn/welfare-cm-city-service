@@ -42,7 +42,7 @@ public class DocumentsController {
 
         val headers = new HttpHeaders();
         headers.add(
-                HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=doc-" + document.getId() + ".pdf");
+                HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=doc-\"" + document.getId() + ".pdf\"");
 
         return ResponseEntity.ok()
                 .headers(headers)
