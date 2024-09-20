@@ -312,7 +312,7 @@ public class DocumentRepository {
       sql.append(
               " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, " +
               " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, " +
-              " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent "
+              " loan_detail.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan_detail.interest as interestLoanLastMonth, loan_detail.loan_ordinary "
       );
     }
     sql.append(
