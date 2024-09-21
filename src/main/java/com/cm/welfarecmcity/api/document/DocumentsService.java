@@ -10,6 +10,8 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import lombok.val;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentsService {
 
+    private static final Logger log = LoggerFactory.getLogger(DocumentsService.class);
     private final AppPropertiesConfigBean appProperties;
 
     @Autowired
@@ -63,12 +66,12 @@ public class DocumentsService {
         documentRepository.deleteById(doc.getId());
     }
 
-    public List<byte[]> getFileTestForHost() {
+    public List<FileConfigBean> getFileTestForHost(FileConfigBean req) {
         String host = "103.253.72.208";
         String user = "root";
         String password = "Tri@#tirL";
-        String remoteDirectoryPath = appProperties.getPathFile(); // Remote folder containing PDF files
-        List<byte[]> textAllFile = new ArrayList<>();
+        String remoteDirectoryPath = appProperties.getPathFile() + "/"  + req.getMonth() + "/" + req.getYear(); // Remote folder containing PDF files
+        List<FileConfigBean> textAllFile = new ArrayList<>();
 
         JSch jsch = new JSch();
         Session session = null;
@@ -117,7 +120,10 @@ public class DocumentsService {
 
                     // byte[] fileByte = inputStream.readAllBytes();
 
-                    textAllFile.add(fileByte);
+                    FileConfigBean fileConfigBean = new FileConfigBean();
+                    fileConfigBean.setFileData(fileByte);
+                    fileConfigBean.setFileName(fileName);
+                    textAllFile.add(fileConfigBean);
 
                     // document.close();
                     inputStream.close();
@@ -140,9 +146,11 @@ public class DocumentsService {
     public List<FileConfigBean> getFile(FileConfigBean req) {
         // Path to the directory containing PDF files
         String directoryPath = "D:\\Project_Icoop\\file-test-add\\" + req.getMonth() + "\\" + req.getYear();
-        String directoryPathToSever = appProperties.getPathFile() + "/"  + req.getMonth() + "/" + req.getYear();
+        String directoryPathToSever = "/root/upload/file" + "/"  + req.getMonth() + "/" + req.getYear();
         // appProperties.getPathFile() + "/"  + month + "/" + year, "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year
         List<FileConfigBean> textAllFile = new ArrayList<>();
+
+        log.debug(" directoryPathToSever : {} ", directoryPathToSever);
 
         File directory = new File(directoryPathToSever);
 
@@ -152,6 +160,8 @@ public class DocumentsService {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 if (file.isFile() && file.getName().endsWith(".pdf")) {
                     System.out.println("Processing PDF: " + file.getName());
+
+                    log.debug(" Processing PDF: {} ", file.getName());
 
                     try(InputStream inputStream = new FileInputStream(file)){
                         // Load the PDF document
@@ -211,7 +221,7 @@ public class DocumentsService {
 
     public Map<String, String> addFile(MultipartFile file, String month, String year) {
         String directoryPath = "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year;
-        String directoryPathToSever = appProperties.getPathFile() + "/"  + month + "/" + year;
+        String directoryPathToSever = "/root/upload/file" + "/"  + month + "/" + year;
         // appProperties.getPathFile() + "/"  + month + "/" + year, "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year
         Map<String, String> response = new HashMap<>();
         if (!file.isEmpty()) {
