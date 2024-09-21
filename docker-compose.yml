@@ -21,6 +21,8 @@ services:
       - '8787:8787'
     depends_on:
       - db
+    volumes:
+      - /var/upload/file:/app/upload
 
 volumes:
   db:
