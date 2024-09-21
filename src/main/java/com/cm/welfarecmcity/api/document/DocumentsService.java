@@ -153,9 +153,9 @@ public class DocumentsService {
         // appProperties.getPathFile() + "/"  + month + "/" + year, "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year
         List<FileConfigBean> textAllFile = new ArrayList<>();
 
-        log.debug(" directoryPathToSever : {} ", directoryPath);
+        log.debug(" directoryPathToSever : {} ", directoryPathToSever);
 
-        File directory = new File(directoryPath);
+        File directory = new File(directoryPathToSever);
 
         // Ensure it's a valid directory
         if (directory.isDirectory()) {
@@ -269,13 +269,13 @@ public class DocumentsService {
         if (!file.isEmpty()) {
             try {
                 // Create the directory if it doesn't exist
-                File uploadDir = new File(directoryPath);
+                File uploadDir = new File(directoryPathToServer);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs(); // Create directories if they don't exist
                 }
 
                 // Specify the path where the file will be saved
-                Path destPath = new File(directoryPath, Objects.requireNonNull(file.getOriginalFilename())).toPath();
+                Path destPath = new File(directoryPathToServer, Objects.requireNonNull(file.getOriginalFilename())).toPath();
 
                 // Copy the file to the destination path
                 Files.copy(file.getInputStream(), destPath, StandardCopyOption.REPLACE_EXISTING);
