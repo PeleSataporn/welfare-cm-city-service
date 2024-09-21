@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DocumentsRepository extends JpaRepository<DocumentDto, Long> {
-    List<DocumentDto> findAllByOrderByCreateDateAsc();
+    List<DocumentDto> findAllByOrderByCreateDateDesc();
 }
 

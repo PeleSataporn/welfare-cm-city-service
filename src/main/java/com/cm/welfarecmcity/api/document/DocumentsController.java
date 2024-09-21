@@ -35,20 +35,6 @@ public class DocumentsController {
                     .body(document.getPdfFile());
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<byte[]> getDocumentV2(@PathVariable Long id) {
-//        val document = documentService.getDocument(id);
-//
-//        val headers = new HttpHeaders();
-//        headers.add(
-//                HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=doc-\"" + document.getId() + ".pdf\"");
-//
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .contentType(MediaType.APPLICATION_PDF)
-//                .body(document.getPdfFile());
-//    }
-
     @PostMapping("/search")
     public List<DocumentRes> search() {
         return documentService.search();
