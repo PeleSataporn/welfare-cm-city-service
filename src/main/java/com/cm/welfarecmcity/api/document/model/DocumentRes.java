@@ -8,6 +8,7 @@ import java.util.Date;
 public record DocumentRes (
         Long id,
         String name,
-        Date createDate
+        Date createDate,
+        Long size
 ) {
 }

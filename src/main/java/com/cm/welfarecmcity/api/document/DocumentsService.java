@@ -39,6 +39,7 @@ public class DocumentsService {
                                         .id(doc.getId())
                                         .name(doc.getName())
                                         .createDate(doc.getCreateDate())
+                                        .size(doc.getPdfFile() != null ? (long) doc.getPdfFile().length : 0)
                                         .build())
                 .collect(Collectors.toList());
     }
