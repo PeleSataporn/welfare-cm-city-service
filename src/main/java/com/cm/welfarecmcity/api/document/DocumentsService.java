@@ -32,7 +32,7 @@ public class DocumentsService {
     }
 
     public List<DocumentRes> search() {
-        return documentRepository.findAll().stream()
+        return documentRepository.findAllByOrderByCreateDateAsc().stream()
                 .map(
                         doc ->
                                 DocumentRes.builder()
