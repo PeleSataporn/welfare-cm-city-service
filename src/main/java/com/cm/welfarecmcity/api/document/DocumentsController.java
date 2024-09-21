@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.document;
 
 import com.cm.welfarecmcity.api.document.model.DocumentRes;
+import com.cm.welfarecmcity.dto.bean.FileConfigBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -44,4 +48,25 @@ public class DocumentsController {
     public void deleted(@PathVariable Long id) throws IOException {
         documentService.deleted(id);
     }
+
+    @PostMapping("/get-file")
+    public ResponseEntity<byte[]> getFile(@RequestBody FileConfigBean req) throws IOException {
+        val res = documentService.getFile(req);
+        String filename = res.get(0).getFileName();
+        // Encode the filename to handle non-ASCII characters
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFilename)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(res.get(0).getFileData());
+    }
+
+    @PostMapping("/add-file")
+    public ResponseEntity<Map<String, String>> addFile(@RequestParam("file") MultipartFile file,
+                                                       @RequestParam("month") String month, @RequestParam("year") String year) throws IOException {
+        val res = documentService.addFile(file, month, year);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
 }

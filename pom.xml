@@ -116,6 +116,18 @@
       <version>0.0.43</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>2.0.29</version> <!-- Use the latest version available -->
+    </dependency>
+
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <version>0.1.55</version>
+    </dependency>
+
   </dependencies>
 
   <build>
