@@ -65,7 +65,7 @@ public class DocumentsController {
     @PostMapping("/add-file")
     public ResponseEntity<Map<String, String>> addFile(@RequestParam("file") MultipartFile file,
                                                        @RequestParam("month") String month, @RequestParam("year") String year) throws IOException {
-        val res = documentService.addFile(file, month, year);
+        val res = documentService.addFile2(file, month, year);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

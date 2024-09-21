@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -146,13 +149,13 @@ public class DocumentsService {
     public List<FileConfigBean> getFile(FileConfigBean req) {
         // Path to the directory containing PDF files
         String directoryPath = "D:\\Project_Icoop\\file-test-add\\" + req.getMonth() + "\\" + req.getYear();
-        String directoryPathToSever = "/root/upload/file" + "/"  + req.getMonth() + "/" + req.getYear();
+        String directoryPathToSever = appProperties.getPathFile() + "/"  + req.getMonth() + "/" + req.getYear();
         // appProperties.getPathFile() + "/"  + month + "/" + year, "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year
         List<FileConfigBean> textAllFile = new ArrayList<>();
 
-        log.debug(" directoryPathToSever : {} ", directoryPathToSever);
+        log.debug(" directoryPathToSever : {} ", directoryPath);
 
-        File directory = new File(directoryPathToSever);
+        File directory = new File(directoryPath);
 
         // Ensure it's a valid directory
         if (directory.isDirectory()) {
@@ -221,7 +224,7 @@ public class DocumentsService {
 
     public Map<String, String> addFile(MultipartFile file, String month, String year) {
         String directoryPath = "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year;
-        String directoryPathToSever = "/root/upload/file" + "/"  + month + "/" + year;
+        String directoryPathToSever = appProperties.getPathFile() + "/"  + month + "/" + year;
         // appProperties.getPathFile() + "/"  + month + "/" + year, "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year
         Map<String, String> response = new HashMap<>();
         if (!file.isEmpty()) {
@@ -255,6 +258,36 @@ public class DocumentsService {
         } else {
             response.put("message", "No file selected!");
         }
+        return response;
+    }
+
+    public Map<String, String> addFile2(MultipartFile file, String month, String year) {
+        String directoryPath = "D:\\Project_Icoop\\file-test-add\\" + month + "\\" + year;
+        String directoryPathToServer = appProperties.getPathFile() + "/" + month + "/" + year;
+        Map<String, String> response = new HashMap<>();
+
+        if (!file.isEmpty()) {
+            try {
+                // Create the directory if it doesn't exist
+                File uploadDir = new File(directoryPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs(); // Create directories if they don't exist
+                }
+
+                // Specify the path where the file will be saved
+                Path destPath = new File(directoryPath, Objects.requireNonNull(file.getOriginalFilename())).toPath();
+
+                // Copy the file to the destination path
+                Files.copy(file.getInputStream(), destPath, StandardCopyOption.REPLACE_EXISTING);
+                response.put("message", "File uploaded successfully!");
+            } catch (IOException e) {
+                response.put("message", "Failed to upload file!");
+                e.printStackTrace();
+            }
+        } else {
+            response.put("message", "No file selected!");
+        }
+
         return response;
     }
 
