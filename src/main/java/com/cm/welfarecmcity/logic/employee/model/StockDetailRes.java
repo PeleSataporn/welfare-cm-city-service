@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class StockDetailRes {
-    private Long id;
+  private Long id;
 }

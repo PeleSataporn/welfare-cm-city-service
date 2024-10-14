@@ -40,47 +40,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminConfigService {
 
-  @Autowired
-  private AdminConfigRepositoryLogic adminConfigRepositoryLogic;
+  @Autowired private AdminConfigRepositoryLogic adminConfigRepositoryLogic;
 
-  @Autowired
-  private AdminConfigRepository adminConfigRepository;
+  @Autowired private AdminConfigRepository adminConfigRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private LoanRepository loanRepository;
+  @Autowired private LoanRepository loanRepository;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private DocumentRepository documentRepository;
+  @Autowired private DocumentRepository documentRepository;
 
-  @Autowired
-  private LoanDetailRepository loanDetailRepository;
+  @Autowired private LoanDetailRepository loanDetailRepository;
 
-  @Autowired
-  private LevelRepository levelRepository;
+  @Autowired private LevelRepository levelRepository;
 
-  @Autowired
-  private EmployeeTypeRepository employeeTypeRepository;
+  @Autowired private EmployeeTypeRepository employeeTypeRepository;
 
-  @Autowired
-  private PositionRepository positionRepository;
+  @Autowired private PositionRepository positionRepository;
 
-  @Autowired
-  private DepartmentRepository departmentRepository;
+  @Autowired private DepartmentRepository departmentRepository;
 
-  @Autowired
-  private AffiliationRepository affiliationRepository;
+  @Autowired private AffiliationRepository affiliationRepository;
 
-  @Autowired
-  private BureauRepository bureauRepository;
+  @Autowired private BureauRepository bureauRepository;
 
-  @Autowired
-  private StockRepository stockRepository;
+  @Autowired private StockRepository stockRepository;
 
   @Transactional
   public List<AdminConfigRes> getConfigByList() {
@@ -126,7 +112,9 @@ public class AdminConfigService {
       config.setValue(req.getValue());
 
       if (req.getConfigId() == 1) {
-        var result = adminConfigRepositoryLogic.getLanDetailOfEmp(req.getMonthCurrent(), req.getYearCurrent());
+        var result =
+            adminConfigRepositoryLogic.getLanDetailOfEmp(
+                req.getMonthCurrent(), req.getYearCurrent());
         for (EmployeeLoanNew empNew : result) {
           if (Integer.parseInt(empNew.getLoanBalance()) > 0) {
             // set Req calculateLoanNew
@@ -172,7 +160,7 @@ public class AdminConfigService {
   public void addLoanNew(EmployeeLoanNew req) {
     // inset loan
     LoanDto loanDto = new LoanDto();
-    //loanDto.setLoanNo("2566-0624001");
+    // loanDto.setLoanNo("2566-0624001");
     loanDto.setLoanValue(Double.parseDouble(req.getLoanValue()));
     loanDto.setLoanBalance(Double.parseDouble(req.getLoanValue()));
     loanDto.setLoanTime(Long.valueOf(req.getLoanTime()).intValue());
@@ -184,11 +172,11 @@ public class AdminConfigService {
       //            var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
       val emp1 = employeeRepository.findById(Long.valueOf(req.getGuarantorOne())).get();
       loanDto.setGuarantorOne(emp1);
-      //loanDto.getGuarantorOne().setId(result1.getEmpId());
+      // loanDto.getGuarantorOne().setId(result1.getEmpId());
       //          var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
       val emp2 = employeeRepository.findById(Long.valueOf(req.getGuarantorTwo())).get();
       loanDto.setGuarantorTwo(emp2);
-      //loanDto.getGuarantorTwo().setId(result2.getEmpId());
+      // loanDto.getGuarantorTwo().setId(result2.getEmpId());
     }
     val loan = loanRepository.save(loanDto);
 
@@ -197,12 +185,12 @@ public class AdminConfigService {
     loanDetailDto.setInstallment(0);
     loanDetailDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDetailDto.setLoanMonth(req.getLoanMonth());
-    loanDetailDto.setLoanOrdinary(0); //Integer.parseInt(req.getLoanOrdinary()
+    loanDetailDto.setLoanOrdinary(0); // Integer.parseInt(req.getLoanOrdinary()
     val lone = loanRepository.findById(loan.getId()).get();
     loanDetailDto.setLoan(lone);
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDetailDto.setLoanYear(req.getLoanYear());
-    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+    loanDetailDto.setInterestLastMonth(0); // Integer.parseInt(req.getInterestLoanLastMonth()
     val loanDetail = loanDetailRepository.save(loanDetailDto);
 
     // update number running
@@ -231,7 +219,11 @@ public class AdminConfigService {
 
     int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
     String formattedRunningNumber = String.format("%04d", runningNumber);
-    String runningNumberString = currentYear + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
+    String runningNumberString =
+        currentYear
+            + "-"
+            + String.format("%02d%02d", currentMonth, currentDay)
+            + formattedRunningNumber;
     System.out.println(runningNumberString);
 
     return runningNumberString;
@@ -247,32 +239,29 @@ public class AdminConfigService {
     LocalDate date = LocalDate.parse(dateSt);
 
     // calculate loan
-    LocalDate paymentStartDate = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    LocalDate paymentStartDate =
+        LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     double installment = calculateLoanInstallment(principal, interestRate, numOfPayments);
-    List<CalculateInstallments> calculateInstallments = createAmortizationTableNew(
-      principal,
-      interestRate,
-      numOfPayments,
-      installment,
-      paymentStartDate
-    );
+    List<CalculateInstallments> calculateInstallments =
+        createAmortizationTableNew(
+            principal, interestRate, numOfPayments, installment, paymentStartDate);
 
     return calculateInstallments;
   }
 
   public double calculateLoanInstallment(double principal, double interestRate, int numOfPayments) {
     double monthlyInterestRate = (interestRate / 100) / 12;
-    double installment = (principal * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numOfPayments));
+    double installment =
+        (principal * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numOfPayments));
     return installment;
   }
 
   public List<CalculateInstallments> createAmortizationTableNew(
-    double principal,
-    double interestRate,
-    int numOfPayments,
-    double installment,
-    LocalDate paymentStartDate
-  ) {
+      double principal,
+      double interestRate,
+      int numOfPayments,
+      double installment,
+      LocalDate paymentStartDate) {
     List<CalculateInstallments> result = new ArrayList<>();
     DecimalFormat decimalFormat = new DecimalFormat("#");
 
@@ -296,7 +285,7 @@ public class AdminConfigService {
       if (i == numOfPayments) {
         double principalPaidLast = remainingBalance;
         double installmentSumLastMonth = principalPaidLast - interest;
-        //remainingBalance -= principalPaid;
+        // remainingBalance -= principalPaid;
         // paymentDate.format(dateFormatter)
 
         cal.setInstallment(i);
@@ -324,7 +313,8 @@ public class AdminConfigService {
           // toralDeduction
           YearMonth currentPaymentMonthDeduction = YearMonth.from(paymentDateDeduction);
           int daysInMonthDeduction = currentPaymentMonthDeduction.lengthOfMonth();
-          double interestDeduction = Math.round((toralDeduction * (interestRate / 100) / 365) * daysInMonthDeduction);
+          double interestDeduction =
+              Math.round((toralDeduction * (interestRate / 100) / 365) * daysInMonthDeduction);
           double principalPaidDeduction = Math.round(installment - interestDeduction);
           toralDeduction -= principalPaidDeduction;
           paymentDateDeduction = paymentDateDeduction.plusMonths(1);
@@ -374,23 +364,23 @@ public class AdminConfigService {
     contact.setEmail(req.getEmail());
     contact.setAddress(req.getAddress());
 
-    if(req.getLevelId() != null){
+    if (req.getLevelId() != null) {
       // level
       emp.setLevel(levelRepository.findById(req.getLevelId()).get());
     }
-    if(req.getEmployeeTypeId() != null){
+    if (req.getEmployeeTypeId() != null) {
       // employeeType
       emp.setEmployeeType(employeeTypeRepository.findById(req.getEmployeeTypeId()).get());
     }
-    if(req.getPositionId() != null){
+    if (req.getPositionId() != null) {
       // position
       emp.setPosition(positionRepository.findById(req.getPositionId()).get());
     }
-    if(req.getDepartmentId() != null){
+    if (req.getDepartmentId() != null) {
       // department
       emp.setDepartment(departmentRepository.findById(req.getDepartmentId()).get());
     }
-    if(req.getAffiliationId() != null){
+    if (req.getAffiliationId() != null) {
       // affiliation
       emp.setAffiliation(affiliationRepository.findById(req.getAffiliationId()).get());
     }

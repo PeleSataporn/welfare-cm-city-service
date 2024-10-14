@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum OrderSortType {
-    ASC("ASC"),
+  ASC("ASC"),
 
-    DESC("DESC");
+  DESC("DESC");
 
-    private final String sort;
+  private final String sort;
 }

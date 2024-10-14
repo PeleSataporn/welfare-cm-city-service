@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/stock")
 public class StockController {
 
-  @Autowired
-  private StockService stockService;
+  @Autowired private StockService stockService;
 
   @PostMapping
   public ResponseModel<ResponseId> add(@RequestBody StockDto dto) {

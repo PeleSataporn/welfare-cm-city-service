@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/stock-detail")
 public class StockDetailController {
 
-  @Autowired
-  private StockDetailService stockDetailService;
+  @Autowired private StockDetailService stockDetailService;
 
   @PostMapping("search-by-stock/{stockId}/{value}")
-  public List<StockDetailDto> getStockDetail(@PathVariable Long stockId, @PathVariable String value) {
+  public List<StockDetailDto> getStockDetail(
+      @PathVariable Long stockId, @PathVariable String value) {
     return stockDetailService.searchStockDetail(stockId, value);
   }
 

@@ -20,30 +20,20 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 @Service
 public class LoginService {
 
-  @Autowired
-  private LoginRepository loginRepository;
+  @Autowired private LoginRepository loginRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private DocumentRepository documentRepository;
+  @Autowired private DocumentRepository documentRepository;
 
-  @Autowired
-  private MapStructMapper mapStructMapper;
+  @Autowired private MapStructMapper mapStructMapper;
 
   @Transactional
   public ResponseModel<Object> login(UserDto dto) {
@@ -96,7 +86,8 @@ public class LoginService {
     }
   }
 
-  public boolean checkstatusFlag(UserDto dto, String hashedPassword, String STORED_HASHED_PASSWORD) {
+  public boolean checkstatusFlag(
+      UserDto dto, String hashedPassword, String STORED_HASHED_PASSWORD) {
     if (dto.getPasswordFlag() == null || !dto.getPasswordFlag()) {
       return true;
     } else {
@@ -115,11 +106,11 @@ public class LoginService {
     Long idEmp = null;
 
     // check forget password
-    val changeForgetPassword = loginRepository.checkChangeForgetPassword(
-      forgetPasswordDto.getTel(),
-      forgetPasswordDto.getIdCard(),
-      forgetPasswordDto.getEmployeeCode()
-    );
+    val changeForgetPassword =
+        loginRepository.checkChangeForgetPassword(
+            forgetPasswordDto.getTel(),
+            forgetPasswordDto.getIdCard(),
+            forgetPasswordDto.getEmployeeCode());
 
     if (changeForgetPassword != null && changeForgetPassword.getUserId() != null) {
       String hashedPassword = hashMD5(forgetPasswordDto.getNewPassword());
@@ -151,16 +142,16 @@ public class LoginService {
 
     val emp = employeeRepository.findById(req.getId()).get();
     val user = emp.getUser();
-    if(emp.getPasswordFlag() != null && emp.getPasswordFlag()){
+    if (emp.getPasswordFlag() != null && emp.getPasswordFlag()) {
       passwordOldEncrypt = hashMD5(req.getOldPassword());
-    }else{
+    } else {
       passwordOldEncrypt = req.getOldPassword();
     }
 
     if (!user.getPassword().equals(passwordOldEncrypt) && user.getPassword() != null) {
       response.setStatusEmployee("password mismatch");
       return response;
-    }else{
+    } else {
       emp.setPasswordFlag(true);
       String hashedPassword = hashMD5(req.getNewPassword());
       user.setPassword(hashedPassword);
@@ -169,7 +160,5 @@ public class LoginService {
       response.setStatusEmployee("success");
       return response;
     }
-
   }
-
 }

@@ -1,8 +1,6 @@
 package com.cm.welfarecmcity.dto.base;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.Date;
 import lombok.Getter;
@@ -14,7 +12,7 @@ import org.springframework.data.annotation.AccessType;
 @Getter
 @Setter
 @MappedSuperclass
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BaseDto {
 
   @Id

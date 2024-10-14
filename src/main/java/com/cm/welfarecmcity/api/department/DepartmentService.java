@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DepartmentService {
 
-  @Autowired
-  private DepartmentRepository departmentRepository;
+  @Autowired private DepartmentRepository departmentRepository;
 
   @Transactional
   public List<DepartmentDto> searchDepartment() {

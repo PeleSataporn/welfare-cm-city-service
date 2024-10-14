@@ -14,9 +14,9 @@ import lombok.Setter;
 @Table(name = "Document")
 public class DocumentDto extends BaseDto {
 
-    private String name;
+  private String name;
 
-    @Lob
-    @Column(name = "pdf_file", columnDefinition="LONGBLOB")
-    private byte[] pdfFile;
+  @Lob
+  @Column(name = "pdf_file", columnDefinition = "LONGBLOB")
+  private byte[] pdfFile;
 }

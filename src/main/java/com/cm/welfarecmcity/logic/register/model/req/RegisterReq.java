@@ -2,7 +2,6 @@ package com.cm.welfarecmcity.logic.register.model.req;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 
 @Getter
 @Setter

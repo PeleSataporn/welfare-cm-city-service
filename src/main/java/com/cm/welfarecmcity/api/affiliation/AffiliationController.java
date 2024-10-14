@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/affiliation")
 public class AffiliationController {
 
-  @Autowired
-  private AffiliationService affiliationService;
+  @Autowired private AffiliationService affiliationService;
 
   @PostMapping("search")
   public List<AffiliationDto> searchAffiliation() {

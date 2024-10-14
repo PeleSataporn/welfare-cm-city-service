@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/contact")
 public class ContactController {
 
-    @Autowired
-    private ContactService contactService;
+  @Autowired private ContactService contactService;
 
-    @PostMapping
-    public ResponseModel<ResponseId> add(@RequestBody ContactDto dto) {
-        return contactService.add(dto);
-    }
+  @PostMapping
+  public ResponseModel<ResponseId> add(@RequestBody ContactDto dto) {
+    return contactService.add(dto);
+  }
 }

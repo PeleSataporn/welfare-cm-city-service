@@ -1,9 +1,8 @@
 package com.cm.welfarecmcity.api.beneficiary.model;
 
+import java.util.Date;
 import lombok.Data;
 import org.hibernate.annotations.Comment;
-
-import java.util.Date;
 
 @Data
 public class BeneficiaryRes {

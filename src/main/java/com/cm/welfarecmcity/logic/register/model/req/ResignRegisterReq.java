@@ -8,16 +8,16 @@ import lombok.Setter;
 public class ResignRegisterReq {
 
   private long id;
-//  private int prefix;
-//  private String firstName;
-//  private String lastName;
-//  private String idCard;
-//  private String tel;
-//  private String email;
-//  //   ตำแหน่ง
-//  private Long positionId;
-//  // สังกัด
-//  private Long affiliationId;
+  //  private int prefix;
+  //  private String firstName;
+  //  private String lastName;
+  //  private String idCard;
+  //  private String tel;
+  //  private String email;
+  //  //   ตำแหน่ง
+  //  private Long positionId;
+  //  // สังกัด
+  //  private Long affiliationId;
 
   private int prefix;
   private String firstName;

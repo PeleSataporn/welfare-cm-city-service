@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestModel<C, O> {
-    C criteria;
+  C criteria;
 
-    O order;
+  O order;
 
-    PageReq pageReq = PageReq.getDefault();
+  PageReq pageReq = PageReq.getDefault();
 }

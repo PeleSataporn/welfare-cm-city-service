@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/beneficiary")
 public class BeneficiaryController {
 
-  @Autowired
-  private BeneficiaryService beneficiaryService;
+  @Autowired private BeneficiaryService beneficiaryService;
 
   @PostMapping
   public ResponseModel<ResponseId> add(@RequestBody BeneficiaryDto dto) {

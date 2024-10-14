@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/logic/v1/employee")
 public class EmployeeLogicController {
 
-  @Autowired
-  private EmployeeLogicService employeeLogicService;
+  @Autowired private EmployeeLogicService employeeLogicService;
 
   @GetMapping("{id}")
   public ResponseEntity<EmployeeRes> getEmployee(@PathVariable Long id) {

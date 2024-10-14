@@ -5,7 +5,6 @@ import com.cm.welfarecmcity.api.notification.model.NotificationRes;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.PetitionNotificationDto;
-import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.mapper.MapStructMapper;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -17,23 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-  @Autowired
-  private NotificationRepository notificationRepository;
+  @Autowired private NotificationRepository notificationRepository;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private NotificationLogicRepository notificationLogicRepository;
+  @Autowired private NotificationLogicRepository notificationLogicRepository;
 
-  @Autowired
-  private MapStructMapper mapStructMapper;
+  @Autowired private MapStructMapper mapStructMapper;
 
-  @Autowired
-  private StockRepository stockRepository;
+  @Autowired private StockRepository stockRepository;
 
-  @Autowired
-  private StockDetailRepository stockDetailRepository;
+  @Autowired private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public List<NotificationRes> searchNotify() {
@@ -47,49 +40,66 @@ public class NotificationService {
       if (petitionNotification.getEmployee().getPosition() == null) {
         notification.getEmployee().setPositionName(null);
       } else {
-        notification.getEmployee().setPositionName(petitionNotification.getEmployee().getPosition().getName());
+        notification
+            .getEmployee()
+            .setPositionName(petitionNotification.getEmployee().getPosition().getName());
       }
 
       if (petitionNotification.getEmployee().getAffiliation() == null) {
         notification.getEmployee().setAffiliationName(null);
       } else {
-        notification.getEmployee().setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
+        notification
+            .getEmployee()
+            .setAffiliationName(petitionNotification.getEmployee().getAffiliation().getName());
       }
 
       if (petitionNotification.getEmployee().getEmployeeType() == null) {
         notification.getEmployee().setEmployeeTypeName(null);
       } else {
-        notification.getEmployee().setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
+        notification
+            .getEmployee()
+            .setEmployeeTypeName(petitionNotification.getEmployee().getEmployeeType().getName());
       }
 
       if (petitionNotification.getEmployee().getDepartment() == null) {
         notification.getEmployee().setDepartmentName(null);
       } else {
-        notification.getEmployee().setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
+        notification
+            .getEmployee()
+            .setDepartmentName(petitionNotification.getEmployee().getDepartment().getName());
       }
 
       if (petitionNotification.getEmployee().getLevel() == null) {
         notification.getEmployee().setLevelName(null);
       } else {
-        notification.getEmployee().setLevelName(petitionNotification.getEmployee().getLevel().getName());
+        notification
+            .getEmployee()
+            .setLevelName(petitionNotification.getEmployee().getLevel().getName());
       }
 
       if (petitionNotification.getEmployee().getStock() == null) {
         notification.getEmployee().setStockAccumulate(0);
       } else {
-        notification.getEmployee().setStockAccumulate(petitionNotification.getEmployee().getStock().getStockAccumulate());
+        notification
+            .getEmployee()
+            .setStockAccumulate(petitionNotification.getEmployee().getStock().getStockAccumulate());
       }
 
       if (petitionNotification.getEmployee().getLoan() == null) {
         notification.getEmployee().setLoanBalance(0);
       } else {
-        notification.getEmployee().setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
+        notification
+            .getEmployee()
+            .setLoanBalance(petitionNotification.getEmployee().getLoan().getLoanBalance());
       }
 
       if (petitionNotification.getEmployee().getAffiliation() == null) {
         notification.getEmployee().setBureauName(null);
       } else {
-        notification.getEmployee().setBureauName(petitionNotification.getEmployee().getAffiliation().getBureau().getName());
+        notification
+            .getEmployee()
+            .setBureauName(
+                petitionNotification.getEmployee().getAffiliation().getBureau().getName());
       }
 
       if (petitionNotification.getEmployee().getMarital() == null) {
@@ -101,7 +111,9 @@ public class NotificationService {
       if (petitionNotification.getEmployee().getProfileImg() == null) {
         notification.getEmployee().setProfileImgId(null);
       } else {
-        notification.getEmployee().setProfileImgId(petitionNotification.getEmployee().getProfileImg().getId());
+        notification
+            .getEmployee()
+            .setProfileImgId(petitionNotification.getEmployee().getProfileImg().getId());
       }
 
       notifications.add(notification);
@@ -138,7 +150,8 @@ public class NotificationService {
 
   @Transactional
   public void rejectRegister(Long id, Long empId) {
-    val notification = notificationRepository.findById(id).get(); //    employeeRepository.save(emp);
+    val notification =
+        notificationRepository.findById(id).get(); //    employeeRepository.save(emp);
     notificationRepository.delete(notification);
     //    val emp = employeeRepository.findById(empId).get();
     //

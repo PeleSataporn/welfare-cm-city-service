@@ -1,14 +1,7 @@
 package com.cm.welfarecmcity.api.document.model;
 
+import java.util.Date;
 import lombok.Builder;
 
-import java.util.Date;
-
 @Builder
-public record DocumentRes (
-        Long id,
-        String name,
-        Date createDate,
-        Long size
-) {
-}
+public record DocumentRes(Long id, String name, Date createDate, Long size) {}

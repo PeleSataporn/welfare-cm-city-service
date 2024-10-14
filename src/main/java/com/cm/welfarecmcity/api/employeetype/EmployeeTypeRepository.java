@@ -4,5 +4,5 @@ import com.cm.welfarecmcity.dto.EmployeeTypeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface EmployeeTypeRepository extends JpaRepository<EmployeeTypeDto, Long>, JpaSpecificationExecutor<EmployeeTypeDto> {}
-
+public interface EmployeeTypeRepository
+    extends JpaRepository<EmployeeTypeDto, Long>, JpaSpecificationExecutor<EmployeeTypeDto> {}

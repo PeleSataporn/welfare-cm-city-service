@@ -3,8 +3,6 @@ package com.cm.welfarecmcity.api.stock;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.stock.model.UpdateStockReq;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
-import com.cm.welfarecmcity.dto.EmployeeDto;
-import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.StockDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -17,17 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockService {
 
-  @Autowired
-  private StockRepository stockRepository;
+  @Autowired private StockRepository stockRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private StockDetailRepository stockDetailRepository;
+  @Autowired private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public ResponseModel<ResponseId> add(StockDto dto) {
@@ -44,7 +38,8 @@ public class StockService {
       employee.setMonthlyStockMoney(req.getStockValue());
       employeeRepository.save(employee);
 
-      val stockDetailLast = stock.getStockDetails().stream().reduce((first, second) -> second).get();
+      val stockDetailLast =
+          stock.getStockDetails().stream().reduce((first, second) -> second).get();
       val sumValue = stockDetailLast.getStockAccumulate() - stockDetailLast.getStockValue();
       val totalValue = sumValue + req.getStockValue();
 

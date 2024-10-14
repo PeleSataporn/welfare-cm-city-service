@@ -9,6 +9,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "server")
 public class AppPropertiesConfigBean {
 
-    private String pathFile;
-
+  private String pathFile;
 }

@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AffiliationService {
 
-  @Autowired
-  private AffiliationRepository affiliationRepository;
+  @Autowired private AffiliationRepository affiliationRepository;
 
   @Transactional
   public List<AffiliationDto> searchAffiliation() {

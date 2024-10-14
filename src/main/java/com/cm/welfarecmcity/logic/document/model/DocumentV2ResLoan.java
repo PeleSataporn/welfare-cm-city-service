@@ -6,22 +6,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DocumentV2ResLoan {
-    private String departmentName;
-    private String loanValueTotal;
-    // เดือนนี้(ดอก)
-    private String monthInterestTotal;
-    // เดือนนี้(ต้น)
-    private String monthPrincipleTotal;
-    // สุดทาย(ดอก)
-    private String lastMonthInterestTotal;
-    // สุดทาย(ต้น)
-    private String lastMonthPrincipleTotal;
-    // รวมสง(ดอก)
-    private String totalValueInterestTotal;
-    // คงคาง(ดอก)
-    private String outStandInterestTotal;
-    // รวมสง(ตน)
-    private String totalValuePrincipleTotal;
-    // คงคาง(ต้น)
-    private String outStandPrincipleTotal;
+  private String departmentName;
+  private String loanValueTotal;
+  // เดือนนี้(ดอก)
+  private String monthInterestTotal;
+  // เดือนนี้(ต้น)
+  private String monthPrincipleTotal;
+  // สุดทาย(ดอก)
+  private String lastMonthInterestTotal;
+  // สุดทาย(ต้น)
+  private String lastMonthPrincipleTotal;
+  // รวมสง(ดอก)
+  private String totalValueInterestTotal;
+  // คงคาง(ดอก)
+  private String outStandInterestTotal;
+  // รวมสง(ตน)
+  private String totalValuePrincipleTotal;
+  // คงคาง(ต้น)
+  private String outStandPrincipleTotal;
 }

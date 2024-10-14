@@ -12,8 +12,7 @@ import lombok.Setter;
 @Table(name = "Loan_history")
 public class LoanHistoryDto extends BaseDto {
 
-    private Long employeeId;
-    private Long loanId;
-    private String status;
-
+  private Long employeeId;
+  private Long loanId;
+  private String status;
 }

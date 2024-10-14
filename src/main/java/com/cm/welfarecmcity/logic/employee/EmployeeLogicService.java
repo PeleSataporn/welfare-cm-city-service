@@ -1,7 +1,6 @@
 package com.cm.welfarecmcity.logic.employee;
 
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
-import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.logic.document.DocumentRepository;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeOfMainRes;
 import com.cm.welfarecmcity.logic.employee.model.EmployeeRes;
@@ -14,17 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeLogicService {
 
-  @Autowired
-  private EmployeeLogicRepository employeeLogicRepository;
+  @Autowired private EmployeeLogicRepository employeeLogicRepository;
 
-  @Autowired
-  private DocumentRepository documentRepository;
+  @Autowired private DocumentRepository documentRepository;
 
-  @Autowired
-  private MapStructMapper mapStructMapper;
+  @Autowired private MapStructMapper mapStructMapper;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
   @Transactional
   public EmployeeRes getEmployee(Long id) {
@@ -36,7 +31,8 @@ public class EmployeeLogicService {
     res.setEmployeeTypeName(emp.getEmployeeType() != null ? emp.getEmployeeType().getName() : null);
     res.setLevelName(emp.getLevel() != null ? emp.getLevel().getName() : null);
     res.setDepartmentName(emp.getDepartment() != null ? emp.getDepartment().getName() : null);
-    res.setBureauName(emp.getAffiliation() != null ? emp.getAffiliation().getBureau().getName() : null);
+    res.setBureauName(
+        emp.getAffiliation() != null ? emp.getAffiliation().getBureau().getName() : null);
 
     res.setStockAccumulate(emp.getStock() != null ? emp.getStock().getStockAccumulate() : 0);
     res.setLoanBalance(emp.getLoan() != null ? emp.getLoan().getLoanBalance() : 0);

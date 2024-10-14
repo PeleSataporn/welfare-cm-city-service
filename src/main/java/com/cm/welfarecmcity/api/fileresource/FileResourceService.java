@@ -20,20 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FileResourceService {
 
-  @Autowired
-  private FileResourceRepository repository;
+  @Autowired private FileResourceRepository repository;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private NewsRepository newRepository;
+  @Autowired private NewsRepository newRepository;
 
-  @Autowired
-  private NewsFileDetailRepository newsFileDetailRepository;
+  @Autowired private NewsFileDetailRepository newsFileDetailRepository;
 
   @Transactional
   public void create(Blob blob, Long empId) {
@@ -68,17 +63,17 @@ public class FileResourceService {
 
     repository.save(img);
 
-//    if (img.getImageAddress() != null) {
-//      img.setImageAddress(blob);
-//    } else {
-////      val resource = new FileResourceDto();
-////      resource.setImage(blob);
-//
-////      val fileResource = repository.save(resource);
-//      emp.setProfileImg(fileResource);
-//    }
-//    emp.getProfileImg().setImageAddress(blob);
-//    employeeRepository.save(emp);
+    //    if (img.getImageAddress() != null) {
+    //      img.setImageAddress(blob);
+    //    } else {
+    ////      val resource = new FileResourceDto();
+    ////      resource.setImage(blob);
+    //
+    ////      val fileResource = repository.save(resource);
+    //      emp.setProfileImg(fileResource);
+    //    }
+    //    emp.getProfileImg().setImageAddress(blob);
+    //    employeeRepository.save(emp);
 
     return null;
   }
@@ -113,20 +108,20 @@ public class FileResourceService {
     return responseDataUtils.updateDataSuccess(file.getId());
   }
 
-//  @Transactional
-//  public void addImageNewsDetail(Blob blob, Long newsId) {
-//    val resource = new FileResourceDto();
-//    resource.setImage(blob);
-//    val file = repository.save(resource);
-//
-//    val news = newRepository.findById(newsId).get();
-//
-//    val fileDetail = new NewsFileDetailDto();
-//    fileDetail.setFileResource(file);
-//    fileDetail.setNews(news);
-//
-//    newsFileDetailRepository.save(fileDetail);
-//  }
+  //  @Transactional
+  //  public void addImageNewsDetail(Blob blob, Long newsId) {
+  //    val resource = new FileResourceDto();
+  //    resource.setImage(blob);
+  //    val file = repository.save(resource);
+  //
+  //    val news = newRepository.findById(newsId).get();
+  //
+  //    val fileDetail = new NewsFileDetailDto();
+  //    fileDetail.setFileResource(file);
+  //    fileDetail.setNews(news);
+  //
+  //    newsFileDetailRepository.save(fileDetail);
+  //  }
 
   @Transactional
   public void addImageNewsDetail(Blob blob, Long newsId) {

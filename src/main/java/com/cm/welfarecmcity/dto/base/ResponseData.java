@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ResponseData {
-    private Long id;
-    private String statusEmployee;
+  private Long id;
+  private String statusEmployee;
 }

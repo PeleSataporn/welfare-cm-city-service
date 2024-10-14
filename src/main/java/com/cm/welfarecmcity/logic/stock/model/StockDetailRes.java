@@ -1,6 +1,5 @@
 package com.cm.welfarecmcity.logic.stock.model;
 
-import com.cm.welfarecmcity.dto.StockDto;
 import lombok.Data;
 import org.hibernate.annotations.Comment;
 
@@ -12,6 +11,7 @@ public class StockDetailRes {
 
   @Comment("เงินหุ้นส่งรายเดือน")
   private int stockValue;
+
   private int stockValueDetail;
 
   @Comment("เดือนที่ส่ง")

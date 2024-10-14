@@ -8,7 +8,6 @@ import com.cm.welfarecmcity.api.fileresource.model.AddImageReq;
 import com.cm.welfarecmcity.dto.AdminConfigDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
-
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -22,8 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin")
 public class AdminConfigController {
 
-  @Autowired
-  private AdminConfigService service;
+  @Autowired private AdminConfigService service;
 
   @PostMapping("logic/document/getConfigByList")
   public List<AdminConfigRes> getConfigByList() {
@@ -46,7 +44,8 @@ public class AdminConfigController {
   }
 
   @GetMapping("logic/document/getImageConfig/{id}")
-  public ResponseEntity<byte[]> displayImage(@PathVariable Long id) throws IOException, SQLException {
+  public ResponseEntity<byte[]> displayImage(@PathVariable Long id)
+      throws IOException, SQLException {
     AdminConfigDto image = service.configById(id);
     byte[] imageBytes = null;
     imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());

@@ -23,5 +23,4 @@ public class DocumentReq {
 
   private Boolean admin;
   private Boolean passwordFlag;
-
 }

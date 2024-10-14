@@ -6,11 +6,10 @@ import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.dto.base.SearchDataResponse;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
-import java.util.List;
-
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
 import com.cm.welfarecmcity.utils.response.ResponseDataUtils;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/logic/v1/stock")
 public class StockLogicController {
 
-  @Autowired
-  private StockLogicService stockService;
+  @Autowired private StockLogicService stockService;
 
   @PostMapping("search")
   public List<StockRes> searchStock() {
@@ -31,7 +29,8 @@ public class StockLogicController {
   }
 
   @PostMapping("v2/search")
-  public ResponseModel<SearchDataResponse<StockRes>> searchStockByAdmin(@RequestBody RequestModel<StockByAdminReqDto, StockByAdminOrderReqDto> req) {
+  public ResponseModel<SearchDataResponse<StockRes>> searchStockByAdmin(
+      @RequestBody RequestModel<StockByAdminReqDto, StockByAdminOrderReqDto> req) {
     val res = stockService.searchStockByAdmin(req);
     return ResponseDataUtils.fetchDataSuccess(res);
   }
@@ -45,5 +44,4 @@ public class StockLogicController {
   public String settingStockDetailAll(@RequestBody AddStockDetailAllReq req) {
     return stockService.settingStockDetailAll(req);
   }
-
 }

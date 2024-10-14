@@ -24,29 +24,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoanService {
 
-  @Autowired
-  private LoanRepository loanRepository;
+  @Autowired private LoanRepository loanRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private DocumentRepository documentRepository;
+  @Autowired private DocumentRepository documentRepository;
 
-  @Autowired
-  private LoanDetailRepository loanDetailRepository;
+  @Autowired private LoanDetailRepository loanDetailRepository;
 
-  @Autowired
-  private LoanHistoryRepository loanHistoryRepository;
+  @Autowired private LoanHistoryRepository loanHistoryRepository;
 
-  @Autowired
-  private LoanLogic01Repository loanLogicRepository;
+  @Autowired private LoanLogic01Repository loanLogicRepository;
 
-  @Autowired
-  private DocumentService documentService;
+  @Autowired private DocumentService documentService;
 
   @Transactional
   public ResponseModel<ResponseId> add(LoanDto dto) {
@@ -58,7 +50,7 @@ public class LoanService {
   public ResponseModel<ResponseId> addLoanNew(EmployeeLoanNew req) {
     // inset loan
     LoanDto loanDto = new LoanDto();
-    //loanDto.setLoanNo("2566-0624001");
+    // loanDto.setLoanNo("2566-0624001");
     loanDto.setLoanValue(Double.parseDouble(req.getLoanValue()));
     loanDto.setLoanBalance(Double.parseDouble(req.getLoanValue()));
     loanDto.setLoanTime(Long.valueOf(req.getLoanTime()).intValue());
@@ -71,11 +63,11 @@ public class LoanService {
       var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
       val emp1 = employeeRepository.findById(result1.getEmpId()).get();
       loanDto.setGuarantorOne(emp1);
-      //loanDto.getGuarantorOne().setId(result1.getEmpId());
+      // loanDto.getGuarantorOne().setId(result1.getEmpId());
       var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
       val emp2 = employeeRepository.findById(result2.getEmpId()).get();
       loanDto.setGuarantorTwo(emp2);
-      //loanDto.getGuarantorTwo().setId(result2.getEmpId());
+      // loanDto.getGuarantorTwo().setId(result2.getEmpId());
     }
     val loan = loanRepository.save(loanDto);
 
@@ -84,12 +76,13 @@ public class LoanService {
     loanDetailDto.setInstallment(Math.toIntExact(req.getInstallment()));
     loanDetailDto.setInterest(Integer.parseInt(req.getInterestLoan()));
     loanDetailDto.setLoanMonth(req.getLoanMonth());
-    loanDetailDto.setLoanOrdinary(Integer.parseInt(req.getLoanOrdinary())); //Integer.parseInt(req.getLoanOrdinary())
+    loanDetailDto.setLoanOrdinary(
+        Integer.parseInt(req.getLoanOrdinary())); // Integer.parseInt(req.getLoanOrdinary())
     val lone = loanRepository.findById(loan.getId()).get();
     loanDetailDto.setLoan(lone);
     loanDetailDto.setInterestPercent(Integer.parseInt(req.getInterestPercent()));
     loanDetailDto.setLoanYear(req.getLoanYear());
-    loanDetailDto.setInterestLastMonth(0); //Integer.parseInt(req.getInterestLoanLastMonth()
+    loanDetailDto.setInterestLastMonth(0); // Integer.parseInt(req.getInterestLoanLastMonth()
     loanDetailDto.setLoanBalance(Double.parseDouble(req.getLoanBalance()));
     val loanDetail = loanDetailRepository.save(loanDetailDto);
 
@@ -127,10 +120,13 @@ public class LoanService {
     int currentMonth = currentDate.getMonthValue();
     int currentDay = currentDate.getDayOfMonth();
 
-    //int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
+    // int runningNumber = (int) Long.parseLong(String.valueOf(numberRun)); // Start with 1
     String formattedRunningNumber = String.format("%04d", numberMax);
-    return (currentYear + 543) + "-" + String.format("%02d%02d", currentMonth, currentDay) + formattedRunningNumber;
-    //System.out.println(runningNumberString);
+    return (currentYear + 543)
+        + "-"
+        + String.format("%02d%02d", currentMonth, currentDay)
+        + formattedRunningNumber;
+    // System.out.println(runningNumberString);
   }
 
   @Transactional

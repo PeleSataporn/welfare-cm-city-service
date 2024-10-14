@@ -15,14 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BeneficiaryService {
 
-  @Autowired
-  private BeneficiaryRepository beneficiaryRepository;
+  @Autowired private BeneficiaryRepository beneficiaryRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private MapStructMapper mapStructMapper;
+  @Autowired private MapStructMapper mapStructMapper;
 
   @Transactional
   public ResponseModel<ResponseId> add(BeneficiaryDto dto) {
@@ -48,7 +45,8 @@ public class BeneficiaryService {
       beneficiaryDto.setLifeStatus(req.getLifeStatus());
       beneficiaryDto.setEmployee(req.getEmployee());
 
-      return responseDataUtils.updateDataSuccess(beneficiaryRepository.save(beneficiaryDto).getId());
+      return responseDataUtils.updateDataSuccess(
+          beneficiaryRepository.save(beneficiaryDto).getId());
     } else {
       val findBeneficiary = beneficiaryRepository.findById(req.getId());
       if (findBeneficiary.isEmpty()) {

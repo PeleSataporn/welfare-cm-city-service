@@ -5,11 +5,9 @@ import com.cm.welfarecmcity.constant.SizeImageEnum;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.image.ImageUtils;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.sql.rowset.serial.SerialBlob;
-
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/file-resource")
 public class FileResourceController {
 
-  @Autowired
-  private FileResourceService service;
+  @Autowired private FileResourceService service;
 
   // display image
   @GetMapping("/display/{id}")
@@ -71,7 +68,8 @@ public class FileResourceController {
   }
 
   @PostMapping("/add-news")
-  public ResponseModel<ResponseId> addImageNews(@ModelAttribute AddImageReq req) throws IOException, SQLException {
+  public ResponseModel<ResponseId> addImageNews(@ModelAttribute AddImageReq req)
+      throws IOException, SQLException {
     val resizedImage = ImageUtils.resizeImage(req.getImage(), SizeImageEnum.XL.getWidth());
     val blob = new SerialBlob(resizedImage);
     return service.addImageNews(blob, req.getEmpId());

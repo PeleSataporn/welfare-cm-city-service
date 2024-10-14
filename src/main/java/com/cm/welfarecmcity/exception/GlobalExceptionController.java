@@ -26,7 +26,8 @@ public class GlobalExceptionController {
   }
 
   @ExceptionHandler
-  public ResponseEntity<ErrorRes<Void>> handleUserPasswordMismatchException(UserPasswordMismatchException ex) {
+  public ResponseEntity<ErrorRes<Void>> handleUserPasswordMismatchException(
+      UserPasswordMismatchException ex) {
     val res = new ErrorRes<Void>(ex.getNotFound(), ex.getMessage(), null);
     return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
   }

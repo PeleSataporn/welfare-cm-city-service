@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class LevelRes {
-    private Long id;
-    private String name;
+  private Long id;
+  private String name;
 }

@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GenerateRes {
-    private Long id;
-    private String employeeCode;
+  private Long id;
+  private String employeeCode;
 }

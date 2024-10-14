@@ -8,7 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/loan-history")
 public class LoanHistoryController {
 
-    @Autowired
-    private LoanHistoryService loanHistoryService;
-
+  @Autowired private LoanHistoryService loanHistoryService;
 }

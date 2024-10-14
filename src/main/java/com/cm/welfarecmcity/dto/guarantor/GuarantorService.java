@@ -11,14 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuarantorService {
 
-    @Autowired
-    private GuarantorRepository guarantorRepository;
+  @Autowired private GuarantorRepository guarantorRepository;
 
-    @Autowired
-    private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-    public ResponseModel<ResponseId> add(GuarantorDto dto) {
-        val guarantor = guarantorRepository.save(dto);
-        return responseDataUtils.insertDataSuccess(guarantor.getId());
-    }
+  public ResponseModel<ResponseId> add(GuarantorDto dto) {
+    val guarantor = guarantorRepository.save(dto);
+    return responseDataUtils.insertDataSuccess(guarantor.getId());
+  }
 }

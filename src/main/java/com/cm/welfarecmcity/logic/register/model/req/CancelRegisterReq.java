@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CancelRegisterReq {
-    private long id;
-    private String remark;
+  private long id;
+  private String remark;
 }

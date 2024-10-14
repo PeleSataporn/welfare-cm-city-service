@@ -1,20 +1,16 @@
 package com.cm.welfarecmcity.logic.stock;
 
-import com.cm.welfarecmcity.api.employee.model.EmpByAdminRes;
-import com.cm.welfarecmcity.api.employee.model.search.EmployeeByAdminOrderReqDto;
-import com.cm.welfarecmcity.api.employee.model.search.EmployeeByAdminReqDto;
 import com.cm.welfarecmcity.dto.StockDetailDto;
 import com.cm.welfarecmcity.dto.base.PageReq;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
 import com.cm.welfarecmcity.logic.stock.model.StockDetailRes;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
 import com.cm.welfarecmcity.utils.PaginationUtils;
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -24,14 +20,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class StockLogicRepository {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
   public StringBuilder buildQuerySql() {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT stock.id, stock_value, stock_accumulate, employee_code, first_name, last_name, employee_status, prefix, id_card, employee.id as employeeId FROM stock JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE) WHERE stock.deleted = FALSE "
-    );
+        " SELECT stock.id, stock_value, stock_accumulate, employee_code, first_name, last_name, employee_status, prefix, id_card, employee.id as employeeId FROM stock JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE) WHERE stock.deleted = FALSE ");
     return sql;
   }
 
@@ -41,20 +35,16 @@ public class StockLogicRepository {
   }
 
   private StringBuilder searchStockByAdminQuerySql(
-          boolean isCount,
-          StockByAdminReqDto criteria,
-          StockByAdminOrderReqDto order,
-          PageReq page) {
+      boolean isCount, StockByAdminReqDto criteria, StockByAdminOrderReqDto order, PageReq page) {
     val sql = new StringBuilder();
 
     // select cause
     if (isCount) {
       sql.append(" SELECT COUNT(*) ");
     } else {
+      sql.append(" SELECT s.id, s.stock_value, s.stock_accumulate, ");
       sql.append(
-              " SELECT s.id, s.stock_value, s.stock_accumulate, ");
-      sql.append(
-              " e.employee_code, e.first_name, e.last_name, e.employee_status, e.prefix, e.id_card, e.id as employeeId ");
+          " e.employee_code, e.first_name, e.last_name, e.employee_status, e.prefix, e.id_card, e.id as employeeId ");
     }
 
     // from cause
@@ -117,12 +107,9 @@ public class StockLogicRepository {
   }
 
   public List<StockRes> searchStockByAdmin(
-          StockByAdminReqDto criteria,
-          StockByAdminOrderReqDto order,
-          PageReq page) {
+      StockByAdminReqDto criteria, StockByAdminOrderReqDto order, PageReq page) {
     val sql = searchStockByAdminQuerySql(false, criteria, order, page);
-    return jdbcTemplate.query(
-            sql.toString(), new BeanPropertyRowMapper<>(StockRes.class));
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockRes.class));
   }
 
   public Long count(StockByAdminReqDto criteria) {
@@ -130,32 +117,37 @@ public class StockLogicRepository {
     return jdbcTemplate.queryForObject(sql.toString(), Long.class);
   }
 
-  public void addStockDetailAll(String month, String year, int installment, int stockValue, Long stockId, int stockAccumulate) {
+  public void addStockDetailAll(
+      String month,
+      String year,
+      int installment,
+      int stockValue,
+      Long stockId,
+      int stockAccumulate) {
     jdbcTemplate.update(
-      "INSERT INTO `stock_detail`(`last_update`, `installment`,`stock_month`,`stock_value`,`stock_id`,`stock_year`, `stock_accumulate`) VALUES (?,?,?,?,?,?,?)",
-      new Date(),
-      installment,
-      month,
-      stockValue,
-      stockId,
-      year,
-      stockAccumulate
-    );
+        "INSERT INTO `stock_detail`(`last_update`, `installment`,`stock_month`,`stock_value`,`stock_id`,`stock_year`, `stock_accumulate`) VALUES (?,?,?,?,?,?,?)",
+        new Date(),
+        installment,
+        month,
+        stockValue,
+        stockId,
+        year,
+        stockAccumulate);
   }
 
   public StringBuilder getStockDetailByMonthSql(String oldMonth, String oldYear) {
     val sql = new StringBuilder();
-    sql
-      .append(" SELECT stock.id , stock_detail.stock_id, stock.stock_value, stock_detail.id as stockDetailId, stock_detail.installment, stock_detail.stock_month, " +
-              " stock_detail.stock_year, stock_detail.stock_value as stockValueDetail, stock_detail.stock_accumulate " +
-              " FROM stock JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ) " +
-              " JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE AND employee.active = TRUE) " +
-              " WHERE stock.deleted = FALSE AND stock.active = TRUE AND stock_detail.stock_month = '")
-      .append(oldMonth)
-      .append("' AND stock_detail.stock_year = '")
-      .append(oldYear)
-      .append("' AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ")
-      .append(" AND employee.employee_status IN (2,5) AND employee.id != 0 ");
+    sql.append(
+            " SELECT stock.id , stock_detail.stock_id, stock.stock_value, stock_detail.id as stockDetailId, stock_detail.installment, stock_detail.stock_month, "
+                + " stock_detail.stock_year, stock_detail.stock_value as stockValueDetail, stock_detail.stock_accumulate "
+                + " FROM stock JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ) "
+                + " JOIN employee ON (employee.stock_id = stock.id AND employee.deleted = FALSE AND employee.active = TRUE) "
+                + " WHERE stock.deleted = FALSE AND stock.active = TRUE AND stock_detail.stock_month = '")
+        .append(oldMonth)
+        .append("' AND stock_detail.stock_year = '")
+        .append(oldYear)
+        .append("' AND stock_detail.deleted = FALSE AND stock_detail.active = TRUE ")
+        .append(" AND employee.employee_status IN (2,5) AND employee.id != 0 ");
     return sql;
   }
 
@@ -166,14 +158,11 @@ public class StockLogicRepository {
 
   public StringBuilder buildQueryDetailSql(AddStockDetailAllReq req) {
     val sql = new StringBuilder();
-    sql.append(
-            " SELECT * " +
-            "FROM stock_detail " +
-            "WHERE stock_detail.stock_month = '")
-            .append(req.getNewMonth())
-            .append("' AND stock_detail.stock_year = '")
-            .append(req.getNewYear())
-            .append("'");
+    sql.append(" SELECT * " + "FROM stock_detail " + "WHERE stock_detail.stock_month = '")
+        .append(req.getNewMonth())
+        .append("' AND stock_detail.stock_year = '")
+        .append(req.getNewYear())
+        .append("'");
     return sql;
   }
 
@@ -181,5 +170,4 @@ public class StockLogicRepository {
     val sql = buildQueryDetailSql(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
   }
-
 }

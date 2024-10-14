@@ -11,5 +11,4 @@ public class WelfareCmCityApplication {
   public static void main(String[] args) {
     SpringApplication.run(WelfareCmCityApplication.class, args);
   }
-
 }

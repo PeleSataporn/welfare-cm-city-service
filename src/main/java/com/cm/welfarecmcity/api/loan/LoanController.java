@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/loan")
 public class LoanController {
 
-  @Autowired
-  private LoanService loanService;
+  @Autowired private LoanService loanService;
 
   @PostMapping
   public ResponseModel<ResponseId> add(@RequestBody LoanDto dto) {

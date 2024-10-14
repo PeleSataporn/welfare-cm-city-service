@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BureauService {
 
-  @Autowired
-  private BureauRepository bureauRepository;
+  @Autowired private BureauRepository bureauRepository;
 
   @Transactional
   public List<BureauDto> searchBureau() {

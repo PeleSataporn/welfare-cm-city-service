@@ -2,8 +2,6 @@ package com.cm.welfarecmcity.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 public enum EmployeeStatusEnum {
   // สมาชิกแรกเข้า (สมัครเข้าใช้งานใหม่)

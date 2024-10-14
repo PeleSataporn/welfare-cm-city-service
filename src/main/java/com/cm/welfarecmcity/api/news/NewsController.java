@@ -1,11 +1,9 @@
 package com.cm.welfarecmcity.api.news;
 
-import com.cm.welfarecmcity.api.fileresource.model.AddImageReq;
-import com.cm.welfarecmcity.api.news.model.SearchImagesRes;
 import com.cm.welfarecmcity.api.news.model.*;
+import com.cm.welfarecmcity.api.news.model.SearchImagesRes;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/news")
 public class NewsController {
 
-  @Autowired
-  private NewsService service;
+  @Autowired private NewsService service;
 
   @PostMapping
   public ResponseModel<ResponseId> createNews() {

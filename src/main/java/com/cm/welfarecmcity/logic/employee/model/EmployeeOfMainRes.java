@@ -1,8 +1,7 @@
 package com.cm.welfarecmcity.logic.employee.model;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 @Data
 public class EmployeeOfMainRes {
@@ -25,5 +24,4 @@ public class EmployeeOfMainRes {
   private Boolean passwordFlag;
   private Date billingStartDate;
   private String loanNo;
-
 }

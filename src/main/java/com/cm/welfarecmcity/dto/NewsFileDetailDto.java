@@ -16,15 +16,15 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Table(name = "NewsFileDetail")
 public class NewsFileDetailDto {
-    @EmbeddedId private NewsFileDetailKey id;
+  @EmbeddedId private NewsFileDetailKey id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("news_id")
-    @JoinColumn(name = "news_id")
-    private NewsDto news;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @MapsId("news_id")
+  @JoinColumn(name = "news_id")
+  private NewsDto news;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("file_resource_id")
-    @JoinColumn(name = "file_resource_id")
-    private FileResourceDto fileResource;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @MapsId("file_resource_id")
+  @JoinColumn(name = "file_resource_id")
+  private FileResourceDto fileResource;
 }

@@ -1,22 +1,15 @@
 package com.cm.welfarecmcity.logic.loan;
 
-import com.cm.welfarecmcity.dto.BeneficiaryDto;
 import com.cm.welfarecmcity.dto.base.RequestModel;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.dto.base.SearchDataResponse;
-import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import com.cm.welfarecmcity.logic.document.model.EmployeeLoanNew;
 import com.cm.welfarecmcity.logic.loan.model.*;
 import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminOrderReqDto;
 import com.cm.welfarecmcity.logic.loan.model.search.LoanByAdminReqDto;
-import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
-import java.util.List;
-
-import com.cm.welfarecmcity.logic.stock.model.StockRes;
-import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
-import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
 import com.cm.welfarecmcity.utils.response.ResponseDataUtils;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/logic/v1/loan")
 public class LoanLogicController {
 
-  @Autowired
-  private LoanLogicService service;
+  @Autowired private LoanLogicService service;
 
   @PostMapping("search")
   public List<LoanRes> searchLoan(@RequestBody AddLoanDetailAllReq req) {
@@ -34,7 +26,8 @@ public class LoanLogicController {
   }
 
   @PostMapping("v2/search")
-  public ResponseModel<SearchDataResponse<LoanRes>> searchLoanByAdmin(@RequestBody RequestModel<LoanByAdminReqDto, LoanByAdminOrderReqDto> req) {
+  public ResponseModel<SearchDataResponse<LoanRes>> searchLoanByAdmin(
+      @RequestBody RequestModel<LoanByAdminReqDto, LoanByAdminOrderReqDto> req) {
     val res = service.searchLoanByAdmin(req);
     return ResponseDataUtils.fetchDataSuccess(res);
   }
@@ -43,6 +36,7 @@ public class LoanLogicController {
   public GuarantorRes guarantor(@PathVariable Long id) {
     return service.guarantor(id);
   }
+
   @GetMapping("guarantee/{id}")
   public GuaranteeRes guarantee(@PathVariable Long id) {
     return service.guarantee(id);

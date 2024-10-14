@@ -20,14 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockLogicService {
 
-  @Autowired
-  private StockLogicRepository stockLogicRepository;
+  @Autowired private StockLogicRepository stockLogicRepository;
 
-  @Autowired
-  private StockRepository stockRepository;
+  @Autowired private StockRepository stockRepository;
 
-  @Autowired
-  private StockDetailRepository stockDetailRepository;
+  @Autowired private StockDetailRepository stockDetailRepository;
 
   @Transactional
   public List<StockRes> searchStock() {
@@ -51,7 +48,8 @@ public class StockLogicService {
   }
 
   @Transactional
-  public SearchDataResponse<StockRes> searchStockByAdmin(RequestModel<StockByAdminReqDto, StockByAdminOrderReqDto> req) {
+  public SearchDataResponse<StockRes> searchStockByAdmin(
+      RequestModel<StockByAdminReqDto, StockByAdminOrderReqDto> req) {
     val criteria = req.getCriteria();
     val order = req.getOrder();
     val pageReq = req.getPageReq();
@@ -80,23 +78,24 @@ public class StockLogicService {
 
   @Transactional
   public ResponseModel<ResponseId> add(AddStockDetailAllReq req) {
-    val listStockDetail = stockLogicRepository.getStockDetailByMonth(req.getOldMonth(), req.getOldYear());
-    listStockDetail.forEach(detail -> {
-      val stockAccumulate = detail.getStockAccumulate() + detail.getStockValue();
+    val listStockDetail =
+        stockLogicRepository.getStockDetailByMonth(req.getOldMonth(), req.getOldYear());
+    listStockDetail.forEach(
+        detail -> {
+          val stockAccumulate = detail.getStockAccumulate() + detail.getStockValue();
 
-      stockLogicRepository.addStockDetailAll(
-        req.getNewMonth(),
-        req.getNewYear(),
-        detail.getInstallment() + 1,
-        detail.getStockValue(),
-        detail.getStockId(),
-        stockAccumulate
-      );
+          stockLogicRepository.addStockDetailAll(
+              req.getNewMonth(),
+              req.getNewYear(),
+              detail.getInstallment() + 1,
+              detail.getStockValue(),
+              detail.getStockId(),
+              stockAccumulate);
 
-      val stock = stockRepository.findById(detail.getStockId()).get();
-      stock.setStockAccumulate(stockAccumulate);
-      stockRepository.save(stock);
-    });
+          val stock = stockRepository.findById(detail.getStockId()).get();
+          stock.setStockAccumulate(stockAccumulate);
+          stockRepository.save(stock);
+        });
 
     return null;
   }
@@ -113,5 +112,4 @@ public class StockLogicService {
 
     return "success";
   }
-
 }

@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PositionService {
 
-  @Autowired
-  private PositionRepository positionRepository;
+  @Autowired private PositionRepository positionRepository;
 
   @Transactional
   public List<PositionsDto> searchPosition() {

@@ -2,7 +2,6 @@ package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
 import jakarta.persistence.*;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +19,6 @@ public class NewsDto extends BaseDto {
   @OneToOne(fetch = FetchType.LAZY)
   private FileResourceDto coverImg;
 
-//  @OneToMany(fetch = FetchType.LAZY)
-//  private List<FileResourceDto> listImg;
+  //  @OneToMany(fetch = FetchType.LAZY)
+  //  private List<FileResourceDto> listImg;
 }

@@ -5,5 +5,4 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SearchPositionRes {
-}
+public class SearchPositionRes {}

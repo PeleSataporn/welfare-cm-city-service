@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdateResignReq {
-    private Long id;
-    private String reason;
+  private Long id;
+  private String reason;
 }

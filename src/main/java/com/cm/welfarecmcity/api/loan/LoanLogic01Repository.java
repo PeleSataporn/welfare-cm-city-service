@@ -3,20 +3,17 @@ package com.cm.welfarecmcity.api.loan;
 import com.cm.welfarecmcity.dto.LoanDto;
 import com.cm.welfarecmcity.dto.MaxNumber;
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
-import com.cm.welfarecmcity.logic.document.model.EmployeeLoanNew;
+import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class LoanLogic01Repository {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
   public StringBuilder buildQuerySqlGetMaxNumber() {
     val sql = new StringBuilder();
@@ -26,7 +23,8 @@ public class LoanLogic01Repository {
 
   public MaxNumber getNumberMaxLoan() {
     val sql = buildQuerySqlGetMaxNumber();
-    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(MaxNumber.class));
+    return jdbcTemplate.queryForObject(
+        sql.toString(), new BeanPropertyRowMapper<>(MaxNumber.class));
   }
 
   public StringBuilder buildQueryGetLoanDetailByLoanId(Long loanId) {
@@ -37,7 +35,8 @@ public class LoanLogic01Repository {
 
   public DocumentReq getLoanDetailByLoanId(Long loanId) {
     val sql = buildQueryGetLoanDetailByLoanId(loanId);
-    return jdbcTemplate.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+    return jdbcTemplate.queryForObject(
+        sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
   }
 
   public StringBuilder buildQueryGetLoanAndDetail() {

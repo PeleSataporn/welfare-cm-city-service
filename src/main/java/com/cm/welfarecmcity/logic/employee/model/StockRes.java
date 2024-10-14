@@ -1,11 +1,10 @@
 package com.cm.welfarecmcity.logic.employee.model;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class StockRes {
-    private Long id;
-    private List<StockDetailRes> stockDetails;
+  private Long id;
+  private List<StockDetailRes> stockDetails;
 }

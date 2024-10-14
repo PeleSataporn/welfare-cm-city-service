@@ -3,7 +3,6 @@ package com.cm.welfarecmcity.api.employee.model;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 
 @Setter
 @Getter

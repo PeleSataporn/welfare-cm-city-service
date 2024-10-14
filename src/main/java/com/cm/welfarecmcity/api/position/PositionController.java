@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/position")
 public class PositionController {
 
-  @Autowired
-  private PositionService positionService;
+  @Autowired private PositionService positionService;
 
   @PostMapping("search")
   public List<PositionsDto> searchPosition() {

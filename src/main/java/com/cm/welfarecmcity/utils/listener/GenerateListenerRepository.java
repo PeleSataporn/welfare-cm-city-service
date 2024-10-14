@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GenerateListenerRepository {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
   public List<GenerateRes> getRunningNumber() {
-    val sql = " SELECT id, employee_code FROM employee WHERE employee.deleted = FALSE AND employee.employee_code is not null ";
+    val sql =
+        " SELECT id, employee_code FROM employee WHERE employee.deleted = FALSE AND employee.employee_code is not null ";
     return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(GenerateRes.class));
   }
 }

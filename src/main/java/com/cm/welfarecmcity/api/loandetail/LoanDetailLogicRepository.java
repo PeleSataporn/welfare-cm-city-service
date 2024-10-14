@@ -14,17 +14,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LoanDetailLogicRepository {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
   public StringBuilder buildQuerySqlV1(Long loanId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year," +
-      "loan.loan_balance, loan.loan_value " +
-      "FROM loan_detail join loan on loan_detail.loan_id = loan.id " +
-      "WHERE loan_detail.deleted = FALSE "
-    );
+        " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year,"
+            + "loan.loan_balance, loan.loan_value "
+            + "FROM loan_detail join loan on loan_detail.loan_id = loan.id "
+            + "WHERE loan_detail.deleted = FALSE ");
     sql.append(" AND loan_detail.loan_id = ").append(loanId);
     if (monthCurrent != null) {
       sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
@@ -32,7 +30,7 @@ public class LoanDetailLogicRepository {
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
-    sql.append(" ORDER BY loan_detail.loan_year , loan_detail.installment desc "); //loan.loan_no
+    sql.append(" ORDER BY loan_detail.loan_year , loan_detail.installment desc "); // loan.loan_no
 
     return sql;
   }
@@ -54,14 +52,14 @@ public class LoanDetailLogicRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanHistoryDto.class));
   }
 
-  public StringBuilder buildQuerySqlV1LoanDetailHistory(String loanId, String monthCurrent, String yearCurrent) {
+  public StringBuilder buildQuerySqlV1LoanDetailHistory(
+      String loanId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-      " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year," +
-      "loan_detail.loan_balance, loan.loan_value, loan.loan_no " +
-      "FROM loan_detail join loan on loan_detail.loan_id = loan.id " +
-      "WHERE loan_detail.deleted = FALSE "
-    );
+        " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.interest_percent, loan_detail.loan_year,"
+            + "loan_detail.loan_balance, loan.loan_value, loan.loan_no "
+            + "FROM loan_detail join loan on loan_detail.loan_id = loan.id "
+            + "WHERE loan_detail.deleted = FALSE ");
     sql.append(" AND loan_detail.loan_id in (").append(loanId).append(")");
     if (monthCurrent != null) {
       sql.append(" AND loan_detail.loan_month = '").append(monthCurrent).append("'");
@@ -69,11 +67,13 @@ public class LoanDetailLogicRepository {
     if (yearCurrent != null) {
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
     }
-    sql.append(" ORDER BY loan_detail.loan_id desc, loan_detail.loan_year desc, loan_detail.installment desc "); //loan.loan_no
+    sql.append(
+        " ORDER BY loan_detail.loan_id desc, loan_detail.loan_year desc, loan_detail.installment desc "); // loan.loan_no
     return sql;
   }
 
-  public List<LoanDetailRes> loanDetailHistory(String loanId, String monthCurrent, String yearCurrent) {
+  public List<LoanDetailRes> loanDetailHistory(
+      String loanId, String monthCurrent, String yearCurrent) {
     val sql = buildQuerySqlV1LoanDetailHistory(loanId, monthCurrent, yearCurrent);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
   }
@@ -81,12 +81,11 @@ public class LoanDetailLogicRepository {
   public StringBuilder buildQuerySqlV1LoanDetailList(DocumentReq req) {
     val sql = new StringBuilder();
     sql.append(" SELECT * FROM loan_detail ");
-    sql
-      .append(" WHERE loan_month = '")
-      .append(req.getMonthCurrent())
-      .append("' AND loan_year = '")
-      .append(req.getYearCurrent())
-      .append("'");
+    sql.append(" WHERE loan_month = '")
+        .append(req.getMonthCurrent())
+        .append("' AND loan_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
     sql.append(" order by id ");
 
     return sql;
@@ -96,5 +95,4 @@ public class LoanDetailLogicRepository {
     val sql = buildQuerySqlV1LoanDetailList(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
-
 }

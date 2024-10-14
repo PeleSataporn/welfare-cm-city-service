@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeTypeService {
 
-  @Autowired
-  private EmployeeTypeRepository employeeTypeRepository;
+  @Autowired private EmployeeTypeRepository employeeTypeRepository;
 
   @Transactional
   public List<EmployeeTypeDto> searchEmployeeType() {

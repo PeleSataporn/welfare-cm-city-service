@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/summary")
 public class SummaryController {
 
-  @Autowired
-  private SummaryService summaryService;
+  @Autowired private SummaryService summaryService;
 
   @PostMapping("get-summary")
   public SummaryDto getSummary(@RequestBody GetSummaryReq req) {

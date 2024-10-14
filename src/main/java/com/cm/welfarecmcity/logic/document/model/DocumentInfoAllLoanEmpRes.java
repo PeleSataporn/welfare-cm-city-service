@@ -1,8 +1,7 @@
 package com.cm.welfarecmcity.logic.document.model;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 @Data
 public class DocumentInfoAllLoanEmpRes {
@@ -33,5 +32,4 @@ public class DocumentInfoAllLoanEmpRes {
   private String loanNo;
   private int principal = 0;
   private int sumOrdinary = 0;
-
 }

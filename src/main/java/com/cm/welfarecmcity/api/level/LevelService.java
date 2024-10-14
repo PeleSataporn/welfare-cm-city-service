@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LevelService {
 
-  @Autowired
-  private LevelRepository levelRepository;
+  @Autowired private LevelRepository levelRepository;
 
   @Transactional
   public List<LevelDto> searchLevel() {

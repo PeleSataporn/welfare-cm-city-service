@@ -10,15 +10,13 @@ import com.cm.welfarecmcity.logic.register.model.req.ResignRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/logic/v1/register")
 public class RegisterController {
 
-  @Autowired
-  private RegisterService registerService;
+  @Autowired private RegisterService registerService;
 
   @PostMapping("/add-employee")
   public ResponseModel<ResponseData> addEmployee(@RequestBody RegisterReq req) {

@@ -4,21 +4,18 @@ import com.cm.welfarecmcity.api.fileresource.FileResourceRepository;
 import com.cm.welfarecmcity.api.fileresource.FileResourceService;
 import com.cm.welfarecmcity.api.news.model.*;
 import com.cm.welfarecmcity.api.newsfiledetail.NewsFileDetailRepository;
-import com.cm.welfarecmcity.dto.FileResourceDto;
 import com.cm.welfarecmcity.dto.NewsDto;
 import com.cm.welfarecmcity.dto.NewsFileDetailDto;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
-
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -27,23 +24,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class NewsService {
 
-  @Autowired
-  private NewsRepository newsRepository;
+  @Autowired private NewsRepository newsRepository;
 
-  @Autowired
-  private FileResourceRepository fileResourceRepository;
+  @Autowired private FileResourceRepository fileResourceRepository;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private NewsLogicRepository newsLogicRepository;
+  @Autowired private NewsLogicRepository newsLogicRepository;
 
-  @Autowired
-  private NewsFileDetailRepository newsFileDetailRepository;
+  @Autowired private NewsFileDetailRepository newsFileDetailRepository;
 
-  @Autowired
-  private FileResourceService fileResourceService;
+  @Autowired private FileResourceService fileResourceService;
 
   @Transactional
   public ResponseModel<ResponseId> createNews() {
@@ -60,9 +51,9 @@ public class NewsService {
     news.setName(req.getName());
     news.setDescription(req.getDescription());
 
-//    if (req.getCoverImgId() != 0) {
-//      news.setCoverImg(fileResourceRepository.findById(req.getCoverImgId()).get());
-//    }
+    //    if (req.getCoverImgId() != 0) {
+    //      news.setCoverImg(fileResourceRepository.findById(req.getCoverImgId()).get());
+    //    }
 
     return responseDataUtils.updateDataSuccess(newsRepository.save(news).getId());
   }
@@ -74,15 +65,16 @@ public class NewsService {
     Sort sort = Sort.by(Sort.Direction.DESC, "createDate");
 
     val finNews = newsRepository.findAll(sort);
-    finNews.forEach(news -> {
-      val res = new SearchNewsRes();
-      res.setId(news.getId());
-      res.setName(news.getName());
-      res.setDescription(news.getDescription());
-      res.setCreateDate(news.getCreateDate());
+    finNews.forEach(
+        news -> {
+          val res = new SearchNewsRes();
+          res.setId(news.getId());
+          res.setName(news.getName());
+          res.setDescription(news.getDescription());
+          res.setCreateDate(news.getCreateDate());
 
-      listNews.add(res);
-    });
+          listNews.add(res);
+        });
 
     return listNews;
   }
@@ -100,7 +92,7 @@ public class NewsService {
     res.setId(finNews.getId());
     res.setName(finNews.getName());
     res.setDescription(finNews.getDescription());
-    res.setCoverImgId(finNews.getCoverImg() != null ? finNews.getCoverImg().getId(): null);
+    res.setCoverImgId(finNews.getCoverImg() != null ? finNews.getCoverImg().getId() : null);
 
     return res;
   }
@@ -131,7 +123,8 @@ public class NewsService {
     if (!newsFiles.isEmpty()) {
       newsFileDetailRepository.deleteAll(newsFiles);
 
-      val files = newsFiles.stream()
+      val files =
+          newsFiles.stream()
               .map(NewsFileDetailDto::getFileResource) // directly get the FileResourceDto object
               .collect(Collectors.toList());
 
@@ -146,14 +139,18 @@ public class NewsService {
     val newsFiles = newsFileDetailRepository.findByNewsId(id).get();
 
     return newsFiles.stream()
-            .map(newsFile -> {
-                try {
-                    return SearchImagesRes.builder().id(newsFile.getFileResource().getId()).image(moveFileToString(newsFile.getFileResource().getImage())).build();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+        .map(
+            newsFile -> {
+              try {
+                return SearchImagesRes.builder()
+                    .id(newsFile.getFileResource().getId())
+                    .image(moveFileToString(newsFile.getFileResource().getImage()))
+                    .build();
+              } catch (SQLException e) {
+                throw new RuntimeException(e);
+              }
             })
-            .collect(Collectors.toList());
+        .collect(Collectors.toList());
   }
 
   @Transactional

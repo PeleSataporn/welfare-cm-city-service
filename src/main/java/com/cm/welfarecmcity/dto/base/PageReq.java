@@ -9,14 +9,14 @@ import lombok.Data;
 @AllArgsConstructor
 public class PageReq {
 
-    @Min(1)
-    private Integer page = 1;
+  @Min(1)
+  private Integer page = 1;
 
-    @Min(1)
-    @Max(100)
-    private Integer pageSize = 50;
+  @Min(1)
+  @Max(100)
+  private Integer pageSize = 50;
 
-    public static PageReq getDefault() {
-        return new PageReq(1, 50);
-    }
+  public static PageReq getDefault() {
+    return new PageReq(1, 50);
+  }
 }

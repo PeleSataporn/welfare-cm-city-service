@@ -1,8 +1,6 @@
 package com.cm.welfarecmcity.dto;
 
 import com.cm.welfarecmcity.dto.base.BaseDto;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;
@@ -25,7 +23,7 @@ public class StockDto extends BaseDto {
   @JoinColumn(name = "stock_id")
   private List<StockDetailDto> stockDetails;
 
-//  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//  private EmployeeDto employee;
+  //  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+  //  private EmployeeDto employee;
 }

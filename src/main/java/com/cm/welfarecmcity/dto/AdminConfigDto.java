@@ -4,10 +4,9 @@ import com.cm.welfarecmcity.dto.base.BaseDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.sql.Blob;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Blob;
 
 @Entity
 @Getter
@@ -18,6 +17,5 @@ public class AdminConfigDto extends BaseDto {
   private String name;
   private String value;
   private String description;
-  @Lob
-  private Blob image;
+  @Lob private Blob image;
 }

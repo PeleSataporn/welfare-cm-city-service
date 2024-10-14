@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenerateListener {
 
-  @Autowired
-  private GenerateListenerRepository generateListenerRepository;
+  @Autowired private GenerateListenerRepository generateListenerRepository;
 
   private static final int NUMBER_MAX_DIGIT = 5;
 

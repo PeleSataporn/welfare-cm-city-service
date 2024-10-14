@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SummaryService {
 
-  @Autowired
-  private SummaryRepository summaryRepository;
+  @Autowired private SummaryRepository summaryRepository;
 
   @Transactional
   public SummaryDto searchSummaryByMonthAndYear(String month, String year) {

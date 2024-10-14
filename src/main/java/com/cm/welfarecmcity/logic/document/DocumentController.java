@@ -1,8 +1,5 @@
 package com.cm.welfarecmcity.logic.document;
 
-import com.cm.welfarecmcity.dto.LoanDto;
-import com.cm.welfarecmcity.dto.base.ResponseId;
-import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.logic.document.model.*;
 import java.text.ParseException;
 import java.util.List;
@@ -16,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/logic")
 public class DocumentController {
 
-  @Autowired
-  private DocumentService service;
+  @Autowired private DocumentService service;
 
   // stock
   @PostMapping("v1/document/search")
@@ -42,18 +38,30 @@ public class DocumentController {
 
   // loan
   @PostMapping("v1/document/searchLoanById")
-  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(@RequestBody DocumentReq req) throws ParseException {
-    return service.searchDocumentV1LoanById(req.getLoanId(), req.getMonthCurrent(), req.getAdmin(), req.getEmpId(), req.getYearCurrent());
+  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(@RequestBody DocumentReq req)
+      throws ParseException {
+    return service.searchDocumentV1LoanById(
+        req.getLoanId(),
+        req.getMonthCurrent(),
+        req.getAdmin(),
+        req.getEmpId(),
+        req.getYearCurrent());
   }
 
   @PostMapping("v1/document/searchLoan")
   public List<DocumentV1ResLoan> searchDocumentV1Loan(@RequestBody DocumentReq req) {
-    return service.searchDocumentV1Loan(req.getLoanId(), req.getMonthCurrent(), req.getAdmin(), req.getEmpId(), req.getYearCurrent());
+    return service.searchDocumentV1Loan(
+        req.getLoanId(),
+        req.getMonthCurrent(),
+        req.getAdmin(),
+        req.getEmpId(),
+        req.getYearCurrent());
   }
 
   @PostMapping("v2/document/searchLoan")
   public List<DocumentV2ResLoan> searchDocumentV2Loan(@RequestBody DocumentReq req) {
-    return service.searchDocumentV2Loan(req.getLoanId(), req.getMonthCurrent(), req.getYearCurrent());
+    return service.searchDocumentV2Loan(
+        req.getLoanId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
   @PostMapping("v1/document/searchLoan-add-new")
@@ -78,19 +86,21 @@ public class DocumentController {
 
   // calculate Loan
   @PostMapping("v1/document/calculate-loan-new")
-  public List<CalculateInstallments> calculateLoanNew(@RequestBody CalculateReq req) throws ParseException {
+  public List<CalculateInstallments> calculateLoanNew(@RequestBody CalculateReq req)
+      throws ParseException {
     return service.calculateLoanNew(req);
   }
 
   @PostMapping("v1/document/calculate-loan-old")
-  public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req) throws ParseException {
+  public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req)
+      throws ParseException {
     return service.calculateLoanOld(req);
   }
 
   // เงินปันผล
   @PostMapping("v1/document/calculate-dividend")
-  public List<DocumentStockDevidend> calculateStockDividend(@RequestBody DocumentReq req) throws ParseException {
+  public List<DocumentStockDevidend> calculateStockDividend(@RequestBody DocumentReq req)
+      throws ParseException {
     return service.calculateStockDividend(req);
   }
-
 }

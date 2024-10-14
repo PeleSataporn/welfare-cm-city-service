@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/logic/v1/login")
 public class LoginController {
 
-  @Autowired
-  private LoginService loginService;
+  @Autowired private LoginService loginService;
 
   //  @PostMapping("/user-login")
   //  @POST
@@ -24,7 +23,8 @@ public class LoginController {
   //  @Produces(MediaType.APPLICATION_JSON)
   //  @Consumes(MediaType.APPLICATION_JSON)
 
-  //  @RequestMapping(value = "/user-login", produces = "application/json", method = RequestMethod.POST, consumes = "application/json")
+  //  @RequestMapping(value = "/user-login", produces = "application/json", method =
+  // RequestMethod.POST, consumes = "application/json")
   @PostMapping("/user-login")
   public ResponseEntity<ResponseModel<Object>> login(@RequestBody UserDto dto) {
     val response = loginService.login(dto);
@@ -38,6 +38,6 @@ public class LoginController {
 
   @PutMapping("/change/reset-password")
   public ResponseTextStatus resetPassword(@RequestBody ResetPasswordReq res) {
-     return loginService.resetPassword(res);
+    return loginService.resetPassword(res);
   }
 }

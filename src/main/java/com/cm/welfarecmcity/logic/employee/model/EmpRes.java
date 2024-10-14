@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class EmpRes {
-    private Long id;
+  private Long id;
 }

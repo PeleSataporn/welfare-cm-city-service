@@ -12,15 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactService {
 
-    @Autowired
-    private ContactRepository contactRepository;
+  @Autowired private ContactRepository contactRepository;
 
-    @Autowired
-    private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-    @Transactional
-    public ResponseModel<ResponseId> add(ContactDto dto) {
-        val contact = contactRepository.save(dto);
-        return responseDataUtils.insertDataSuccess(contact.getId());
-    }
+  @Transactional
+  public ResponseModel<ResponseId> add(ContactDto dto) {
+    val contact = contactRepository.save(dto);
+    return responseDataUtils.insertDataSuccess(contact.getId());
+  }
 }

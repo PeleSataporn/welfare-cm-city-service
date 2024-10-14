@@ -8,11 +8,9 @@ import lombok.Setter;
 @Setter
 public class FileConfigBean {
 
-    private String month;
-    private String year;
+  private String month;
+  private String year;
 
-    @Lob
-    private byte[] fileData;
-    private String fileName;
-
+  @Lob private byte[] fileData;
+  private String fileName;
 }

@@ -35,47 +35,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegisterService {
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @Autowired private EmployeeRepository employeeRepository;
 
-  @Autowired
-  private PositionRepository positionRepository;
+  @Autowired private PositionRepository positionRepository;
 
-  @Autowired
-  private AffiliationRepository affiliationRepository;
+  @Autowired private AffiliationRepository affiliationRepository;
 
-  @Autowired
-  private ContactRepository contactRepository;
+  @Autowired private ContactRepository contactRepository;
 
-  @Autowired
-  private RegisterRepository registerRepository;
+  @Autowired private RegisterRepository registerRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private EmailSenderService emailSendService;
+  @Autowired private EmailSenderService emailSendService;
 
-  @Autowired
-  private ResponseDataUtils responseDataUtils;
+  @Autowired private ResponseDataUtils responseDataUtils;
 
-  @Autowired
-  private GenerateListener generateListener;
+  @Autowired private GenerateListener generateListener;
 
-  @Autowired
-  private DepartmentRepository departmentRepository;
+  @Autowired private DepartmentRepository departmentRepository;
 
-  @Autowired
-  private LevelRepository levelRepository;
+  @Autowired private LevelRepository levelRepository;
 
-  @Autowired
-  private EmployeeTypeRepository employeeTypeRepository;
+  @Autowired private EmployeeTypeRepository employeeTypeRepository;
 
-  @Autowired
-  private NotificationRepository notificationRepository;
+  @Autowired private NotificationRepository notificationRepository;
 
-  @Autowired
-  private StockRepository stockRepository;
+  @Autowired private StockRepository stockRepository;
 
   @Transactional
   public Long setModelEmployee(RegisterReq req) {
@@ -250,7 +236,8 @@ public class RegisterService {
     Long idEmp = null;
     val result = registerRepository.checkEmployee(req.getIdCard());
 
-    // check employee status เช็คสถานะสมาชิก มี 3 สถานะ [ ใช้งานปกติ ( ปัจจุบัน ),ลาออก, รอการอนุมัติ ] สมมติ
+    // check employee status เช็คสถานะสมาชิก มี 3 สถานะ [ ใช้งานปกติ ( ปัจจุบัน ),ลาออก,
+    // รอการอนุมัติ ] สมมติ
     if (result != null) {
       if (result.getEmployeeStatus() == EmployeeStatusEnum.NORMAL_EMPLOYEE.getState()) {
         // ใช้งานปกติ ( ปัจจุบัน )
@@ -300,7 +287,8 @@ public class RegisterService {
     // send email
     val contact = contactRepository.findById(employee.getContact().getId()).get();
     if (contact.getEmail() != null) {
-      emailSendService.sendSimpleEmail(contact.getEmail(), employee.getEmployeeCode(), employee.getIdCard());
+      emailSendService.sendSimpleEmail(
+          contact.getEmail(), employee.getEmployeeCode(), employee.getIdCard());
     }
 
     // notify
