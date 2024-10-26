@@ -379,6 +379,25 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
 
+  public StringBuilder buildQuerySqlV1LoanOfNullHistory(DocumentReq req) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT * FROM loan_detail_history WHERE deleted = FALSE AND active = TRUE ");
+    sql.append(" and employee_id = ").append(req.getEmpId());
+    sql.append(" and loan_id = ").append(req.getLoanId());
+    sql.append(" and loan_month = '")
+        .append(req.getMonthCurrent())
+        .append("' and loan_year = '")
+        .append(req.getYearCurrent())
+        .append("'");
+    return sql;
+  }
+
+  public LoanDetailDto searchEmployeeLoanOfNullHistory(DocumentReq req) {
+    val sql = buildQuerySqlV1LoanOfNullHistory(req);
+    return jdbcTemplate.queryForObject(
+        sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
+  }
+
   public StringBuilder buildQuerySqlV1LoanNewOfNull(DocumentReq req) {
     val sql = new StringBuilder();
     sql.append(
@@ -759,5 +778,83 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1OfEmpById(empId);
     return jdbcTemplate.queryForObject(
         sql.toString(), new BeanPropertyRowMapper<>(DocumentV1ResLoan.class));
+  }
+
+  public StringBuilder buildQuerySqlV1OfLoanByIdMergeHistory(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT SELECT loan_detail_history.installment, loan_detail_history.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
+                + " loan.loan_value AS loanValue, loan.loan_time AS loanTime, loan_detail_history.interest_percent AS interestPercent, loan.guarantor_one_id AS guarantor1, "
+                + " loan.guarantor_two_id AS guarantor2, loan.start_loan_date, loan_detail_history.loan_month, loan_detail_history.loan_year, loan_detail_history.loan_ordinary, "
+                + " loan_detail_history.loan_balance, loan_detail_history.interest, loan.loan_no "
+                + " FROM loan JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id AND loan_detail_history.deleted = FALSE AND loan_detail_history.active = TRUE "
+                + " WHERE loan.active = TRUE AND loan.id = ")
+        .append(loanId);
+    sql.append(" UNION ALL ");
+    sql.append(
+            " SELECT SELECT loan_detail.installment, loan_detail.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
+                + " loan.loan_value AS loanValue, loan.loan_time AS loanTime, loan_detail.interest_percent AS interestPercent, loan.guarantor_one_id AS guarantor1, "
+                + " loan.guarantor_two_id AS guarantor2, loan.start_loan_date, loan_detail.loan_month, loan_detail.loan_year, loan_detail.loan_ordinary, "
+                + " loan_detail.loan_balance, loan_detail.interest, loan.loan_no "
+                + " FROM loan JOIN loan_detail ON loan_detail.loan_id = loan.id AND loan_detail.deleted = FALSE AND loan_detail.active = TRUE "
+                + " WHERE loan.active = TRUE AND loan.id = ")
+        .append(loanId);
+    sql.append(" ORDER BY loan_year DESC, installment DESC ");
+    return sql;
+  }
+
+  public List<DocumentInfoAllLoanEmpRes> loanByIdMergeHistory(Long loanId) {
+    val sql = buildQuerySqlV1OfLoanByIdMergeHistory(loanId);
+    return jdbcTemplate.query(
+        sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
+  }
+
+  public StringBuilder buildQuerySqlV1LoanOldHistory(DocumentReq req) {
+    val sql = new StringBuilder();
+    sql.append(
+        " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
+            + " employee_type.name AS employeeTypeName, stock_detail.stock_accumulate AS stockAccumulate,  stock_detail.stock_value, "
+            + " employee.salary, employee.employee_type_id AS employeeTypeId, stock_detail.installment as stockDetailInstallment, stock.id as stockId ");
+    if (req.getLoanId() != null) {
+      sql.append(
+          " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, "
+              + " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, "
+              + " loan_detail_history.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan_detail_history.interest as interestLoanLastMonth, loan_detail_history.loan_ordinary ");
+    }
+    sql.append(
+        " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
+            + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id   ");
+    if (req.getLoanId() != null) {
+      sql.append(
+          " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id ");
+    }
+    sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
+    if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
+      if (req.getStockId() != null) {
+        sql.append(" and stock_detail.stock_month = '")
+            .append(req.getMonthCurrent())
+            .append("' and stock_detail.stock_year = '")
+            .append(req.getYearCurrent())
+            .append("'");
+      }
+      if (req.getLoanId() != null) {
+        sql.append("and loan_detail_history.employee_code = '")
+            .append(req.getEmpCode())
+            .append("'");
+        sql.append(" and loan_detail_history.loan_month = '")
+            .append(req.getMonthCurrent())
+            .append("' and loan_detail_history.loan_year = '")
+            .append(req.getYearCurrent())
+            .append("'");
+      }
+    }
+    sql.append(" GROUP BY employee.employee_code ");
+    return sql;
+  }
+
+  public EmployeeLoanNew searchEmployeeLoanOldHistory(DocumentReq req) {
+    val sql = buildQuerySqlV1LoanOldHistory(req);
+    return jdbcTemplate.queryForObject(
+        sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
   }
 }

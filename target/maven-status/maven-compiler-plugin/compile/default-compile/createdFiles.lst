@@ -49,6 +49,7 @@ com/cm/welfarecmcity/logic/login/LoginService.class
 com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminReqDto.class
 com/cm/welfarecmcity/dto/base/PageReq.class
 com/cm/welfarecmcity/mapper/MapStructMapperImpl.class
+com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryLogicRepository.class
 com/cm/welfarecmcity/logic/employee/EmployeeLogicController.class
 com/cm/welfarecmcity/logic/employee/model/StockDetailRes.class
 com/cm/welfarecmcity/dto/LoanDto.class
@@ -63,6 +64,7 @@ com/cm/welfarecmcity/constant/OrderSortType.class
 com/cm/welfarecmcity/dto/bean/AppPropertiesConfigBean.class
 com/cm/welfarecmcity/CalinteresDividend.class
 com/cm/welfarecmcity/api/position/PositionService.class
+com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryService.class
 com/cm/welfarecmcity/runningNumber.class
 com/cm/welfarecmcity/logic/document/DocumentService.class
 com/cm/welfarecmcity/logic/employee/model/BeneficiariesRes.class
@@ -113,6 +115,7 @@ com/cm/welfarecmcity/api/stock/StockController.class
 com/cm/welfarecmcity/dto/NewsFileDetailDto.class
 com/cm/welfarecmcity/dto/AffiliationDto.class
 com/cm/welfarecmcity/api/summary/model/GetSummaryReq.class
+com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryRepository.class
 com/cm/welfarecmcity/logic/employee/EmployeeLogicRepository.class
 com/cm/welfarecmcity/api/stockdetail/StockDetailRepository.class
 com/cm/welfarecmcity/logic/email/EmailSenderService.class
@@ -184,6 +187,7 @@ com/cm/welfarecmcity/logic/stock/model/AddStockDetailAllReq.class
 com/cm/welfarecmcity/api/level/LevelRepository.class
 com/cm/welfarecmcity/logic/document/model/DocumentV1ResLoan.class
 com/cm/welfarecmcity/api/fileresource/FileResourceService.class
+com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryController.class
 com/cm/welfarecmcity/api/news/NewsRepository.class
 com/cm/welfarecmcity/api/level/LevelService.class
 com/cm/welfarecmcity/WelfareCmCityApplication.class

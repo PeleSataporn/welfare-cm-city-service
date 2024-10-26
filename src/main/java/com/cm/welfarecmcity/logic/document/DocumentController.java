@@ -36,16 +36,11 @@ public class DocumentController {
     return service.documentInfoAll(req);
   }
 
-  // loan
+  // loan แก้ service แล้ว
   @PostMapping("v1/document/searchLoanById")
   public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(@RequestBody DocumentReq req)
       throws ParseException {
-    return service.searchDocumentV1LoanById(
-        req.getLoanId(),
-        req.getMonthCurrent(),
-        req.getAdmin(),
-        req.getEmpId(),
-        req.getYearCurrent());
+    return service.searchDocumentV1LoanById(req.getLoanId(), req.getEmpId());
   }
 
   @PostMapping("v1/document/searchLoan")
@@ -64,9 +59,16 @@ public class DocumentController {
         req.getLoanId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
+  // ใบเสร็จรับเงิน เดือนปัจจุบัน
   @PostMapping("v1/document/searchLoan-add-new")
   public EmployeeLoanNew searchEmployeeLoanNew(@RequestBody DocumentReq req) {
     return service.searchEmployeeLoanNew(req);
+  }
+
+  // ใบเสร็จรับเงิน เดือนเก่า
+  @PostMapping("v1/document/searchLoan-old-new")
+  public EmployeeLoanNew searchEmployeeLoanOld(@RequestBody DocumentReq req) {
+    return service.searchEmployeeLoanOld(req);
   }
 
   @PostMapping("v1/document/searchLoan-guarantor-unique")

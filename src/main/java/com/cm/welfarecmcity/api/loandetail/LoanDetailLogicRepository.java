@@ -95,4 +95,27 @@ public class LoanDetailLogicRepository {
     val sql = buildQuerySqlV1LoanDetailList(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
+
+  public List<LoanDetailRes> getLoanDetailMergeHistory(Long loanId) {
+    val sql = buildQuerySqlV1LoanDetailMergeHistory(loanId);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
+  }
+
+  public StringBuilder buildQuerySqlV1LoanDetailMergeHistory(Long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+        " SELECT loan_detail_history.installment, loan_detail_history.interest, loan_detail_history.loan_month, loan_detail_history.loan_ordinary, "
+            + " loan_detail_history.interest_percent, loan_detail_history.loan_year, loan_detail_history.loan_balance, loan.loan_value, loan.loan_no "
+            + " FROM loan_detail_history JOIN loan ON loan_detail_history.loan_id = loan.id "
+            + " WHERE loan_detail_history.deleted = FALSE ");
+    sql.append(" AND loan_detail_history.loan_id = ").append(loanId).append(" UNION ALL ");
+    sql.append(
+        " SELECT loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, "
+            + " loan_detail.interest_percent, loan_detail.loan_year, loan_detail.loan_balance, loan.loan_value, loan.loan_no "
+            + " FROM loan_detail JOIN loan ON loan_detail.loan_id = loan.id "
+            + " WHERE loan_detail.deleted = FALSE ");
+    sql.append(" AND loan_detail.loan_id = ").append(loanId).append(" ");
+    sql.append(" ORDER BY loan_year DESC, installment DESC; ");
+    return sql;
+  }
 }

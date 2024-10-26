@@ -14,19 +14,44 @@ public class LoanDetailService {
 
   @Autowired private LoanDetailLogicRepository loanDetailLogicRepository;
 
+  //  @Transactional
+  //  public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
+  //    StringBuilder testHistory = new StringBuilder(String.valueOf(req.getLoanId()));
+  //    val loanHistory = loanDetailLogicRepository.loanHistory(req.getEmpId());
+  //    //    for (LoanHistoryDto loanHistoryDto : loanHistory) {
+  //    //      testHistory.append(',').append(loanHistoryDto.getLoanId());
+  //    //    }
+  //    val listLoanDetail =
+  //            loanDetailLogicRepository.loanDetailHistory(
+  //                    testHistory.toString(), req.getMonthCurrent(), req.getYearCurrent());
+  //    for (LoanDetailRes list : listLoanDetail) {
+  //      if (Integer.parseInt(list.getLoanYear()) >= 2567) {
+  //        Integer sum = 0;
+  //        if (list.getLoanBalance() > 0 && list.getInstallment() > 0) {
+  //          sum = (list.getLoanBalance() + Math.round((list.getLoanOrdinary() -
+  // list.getInterest())));
+  //        } else {
+  //          if (list.getInstallment() < 0) {
+  //            sum =
+  //                    (list.getLoanBalance() + Math.round((list.getLoanOrdinary() -
+  // list.getInterest())));
+  //          } else {
+  //            sum = list.getLoanOrdinary();
+  //          }
+  //        }
+  //        list.setLoanBalance(sum);
+  //      }
+  //    }
+  //    return listLoanDetail;
+  //  }
+
   @Transactional
   public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
-    StringBuilder testHistory = new StringBuilder(String.valueOf(req.getLoanId()));
-    val loanHistory = loanDetailLogicRepository.loanHistory(req.getEmpId());
-    //    for (LoanHistoryDto loanHistoryDto : loanHistory) {
-    //      testHistory.append(',').append(loanHistoryDto.getLoanId());
-    //    }
-    val listLoanDetail =
-        loanDetailLogicRepository.loanDetailHistory(
-            testHistory.toString(), req.getMonthCurrent(), req.getYearCurrent());
-    for (LoanDetailRes list : listLoanDetail) {
+    val loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
+
+    for (val list : loanDetailHistories) {
       if (Integer.parseInt(list.getLoanYear()) >= 2567) {
-        Integer sum = 0;
+        int sum = 0;
         if (list.getLoanBalance() > 0 && list.getInstallment() > 0) {
           sum = (list.getLoanBalance() + Math.round((list.getLoanOrdinary() - list.getInterest())));
         } else {
@@ -40,7 +65,7 @@ public class LoanDetailService {
         list.setLoanBalance(sum);
       }
     }
-    return listLoanDetail;
+    return loanDetailHistories;
   }
 
   @Transactional

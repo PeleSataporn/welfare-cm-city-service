@@ -1,3 +1,4 @@
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/base/RequestModel.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/stock/StockController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/employee/model/AffiliationRes.java
@@ -46,6 +47,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/AdminConfigDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loanHistory/LoanHistoryService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/employee/model/BureauRes.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryLogicRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/image/ImageUtils.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/DateUtils.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/user/UserService.java
@@ -80,6 +82,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminReqDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/beneficiary/BeneficiaryService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/register/model/res/CheckEmployeeCodeRes.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/exception/entity/DocumentException.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/bureau/BureauController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/SummaryDto.java
@@ -153,6 +156,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/runningNumber.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/LoanLogicController.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/admin/AdminConfigRepositoryLogic.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryService.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/GuarantorRes.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/utils/ResponseDataUtils.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/LoanLogicService.java
