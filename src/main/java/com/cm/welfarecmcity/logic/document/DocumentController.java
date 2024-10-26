@@ -15,15 +15,28 @@ public class DocumentController {
 
   @Autowired private DocumentService service;
 
-  // stock
+  // stock v1 เดือนปัจจุบัน
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
     return service.searchDocumentV1(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
+  // stock v2 เดือนปัจจุบัน
   @PostMapping("v2/document/search")
   public List<DocumentV2Res> searchDocumentV2(@RequestBody DocumentReq req) {
     return service.searchDocumentV2(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
+  }
+
+  // stock v1 เดือนเก่า
+  @PostMapping("v1/document/old/search")
+  public List<DocumentV1Res> searchDocumentOldV1(@RequestBody DocumentReq req) {
+    return service.searchDocumentOldV1(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
+  }
+
+  // stock v2 เดือนเก่า
+  @PostMapping("v2/document/old/search")
+  public List<DocumentV2Res> searchDocumentOldV2(@RequestBody DocumentReq req) {
+    return service.searchDocumentOldV2(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
   }
 
   @PostMapping("v1/document/grand-total")
@@ -66,7 +79,7 @@ public class DocumentController {
   }
 
   // ใบเสร็จรับเงิน เดือนเก่า
-  @PostMapping("v1/document/searchLoan-old-new")
+  @PostMapping("v1/document/searchLoan-old")
   public EmployeeLoanNew searchEmployeeLoanOld(@RequestBody DocumentReq req) {
     return service.searchEmployeeLoanOld(req);
   }

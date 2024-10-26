@@ -4,7 +4,9 @@ import com.cm.welfarecmcity.api.beneficiary.BeneficiaryRepository;
 import com.cm.welfarecmcity.api.employee.EmployeeRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
+import com.cm.welfarecmcity.dto.LoanDetailHistory;
 import com.cm.welfarecmcity.dto.base.RequestModel;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
@@ -22,6 +24,7 @@ import jakarta.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,8 @@ public class LoanLogicService {
   @Autowired private LoanRepository loanRepository;
 
   @Autowired private LoanDetailRepository loanDetailRepository;
+
+  @Autowired private LoanDetailHistoryRepository loanDetailHistoryRepository;
 
   @Autowired private DocumentRepository documentRepository;
 
@@ -210,6 +215,46 @@ public class LoanLogicService {
             throw new RuntimeException(e);
           }
         });
+
+    addInfoLoanDetailHistory(listLoanDetail);
+    deleteInfoLoanDetail(listLoanDetail);
+  }
+
+  @Transactional
+  public void deleteInfoLoanDetail(List<LoanDetailRes> listLoanDetail) {
+    val loanDetailIds = listLoanDetail.stream().map(LoanDetailRes::getLoanDetailId).toList();
+
+    loanDetailRepository.deleteAllById(loanDetailIds);
+  }
+
+  @Transactional
+  public void addInfoLoanDetailHistory(List<LoanDetailRes> listLoanDetail) {
+    val loanDetailHistories =
+        listLoanDetail.stream().map(this::mapToLoanDetailHistory).collect(Collectors.toList());
+
+    loanDetailHistoryRepository.saveAll(loanDetailHistories);
+  }
+
+  private LoanDetailHistory mapToLoanDetailHistory(LoanDetailRes loanDetailRes) {
+    LoanDetailHistory loanDetailHistory = new LoanDetailHistory();
+    loanDetailHistory.setInstallment(loanDetailRes.getInstallment());
+    loanDetailHistory.setLoanMonth(loanDetailRes.getLoanMonth());
+    loanDetailHistory.setLoanYear(loanDetailRes.getLoanYear());
+    loanDetailHistory.setLoanOrdinary(loanDetailRes.getLoanOrdinary());
+    loanDetailHistory.setInterest(loanDetailRes.getInterest());
+    loanDetailHistory.setInterestPercent(loanDetailRes.getInterestPercent());
+    loanDetailHistory.setInterestLastMonth(loanDetailRes.getInterestLastMonth());
+    loanDetailHistory.setLoanBalance(loanDetailRes.getLoanValue());
+
+    val loan = loanRepository.findById(loanDetailRes.getLoanId()).get();
+    loanDetailHistory.setLoan(loan);
+    loanDetailHistory.setLoanNo(loan.getLoanNo());
+
+    val employee = employeeRepository.findById(loanDetailRes.getEmployeeId()).get();
+    loanDetailHistory.setEmployee(employee);
+    loanDetailHistory.setEmployeeCode(employee.getEmployeeCode());
+
+    return loanDetailHistory;
   }
 
   @Transactional

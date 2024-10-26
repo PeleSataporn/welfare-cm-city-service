@@ -5,6 +5,7 @@ import org.hibernate.annotations.Comment;
 
 @Data
 public class LoanDetailRes {
+  private Long loanDetailId;
 
   @Comment("งวดที่")
   private int installment;
@@ -40,4 +41,6 @@ public class LoanDetailRes {
 
   @Comment("วันที่เริ่มกู้")
   private String startLoanDate;
+
+  private Long employeeId;
 }

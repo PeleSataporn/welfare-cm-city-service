@@ -83,6 +83,41 @@ public class DocumentRepository {
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentLoanV1Res.class));
   }
 
+  public StringBuilder buildQuerySqlV1loanHistory(
+      Long empId, String monthCurrent, String yearCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time FROM employee "
+            + " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN loan ON employee.loan_id = loan.id "
+            + " LEFT JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id WHERE 1=1");
+
+    if (empId != null && monthCurrent != null && yearCurrent != null) {
+      sql.append(" AND employee.id = ").append(empId);
+      sql.append(" AND loan_detail_history.loan_month = '").append(monthCurrent).append("'");
+      sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
+    } else {
+      if (empId != null) {
+        sql.append(" AND employee.id = ").append(empId);
+      }
+
+      if (monthCurrent != null) {
+        sql.append(" AND loan_detail_history.loan_month = '").append(monthCurrent).append("'");
+      }
+
+      if (yearCurrent != null) {
+        sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
+      }
+    }
+    sql.append(" GROUP BY employee.employee_code ");
+    return sql;
+  }
+
+  public List<DocumentLoanV1Res> documentInfoV1loanHistory(
+      Long empId, String monthCurrent, String yearCurrent) {
+    val sql = buildQuerySqlV1loanHistory(empId, monthCurrent, yearCurrent);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentLoanV1Res.class));
+  }
+
   public StringBuilder buildQuerySqlV2(Long stockId) {
     val sql = new StringBuilder();
     // TODO: edit sql
