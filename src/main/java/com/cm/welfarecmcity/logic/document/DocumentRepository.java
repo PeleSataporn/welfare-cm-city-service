@@ -818,7 +818,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1OfLoanByIdMergeHistory(Long loanId) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT SELECT loan_detail_history.installment, loan_detail_history.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
+            " SELECT loan_detail_history.installment, loan_detail_history.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
                 + " loan.loan_value AS loanValue, loan.loan_time AS loanTime, loan_detail_history.interest_percent AS interestPercent, loan.guarantor_one_id AS guarantor1, "
                 + " loan.guarantor_two_id AS guarantor2, loan.start_loan_date, loan_detail_history.loan_month, loan_detail_history.loan_year, loan_detail_history.loan_ordinary, "
                 + " loan_detail_history.loan_balance, loan_detail_history.interest, loan.loan_no "
@@ -827,7 +827,7 @@ public class DocumentRepository {
         .append(loanId);
     sql.append(" UNION ALL ");
     sql.append(
-            " SELECT SELECT loan_detail.installment, loan_detail.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
+            " SELECT loan_detail.installment, loan_detail.interest_last_month AS interestLastMonth, loan.loan_balance, loan.new_loan AS newLoan, "
                 + " loan.loan_value AS loanValue, loan.loan_time AS loanTime, loan_detail.interest_percent AS interestPercent, loan.guarantor_one_id AS guarantor1, "
                 + " loan.guarantor_two_id AS guarantor2, loan.start_loan_date, loan_detail.loan_month, loan_detail.loan_year, loan_detail.loan_ordinary, "
                 + " loan_detail.loan_balance, loan_detail.interest, loan.loan_no "

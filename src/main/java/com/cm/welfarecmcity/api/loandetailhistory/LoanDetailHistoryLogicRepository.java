@@ -30,7 +30,8 @@ public class LoanDetailHistoryLogicRepository {
             + " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) "
             + " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) "
             + " RIGHT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) "
-            + " RIGHT JOIN loan_detail_history ON (loan_detail_history.loan_id = loan.id AND loan_detail_history.deleted = FALSE AND loan_detail_history.loan_ordinary != 0) WHERE 1=1 ");
+            + " RIGHT JOIN loan_detail_history ON (loan_detail_history.loan_id = loan.id AND loan_detail_history.deleted = FALSE AND loan_detail_history.loan_ordinary != 0) "
+            + " WHERE 1=1 ");
     if (getMonthCurrent != null && yearCurrent != null) {
       sql.append(" AND loan_detail_history.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
