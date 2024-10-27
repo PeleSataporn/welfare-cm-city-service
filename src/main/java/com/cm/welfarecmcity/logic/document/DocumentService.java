@@ -191,7 +191,7 @@ public class DocumentService {
   @Transactional
   public List<DocumentV1Res> searchDocumentOldV1(
       Long empId, String monthCurrent, String yearCurrent) {
-    val res1 = documentRepository.documentInfoV1stock(empId, monthCurrent, yearCurrent);
+    val res1 = documentRepository.documentInfoV1stockOldHistory(empId, monthCurrent, yearCurrent);
 
     for (int i = 0; i < res1.size(); i++) {
       var res2 = new ArrayList<DocumentLoanV1Res>();

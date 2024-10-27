@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.loandetailhistory;
 
 import com.cm.welfarecmcity.logic.document.DocumentService;
+import com.cm.welfarecmcity.logic.document.model.CalculateInstallments;
 import com.cm.welfarecmcity.logic.document.model.CalculateReq;
 import com.cm.welfarecmcity.logic.document.model.DocumentV1ResLoan;
 import com.cm.welfarecmcity.logic.document.model.DocumentV2ResLoan;
@@ -19,94 +20,116 @@ public class LoanDetailHistoryService {
   @Autowired private DocumentService documentService;
 
   @Transactional
-  public List<DocumentV1ResLoan> searchV1LoanHistory(String getMonthCurrent, String yearCurrent)
-      throws ParseException {
+  public List<DocumentV1ResLoan> searchV1LoanHistory(String getMonthCurrent, String yearCurrent) {
 
-    var loanHistories =
+    var resLoan =
         loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
+    resLoan.forEach(
+        res -> {
+          if (res.getGuarantor1() != null) {
+            val empCode1 = documentService.searchIdOfEmpCode(Long.valueOf(res.getGuarantor1()));
+            res.setGuarantorCode1(empCode1.getEmpCode());
+          }
+          if (res.getGuarantor2() != null) {
+            val empCode2 = documentService.searchIdOfEmpCode(Long.valueOf(res.getGuarantor2()));
+            res.setGuarantorCode2(empCode2.getEmpCode());
+          }
+          //    function --> calculateLoanOld()
+          if (res.getLoanValue() != null) {
+            if (!res.getNewLoan()) {
+              CalculateReq req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate());
 
-    for (val loanHistory : loanHistories) {
-      if (loanHistory.getGuarantor1() != null) {
-        val empCode1 = documentService.searchIdOfEmpCode(Long.valueOf(loanHistory.getGuarantor1()));
-        loanHistory.setGuarantorCode1(empCode1.getEmpCode());
-      }
+              List<CalculateInstallments> resList =
+                  null; // ** function --> calculateLoanNew() , calculateLoanOld
+              try {
+                resList = documentService.calculateLoanOld(req);
+              } catch (ParseException e) {
+                throw new RuntimeException(e);
+              }
+              int sumTotalValueInterest = 0;
+              int setTotalValuePrinciple = 0;
+              int sumTotalValueInterestOfInstallment = 0;
+              int setTotalValuePrincipleOfInstallment = 0;
+              for (CalculateInstallments calculateInstallments : resList) {
+                sumTotalValueInterest += calculateInstallments.getInterest();
+                setTotalValuePrinciple += calculateInstallments.getTotalDeduction();
+                if (Integer.parseInt(res.getInstallment())
+                    == calculateInstallments.getInstallment()) {
+                  res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                  res.setMonthPrinciple(String.valueOf(calculateInstallments.getTotalDeduction()));
+                  // Interest
+                  sumTotalValueInterestOfInstallment = sumTotalValueInterest;
+                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
+                  // Principle
+                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrinciple));
+                  res.setOutStandPrinciple(
+                      String.valueOf(calculateInstallments.getPrincipalBalance()));
+                }
+                if (Integer.parseInt(res.getLoanTime()) == calculateInstallments.getInstallment()) {
+                  res.setLastMonthInterest(
+                      String.valueOf(res.getInterestLastMonth())); // resList.get(i).getInterest())
+                  res.setLastMonthPrinciple(
+                      String.valueOf(calculateInstallments.getTotalDeduction()));
+                }
+                res.setOutStandInterest(
+                    String.valueOf(sumTotalValueInterest - sumTotalValueInterestOfInstallment));
+              }
 
-      if (loanHistory.getGuarantor2() != null) {
-        val empCode2 = documentService.searchIdOfEmpCode(Long.valueOf(loanHistory.getGuarantor2()));
-        loanHistory.setGuarantorCode2(empCode2.getEmpCode());
-      }
+            } else {
+              CalculateReq req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate()); // "2024-01-01"
 
-      if (loanHistory.getLoanValue() != null) {
-        val calculate = setCalculateReq(loanHistory);
-        val calculateInstallments = documentService.calculateLoanOld(calculate);
-        int sumTotalValueInterest = 0;
-        int setTotalValuePrinciple = 0;
-        int sumTotalValueInterestOfInstallment = 0;
-        if (!loanHistory.getNewLoan()) {
-
-          for (val calculateInstallment : calculateInstallments) {
-            sumTotalValueInterest += calculateInstallment.getInterest();
-            setTotalValuePrinciple += calculateInstallment.getTotalDeduction();
-
-            if (Integer.parseInt(loanHistory.getInstallment())
-                == calculateInstallment.getInstallment()) {
-              loanHistory.setMonthInterest(String.valueOf(calculateInstallment.getInterest()));
-              loanHistory.setMonthPrinciple(
-                  String.valueOf(calculateInstallment.getTotalDeduction()));
-
-              // Interest
-              sumTotalValueInterestOfInstallment = sumTotalValueInterest;
-              loanHistory.setTotalValueInterest(String.valueOf(sumTotalValueInterestOfInstallment));
-
-              // Principle
-              loanHistory.setTotalValuePrinciple(String.valueOf(setTotalValuePrinciple));
-              loanHistory.setOutStandPrinciple(
-                  String.valueOf(calculateInstallment.getPrincipalBalance()));
+              List<CalculateInstallments> resList =
+                  null; // ** function --> calculateLoanNew() , calculateLoanOld()
+              try {
+                resList = documentService.calculateLoanNew(req);
+              } catch (ParseException e) {
+                throw new RuntimeException(e);
+              }
+              int sumTotalValueInterest = 0;
+              int setTotalValuePrinciple = 0;
+              int sumTotalValueInterestOfInstallment = 0;
+              int setTotalValuePrincipleOfInstallment = 0;
+              int sumOutStandInterest = 0;
+              int setOutStandPrinciple = 0;
+              for (CalculateInstallments calculateInstallments : resList) {
+                sumOutStandInterest += calculateInstallments.getInterest();
+                setOutStandPrinciple += calculateInstallments.getPrincipal();
+                if (Integer.parseInt(res.getInstallment())
+                    == calculateInstallments.getInstallment()) {
+                  res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                  res.setMonthPrinciple(String.valueOf(calculateInstallments.getTotalDeduction()));
+                }
+                int installmentCurrent = Integer.parseInt(res.getInstallment()) - 1;
+                if (calculateInstallments.getInstallment() <= installmentCurrent) {
+                  sumTotalValueInterest += calculateInstallments.getInterest();
+                  setTotalValuePrinciple += calculateInstallments.getPrincipal();
+                  sumTotalValueInterestOfInstallment = sumTotalValueInterest;
+                  setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+                  res.setTotalValueInterest(String.valueOf(sumTotalValueInterest));
+                  res.setTotalValuePrinciple(String.valueOf(setTotalValuePrinciple));
+                }
+                if (Integer.parseInt(res.getLoanTime()) == calculateInstallments.getInstallment()) {
+                  res.setLastMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                  res.setLastMonthPrinciple(
+                      String.valueOf(calculateInstallments.getTotalDeduction()));
+                }
+              }
+              res.setOutStandInterest(
+                  String.valueOf(sumOutStandInterest - sumTotalValueInterestOfInstallment));
+              res.setOutStandPrinciple(
+                  String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
             }
           }
-        } else {
-
-          int setTotalValuePrincipleOfInstallment = 0;
-          int sumOutStandInterest = 0;
-          int setOutStandPrinciple = 0;
-
-          for (val calculateInstallment : calculateInstallments) {
-            sumOutStandInterest += calculateInstallment.getInterest();
-            setOutStandPrinciple += calculateInstallment.getPrincipal();
-
-            if (Integer.parseInt(loanHistory.getInstallment())
-                == calculateInstallment.getInstallment()) {
-              loanHistory.setMonthInterest(String.valueOf(calculateInstallment.getInterest()));
-              loanHistory.setMonthPrinciple(
-                  String.valueOf(calculateInstallment.getTotalDeduction()));
-            }
-
-            int installmentCurrent = Integer.parseInt(loanHistory.getInstallment()) - 1;
-
-            if (calculateInstallment.getInstallment() <= installmentCurrent) {
-              sumTotalValueInterest += calculateInstallment.getInterest();
-              setTotalValuePrinciple += calculateInstallment.getPrincipal();
-              sumTotalValueInterestOfInstallment = sumTotalValueInterest;
-              setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
-              loanHistory.setTotalValueInterest(String.valueOf(sumTotalValueInterest));
-              loanHistory.setTotalValuePrinciple(String.valueOf(setTotalValuePrinciple));
-            }
-
-            if (Integer.parseInt(loanHistory.getLoanTime())
-                == calculateInstallment.getInstallment()) {
-              loanHistory.setLastMonthInterest(String.valueOf(calculateInstallment.getInterest()));
-              loanHistory.setLastMonthPrinciple(
-                  String.valueOf(calculateInstallment.getTotalDeduction()));
-            }
-          }
-          loanHistory.setOutStandInterest(
-              String.valueOf(sumOutStandInterest - sumTotalValueInterestOfInstallment));
-          loanHistory.setOutStandPrinciple(
-              String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
-        }
-      }
-    }
-    return loanHistories;
+        });
+    return resLoan;
   }
 
   @Transactional

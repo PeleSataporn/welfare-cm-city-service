@@ -88,8 +88,10 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
         " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time FROM employee "
-            + " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN loan ON employee.loan_id = loan.id "
-            + " LEFT JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id WHERE 1=1");
+            + " LEFT JOIN department ON employee.department_id = department.id "
+            + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
+            + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
+            + " WHERE 1=1");
 
     if (empId != null && monthCurrent != null && yearCurrent != null) {
       sql.append(" AND employee.id = ").append(empId);
@@ -861,7 +863,10 @@ public class DocumentRepository {
             + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id   ");
     if (req.getLoanId() != null) {
       sql.append(
-          " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id ");
+          // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
+          // loan_detail_history.loan_id = loan.id
+          " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
+              + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  ");
     }
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
@@ -891,5 +896,61 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1LoanOldHistory(req);
     return jdbcTemplate.queryForObject(
         sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+  }
+
+  public StringBuilder buildQuerySqlV1stockOldHistory(
+      Long empId, String monthCurrent, String yearCurrent) {
+    val sql = new StringBuilder();
+    sql.append(
+        " SELECT employee.id as empId, department.name AS departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
+            + " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate FROM employee "
+            + " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN stock ON employee.stock_id = stock.id "
+            + " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id WHERE 1=1 ");
+
+    if (empId != null) {
+      //      sql.append(" AND employee.id = ").append(empId);
+      sql.append(" AND employee.id = ").append(empId);
+      //      sql.append(" ORDER BY stock_detail.installment ");
+    }
+
+    if (monthCurrent != null) {
+      sql.append(" AND stock_detail.stock_month = '").append(monthCurrent).append("'");
+    }
+
+    if (yearCurrent != null) {
+      sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
+    }
+    sql.append(" AND stock_detail.deleted = false ");
+    sql.append(" AND ( employee.employee_status not in ('3')");
+    sql.append(
+        " AND employee.resignation_date IS NULL "
+            + "        OR  (CASE '"
+            + monthCurrent
+            + "' "
+            + "            WHEN 'มกราคม' THEN '1' "
+            + "            WHEN 'กุมภาพันธ์' THEN '2' "
+            + "            WHEN 'มีนาคม' THEN '3' "
+            + "            WHEN 'เมษายน' THEN '4'"
+            + "            WHEN 'พฤษภาคม' THEN '5'"
+            + "            WHEN 'มิถุนายน' THEN '6'"
+            + "            WHEN 'กรกฎาคม' THEN '7'"
+            + "            WHEN 'สิงหาคม' THEN '8'"
+            + "            WHEN 'กันยายน' THEN '9'"
+            + "            WHEN 'ตุลาคม' THEN '10'"
+            + "            WHEN 'พฤศจิกายน' THEN '11'"
+            + "            WHEN 'ธันวาคม' THEN '12' "
+            + "        END) < MONTH(employee.resignation_date) ");
+    sql.append(
+        " AND employee.resignation_date IS NULL OR CAST('"
+            + yearCurrent
+            + "' as Int) = (YEAR(employee.resignation_date) + 543) ) ");
+    sql.append(" GROUP BY employee.employee_code "); // AND employee.employee_status IN (2,5)
+    return sql;
+  }
+
+  public List<DocumentV1Res> documentInfoV1stockOldHistory(
+      Long empId, String monthCurrent, String yearCurrent) {
+    val sql = buildQuerySqlV1stockOldHistory(empId, monthCurrent, yearCurrent);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(DocumentV1Res.class));
   }
 }

@@ -29,17 +29,21 @@ public class LoanDetailHistoryLogicRepository {
             + " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) "
             + " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) "
             + " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) "
-            + " RIGHT JOIN loan ON (employee.loan_id = loan.id AND loan.deleted = FALSE) "
-            + " RIGHT JOIN loan_detail_history ON (loan_detail_history.loan_id = loan.id AND loan_detail_history.deleted = FALSE AND loan_detail_history.loan_ordinary != 0) "
+            + " RIGHT JOIN loan_detail_history ON (loan_detail_history.employee_id = employee.id "
+            + " AND loan_detail_history.deleted = FALSE "
+            + " AND loan_detail_history.loan_ordinary != 0) "
+            + " RIGHT JOIN loan ON "
+            + " (loan_detail_history.loan_id = loan.id "
+            + " AND loan.deleted = FALSE) "
             + " WHERE 1=1 ");
     if (getMonthCurrent != null && yearCurrent != null) {
       sql.append(" AND loan_detail_history.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
-      sql.append(" AND employee.employee_status IN (2,5) AND employee.id != 0 ");
+      sql.append(" AND employee.id != 0 "); // employee.employee_status IN (2,5) AND
     }
 
     sql.append(" GROUP BY employee.id ");
-    sql.append(" order by department.id ");
+    // sql.append(" order by department.id ");
 
     return sql;
   }
@@ -55,9 +59,9 @@ public class LoanDetailHistoryLogicRepository {
         " SELECT department.name as departmentName, SUM(loan.loan_value) AS loanValueTotal "
             + " FROM department "
             + " LEFT JOIN employee ON employee.department_id = department.id "
-            + " LEFT JOIN loan ON employee.loan_id = loan.id  "
-            + " LEFT JOIN loan_detail_history ON loan_detail_history.loan_id = loan.id "
-            + " WHERE employee.deleted = FALSE AND employee.employee_status IN (2,5) AND loan.active = TRUE ");
+            + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
+            + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
+            + " WHERE employee.deleted = FALSE AND loan.active = TRUE ");
 
     sql.append(" AND loan_detail_history.loan_month = '").append(getMonthCurrent).append("'");
     sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
