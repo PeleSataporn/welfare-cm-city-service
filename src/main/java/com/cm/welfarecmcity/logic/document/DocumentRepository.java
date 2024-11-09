@@ -921,6 +921,7 @@ public class DocumentRepository {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
     }
     sql.append(" AND stock_detail.deleted = false ");
+    sql.append(" AND stock_detail.active = true ");
     sql.append(" AND ( employee.employee_status not in ('3')");
     sql.append(
         " AND employee.resignation_date IS NULL "
