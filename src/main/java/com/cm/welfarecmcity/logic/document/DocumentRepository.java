@@ -504,8 +504,8 @@ public class DocumentRepository {
       String empCode, String getYearCurrent, String getYearOld) {
     val sql = new StringBuilder();
     sql.append(
-        " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
-            + "employee.bank_account_receiving_number, stock.stock_accumulate "
+        " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix,' ', employee.first_name,' ', employee.last_name) AS fullName, "
+            + "employee.salary_bank_account_number as bankName, employee.bank_account_receiving_number, stock.stock_accumulate "
             + "FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
             + "LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id "
             + "LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail ON loan_detail.loan_id = loan.id "

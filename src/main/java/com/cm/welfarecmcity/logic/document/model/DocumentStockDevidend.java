@@ -11,6 +11,7 @@ public class DocumentStockDevidend {
   private String departmentName;
   private String employeeCode;
   private String fullName;
+  private String bankName;
   private String bankAccountReceivingNumber;
   private String stockAccumulate;
 
