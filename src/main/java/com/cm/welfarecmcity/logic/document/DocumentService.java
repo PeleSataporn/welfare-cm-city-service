@@ -2,6 +2,7 @@ package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailLoginRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
@@ -31,6 +32,8 @@ public class DocumentService {
   @Autowired private LoanDetailRepository loanDetailRepository;
 
   @Autowired private LoanDetailLogicRepository loanDetailLogicRepository;
+
+  @Autowired private LoanDetailHistoryRepository loanDetailHistoryRepository;
 
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
@@ -1130,7 +1133,7 @@ public class DocumentService {
     //      return null;
     //    } else {
     val empData = documentRepository.employeeById(empId);
-    val loanData = documentRepository.loanByIdMergeHistory(loanId);
+    val loanData = documentRepository.loanByIdMergeHistoryOfLoanById(loanId);
 
     for (val list : loanData) {
       int sumOrdinary = 0;
@@ -1162,4 +1165,33 @@ public class DocumentService {
     return loanData;
     //    }
   }
+
+  @Transactional
+  public String calculateLoanbalance(CalculateReq req) throws ParseException {
+
+    var result = documentRepository.documentCalLoanBalance(null, null, 0);
+    for (val list : result) {
+         double calLoanBalance = 0;
+         if(list.getLoanBalance() > 0 && (list.getLoanBalance() > list.getLoanOrdinary())){
+           calLoanBalance = Math.round(list.getLoanBalance() - list.getLoanOrdinary());
+         }else{
+           calLoanBalance = 0; //list.getLoanBalance();
+         }
+
+         var resultOfLoanId = documentRepository.documentCalLoanBalanceOfSingle(null,null, list.getLoanId()); // list.getLoan().getId()
+         if(resultOfLoanId != null){
+           double calResultBL = 0;
+           if((list.getLoanBalance() > list.getLoanOrdinary())){
+              calResultBL = calLoanBalance + resultOfLoanId.getInterest();
+           }else{
+              calResultBL = calLoanBalance;
+           }
+           val loanDetailHistory = loanDetailHistoryRepository.findById(resultOfLoanId.getId()).get();
+           loanDetailHistory.setLoanBalance(calResultBL);
+           loanDetailHistoryRepository.save(loanDetailHistory);
+         }
+    }
+    return "success";
+  }
+
 }

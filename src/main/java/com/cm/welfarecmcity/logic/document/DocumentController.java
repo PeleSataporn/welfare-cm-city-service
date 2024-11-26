@@ -118,4 +118,10 @@ public class DocumentController {
       throws ParseException {
     return service.calculateStockDividend(req);
   }
+
+  @PostMapping("v1/document/calculate-loanbalance")
+  public String calculateLoanbalance(@RequestBody CalculateReq req)
+          throws ParseException {
+    return service.calculateLoanbalance(req);
+  }
 }
