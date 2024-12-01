@@ -24,4 +24,5 @@ public class EmployeeOfMainRes {
   private Boolean passwordFlag;
   private Date billingStartDate;
   private String loanNo;
+  private Date loanCreateDate;
 }

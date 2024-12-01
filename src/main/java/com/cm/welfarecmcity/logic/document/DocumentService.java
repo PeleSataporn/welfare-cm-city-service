@@ -1171,27 +1171,28 @@ public class DocumentService {
 
     var result = documentRepository.documentCalLoanBalance(null, null, 0);
     for (val list : result) {
-         double calLoanBalance = 0;
-         if(list.getLoanBalance() > 0 && (list.getLoanBalance() > list.getLoanOrdinary())){
-           calLoanBalance = Math.round(list.getLoanBalance() - list.getLoanOrdinary());
-         }else{
-           calLoanBalance = 0; //list.getLoanBalance();
-         }
+      double calLoanBalance = 0;
+      if (list.getLoanBalance() > 0 && (list.getLoanBalance() > list.getLoanOrdinary())) {
+        calLoanBalance = Math.round(list.getLoanBalance() - list.getLoanOrdinary());
+      } else {
+        calLoanBalance = 0; // list.getLoanBalance();
+      }
 
-         var resultOfLoanId = documentRepository.documentCalLoanBalanceOfSingle(null,null, list.getLoanId()); // list.getLoan().getId()
-         if(resultOfLoanId != null){
-           double calResultBL = 0;
-           if((list.getLoanBalance() > list.getLoanOrdinary())){
-              calResultBL = calLoanBalance + resultOfLoanId.getInterest();
-           }else{
-              calResultBL = calLoanBalance;
-           }
-           val loanDetailHistory = loanDetailHistoryRepository.findById(resultOfLoanId.getId()).get();
-           loanDetailHistory.setLoanBalance(calResultBL);
-           loanDetailHistoryRepository.save(loanDetailHistory);
-         }
+      var resultOfLoanId =
+          documentRepository.documentCalLoanBalanceOfSingle(
+              null, null, list.getLoanId()); // list.getLoan().getId()
+      if (resultOfLoanId != null) {
+        double calResultBL = 0;
+        if ((list.getLoanBalance() > list.getLoanOrdinary())) {
+          calResultBL = calLoanBalance + resultOfLoanId.getInterest();
+        } else {
+          calResultBL = calLoanBalance;
+        }
+        val loanDetailHistory = loanDetailHistoryRepository.findById(resultOfLoanId.getId()).get();
+        loanDetailHistory.setLoanBalance(calResultBL);
+        loanDetailHistoryRepository.save(loanDetailHistory);
+      }
     }
     return "success";
   }
-
 }

@@ -120,8 +120,7 @@ public class DocumentController {
   }
 
   @PostMapping("v1/document/calculate-loanbalance")
-  public String calculateLoanbalance(@RequestBody CalculateReq req)
-          throws ParseException {
+  public String calculateLoanbalance(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanbalance(req);
   }
 }
