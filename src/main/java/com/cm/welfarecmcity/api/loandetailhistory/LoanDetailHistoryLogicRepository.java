@@ -61,7 +61,7 @@ public class LoanDetailHistoryLogicRepository {
             + " LEFT JOIN employee ON employee.department_id = department.id "
             + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
             + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
-            + " WHERE employee.deleted = FALSE AND loan.active = TRUE ");
+            + " WHERE employee.deleted = FALSE  "); // AND loan.active = TRUE
 
     sql.append(" AND loan_detail_history.loan_month = '").append(getMonthCurrent).append("'");
     sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");

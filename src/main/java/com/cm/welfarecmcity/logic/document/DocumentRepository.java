@@ -249,7 +249,7 @@ public class DocumentRepository {
     if (getMonthCurrent != null && yearCurrent != null) {
       sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
-      sql.append(" AND employee.employee_status IN (2,5) AND employee.id != 0 ");
+      sql.append(" AND employee.employee_status IN (2,5) AND employee.id != 0 AND loan.active = true ");
     }
     if (loanId != null) {
       if (testHistory != null) {
