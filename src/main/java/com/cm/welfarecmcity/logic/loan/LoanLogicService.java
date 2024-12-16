@@ -272,16 +272,10 @@ public class LoanLogicService {
     loan.setActive(false);
     loan.setDeleted(true);
 
-    //    val listLoanDetail = repository.searchLoanOfLoanDetail(id);
-
-    //    val detailLoan = repository.searchLoanOfLoanDetail(id);
-    //    for (LoanDetailDto list : detailLoan) {
-    //      val detail1 = loanDetailRepository.findById(list.getId()).get();
-    //      detail1.setActive(false);
-    //      loanDetailRepository.save(detail1);
-    //    }
-
     loanRepository.save(loan);
+
+    val detailLoan = repository.searchLoanOfLoanDetail(id);
+    loanDetailRepository.deleteAll(detailLoan);
   }
 
   @Transactional
