@@ -248,4 +248,21 @@ public class LoanLogicRepository {
     val sql = buildQuerySqlLoanOfLoanDetail(loanId);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
   }
+
+  public StringBuilder getLoanDetailByMonthNewSql(Long id) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT loan_detail.id as loanDetailId, loan_detail.installment, loan_detail.interest, loan_detail.loan_month, loan_detail.loan_ordinary, loan_detail.loan_id, loan_detail.interest_percent, "
+                + " loan_detail.loan_year, loan_detail.interest_last_month, loan.loan_time, loan.loan_value, loan.new_loan, loan.start_loan_date, employee.id as employeeId  ")
+        .append(" FROM loan_detail LEFT JOIN loan ON loan.id = loan_detail.loan_id ")
+        .append(" LEFT JOIN employee on employee.loan_id = loan.id ")
+        .append(" WHERE loan.id = ")
+        .append(id);
+    return sql;
+  }
+
+  public List<LoanDetailRes> getLoanDetailByMonthNew(Long id) {
+    val sql = getLoanDetailByMonthNewSql(id);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanDetailRes.class));
+  }
 }
