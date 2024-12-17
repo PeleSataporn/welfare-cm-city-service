@@ -44,4 +44,8 @@ public class EmployeeLoanNew {
   // --------- stock -----------
   private Long stockId = null;
   //  private Long stockValue = null;
+
+  // --------- loan detail history -----------
+  private Boolean historyLoanFlag = false;
+
 }

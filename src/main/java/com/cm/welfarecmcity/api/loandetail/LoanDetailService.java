@@ -3,6 +3,7 @@ package com.cm.welfarecmcity.api.loandetail;
 import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
+import com.cm.welfarecmcity.logic.employee.EmployeeLogicRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.val;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class LoanDetailService {
 
   @Autowired private LoanDetailLogicRepository loanDetailLogicRepository;
+
+  @Autowired private EmployeeLogicRepository employeeLogicRepository;
 
   //  @Transactional
   //  public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
@@ -47,7 +50,16 @@ public class LoanDetailService {
 
   @Transactional
   public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
-    val loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
+    val emp = employeeLogicRepository.getEmployeeOfMain(req.getEmpId());
+
+    List<LoanDetailRes> loanDetailHistories = null;
+    if(req.getLoanId() != null){
+       loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
+    }else{
+       val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(emp.getEmployeeCode());
+       loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory((!loanHistory.isEmpty() ? loanHistory.get(0).getLoanId() : req.getLoanId()));
+    }
+
 
     for (val list : loanDetailHistories) {
       if (Integer.parseInt(list.getLoanYear()) >= 2567) {

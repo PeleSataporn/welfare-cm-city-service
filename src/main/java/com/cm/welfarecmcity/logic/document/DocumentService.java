@@ -365,11 +365,14 @@ public class DocumentService {
           // req.setLoanId(null);
         }
       } else {
-        req.setLoanId(null);
+        flagLoan = true;
+        // req.setLoanId(null);
       }
 
       if(flagLoan){
-        return documentRepository.searchEmployeeLoanOldHistory(req);
+        EmployeeLoanNew employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+        employeeLoanNew.setHistoryLoanFlag(true);
+        return employeeLoanNew;
       }else{
         return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
       }
@@ -1139,6 +1142,10 @@ public class DocumentService {
     //      return null;
     //    } else {
     val empData = documentRepository.employeeById(empId);
+    if(loanId == null){
+      val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(empData.getEmployeeCode());
+      loanId = (loanHistory != null ? loanHistory.get(0).getLoanId() : loanId);
+    }
     val loanData = documentRepository.loanByIdMergeHistoryOfLoanById(loanId);
 
     for (val list : loanData) {

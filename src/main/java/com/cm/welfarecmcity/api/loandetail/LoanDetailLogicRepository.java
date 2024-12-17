@@ -118,4 +118,19 @@ public class LoanDetailLogicRepository {
     sql.append(" ORDER BY loan_year DESC, installment DESC; ");
     return sql;
   }
+
+  public StringBuilder buildQuerySqlV1LoanDetailHistoryList(String empCode) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT employee_code, loan_id, employee_id FROM loan_detail_history ");
+    sql.append(" WHERE employee_code = '")
+            .append(empCode)
+            .append("'");
+    return sql;
+  }
+
+  public List<LoanHistoryDto> LoanDetailHistoryList(String empCode) {
+    val sql = buildQuerySqlV1LoanDetailHistoryList(empCode);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanHistoryDto.class));
+  }
+
 }

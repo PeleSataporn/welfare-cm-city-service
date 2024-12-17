@@ -15,4 +15,6 @@ public class LoanHistoryDto extends BaseDto {
   private Long employeeId;
   private Long loanId;
   private String status;
+  private String employeeCode;
+
 }
