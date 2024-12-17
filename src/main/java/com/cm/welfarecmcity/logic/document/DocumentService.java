@@ -399,7 +399,10 @@ public class DocumentService {
     } else {
       req.setLoanId(null);
     }
-    return documentRepository.searchEmployeeLoanOldHistory(req);
+    // return documentRepository.searchEmployeeLoanOldHistory(req);
+    EmployeeLoanNew employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+    employeeLoanNew.setHistoryLoanFlag(true);
+    return employeeLoanNew;
   }
 
   @Transactional
