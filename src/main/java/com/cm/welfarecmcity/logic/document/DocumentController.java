@@ -4,10 +4,7 @@ import com.cm.welfarecmcity.logic.document.model.*;
 import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/logic")
@@ -122,5 +119,11 @@ public class DocumentController {
   @PostMapping("v1/document/calculate-loanbalance")
   public String calculateLoanbalance(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanbalance(req);
+  }
+
+  // TODO: TEST UPDATE LOAN HISTORY MONTH 11
+  @PutMapping("v1/document/test-update")
+  public void update() throws ParseException {
+    service.update();
   }
 }

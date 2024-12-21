@@ -1,5 +1,6 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
@@ -34,6 +35,7 @@ public class DocumentService {
   @Autowired private LoanDetailLogicRepository loanDetailLogicRepository;
 
   @Autowired private LoanDetailHistoryRepository loanDetailHistoryRepository;
+  @Autowired private LoanRepository loanRepository;
 
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
@@ -369,11 +371,12 @@ public class DocumentService {
         // req.setLoanId(null);
       }
 
-      if(flagLoan){
-        EmployeeLoanNew employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+      if (flagLoan) {
+        EmployeeLoanNew employeeLoanNew =
+            documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
         employeeLoanNew.setHistoryLoanFlag(true);
         return employeeLoanNew;
-      }else{
+      } else {
         return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
       }
 
@@ -1145,7 +1148,7 @@ public class DocumentService {
     //      return null;
     //    } else {
     val empData = documentRepository.employeeById(empId);
-    if(loanId == null){
+    if (loanId == null) {
       val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(empData.getEmployeeCode());
       loanId = (loanHistory != null ? loanHistory.get(0).getLoanId() : loanId);
     }
@@ -1210,5 +1213,40 @@ public class DocumentService {
       }
     }
     return "success";
+  }
+
+  // TODO: TEST UPDATE LOAN HISTORY MONTH 11
+  public void update() throws ParseException {
+    val loans = loanRepository.findAll();
+
+    for (val loan : loans) {
+      val calculate = new CalculateReq();
+      calculate.setPrincipal(loan.getLoanValue());
+      calculate.setInterestRate(5);
+      calculate.setNumOfPayments(loan.getLoanTime());
+      calculate.setPaymentStartDate(loan.getStartLoanDate());
+
+      val filteredHistories =
+          loanDetailHistoryRepository.findAll().stream()
+              .filter(
+                  history ->
+                      Objects.equals(history.getLoanMonth(), "พฤศจิกายน")
+                          && Objects.equals(history.getLoanYear(), "2567")
+                          && history.getLoan() == loan)
+              .toList();
+
+      if (!filteredHistories.isEmpty()) {
+
+        val his = filteredHistories.get(0);
+
+        val cals =
+            calculateLoanNew(calculate).stream()
+                .filter(cal -> cal.getInstallment() == his.getInstallment())
+                .toList();
+
+        his.setLoanBalance(cals.get(0).getPrincipalBalance());
+        loanDetailHistoryRepository.save(his);
+      }
+    }
   }
 }

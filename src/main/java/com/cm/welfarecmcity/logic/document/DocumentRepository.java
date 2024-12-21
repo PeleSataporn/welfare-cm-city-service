@@ -249,7 +249,8 @@ public class DocumentRepository {
     if (getMonthCurrent != null && yearCurrent != null) {
       sql.append(" AND loan_detail.loan_month = '").append(getMonthCurrent).append("'");
       sql.append(" AND loan_detail.loan_year = '").append(yearCurrent).append("'");
-      sql.append(" AND employee.employee_status IN (2,5) AND employee.id != 0 AND loan.active = true ");
+      sql.append(
+          " AND employee.employee_status IN (2,5) AND employee.id != 0 AND loan.active = true ");
     }
     if (loanId != null) {
       if (testHistory != null) {
@@ -1026,43 +1027,43 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlV1LoanOldHistoryOfNull(DocumentReq req) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
-                    + " employee_type.name AS employeeTypeName, stock_detail.stock_accumulate AS stockAccumulate,  stock_detail.stock_value, "
-                    + " employee.salary, employee.employee_type_id AS employeeTypeId, stock_detail.installment as stockDetailInstallment, stock.id as stockId ");
+        " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
+            + " employee_type.name AS employeeTypeName, stock_detail.stock_accumulate AS stockAccumulate,  stock_detail.stock_value, "
+            + " employee.salary, employee.employee_type_id AS employeeTypeId, stock_detail.installment as stockDetailInstallment, stock.id as stockId ");
     if (req.getLoanId() == null) {
       sql.append(
-              " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, "
-                      + " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, "
-                      + " loan_detail_history.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan_detail_history.interest as interestLoanLastMonth, loan_detail_history.loan_ordinary ");
+          " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, "
+              + " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, "
+              + " loan_detail_history.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan_detail_history.interest as interestLoanLastMonth, loan_detail_history.loan_ordinary ");
     }
     sql.append(
-            " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
-                    + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id   ");
+        " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
+            + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id   ");
     if (req.getLoanId() == null) {
       sql.append(
-              // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
-              // loan_detail_history.loan_id = loan.id
-              " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
-                      + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  ");
+          // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
+          // loan_detail_history.loan_id = loan.id
+          " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
+              + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  ");
     }
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
       if (req.getStockId() != null) {
         sql.append(" and stock_detail.stock_month = '")
-                .append(req.getMonthCurrent())
-                .append("' and stock_detail.stock_year = '")
-                .append(req.getYearCurrent())
-                .append("'");
+            .append(req.getMonthCurrent())
+            .append("' and stock_detail.stock_year = '")
+            .append(req.getYearCurrent())
+            .append("'");
       }
       if (req.getLoanId() == null) {
         sql.append("and loan_detail_history.employee_code = '")
-                .append(req.getEmpCode())
-                .append("'");
+            .append(req.getEmpCode())
+            .append("'");
         sql.append(" and loan_detail_history.loan_month = '")
-                .append(req.getMonthCurrent())
-                .append("' and loan_detail_history.loan_year = '")
-                .append(req.getYearCurrent())
-                .append("'");
+            .append(req.getMonthCurrent())
+            .append("' and loan_detail_history.loan_year = '")
+            .append(req.getYearCurrent())
+            .append("'");
       }
     }
     sql.append(" GROUP BY employee.employee_code ");
@@ -1072,7 +1073,6 @@ public class DocumentRepository {
   public EmployeeLoanNew searchEmployeeLoanOldHistoryOfNull(DocumentReq req) {
     val sql = buildQuerySqlV1LoanOldHistoryOfNull(req);
     return jdbcTemplate.queryForObject(
-            sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+        sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
   }
-
 }

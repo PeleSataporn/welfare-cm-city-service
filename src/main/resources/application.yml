@@ -13,9 +13,12 @@ spring:
     default-property-inclusion: non_null
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
+#    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+#    username: ${DATABASE_USER}
+#    password: ${DATABASE_PASSWORD}
+    url: jdbc:mariadb://103.253.72.208:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+    username: icoop
+    password: icoop.cmcity.db@2023$
     hikari:
       auto-commit: false
     initialization-mode: always
