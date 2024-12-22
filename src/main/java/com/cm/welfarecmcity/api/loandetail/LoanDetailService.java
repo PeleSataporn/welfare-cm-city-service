@@ -53,13 +53,14 @@ public class LoanDetailService {
     val emp = employeeLogicRepository.getEmployeeOfMain(req.getEmpId());
 
     List<LoanDetailRes> loanDetailHistories = null;
-    if(req.getLoanId() != null){
-       loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
-    }else{
-       val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(emp.getEmployeeCode());
-       loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory((!loanHistory.isEmpty() ? loanHistory.get(0).getLoanId() : req.getLoanId()));
+    if (req.getLoanId() != null) {
+      loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
+    } else {
+      val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(emp.getEmployeeCode());
+      loanDetailHistories =
+          loanDetailLogicRepository.getLoanDetailMergeHistory(
+              (!loanHistory.isEmpty() ? loanHistory.get(0).getLoanId() : req.getLoanId()));
     }
-
 
     for (val list : loanDetailHistories) {
       if (Integer.parseInt(list.getLoanYear()) >= 2567) {

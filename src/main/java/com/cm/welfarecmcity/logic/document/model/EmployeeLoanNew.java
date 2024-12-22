@@ -47,5 +47,4 @@ public class EmployeeLoanNew {
 
   // --------- loan detail history -----------
   private Boolean historyLoanFlag = false;
-
 }
