@@ -1,9 +1,14 @@
 package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.logic.document.model.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -111,13 +116,12 @@ public class DocumentController {
 
   // เงินปันผล
   @PostMapping("v1/document/calculate-dividend")
-  public List<DocumentStockDevidend> calculateStockDividend(@RequestBody DocumentReq req)
-      throws ParseException {
+  public List<DocumentStockDevidend> calculateStockDividend(@RequestBody DocumentReq req) {
     return service.calculateStockDividend(req);
   }
 
   @PostMapping("v1/document/calculate-loanbalance")
-  public String calculateLoanbalance(@RequestBody CalculateReq req) throws ParseException {
+  public String calculateLoanBalance(@RequestBody CalculateReq req) throws ParseException {
     return service.calculateLoanbalance(req);
   }
 
@@ -125,5 +129,24 @@ public class DocumentController {
   @PutMapping("v1/document/test-update")
   public void update() throws ParseException {
     service.update();
+  }
+
+  @PostMapping(
+      value = "v1/document/export-data/dividends",
+      produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> exportDividends(@RequestBody DocumentReq req) throws IOException {
+    val outputStream = service.exportDividends(req);
+
+    if (outputStream == null || outputStream.size() == 0) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .contentLength(outputStream.size())
+        .header(
+            "Content-Disposition",
+            "attachment;filename=export-dividends-" + System.nanoTime() + ".xlsx")
+        .body(outputStream.toByteArray());
   }
 }

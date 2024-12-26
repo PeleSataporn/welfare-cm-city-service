@@ -161,6 +161,7 @@ com/cm/welfarecmcity/api/news/NewsService.class
 com/cm/welfarecmcity/api/loandetail/LoanDetailController.class
 com/cm/welfarecmcity/dto/NewsFileDetailDto$NewsFileDetailDtoBuilderImpl.class
 com/cm/welfarecmcity/logic/document/model/DocumentLoanV1Res.class
+com/cm/welfarecmcity/api/loandetail/model/SumLoanHistoryV2Res.class
 com/cm/welfarecmcity/logic/login/model/LoginRes.class
 com/cm/welfarecmcity/api/employee/model/UpdateAdminReq.class
 com/cm/welfarecmcity/dto/bean/FileConfigBean.class
@@ -173,9 +174,11 @@ com/cm/welfarecmcity/dto/base/ResponseModel.class
 com/cm/welfarecmcity/dto/base/ResponseData.class
 com/cm/welfarecmcity/logic/register/model/res/SearchNewRegisterRes.class
 com/cm/welfarecmcity/dto/LoanDetailDto.class
+com/cm/welfarecmcity/utils/NumberFormatUtils.class
 com/cm/welfarecmcity/api/employee/model/UpdateStockValueReq.class
 com/cm/welfarecmcity/api/document/DocumentsService.class
 com/cm/welfarecmcity/CalloanOld.class
+com/cm/welfarecmcity/api/loandetail/model/LoanHistoryV2Res.class
 com/cm/welfarecmcity/dto/GuarantorDto.class
 com/cm/welfarecmcity/api/user/UserRepository.class
 com/cm/welfarecmcity/api/stockdetail/StockDetailController.class

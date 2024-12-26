@@ -14,7 +14,7 @@ public class DocumentStockDevidend {
   private String bankName;
   private String bankAccountReceivingNumber;
   private String stockAccumulate;
-
+  private String index;
   private String stockValue;
   private String stockYear;
   private String stockMonth;

@@ -3,13 +3,18 @@ package com.cm.welfarecmcity.logic.document;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.loandetail.model.LoanHistoryV2Res;
+import com.cm.welfarecmcity.api.loandetail.model.SumLoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailLoginRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
+import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.utils.NumberFormatUtils;
 import jakarta.transaction.Transactional;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -20,8 +25,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.val;
+import org.jxls.common.Context;
+import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -1040,7 +1049,8 @@ public class DocumentService {
               int stockAccumulate =
                   Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue;
               sumYearOld = (stockAccumulate * stockDividendPercent); // * ((12-0) / 12)
-              BigDecimal roundedValue = new BigDecimal(sumYearOld).setScale(2, RoundingMode.HALF_UP);
+              BigDecimal roundedValue =
+                  new BigDecimal(sumYearOld).setScale(2, RoundingMode.HALF_UP);
               sumYearOld = roundedValue.doubleValue();
             }
             for (DocumentStockDevidend documentStockDevidend : resDividendYearCurrent) {
@@ -1053,7 +1063,8 @@ public class DocumentService {
                     Double.parseDouble(req.getStockDividendPercent()) / 100;
                 int stockValueMonth = Integer.parseInt(documentStockDevidend.getStockValue());
                 sumMonth = ((stockValueMonth * stockDividendPercent) * monthDifference / 12);
-                BigDecimal roundedValue = new BigDecimal(sumMonth).setScale(2, RoundingMode.HALF_UP);
+                BigDecimal roundedValue =
+                    new BigDecimal(sumMonth).setScale(2, RoundingMode.HALF_UP);
                 sumYearCurrent += roundedValue.doubleValue();
               }
             }
@@ -1063,23 +1074,40 @@ public class DocumentService {
             // Interest dividend
             int sumInterest = 0;
             int interestDividend = 0;
-            Long loanId = null;
 
-            val loanHistory = loanDetailLogicRepository.LoanDetailHistoryList(res.getEmployeeCode());
-            loanId = (!loanHistory.isEmpty() ? loanHistory.get(0).getLoanId() : null);
+            val loanHistory =
+                loanDetailLogicRepository.LoanDetailHistoryList(res.getEmployeeCode());
 
-            if(loanId != null){
-              var LoanDividendYearCurrent =
-                      documentRepository.loanByIdMergeHistoryOfLoanByIdForDividend(
-                              loanId, req.getYearCurrent());
-              for (DocumentInfoAllLoanEmpRes loanDividend : LoanDividendYearCurrent) {
+            val loanIds = loanHistory.stream().map(LoanHistoryDto::getLoanId).distinct().toList();
+
+            if (!loanIds.isEmpty()) {
+              var loanDividendYearCurrent =
+                  documentRepository.loanByIdMergeHistoryOfLoanByIdForDividend(
+                      loanIds, req.getYearCurrent());
+
+              loanDividendYearCurrent =
+                  loanDividendYearCurrent.stream()
+                      .filter(
+                          loan ->
+                              !(loan.getGg().equals("history")
+                                  && loan.getLoanMonth().equals("ธันวาคม")
+                                  && loan.getLoanYear().equals("2567")))
+                      .toList();
+
+              for (DocumentInfoAllLoanEmpRes loanDividend : loanDividendYearCurrent) {
                 sumInterest += loanDividend.getInterest();
               }
               double interestDividendPercent =
-                      Double.parseDouble(req.getInterestDividendPercent()) / 100;
+                  Double.parseDouble(req.getInterestDividendPercent()) / 100;
               interestDividend = (int) (sumInterest * interestDividendPercent);
               res.setCumulativeInterest(String.valueOf(sumInterest));
               res.setInterestDividend(String.valueOf(interestDividend));
+            } else {
+              val resSumV2 = calculateStockDividendV2(res.getEmployeeCode(), req);
+              res.setCumulativeInterest(resSumV2.getCumulativeInterest());
+              res.setInterestDividend(resSumV2.getInterestDividend());
+
+              interestDividend = resSumV2.getInterestDividendIn();
             }
             //  รวมปนผล = ( ปนผลหุน + ปนผลดอกเบี้ย )
             totalDividend = stockDividend + interestDividend;
@@ -1088,6 +1116,47 @@ public class DocumentService {
     }
 
     return resDividend;
+  }
+
+  @Transactional
+  public SumLoanHistoryV2Res calculateStockDividendV2(String employeeCode, DocumentReq req) {
+    // Interest dividend
+    int sumInterest = 0;
+    int interestDividend = 0;
+
+    val res = new SumLoanHistoryV2Res();
+
+    val loanHistory = loanDetailLogicRepository.LoanDetailHistoryListV2(employeeCode);
+
+    val loanIds = loanHistory.stream().map(LoanHistoryV2Res::getLLoanId).distinct().toList();
+
+    if (!loanIds.isEmpty()) {
+      var loanDividendYearCurrent =
+          documentRepository.loanByIdMergeHistoryOfLoanByIdForDividend(
+              loanIds, req.getYearCurrent());
+
+      loanDividendYearCurrent =
+          loanDividendYearCurrent.stream()
+              .filter(
+                  loan ->
+                      !(loan.getGg().equals("history")
+                          && loan.getLoanMonth().equals("ธันวาคม")
+                          && loan.getLoanYear().equals("2567")))
+              .toList();
+
+      for (DocumentInfoAllLoanEmpRes loanDividend : loanDividendYearCurrent) {
+        sumInterest += loanDividend.getInterest();
+      }
+
+      double interestDividendPercent = Double.parseDouble(req.getInterestDividendPercent()) / 100;
+      interestDividend = (int) (sumInterest * interestDividendPercent);
+
+      res.setCumulativeInterest(String.valueOf(sumInterest));
+      res.setInterestDividend(String.valueOf(interestDividend));
+      res.setInterestDividendIn(interestDividend);
+    }
+
+    return res;
   }
 
   private int getMonthNumber(String month) {
@@ -1106,48 +1175,6 @@ public class DocumentService {
       default -> 12; // For "ธันวาคม" month
     };
   }
-
-  //  @Transactional
-  //  public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(
-  //          Long loanId, String getMonthCurrent, Boolean admin, Long empId, String yearCurrent)
-  //          throws ParseException {
-  //    if (!admin) {
-  //      return null;
-  //    } else {
-  //      val empData = documentRepository.employeeById(empId);
-  //      val loanData = documentRepository.loanById(loanId);
-  //
-  //      for (DocumentInfoAllLoanEmpRes list : loanData) {
-  //        int sumOrdinary = 0;
-  //        list.setDepartmentName(empData.getDepartmentName());
-  //        list.setEmployeeCode(empData.getEmployeeCode());
-  //        list.setFullName(empData.getFullName());
-  //        if (Integer.parseInt(list.getLoanYear()) >= 2567) {
-  //          list.setLoanBalance(
-  //                  list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
-  //          val calculateReq = new CalculateReq();
-  //          calculateReq.setPrincipal(list.getLoanValue());
-  //          calculateReq.setInterestRate(list.getInterestPercent());
-  //          calculateReq.setNumOfPayments(Integer.parseInt(list.getLoanTime()));
-  //          calculateReq.setPaymentStartDate(list.getStartLoanDate());
-  //          val calculate = calculateLoanNew(calculateReq);
-  //          for (CalculateInstallments calculation : calculate) {
-  //            if (calculation.getInstallment() <= list.getInstallment()) {
-  //              sumOrdinary += calculation.getPrincipal();
-  //            }
-  //            if (calculation.getInstallment() == list.getInstallment()) {
-  //              list.setPrincipal(calculation.getPrincipal());
-  //            }
-  //          }
-  //          list.setSumOrdinary(sumOrdinary - list.getPrincipal());
-  //        } else {
-  //          list.setSumOrdinary((int) (list.getLoanOrdinary() * list.getInstallment()));
-  //          list.setPrincipal(0);
-  //        }
-  //      }
-  //      return loanData;
-  //    }
-  //  }
 
   @Transactional
   public List<DocumentInfoAllLoanEmpRes> searchDocumentV1LoanById(Long loanId, Long empId)
@@ -1256,5 +1283,179 @@ public class DocumentService {
         loanDetailHistoryRepository.save(his);
       }
     }
+  }
+
+  // Export EXCEL
+  @Transactional
+  public List<DocumentStockDevidend> calculateStockDividendExcel(DocumentReq req) {
+    var resDividend =
+        documentRepository.documentInfoStockDividend(req.getEmpCode(), req.getYearCurrent(), null);
+    AtomicInteger i = new AtomicInteger(1);
+    if (resDividend != null) {
+      resDividend.forEach(
+          res -> {
+            int totalDividend = 0;
+            // stock dividend
+            double sumYearOld = 0;
+            double sumYearCurrent = 0;
+            int stockDividend = 0;
+
+            // Dividend of employeeCode ( yearCurrent )
+            var resDividendYearCurrent =
+                documentRepository.documentInfoStockDividendV1(
+                    res.getEmployeeCode(), req.getYearCurrent(), null);
+            // Dividend of employeeCode ( yearOld )
+            var resDividendYearOld =
+                documentRepository.documentInfoStockDividendV1(
+                    res.getEmployeeCode(), null, req.getYearOld());
+
+            if (!Objects.requireNonNull(resDividendYearOld).isEmpty()) {
+              double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
+              int stockValue = Integer.parseInt(resDividendYearOld.get(0).getStockValue());
+              int stockAccumulate =
+                  Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue;
+              sumYearOld = (stockAccumulate * stockDividendPercent); // * ((12-0) / 12)
+              BigDecimal roundedValue =
+                  new BigDecimal(sumYearOld).setScale(2, RoundingMode.HALF_UP);
+              sumYearOld = roundedValue.doubleValue();
+            }
+            for (DocumentStockDevidend documentStockDevidend : resDividendYearCurrent) {
+              String stockMonth = documentStockDevidend.getStockMonth();
+              int monthDifference = 12 - getMonthNumber(stockMonth);
+
+              if (!stockMonth.equalsIgnoreCase("ธันวาคม")) {
+                double sumMonth = 0;
+                double stockDividendPercent =
+                    Double.parseDouble(req.getStockDividendPercent()) / 100;
+                int stockValueMonth = Integer.parseInt(documentStockDevidend.getStockValue());
+                sumMonth = ((stockValueMonth * stockDividendPercent) * monthDifference / 12);
+                BigDecimal roundedValue =
+                    new BigDecimal(sumMonth).setScale(2, RoundingMode.HALF_UP);
+                sumYearCurrent += roundedValue.doubleValue();
+              }
+            }
+            stockDividend = (int) (sumYearOld + sumYearCurrent);
+            res.setStockDividend(NumberFormatUtils.numberFormat(String.valueOf(stockDividend)));
+
+            // Interest dividend
+            int sumInterest = 0;
+            int interestDividend = 0;
+
+            val loanHistory =
+                loanDetailLogicRepository.LoanDetailHistoryList(res.getEmployeeCode());
+
+            val loanIds = loanHistory.stream().map(LoanHistoryDto::getLoanId).distinct().toList();
+
+            if (!loanIds.isEmpty()) {
+              var loanDividendYearCurrent =
+                  documentRepository.loanByIdMergeHistoryOfLoanByIdForDividend(
+                      loanIds, req.getYearCurrent());
+
+              loanDividendYearCurrent =
+                  loanDividendYearCurrent.stream()
+                      .filter(
+                          loan ->
+                              !(loan.getGg().equals("history")
+                                  && loan.getLoanMonth().equals("ธันวาคม")
+                                  && loan.getLoanYear().equals("2567")))
+                      .toList();
+
+              for (DocumentInfoAllLoanEmpRes loanDividend : loanDividendYearCurrent) {
+                sumInterest += loanDividend.getInterest();
+              }
+              double interestDividendPercent =
+                  Double.parseDouble(req.getInterestDividendPercent()) / 100;
+              interestDividend = (int) (sumInterest * interestDividendPercent);
+              res.setCumulativeInterest(
+                  NumberFormatUtils.numberFormat(String.valueOf(sumInterest)));
+              res.setInterestDividend(
+                  NumberFormatUtils.numberFormat(String.valueOf(interestDividend)));
+            } else {
+              val resSumV2 = calculateStockDividendV2(res.getEmployeeCode(), req);
+              res.setCumulativeInterest(
+                  NumberFormatUtils.numberFormat(resSumV2.getCumulativeInterest()));
+              res.setInterestDividend(
+                  NumberFormatUtils.numberFormat(resSumV2.getInterestDividend()));
+
+              interestDividend = resSumV2.getInterestDividendIn();
+            }
+            //  รวมปนผล = ( ปนผลหุน + ปนผลดอกเบี้ย )
+            totalDividend = stockDividend + interestDividend;
+            res.setTotalDividend(NumberFormatUtils.numberFormat(String.valueOf(totalDividend)));
+
+            res.setStockAccumulate(NumberFormatUtils.numberFormat(res.getStockAccumulate()));
+
+            res.setIndex(String.format("%05d", i.getAndIncrement()));
+          });
+    }
+
+    return resDividend;
+  }
+
+  public static DocumentStockDevidend calculateSums(List<DocumentStockDevidend> dataList) {
+    DocumentStockDevidend sumResult = new DocumentStockDevidend();
+
+    // Calculate the sums
+    long stockAccumulateSum =
+        dataList.stream()
+            .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getStockAccumulate()))
+            .sum();
+    long stockDividendSum =
+        dataList.stream()
+            .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getStockDividend()))
+            .sum();
+    long cumulativeInterestSum =
+        dataList.stream()
+            .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getCumulativeInterest()))
+            .sum();
+    long interestDividendSum =
+        dataList.stream()
+            .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getInterestDividend()))
+            .sum();
+    long totalDividendSum =
+        dataList.stream()
+            .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getTotalDividend()))
+            .sum();
+
+    // Set the calculated sums in the result object
+    sumResult.setStockAccumulate(
+        NumberFormatUtils.numberFormat(String.valueOf(stockAccumulateSum)));
+    sumResult.setStockDividend(NumberFormatUtils.numberFormat(String.valueOf(stockDividendSum)));
+    sumResult.setCumulativeInterest(
+        NumberFormatUtils.numberFormat(String.valueOf(cumulativeInterestSum)));
+    sumResult.setInterestDividend(
+        NumberFormatUtils.numberFormat(String.valueOf(interestDividendSum)));
+    sumResult.setTotalDividend(NumberFormatUtils.numberFormat(String.valueOf(totalDividendSum)));
+    sumResult.setFullName("รวม");
+
+    return sumResult;
+  }
+
+  @Transactional
+  public ByteArrayOutputStream exportDividends(DocumentReq req) throws IOException {
+    val dataList = calculateStockDividendExcel(req);
+
+    if (dataList.isEmpty()) {
+      return null;
+    }
+
+    val sum = calculateSums(dataList);
+    dataList.add(sum);
+
+    return generateExportDividendFile(dataList);
+  }
+
+  @Transactional
+  public ByteArrayOutputStream generateExportDividendFile(List<DocumentStockDevidend> dataList)
+      throws IOException {
+    val input = new ClassPathResource("excel-template/template-dividends.xlsx").getInputStream();
+
+    val output = new ByteArrayOutputStream();
+    val context = new Context();
+
+    context.putVar("dataList", dataList);
+    JxlsHelper.getInstance().processTemplate(input, output, context);
+
+    return output;
   }
 }

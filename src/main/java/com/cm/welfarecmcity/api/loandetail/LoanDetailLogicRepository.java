@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.api.loandetail;
 
 import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
+import com.cm.welfarecmcity.api.loandetail.model.LoanHistoryV2Res;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
@@ -129,5 +130,21 @@ public class LoanDetailLogicRepository {
   public List<LoanHistoryDto> LoanDetailHistoryList(String empCode) {
     val sql = buildQuerySqlV1LoanDetailHistoryList(empCode);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanHistoryDto.class));
+  }
+
+  public StringBuilder buildQuerySqlV2LoanDetailHistoryList(String empCode) {
+    val sql = new StringBuilder();
+    sql.append(
+        " SELECT e.employee_code, e.loan_id as lLoanId, ldh.loan_id as hLoanId, ldh.employee_id FROM employee e ");
+    sql.append(
+            " left join loan_detail_history ldh on ldh.employee_id = e.id left join loan l on e.loan_id = l.id WHERE e.employee_code = '")
+        .append(empCode)
+        .append("'");
+    return sql;
+  }
+
+  public List<LoanHistoryV2Res> LoanDetailHistoryListV2(String empCode) {
+    val sql = buildQuerySqlV2LoanDetailHistoryList(empCode);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(LoanHistoryV2Res.class));
   }
 }

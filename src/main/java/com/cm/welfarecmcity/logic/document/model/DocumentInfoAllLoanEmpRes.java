@@ -32,4 +32,6 @@ public class DocumentInfoAllLoanEmpRes {
   private String loanNo;
   private int principal = 0;
   private int sumOrdinary = 0;
+  private boolean active;
+  private String gg;
 }
