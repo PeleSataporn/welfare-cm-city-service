@@ -135,6 +135,37 @@
       <version>2.12.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+      <version>6.21.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>4.2.2</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>sarabun-report</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/repo/sarabun-report.jar</systemPath>
+    </dependency>
+
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>k2d-report</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/repo/k2d-report.jar</systemPath>
+    </dependency>
+
   </dependencies>
 
   <build>

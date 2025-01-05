@@ -1,18 +1,25 @@
 package com.cm.welfarecmcity.logic.document;
 
+import com.cm.welfarecmcity.api.admin.AdminConfigRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
 import com.cm.welfarecmcity.api.loandetail.model.LoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetail.model.SumLoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
+import com.cm.welfarecmcity.api.stock.StockRepository;
+import com.cm.welfarecmcity.api.stock.StockService;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailLoginRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.utils.DateUtils;
 import com.cm.welfarecmcity.utils.NumberFormatUtils;
+import com.cm.welfarecmcity.utils.ThaiNumeralsUtils;
+import com.cm.welfarecmcity.utils.ZipUtil;
 import jakarta.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,15 +29,20 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.val;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,6 +60,9 @@ public class DocumentService {
 
   @Autowired private LoanDetailHistoryRepository loanDetailHistoryRepository;
   @Autowired private LoanRepository loanRepository;
+  @Autowired private AdminConfigRepository adminConfigRepository;
+  @Autowired private StockService stockService;
+  @Autowired private StockRepository stockRepository;
 
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
@@ -419,6 +434,213 @@ public class DocumentService {
     employeeLoanNew.setHistoryLoanFlag(true);
     return employeeLoanNew;
   }
+
+  // v2
+  @Transactional
+  public EmployeeLoanNew searchEmployeeLoanNewV2(DocumentReq req) {
+    //    try {
+    //      val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
+    //      req.setStockId(empFullData.getStockId());
+    //      req.setLoanId(empFullData.getLoanId());
+    boolean flagLoan = false;
+    if (req.getLoanId() != null) {
+      val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
+      if (loadDetail.isEmpty()) {
+        flagLoan = true;
+      }
+    } else {
+      flagLoan = true;
+      // req.setLoanId(null);
+    }
+
+    if (flagLoan) {
+      val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+      if (employeeLoanNew != null) {
+        employeeLoanNew.setHistoryLoanFlag(true);
+      }
+      return employeeLoanNew;
+    } else {
+      return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
+    }
+
+    //    } catch (Exception e) {
+    //      return null;
+    //    }
+  }
+
+  @Transactional
+  public EmployeeLoanNew searchEmployeeLoanOldV2(DocumentReq req) {
+    //    val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
+    //    req.setStockId(reportReq.getStockId());
+    //    req.setEmpId(reportReq.getEmpId());
+
+    //    if (req.getLoanId() != null) {
+    //      val loadDetail = documentRepository.searchEmployeeLoanOfNullHistory(req);
+    //      if (loadDetail != null) {
+    //        req.setLoanId(loadDetail.getLoan().getId());
+    //      } else {
+    //        req.setLoanId(null);
+    //      }
+    //    } else {
+    //      req.setLoanId(null);
+    //    }
+    // return documentRepository.searchEmployeeLoanOldHistory(req);
+    val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+    if (employeeLoanNew != null) {
+      employeeLoanNew.setHistoryLoanFlag(true);
+    }
+    return employeeLoanNew;
+  }
+
+  // all bill receipt
+  @Transactional
+  public InputStreamResource receiptStock(ReportReq req) throws Exception {
+    val pdfList = new ArrayList<InputStreamResource>();
+    val nameList = new ArrayList<String>();
+
+    val find = documentRepository.findByActiveTrueAndEmployeeCode();
+    for (val stock : find) {
+      req.setStockId(stock.getStockId());
+      req.setEmpCode(stock.getEmployeeCode());
+      req.setEmpId(stock.getEmpId());
+      req.setLoanId(stock.getLoanId());
+
+      pdfList.add(generateReceiptStockReport(req, stock));
+
+      nameList.add(stock.getEmployeeCode() + "_" + stock.getFirstName());
+    }
+
+    return ZipUtil.createZipFileR5(pdfList, nameList);
+  }
+
+  public InputStreamResource generateReceiptStockReport(
+      ReportReq req, StockAndEmployeeCodeRes resEmp) throws Exception {
+    val stock = stockService.getStock(req.getStockId());
+    val stockDetails = stock.getStockDetails();
+
+    val documentReq = new DocumentReq();
+    documentReq.setEmpCode(req.getEmpCode());
+    documentReq.setMonthCurrent(req.getMonthCurrent());
+    documentReq.setYearCurrent(req.getYearCurrent());
+    documentReq.setEmpId(req.getEmpId());
+    documentReq.setStockId(req.getStockId());
+    documentReq.setLoanId(req.getLoanId());
+
+    EmployeeLoanNew searchEmp;
+
+    val currentDate = LocalDate.now();
+    val monthNow = DateUtils.getThaiMonthInt(currentDate.getMonthValue());
+    val yearNow = String.valueOf(currentDate.getYear() + 543);
+
+    val lastStockDetail = stockDetails.get(stockDetails.size() - 1);
+    if (Objects.equals(req.getMonthCurrent(), monthNow)
+        && Objects.equals(req.getYearCurrent(), yearNow)) {
+      searchEmp = searchEmployeeLoanNewV2(documentReq);
+    } else if (Objects.equals(req.getMonthCurrent(), lastStockDetail.getStockMonth())
+        && Objects.equals(req.getYearCurrent(), lastStockDetail.getStockYear())) {
+      searchEmp = searchEmployeeLoanNewV2(documentReq);
+    } else {
+      searchEmp = searchEmployeeLoanOldV2(documentReq);
+    }
+
+    val res = new ReportRes();
+    res.setMonth(req.getMonthCurrent() + " " + req.getYearCurrent());
+    res.setEmployeeCode(req.getEmpCode());
+    res.setDepartmentName(resEmp.getDepartmentName());
+    res.setFullName(resEmp.getFullName());
+    if (searchEmp != null) {
+      res.setStockAccumulate(
+          searchEmp.getStockAccumulate() != null
+              ? Double.parseDouble(searchEmp.getStockAccumulate())
+              : 0.00);
+      res.setStockDetailInstallment(
+          searchEmp.getStockDetailInstallment() != null
+              ? searchEmp.getStockDetailInstallment()
+              : 0L);
+      res.setStockValue(
+          searchEmp.getStockValue() != null ? Double.parseDouble(searchEmp.getStockValue()) : 0.00);
+      res.setInstallment(searchEmp.getInstallment() != null ? searchEmp.getInstallment() : 0L);
+      res.setInterest(
+          searchEmp.getInterestLoanLastMonth() != null
+              ? Long.parseLong(searchEmp.getInterestLoanLastMonth())
+              : 0L);
+      res.setPrincipalBalance(
+          searchEmp.getLoanBalance() != null
+              ? Double.parseDouble(searchEmp.getLoanBalance())
+              : 0.00);
+      res.setTotalDeduction(
+          (searchEmp.getLoanOrdinary() != null
+                  ? Double.parseDouble(searchEmp.getLoanOrdinary())
+                  : 0.00)
+              - (searchEmp.getInterestLoanLastMonth() != null
+                  ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
+                  : 0.00));
+    }
+    res.setTotalPrice(res.getStockValue() + res.getTotalDeduction() + res.getInterest());
+    res.setTotalText("(" + ThaiNumeralsUtils.formatThaiWords(res.getTotalPrice()) + ")");
+
+    val config1 = adminConfigRepository.findById(4L).get();
+    byte[] imageBytes1 = config1.getImage().getBytes(1, (int) config1.getImage().length());
+    res.setSignature1(imageBytes1);
+
+    val config2 = adminConfigRepository.findById(5L).get();
+    byte[] imageBytes2 = config2.getImage().getBytes(1, (int) config2.getImage().length());
+    res.setSignature2(imageBytes2);
+
+    val params = new HashMap<String, Object>();
+    params.put(JRParameter.REPORT_LOCALE, new Locale("th"));
+
+    val filePath = "report/icoop_receipt_stock.jrxml";
+    val jasperXmlInputStream = new ClassPathResource(filePath).getInputStream();
+    val jasperDesign = JRXmlLoader.load(jasperXmlInputStream);
+    val jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+    return processStream(jasperReport, res, params);
+  }
+
+  public InputStreamResource processStream(
+      JasperReport compiledReport, ReportRes req, HashMap<String, Object> params)
+      throws JRException, IOException {
+
+    val output = new ByteArrayOutputStream();
+
+    try (output) {
+      val print =
+          JasperFillManager.fillReport(
+              compiledReport, params, new JRBeanCollectionDataSource(List.of(req)));
+
+      val exporter = new JRPdfExporter();
+      exporter.setExporterInput(new SimpleExporterInput(print));
+      exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(output));
+      exporter.exportReport();
+    }
+
+    return new InputStreamResource(new ByteArrayInputStream(output.toByteArray()));
+  }
+
+  //  @Transactional
+  //  public EmployeeLoanNew allBillReceipt(DocumentReq req) {
+  //    val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
+  //    req.setStockId(empFullData.getStockId());
+  //    req.setLoanId(empFullData.getLoanId());
+  //    req.setEmpId(empFullData.getEmpId());
+  //
+  //    if (req.getLoanId() != null) {
+  //      val loadDetail = documentRepository.searchEmployeeLoanOfNullHistory(req);
+  //      if (loadDetail != null) {
+  //        req.setLoanId(empFullData.getLoanId());
+  //      } else {
+  //        req.setLoanId(null);
+  //      }
+  //    } else {
+  //      req.setLoanId(null);
+  //    }
+  //    // return documentRepository.searchEmployeeLoanOldHistory(req);
+  //    EmployeeLoanNew employeeLoanNew =
+  // documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+  //    employeeLoanNew.setHistoryLoanFlag(true);
+  //    return employeeLoanNew;
+  //  }
 
   @Transactional
   public List<GuaranteeRes> searchGuarantorUnique(String empCode) {

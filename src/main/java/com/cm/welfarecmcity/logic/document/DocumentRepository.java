@@ -1,6 +1,7 @@
 package com.cm.welfarecmcity.logic.document;
 
 import com.cm.welfarecmcity.dto.LoanDetailDto;
+import com.cm.welfarecmcity.dto.LoanDetailHistory;
 import com.cm.welfarecmcity.logic.document.model.*;
 import com.cm.welfarecmcity.utils.DateUtils;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -431,10 +433,14 @@ public class DocumentRepository {
     return sql;
   }
 
-  public LoanDetailDto searchEmployeeLoanOfNullHistory(DocumentReq req) {
+  public LoanDetailHistory searchEmployeeLoanOfNullHistory(DocumentReq req) {
     val sql = buildQuerySqlV1LoanOfNullHistory(req);
-    return jdbcTemplate.queryForObject(
-        sql.toString(), new BeanPropertyRowMapper<>(LoanDetailDto.class));
+    try {
+      return jdbcTemplate.queryForObject(
+          sql.toString(), new BeanPropertyRowMapper<>(LoanDetailHistory.class));
+    } catch (EmptyResultDataAccessException e) {
+      return null; // No result found
+    }
   }
 
   public StringBuilder buildQuerySqlV1LoanNewOfNull(DocumentReq req) {
@@ -1038,7 +1044,7 @@ public class DocumentRepository {
         " SELECT employee.id as empId, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
             + " employee_type.name AS employeeTypeName, stock_detail.stock_accumulate AS stockAccumulate,  stock_detail.stock_value, "
             + " employee.salary, employee.employee_type_id AS employeeTypeId, stock_detail.installment as stockDetailInstallment, stock.id as stockId ");
-    if (req.getLoanId() == null) {
+    if (req.getLoanId() != null) {
       sql.append(
           " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, "
               + " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, "
@@ -1047,7 +1053,7 @@ public class DocumentRepository {
     sql.append(
         " FROM employee LEFT JOIN department ON employee.department_id = department.id LEFT JOIN employee_type ON employee_type.id = employee.employee_type_id "
             + " LEFT JOIN stock ON employee.stock_id = stock.id LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id   ");
-    if (req.getLoanId() == null) {
+    if (req.getLoanId() != null) {
       sql.append(
           // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
           // loan_detail_history.loan_id = loan.id
@@ -1063,7 +1069,7 @@ public class DocumentRepository {
             .append(req.getYearCurrent())
             .append("'");
       }
-      if (req.getLoanId() == null) {
+      if (req.getLoanId() != null) {
         sql.append("and loan_detail_history.employee_code = '")
             .append(req.getEmpCode())
             .append("'");
@@ -1080,8 +1086,15 @@ public class DocumentRepository {
 
   public EmployeeLoanNew searchEmployeeLoanOldHistoryOfNull(DocumentReq req) {
     val sql = buildQuerySqlV1LoanOldHistoryOfNull(req);
-    return jdbcTemplate.queryForObject(
-        sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+    //    return jdbcTemplate.queryForObject(
+    //        sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+
+    try {
+      return jdbcTemplate.queryForObject(
+          sql.toString(), new BeanPropertyRowMapper<>(EmployeeLoanNew.class));
+    } catch (EmptyResultDataAccessException e) {
+      return null; // No result found
+    }
   }
 
   public StringBuilder buildQuerySqlV1OfLoanByIdMergeHistoryOfLoanByIdForDividend(
@@ -1121,5 +1134,20 @@ public class DocumentRepository {
     val sql = buildQuerySqlV1OfLoanByIdMergeHistoryOfLoanByIdForDividend(loanIds, yearCurrent);
     return jdbcTemplate.query(
         sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
+  }
+
+  public StringBuilder buildQuerySqlFindByActiveTrueAndEmployeeCode() {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT stock.id as stockId, employee.employee_code, employee.first_name, employee.id as empId, employee.loan_id, department.name , CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM stock ")
+        .append(
+            " LEFT JOIN employee ON employee.stock_id = stock.id LEFT JOIN department ON employee.department_id = department.id WHERE stock.active = true and employee.active = true ");
+    return sql;
+  }
+
+  public List<StockAndEmployeeCodeRes> findByActiveTrueAndEmployeeCode() {
+    val sql = buildQuerySqlFindByActiveTrueAndEmployeeCode();
+    return jdbcTemplate.query(
+        sql.toString(), new BeanPropertyRowMapper<>(StockAndEmployeeCodeRes.class));
   }
 }

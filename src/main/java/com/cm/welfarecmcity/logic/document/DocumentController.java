@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.List;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -84,6 +86,20 @@ public class DocumentController {
   @PostMapping("v1/document/searchLoan-old")
   public EmployeeLoanNew searchEmployeeLoanOld(@RequestBody DocumentReq req) {
     return service.searchEmployeeLoanOld(req);
+  }
+
+  @PostMapping("v1/document/receipt-report")
+  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
+      throws Exception {
+    val pdfStream = service.receiptStock(req);
+
+    val headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
+
+    return ResponseEntity.ok()
+        .headers(headers)
+        .contentType(MediaType.APPLICATION_PDF)
+        .body(pdfStream);
   }
 
   @PostMapping("v1/document/searchLoan-guarantor-unique")

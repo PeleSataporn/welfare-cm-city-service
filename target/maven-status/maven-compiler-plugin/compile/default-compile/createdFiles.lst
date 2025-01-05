@@ -89,6 +89,7 @@ com/cm/welfarecmcity/logic/stock/model/StockRes.class
 com/cm/welfarecmcity/dto/EmployeeDto.class
 com/cm/welfarecmcity/utils/PaginationUtils.class
 com/cm/welfarecmcity/api/news/NewsController.class
+com/cm/welfarecmcity/logic/document/model/StockAndEmployeeCodeRes.class
 com/cm/welfarecmcity/api/employee/model/search/EmployeeByAdminOrderReqDto.class
 com/cm/welfarecmcity/logic/register/model/req/ResignRegisterReq.class
 com/cm/welfarecmcity/api/summary/SummaryController.class
@@ -100,6 +101,7 @@ com/cm/welfarecmcity/logic/document/model/GrandTotalRes.class
 com/cm/welfarecmcity/api/news/model/SearchNewsRes.class
 com/cm/welfarecmcity/api/beneficiary/BeneficiaryRepository.class
 com/cm/welfarecmcity/logic/loan/model/AddLoanDetailAllReq.class
+com/cm/welfarecmcity/logic/document/model/ReportRes.class
 com/cm/welfarecmcity/logic/employee/model/LoanRes.class
 com/cm/welfarecmcity/api/loandetail/LoanDetailRepository.class
 com/cm/welfarecmcity/logic/employee/model/EmployeeRes.class
@@ -131,6 +133,7 @@ com/cm/welfarecmcity/logic/register/model/req/ApproveRegisterReq.class
 com/cm/welfarecmcity/utils/DateUtils.class
 com/cm/welfarecmcity/api/employee/model/EmpEditReq.class
 com/cm/welfarecmcity/api/loanHistory/LoanHistoryRepository.class
+com/cm/welfarecmcity/logic/document/model/ReportReq.class
 com/cm/welfarecmcity/api/position/PositionRepository.class
 com/cm/welfarecmcity/api/employee/model/UpdateUserReq.class
 com/cm/welfarecmcity/constant/EmployeeStatusEnum$EmployeeStatusDto.class
@@ -180,6 +183,7 @@ com/cm/welfarecmcity/api/document/DocumentsService.class
 com/cm/welfarecmcity/CalloanOld.class
 com/cm/welfarecmcity/api/loandetail/model/LoanHistoryV2Res.class
 com/cm/welfarecmcity/dto/GuarantorDto.class
+com/cm/welfarecmcity/utils/ThaiNumeralsUtils.class
 com/cm/welfarecmcity/api/user/UserRepository.class
 com/cm/welfarecmcity/api/stockdetail/StockDetailController.class
 com/cm/welfarecmcity/mapper/MapStructMapper.class
@@ -198,6 +202,7 @@ com/cm/welfarecmcity/WelfareCmCityApplication.class
 com/cm/welfarecmcity/logic/employee/model/EmpRes.class
 com/cm/welfarecmcity/logic/register/model/res/CheckEmployeeCodeRes.class
 com/cm/welfarecmcity/exception/entity/UserPasswordMismatchException.class
+com/cm/welfarecmcity/utils/ZipUtil.class
 com/cm/welfarecmcity/logic/stock/model/search/StockByAdminOrderReqDto.class
 com/cm/welfarecmcity/api/loandetail/model/LoanDetailRes.class
 com/cm/welfarecmcity/api/department/DepartmentController.class

@@ -1,0 +1,99 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.x_connext",
+    "module": "http-log-spring-boot-starter",
+    "version": "2.2.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "http-log-spring-boot-starter-2.2.0-plain.jar",
+          "url": "http-log-spring-boot-starter-2.2.0-plain.jar",
+          "size": 31339,
+          "sha512": "7e66ac083ff8eee8bd7f9d9ed87ca9d3854606574a3c54595d6fd4f646e533ac103988bd6fe5142257af30cba547857722b4f1c2fd85febbf546dac243d87728",
+          "sha256": "6d642993de3d69f5800b7611ddd83f0b26e3fd56edb07025a49331d2ab42e07d",
+          "sha1": "e6278dfb425f652bce383c200beea81bc740f51e",
+          "md5": "b1313873f4e2e519400de0f2e071e166"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-autoconfigure"
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-reflect",
+          "version": {
+            "requires": "1.8.22"
+          }
+        },
+        {
+          "group": "org.apache.commons",
+          "module": "commons-lang3",
+          "version": {
+            "requires": "3.13.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.8.22"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "http-log-spring-boot-starter-2.2.0-plain.jar",
+          "url": "http-log-spring-boot-starter-2.2.0-plain.jar",
+          "size": 31339,
+          "sha512": "7e66ac083ff8eee8bd7f9d9ed87ca9d3854606574a3c54595d6fd4f646e533ac103988bd6fe5142257af30cba547857722b4f1c2fd85febbf546dac243d87728",
+          "sha256": "6d642993de3d69f5800b7611ddd83f0b26e3fd56edb07025a49331d2ab42e07d",
+          "sha1": "e6278dfb425f652bce383c200beea81bc740f51e",
+          "md5": "b1313873f4e2e519400de0f2e071e166"
+        }
+      ]
+    }
+  ]
+}
