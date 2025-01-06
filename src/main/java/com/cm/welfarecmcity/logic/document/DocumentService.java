@@ -601,21 +601,15 @@ public class DocumentService {
   public InputStreamResource processStream(
       JasperReport compiledReport, ReportRes req, HashMap<String, Object> params)
       throws JRException, IOException {
-
-    val output = new ByteArrayOutputStream();
-
-    try (output) {
-      val print =
-          JasperFillManager.fillReport(
+    try (val output = new ByteArrayOutputStream()) {
+      val print = JasperFillManager.fillReport(
               compiledReport, params, new JRBeanCollectionDataSource(List.of(req)));
-
       val exporter = new JRPdfExporter();
       exporter.setExporterInput(new SimpleExporterInput(print));
       exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(output));
       exporter.exportReport();
+      return new InputStreamResource(new ByteArrayInputStream(output.toByteArray()));
     }
-
-    return new InputStreamResource(new ByteArrayInputStream(output.toByteArray()));
   }
 
   //  @Transactional
