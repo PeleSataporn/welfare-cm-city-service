@@ -19,9 +19,16 @@
 FROM openjdk:17-jdk-slim
 
 # Install required libraries
+# RUN apt-get update && apt-get install -y \
+#     fontconfig \
+#     ttf-dejavu \
+#     && rm -rf /var/lib/apt/lists/*
+
 RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
     fontconfig \
     ttf-dejavu \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
