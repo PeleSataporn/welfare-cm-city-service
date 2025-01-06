@@ -26,6 +26,7 @@ spring:
     show-sql: true
   main:
     allow-circular-references: true
+    headless: true
   mail:
     host: ${MAIL_HOST}
     username: ${MAIL_USER}
