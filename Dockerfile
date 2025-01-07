@@ -14,7 +14,7 @@ COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8787
 
 # Set the entrypoint command to run your application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Set the entrypoint command to run your application with the JVM option
-# ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
