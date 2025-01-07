@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Install necessary dependencies (headless fonts) to avoid issues like the X11FontManager error
-RUN apk add --no-cache ttf-dejavu
+# RUN apk add --no-cache ttf-dejavu
 
 # Copy the JAR file into the container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
@@ -14,7 +14,7 @@ COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8787
 
 # Set the entrypoint command to run your application
-# ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Set the entrypoint command to run your application with the JVM option
-ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+# ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
