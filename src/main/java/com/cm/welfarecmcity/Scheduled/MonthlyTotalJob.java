@@ -43,8 +43,9 @@ public class MonthlyTotalJob {
     summaryDto.setSumEmp(resultTotal.getSumEmp());
     summaryDto.setSumLoan(resultTotal.getSumLoan());
     summaryDto.setSumLoanBalance(resultTotal.getSumLoanBalance());
-    int sumDelete =
-        Math.round(resultTotal.getSumStockAccumulate() - resultTotal.getSumStockValue());
+//    int sumDelete =
+//        Math.round(resultTotal.getSumStockAccumulate() - resultTotal.getSumStockValue());
+    int sumDelete = (int) (resultTotal.getSumStockAccumulate() - resultTotal.getSumStockValue());
     summaryDto.setSumStockAccumulate((long) sumDelete);
     summaryDto.setSumStockValue(resultTotal.getSumStockValue());
     summaryDto.setSumLoanInterest(resultTotal.getSumLoanInterest());
