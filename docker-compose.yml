@@ -23,6 +23,7 @@ services:
       - db
     volumes:
       - /var/upload/file:/app/upload
+      - /var/upload/fonts:/app/fonts
 
 volumes:
   db:
