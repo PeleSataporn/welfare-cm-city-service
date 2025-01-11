@@ -136,10 +136,17 @@ RUN apk add --no-cache ttf-dejavu fontconfig
 COPY repo/sarabun-report.jar /app/sarabun-report.jar
 
 # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
+# RUN mkdir -p /usr/share/fonts/ && \
+#     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+#     mv fonts/SARABUN/* /usr/share/fonts/ && \
+#     fc-cache -f -v
+
 RUN mkdir -p /usr/share/fonts/ && \
     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+    ls -al fonts/SARABUN/ && \
     mv fonts/SARABUN/* /usr/share/fonts/ && \
-    fc-cache -f -v
+    ls -al /usr/share/fonts/
+
 
 # คัดลอก JAR ของแอปพลิเคชันไปยัง container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
