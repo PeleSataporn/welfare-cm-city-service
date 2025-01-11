@@ -143,10 +143,11 @@ COPY repo/sarabun-report.jar /app/sarabun-report.jar
 
 RUN mkdir -p /usr/share/fonts/ && \
     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+    echo "Contents of fonts/SARABUN/" && \
     ls -al fonts/SARABUN/ && \
     mv fonts/SARABUN/* /usr/share/fonts/ && \
+    echo "Contents of /usr/share/fonts/" && \
     ls -al /usr/share/fonts/
-
 
 # คัดลอก JAR ของแอปพลิเคชันไปยัง container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
