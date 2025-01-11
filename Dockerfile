@@ -37,7 +37,8 @@ ENV LANG=C.UTF-8
 ENV LANGUAGE=C.UTF-8
 
 # Install necessary dependencies
-RUN apk add --no-cache freetype ttf-dejavu
+# RUN apk add --no-cache freetype ttf-dejavu
+RUN apk add --no-cache ttf-dejavu ttf-th-sarabun
 
 # Copy the JAR file into the container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
