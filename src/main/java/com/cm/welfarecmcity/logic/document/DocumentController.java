@@ -152,7 +152,7 @@ public class DocumentController {
         .body(outputStream.toByteArray());
   }
 
-  // Report PDF
+  // Report PDF All
   @PostMapping("v1/document/receipt-report")
   public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
           throws Exception {
@@ -167,6 +167,7 @@ public class DocumentController {
             .body(pdfStream);
   }
 
+  // Report PDF by emp code
   @PostMapping("v1/document/receipt-report-code")
   public ResponseEntity<InputStreamResource> receiptReportCode(@RequestBody ReportReq req)
           throws Exception {
