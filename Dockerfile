@@ -133,7 +133,7 @@ WORKDIR /app
 RUN apk add --no-cache ttf-dejavu fontconfig
 
 # คัดลอก JAR ไปยัง container
-COPY ./sarabun-report.jar /app/sarabun-report.jar
+COPY repo/sarabun-report.jar /app/sarabun-report.jar
 
 # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
 RUN mkdir -p /usr/share/fonts/ && \
