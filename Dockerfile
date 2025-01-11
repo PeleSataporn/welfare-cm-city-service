@@ -79,7 +79,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # คัดลอกฟอนต์จากโฟลเดอร์ resources/fonts ไปยัง container
-COPY resources/fonts/THSarabun.ttf /usr/share/fonts/
+COPY src/main/resources/fonts/THSarabun.ttf /usr/share/fonts/
 
 # อัพเดท cache ของฟอนต์
 RUN fc-cache -f -v
