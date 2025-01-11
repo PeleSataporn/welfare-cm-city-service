@@ -78,14 +78,14 @@ FROM openjdk:17-jdk-alpine
 # ตั้งค่า working directory
 WORKDIR /app
 
-# คัดลอกฟอนต์จากโฟลเดอร์ resources/fonts ไปยัง container
+# ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
+RUN apk add --no-cache ttf-dejavu fontconfig
+
+# คัดลอกฟอนต์จาก resources/fonts ไปยัง container
 COPY src/main/resources/fonts/THSarabun.ttf /usr/share/fonts/
 
 # อัพเดท cache ของฟอนต์
 RUN fc-cache -f -v
-
-# ติดตั้ง dependencies อื่น ๆ
-RUN apk add --no-cache ttf-dejavu
 
 # คัดลอก JAR ไปยัง container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
