@@ -104,13 +104,13 @@ WORKDIR /app
 # ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
 RUN apk add --no-cache ttf-dejavu fontconfig
 
-# คัดลอก JAR ไปยัง container
-COPY repo/sarabun-report.jar /app/sarabun-report.jar
-
-# ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
-RUN mkdir -p /usr/share/fonts/ && \
-    jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
-    mv fonts/SARABUN/* /usr/share/fonts/
+# # คัดลอก JAR ไปยัง container
+# COPY repo/sarabun-report.jar /app/sarabun-report.jar
+#
+# # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
+# RUN mkdir -p /usr/share/fonts/ && \
+#     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+#     mv fonts/SARABUN/* /usr/share/fonts/
 
 # อัพเดท cache ของฟอนต์
 RUN fc-cache -f -v
