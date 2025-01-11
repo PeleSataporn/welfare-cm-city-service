@@ -49,14 +49,37 @@
 # # Set the entrypoint command to run your application with headless mode
 # ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
 
-# ใช้ base image ที่มี Java
+# # ใช้ base image ที่มี Java
+# FROM openjdk:17-jdk-alpine
+#
+# # ตั้งค่า work directory
+# WORKDIR /app
+#
+# # คัดลอกฟอนต์ TH Sarabun PSK (ฟอนต์ .ttf) ไปยัง container
+# COPY ./resources/fonts/THSarabun.ttf /usr/share/fonts/
+#
+# # อัพเดท cache ของฟอนต์
+# RUN fc-cache -f -v
+#
+# # ติดตั้ง dependencies อื่น ๆ
+# RUN apk add --no-cache ttf-dejavu
+#
+# # คัดลอก JAR ไปยัง container
+# COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
+#
+# # เปิด port
+# EXPOSE 8787
+#
+# # ตั้งค่า entrypoint
+# ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+
 FROM openjdk:17-jdk-alpine
 
-# ตั้งค่า work directory
+# ตั้งค่า working directory
 WORKDIR /app
 
-# คัดลอกฟอนต์ TH Sarabun PSK (ฟอนต์ .ttf) ไปยัง container
-COPY ./resources/fonts/THSarabun.ttf /usr/share/fonts/
+# คัดลอกฟอนต์จากโฟลเดอร์ resources/fonts ไปยัง container
+COPY resources/fonts/THSarabun.ttf /usr/share/fonts/
 
 # อัพเดท cache ของฟอนต์
 RUN fc-cache -f -v
@@ -72,3 +95,4 @@ EXPOSE 8787
 
 # ตั้งค่า entrypoint
 ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+
