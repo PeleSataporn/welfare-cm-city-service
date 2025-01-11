@@ -102,6 +102,24 @@ public class DocumentController {
         .body(pdfStream);
   }
 
+  @PostMapping("v1/document/receipt-report-code")
+  public ResponseEntity<InputStreamResource> receiptReportCode(@RequestBody ReportReq req)
+          throws Exception {
+    val gg = new StockAndEmployeeCodeRes();
+    gg.setDepartmentName("gg");
+    gg.setFullName("gg");
+
+    val pdfStream = service.generateReceiptStockReport(req, gg);
+
+    val headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
+
+    return ResponseEntity.ok()
+            .headers(headers)
+            .contentType(MediaType.APPLICATION_PDF)
+            .body(pdfStream);
+  }
+
   @PostMapping("v1/document/searchLoan-guarantor-unique")
   public List<GuaranteeRes> searchGuarantorUnique(@RequestBody DocumentReq req) {
     return service.searchGuarantorUnique(req.getEmpCode());

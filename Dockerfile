@@ -5,7 +5,15 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Install necessary dependencies (headless fonts) to avoid issues like the X11FontManager error
-RUN apk add --no-cache ttf-dejavu
+# RUN apk add --no-cache ttf-dejavu
+# ตั้งค่าตัวแปร Locale
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+ENV LANGUAGE=C.UTF-8
+
+# ติดตั้ง dependencies
+RUN apt-get update && apt-get install -y \
+    some-package
 
 # Copy the JAR file into the container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
