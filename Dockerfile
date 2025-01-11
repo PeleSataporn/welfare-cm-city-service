@@ -12,8 +12,7 @@ ENV LANG=C.UTF-8
 ENV LANGUAGE=C.UTF-8
 
 # ติดตั้ง dependencies
-RUN apt-get update && apt-get install -y \
-    some-package
+RUN apt-get update && apt-get install -y curl
 
 # Copy the JAR file into the container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
