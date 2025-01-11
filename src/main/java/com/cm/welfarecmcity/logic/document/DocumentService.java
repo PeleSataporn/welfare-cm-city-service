@@ -498,7 +498,7 @@ public class DocumentService {
     val pdfList = new ArrayList<InputStreamResource>();
     val nameList = new ArrayList<String>();
 
-    val find = documentRepository.findByActiveTrueAndEmployeeCode();
+    val find = documentRepository.findByActiveTrueAndEmployee();
     for (val stock : find) {
       req.setStockId(stock.getStockId());
       req.setEmpCode(stock.getEmployeeCode());
@@ -511,6 +511,17 @@ public class DocumentService {
     }
 
     return ZipUtil.createZipFileR5(pdfList, nameList);
+  }
+
+  @Transactional
+  public InputStreamResource receiptStockEmpCode(ReportReq req) throws Exception {
+    val find = documentRepository.findByActiveTrueAndEmployeeCode(req.getEmpCode());
+    req.setStockId(find.getStockId());
+    req.setEmpCode(find.getEmployeeCode());
+    req.setEmpId(find.getEmpId());
+    req.setLoanId(find.getLoanId());
+
+    return generateReceiptStockReport(req, find);
   }
 
   public InputStreamResource generateReceiptStockReport(
@@ -602,7 +613,8 @@ public class DocumentService {
       JasperReport compiledReport, ReportRes req, HashMap<String, Object> params)
       throws JRException, IOException {
     try (val output = new ByteArrayOutputStream()) {
-      val print = JasperFillManager.fillReport(
+      val print =
+          JasperFillManager.fillReport(
               compiledReport, params, new JRBeanCollectionDataSource(List.of(req)));
       val exporter = new JRPdfExporter();
       exporter.setExporterInput(new SimpleExporterInput(print));

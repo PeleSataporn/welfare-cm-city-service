@@ -1136,7 +1136,7 @@ public class DocumentRepository {
         sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
   }
 
-  public StringBuilder buildQuerySqlFindByActiveTrueAndEmployeeCode() {
+  public StringBuilder buildQuerySqlFindByActiveTrueAndEmployee() {
     val sql = new StringBuilder();
     sql.append(
             " SELECT stock.id as stockId, employee.employee_code, employee.first_name, employee.id as empId, employee.loan_id, department.name , CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM stock ")
@@ -1145,9 +1145,26 @@ public class DocumentRepository {
     return sql;
   }
 
-  public List<StockAndEmployeeCodeRes> findByActiveTrueAndEmployeeCode() {
-    val sql = buildQuerySqlFindByActiveTrueAndEmployeeCode();
+  public List<StockAndEmployeeCodeRes> findByActiveTrueAndEmployee() {
+    val sql = buildQuerySqlFindByActiveTrueAndEmployee();
     return jdbcTemplate.query(
+        sql.toString(), new BeanPropertyRowMapper<>(StockAndEmployeeCodeRes.class));
+  }
+
+  public StringBuilder buildQuerySqlFindByActiveTrueAndEmployeeCode(String employeeCode) {
+    val sql = new StringBuilder();
+    sql.append(
+            " SELECT stock.id as stockId, employee.employee_code, employee.first_name, employee.id as empId, employee.loan_id, department.name , CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM stock ")
+        .append(
+            " LEFT JOIN employee ON employee.stock_id = stock.id LEFT JOIN department ON employee.department_id = department.id WHERE stock.active = true and employee.active = true and employee.employee_code = '"
+                + employeeCode
+                + "'");
+    return sql;
+  }
+
+  public StockAndEmployeeCodeRes findByActiveTrueAndEmployeeCode(String employeeCode) {
+    val sql = buildQuerySqlFindByActiveTrueAndEmployeeCode(employeeCode);
+    return jdbcTemplate.queryForObject(
         sql.toString(), new BeanPropertyRowMapper<>(StockAndEmployeeCodeRes.class));
   }
 }

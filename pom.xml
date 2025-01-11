@@ -158,13 +158,13 @@
       <systemPath>${project.basedir}/repo/sarabun-report.jar</systemPath>
     </dependency>
 
-    <dependency>
-      <groupId>com.example</groupId>
-      <artifactId>k2d-report</artifactId>
-      <version>1.0.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/repo/k2d-report.jar</systemPath>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.example</groupId>-->
+<!--      <artifactId>k2d-report</artifactId>-->
+<!--      <version>1.0.0</version>-->
+<!--      <scope>system</scope>-->
+<!--      <systemPath>${project.basedir}/repo/k2d-report.jar</systemPath>-->
+<!--    </dependency>-->
 
     <!-- jasperreports -->
     <dependency>

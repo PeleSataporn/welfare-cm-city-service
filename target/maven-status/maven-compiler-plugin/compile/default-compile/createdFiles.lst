@@ -32,7 +32,6 @@ com/cm/welfarecmcity/api/news/model/SearchNewsMainRes.class
 com/cm/welfarecmcity/logic/document/model/DocumentInfoAllRes.class
 com/cm/welfarecmcity/api/employee/EmployeeController.class
 com/cm/welfarecmcity/constant/NotificationStatusEnum.class
-com/cm/welfarecmcity/utils/FontLoader.class
 com/cm/welfarecmcity/dto/PetitionNotificationDto.class
 com/cm/welfarecmcity/logic/register/model/req/RegisterReq.class
 com/cm/welfarecmcity/logic/loan/model/GuaranteeRes.class
