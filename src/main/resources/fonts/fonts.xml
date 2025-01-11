@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="SARABUN">
+        <normal><![CDATA[fonts/SARABUN/THSARABUN_0.TTF]]></normal>
+        <bold><![CDATA[fonts/SARABUN/THSARABUN BOLD_0.TTF]]></bold>
+        <italic><![CDATA[fonts/SARABUN/THSARABUN ITALIC_0.TTF]]></italic>
+        <boldItalic><![CDATA[fonts/SARABUN/THSARABUN BOLD ITALIC_0.TTF]]></boldItalic>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+</fontFamilies>

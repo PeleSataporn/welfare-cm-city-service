@@ -150,14 +150,6 @@
       <type>pom</type>
     </dependency>
 
-    <dependency>
-      <groupId>com.example</groupId>
-      <artifactId>sarabun-report</artifactId>
-      <version>1.0.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/repo/sarabun-report.jar</systemPath>
-    </dependency>
-
 <!--    <dependency>-->
 <!--      <groupId>com.example</groupId>-->
 <!--      <artifactId>k2d-report</artifactId>-->
@@ -170,6 +162,12 @@
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
+      <version>6.21.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports-fonts</artifactId>
       <version>6.21.3</version>
     </dependency>
 <!--    <dependency>-->
