@@ -96,6 +96,34 @@
 # # ตั้งค่า entrypoint
 # ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
 
+# FROM openjdk:17-jdk-alpine
+#
+# # ตั้งค่า working directory
+# WORKDIR /app
+#
+# # ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
+# RUN apk add --no-cache ttf-dejavu fontconfig
+#
+# # คัดลอก JAR ไปยัง container
+# COPY repo/sarabun-report.jar /app/sarabun-report.jar
+#
+# # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
+# RUN mkdir -p /usr/share/fonts/ && \
+#     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+#     mv fonts/SARABUN/* /usr/share/fonts/
+#
+# # อัพเดท cache ของฟอนต์
+# RUN fc-cache -f -v
+#
+# # คัดลอก JAR ของแอปพลิเคชันไปยัง container
+# COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
+#
+# # เปิด port
+# EXPOSE 8787
+#
+# # ตั้งค่า entrypoint
+# ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+
 FROM openjdk:17-jdk-alpine
 
 # ตั้งค่า working directory
@@ -104,16 +132,14 @@ WORKDIR /app
 # ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
 RUN apk add --no-cache ttf-dejavu fontconfig
 
-# # คัดลอก JAR ไปยัง container
-# COPY repo/sarabun-report.jar /app/sarabun-report.jar
-#
-# # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
-# RUN mkdir -p /usr/share/fonts/ && \
-#     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
-#     mv fonts/SARABUN/* /usr/share/fonts/
+# คัดลอก JAR ไปยัง container
+COPY repo/sarabun-report.jar /app/sarabun-report.jar
 
-# อัพเดท cache ของฟอนต์
-RUN fc-cache -f -v
+# ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
+RUN mkdir -p /usr/share/fonts/ && \
+    jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+    mv fonts/SARABUN/* /usr/share/fonts/ && \
+    fc-cache -f -v
 
 # คัดลอก JAR ของแอปพลิเคชันไปยัง container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
