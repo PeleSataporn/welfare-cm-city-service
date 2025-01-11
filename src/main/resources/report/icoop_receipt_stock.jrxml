@@ -72,7 +72,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="3"/>
                     </textElement>
                     <text><![CDATA[รายการ]]></text>
@@ -92,7 +92,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Left" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="3"/>
                     </textElement>
                     <text><![CDATA[ค่าหุ้น]]></text>
@@ -111,7 +111,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                     </textElement>
                     <text><![CDATA[เป็นเงิน]]></text>
                 </staticText>
@@ -128,7 +128,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                     </textElement>
                     <text><![CDATA[เงินต้นเหลือ]]></text>
                 </staticText>
@@ -149,7 +149,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Left" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="3"/>
                     </textElement>
                     <text><![CDATA[เงินต้น]]></text>
@@ -168,7 +168,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Left" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="3"/>
                     </textElement>
                     <text><![CDATA[ดอกเบี้ย]]></text>
@@ -189,7 +189,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                 </textField>
@@ -208,7 +208,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="0" leftIndent="0" rightIndent="0"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{principalBalance}]]></textFieldExpression>
@@ -228,7 +228,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                 </textField>
@@ -240,7 +240,7 @@
                         <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2"/>
                     </textElement>
                     <text><![CDATA[ประธานกองทุน]]></text>
@@ -260,7 +260,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" rightIndent="5"/>
                     </textElement>
                     <text><![CDATA[รวมเงิน]]></text>
@@ -280,7 +280,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
@@ -299,7 +299,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                     </textElement>
                     <text><![CDATA[งวด]]></text>
                 </staticText>
@@ -317,7 +317,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="5"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{stockDetailInstallment}]]></textFieldExpression>
@@ -337,7 +337,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="5"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
@@ -356,7 +356,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="5"/>
                     </textElement>
                 </textField>
@@ -375,7 +375,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                 </textField>
@@ -386,7 +386,7 @@
                         <property name="com.jaspersoft.studio.unit.y" value="px"/>
                     </reportElement>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                        <font fontName="SARABUN" size="20" isBold="false"/>
                         <paragraph firstLineIndent="2"/>
                     </textElement>
                     <text><![CDATA[เหรัญญิก]]></text>
@@ -405,7 +405,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{interest}]]></textFieldExpression>
@@ -425,7 +425,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{stockValue}]]></textFieldExpression>
@@ -444,7 +444,7 @@
                         <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="8"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalDeduction}]]></textFieldExpression>
@@ -455,7 +455,7 @@
                         <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                     </reportElement>
                     <textElement verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="5"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalText}]]></textFieldExpression>
@@ -492,7 +492,7 @@
                         <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
                     </box>
                     <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="20" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="0" rightIndent="5"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{stockAccumulate}]]></textFieldExpression>
@@ -505,7 +505,7 @@
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="24" isBold="true"/>
+                    <font fontName="SARABUN" size="24" isBold="true"/>
                 </textElement>
                 <text><![CDATA[กองทุนสวัสดิการพนักงานเทศบาลนครเชียงใหม่]]></text>
             </staticText>
@@ -518,7 +518,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Right" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph rightIndent="5"/>
                 </textElement>
                 <text><![CDATA[เลขที่สมาชิก]]></text>
@@ -528,7 +528,7 @@
                     <property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
                 </reportElement>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                    <font fontName="SARABUN" size="20" isBold="true"/>
                     <paragraph firstLineIndent="2" leftIndent="5"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{employeeCode}]]></textFieldExpression>
@@ -539,7 +539,7 @@
                     <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                 </reportElement>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                    <font fontName="SARABUN" size="20" isBold="true"/>
                     <paragraph firstLineIndent="2" leftIndent="5"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
@@ -558,7 +558,7 @@
                     <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                 </reportElement>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                    <font fontName="SARABUN" size="20" isBold="true"/>
                     <paragraph firstLineIndent="2" leftIndent="5"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{month}]]></textFieldExpression>
@@ -573,7 +573,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph leftIndent="2"/>
                 </textElement>
                 <text><![CDATA[ประจําเดือน]]></text>
@@ -586,7 +586,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="24" isBold="true"/>
+                    <font fontName="SARABUN" size="24" isBold="true"/>
                 </textElement>
                 <text><![CDATA[ใบเสร็จรับเงิน]]></text>
             </staticText>
@@ -599,7 +599,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph leftIndent="2"/>
                 </textElement>
                 <text><![CDATA[ได้รับเงินจาก]]></text>
@@ -613,7 +613,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph leftIndent="2"/>
                 </textElement>
                 <text><![CDATA[สังกัด]]></text>
@@ -624,7 +624,7 @@
                     <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                 </reportElement>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="true"/>
+                    <font fontName="SARABUN" size="20" isBold="true"/>
                     <paragraph firstLineIndent="2" leftIndent="5"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{departmentName}]]></textFieldExpression>
@@ -638,7 +638,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph leftIndent="2"/>
                 </textElement>
                 <text><![CDATA[หุ้นสะสม]]></text>
@@ -652,7 +652,7 @@
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="TH SarabunPSK" size="20" isBold="false"/>
+                    <font fontName="SARABUN" size="20" isBold="false"/>
                     <paragraph leftIndent="2"/>
                 </textElement>
                 <text><![CDATA[บาท]]></text>
