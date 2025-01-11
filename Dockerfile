@@ -56,7 +56,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # คัดลอกฟอนต์ TH Sarabun PSK (ฟอนต์ .ttf) ไปยัง container
-COPY ./fonts/THSarabun.ttf /usr/share/fonts/
+COPY ./resources/fonts/THSarabun.ttf /usr/share/fonts/
 
 # อัพเดท cache ของฟอนต์
 RUN fc-cache -f -v
