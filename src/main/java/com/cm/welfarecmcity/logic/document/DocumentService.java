@@ -447,21 +447,25 @@ public class DocumentService {
       val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
       if (loadDetail.isEmpty()) {
         flagLoan = true;
+        req.setLoanId(null);
       }
     } else {
       flagLoan = true;
       // req.setLoanId(null);
     }
 
-    if (flagLoan) {
-      val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
-      if (employeeLoanNew != null) {
-        employeeLoanNew.setHistoryLoanFlag(true);
-      }
-      return employeeLoanNew;
-    } else {
-      return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
-    }
+    //    if (flagLoan) {
+    //      val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+    //      if (employeeLoanNew != null) {
+    //        employeeLoanNew.setHistoryLoanFlag(true);
+    //      }
+    //      return employeeLoanNew;
+    //    } else {
+    //    if (flagLoan) {
+    //      return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
+    //    }else {
+    return documentRepository.searchEmployeeLoanNew(req);
+    //    }
 
     //    } catch (Exception e) {
     //      return null;

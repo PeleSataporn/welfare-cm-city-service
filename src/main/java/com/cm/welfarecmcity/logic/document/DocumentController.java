@@ -88,34 +88,6 @@ public class DocumentController {
     return service.searchEmployeeLoanOld(req);
   }
 
-  @PostMapping("v1/document/receipt-report")
-  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
-      throws Exception {
-    val pdfStream = service.receiptStock(req);
-
-    val headers = new HttpHeaders();
-    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
-
-    return ResponseEntity.ok()
-        .headers(headers)
-        .contentType(MediaType.APPLICATION_PDF)
-        .body(pdfStream);
-  }
-
-  @PostMapping("v1/document/receipt-report-code")
-  public ResponseEntity<InputStreamResource> receiptReportCode(@RequestBody ReportReq req)
-      throws Exception {
-    val pdfStream = service.receiptStockEmpCode(req);
-
-    val headers = new HttpHeaders();
-    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
-
-    return ResponseEntity.ok()
-        .headers(headers)
-        .contentType(MediaType.APPLICATION_PDF)
-        .body(pdfStream);
-  }
-
   @PostMapping("v1/document/searchLoan-guarantor-unique")
   public List<GuaranteeRes> searchGuarantorUnique(@RequestBody DocumentReq req) {
     return service.searchGuarantorUnique(req.getEmpCode());
@@ -178,5 +150,34 @@ public class DocumentController {
             "Content-Disposition",
             "attachment;filename=export-dividends-" + System.nanoTime() + ".xlsx")
         .body(outputStream.toByteArray());
+  }
+
+  // Report PDF
+  @PostMapping("v1/document/receipt-report")
+  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
+          throws Exception {
+    val pdfStream = service.receiptStock(req);
+
+    val headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
+
+    return ResponseEntity.ok()
+            .headers(headers)
+            .contentType(MediaType.APPLICATION_PDF)
+            .body(pdfStream);
+  }
+
+  @PostMapping("v1/document/receipt-report-code")
+  public ResponseEntity<InputStreamResource> receiptReportCode(@RequestBody ReportReq req)
+          throws Exception {
+    val pdfStream = service.receiptStockEmpCode(req);
+
+    val headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.pdf");
+
+    return ResponseEntity.ok()
+            .headers(headers)
+            .contentType(MediaType.APPLICATION_PDF)
+            .body(pdfStream);
   }
 }
