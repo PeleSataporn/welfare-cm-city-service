@@ -124,34 +124,61 @@
 # # ตั้งค่า entrypoint
 # ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
 
+#####################################################################
+# FROM openjdk:17-jdk-alpine
+#
+# # ตั้งค่า working directory
+# WORKDIR /app
+#
+# # ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
+# RUN apk add --no-cache ttf-dejavu fontconfig
+#
+# # # คัดลอก JAR ไปยัง container
+# # COPY repo/sarabun-report.jar /app/sarabun-report.jar
+#
+# # # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
+# # RUN mkdir -p /usr/share/fonts/ && \
+# #     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
+# #     mv fonts/SARABUN/* /usr/share/fonts/ && \
+# #     fc-cache -f -v
+#
+# # คัดลอกฟอนต์จาก resources/fonts ไปยัง container
+# COPY src/main/resources/fonts/SARABUN /usr/share/fonts/
+#
+# # อัพเดท cache ของฟอนต์
+# RUN fc-cache -f -v
+#
+# # คัดลอก JAR ของแอปพลิเคชันไปยัง container
+# COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
+#
+# # เปิด port
+# EXPOSE 8787
+#
+# # ตั้งค่า entrypoint
+# ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
+
+
 FROM openjdk:17-jdk-alpine
 
-# ตั้งค่า working directory
+# Set working directory
 WORKDIR /app
 
-# ติดตั้ง dependencies รวมถึง fontconfig สำหรับการใช้ fc-cache
-RUN apk add --no-cache ttf-dejavu fontconfig
+# Install fontconfig and required tools
+RUN apk add --no-cache ttf-dejavu fontconfig unzip
 
-# # คัดลอก JAR ไปยัง container
-# COPY repo/sarabun-report.jar /app/sarabun-report.jar
-
-# # ดึงฟอนต์จาก JAR และคัดลอกฟอนต์ทั้งหมดจาก path fonts/SARABUN/
-# RUN mkdir -p /usr/share/fonts/ && \
-#     jar xf /app/sarabun-report.jar fonts/SARABUN/ && \
-#     mv fonts/SARABUN/* /usr/share/fonts/ && \
-#     fc-cache -f -v
-
-# คัดลอกฟอนต์จาก resources/fonts ไปยัง container
-COPY src/main/resources/fonts/SARABUN /usr/share/fonts/
-
-# อัพเดท cache ของฟอนต์
-RUN fc-cache -f -v
-
-# คัดลอก JAR ของแอปพลิเคชันไปยัง container
+# Copy the application JAR to the container
 COPY target/welfare-cm-city-0.0.1-SNAPSHOT.jar /app/app.jar
 
-# เปิด port
+# Copy the sarabun-report JAR to the container
+COPY repo/sarabun-report.jar /app/sarabun-report.jar
+
+# Extract fonts from sarabun-report.jar and add them to system fonts
+RUN mkdir -p /usr/share/fonts/sarabun && \
+    unzip -o /app/sarabun-report.jar "fonts/SARABUN/*" -d /usr/share/fonts/sarabun && \
+    fc-cache -f -v
+
+# Expose application port
 EXPOSE 8787
 
-# ตั้งค่า entrypoint
+# Set the entrypoint to run the application
 ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
