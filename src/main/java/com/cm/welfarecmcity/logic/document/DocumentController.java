@@ -4,9 +4,6 @@ import com.cm.welfarecmcity.logic.document.model.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.concurrent.*;
-
-import jakarta.annotation.PreDestroy;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -15,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/logic")
@@ -23,13 +19,7 @@ public class DocumentController {
 
   @Autowired private DocumentService service;
 
-  private final ExecutorService executorService;
-
-    public DocumentController() {
-      this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    }
-
-    // stock v1 เดือนปัจจุบัน
+  // stock v1 เดือนปัจจุบัน
   @PostMapping("v1/document/search")
   public List<DocumentV1Res> searchDocumentV1(@RequestBody DocumentReq req) {
     return service.searchDocumentV1(req.getEmpId(), req.getMonthCurrent(), req.getYearCurrent());
@@ -163,44 +153,18 @@ public class DocumentController {
   }
 
   // Report PDF All
-//  @PostMapping("v1/document/receipt-report")
-//  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
-//      throws Exception {
-//    val pdfStream = service.receiptStock(req);
-//
-//    val headers = new HttpHeaders();
-//    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
-//
-//    return ResponseEntity.ok()
-//        .headers(headers)
-//        .contentType(MediaType.APPLICATION_PDF)
-//        .body(pdfStream);
-//  }
-
   @PostMapping("v1/document/receipt-report")
-  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req) {
-    CompletableFuture<InputStreamResource> futureReport =
-            CompletableFuture.supplyAsync(() -> {
-                try {
-                    return service.receiptStock(req);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executorService);
+  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
+      throws Exception {
+    val pdfStream = service.receiptStock(req);
 
-    try {
-      InputStreamResource zipStream = futureReport.get(5, TimeUnit.MINUTES);
-      HttpHeaders headers = new HttpHeaders();
-      headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
-      return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(zipStream);
-    } catch (TimeoutException | InterruptedException | ExecutionException e) {
-      throw new ResponseStatusException(HttpStatus.GATEWAY_TIMEOUT, "Request timed out");
-    }
-  }
+    val headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
 
-  @PreDestroy
-  public void shutdownExecutor() {
-    executorService.shutdown();
+    return ResponseEntity.ok()
+        .headers(headers)
+        .contentType(MediaType.APPLICATION_PDF)
+        .body(pdfStream);
   }
 
   // Report PDF by emp code
