@@ -1,15 +1,21 @@
 server:
-  connection-timeout: 300s
+  connection-timeout: 300000
   servlet:
     session:
       context-parameters:
-        request-timeout: 300s # 5 minutes for the request processing time
+        request-timeout: 300000 # 5 minutes for the request processing time
       timeout: 10m
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
   http2:
     enabled: true
   port: 8787
   tomcat:
     relaxed-query-chars: '|,{,},[,]'
+    connection-timeout: 300000 # 5 minutes in milliseconds
+    max-connections: 200 # Max number of connections
+    max-threads: 200
   pathFile: '/app/upload'
 
 spring:
@@ -50,10 +56,6 @@ spring:
     multipart:
       max-file-size: 200MB
       max-request-size: 200MB
-  tomcat:
-    connection-timeout: 300000 # 5 minutes in milliseconds
-    max-connections: 200 # Max number of connections
-    max-threads: 200
   mvc:
     async:
       request-timeout: 300000
