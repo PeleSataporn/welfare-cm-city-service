@@ -167,6 +167,11 @@ public class DocumentController {
         .body(pdfStream);
   }
 
+  @PostMapping("v1/document/empForReceiptList")
+  public List<ReportRes> empForReceiptList(@RequestBody ReportReq req) throws Exception {
+    return service.empForReceiptList(req);
+  }
+
   // Report PDF by emp code
   @PostMapping("v1/document/receipt-report-code")
   public ResponseEntity<InputStreamResource> receiptReportCode(@RequestBody ReportReq req)

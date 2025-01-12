@@ -1645,4 +1645,91 @@ public class DocumentService {
 
     return output;
   }
+
+  @Transactional
+  public List<ReportRes> empForReceiptList(ReportReq req) throws Exception {
+    List<ReportRes> resReceipt = new ArrayList<>();
+
+    val find = documentRepository.findByActiveTrueAndEmployee();
+    for (val stock : find) {
+      req.setStockId(stock.getStockId());
+      req.setEmpCode(stock.getEmployeeCode());
+      req.setEmpId(stock.getEmpId());
+      req.setLoanId(stock.getLoanId());
+
+      var receiptEmp = generateReceiptStockForObj(req, stock);
+      resReceipt.add(receiptEmp);
+
+    }
+
+    return resReceipt;
+  }
+
+  public ReportRes generateReceiptStockForObj(ReportReq req, StockAndEmployeeCodeRes resEmp)
+          throws Exception {
+    val currentDate = LocalDate.now();
+    val monthNow = DateUtils.getThaiMonthInt(currentDate.getMonthValue());
+    val yearNow = String.valueOf(currentDate.getYear() + 543);
+
+    val stockDetails = stockDetailRepository.findAllByStock_Id(req.getStockId());
+    val lastStockDetail = stockDetails.get(stockDetails.size() - 1);
+
+    val documentReq = new DocumentReq();
+    documentReq.setEmpCode(req.getEmpCode());
+    documentReq.setMonthCurrent(req.getMonthCurrent());
+    documentReq.setYearCurrent(req.getYearCurrent());
+    documentReq.setEmpId(req.getEmpId());
+    documentReq.setStockId(req.getStockId());
+    documentReq.setLoanId(req.getLoanId());
+
+    EmployeeLoanNew searchEmp;
+    if (Objects.equals(req.getMonthCurrent(), monthNow)
+            && Objects.equals(req.getYearCurrent(), yearNow)) {
+      searchEmp = searchEmployeeLoanNewV2(documentReq);
+    } else if (Objects.equals(req.getMonthCurrent(), lastStockDetail.getStockMonth())
+            && Objects.equals(req.getYearCurrent(), lastStockDetail.getStockYear())) {
+      searchEmp = searchEmployeeLoanNewV2(documentReq);
+    } else {
+      searchEmp = searchEmployeeLoanOldV2(documentReq);
+    }
+
+    val res = new ReportRes();
+    res.setMonth(req.getMonthCurrent() + " " + req.getYearCurrent());
+    res.setEmployeeCode(req.getEmpCode());
+    res.setDepartmentName(resEmp.getDepartmentName());
+    res.setFullName(resEmp.getFullName());
+    if (searchEmp != null) {
+      res.setStockAccumulate(
+              searchEmp.getStockAccumulate() != null
+                      ? Double.parseDouble(searchEmp.getStockAccumulate())
+                      : 0.00);
+      res.setStockDetailInstallment(
+              searchEmp.getStockDetailInstallment() != null
+                      ? searchEmp.getStockDetailInstallment()
+                      : 0L);
+      res.setStockValue(
+              searchEmp.getStockValue() != null ? Double.parseDouble(searchEmp.getStockValue()) : 0.00);
+      res.setInstallment(searchEmp.getInstallment() != null ? searchEmp.getInstallment() : 0L);
+      res.setInterest(
+              searchEmp.getInterestLoanLastMonth() != null
+                      ? Long.parseLong(searchEmp.getInterestLoanLastMonth())
+                      : 0L);
+      res.setPrincipalBalance(
+              searchEmp.getLoanBalance() != null
+                      ? Double.parseDouble(searchEmp.getLoanBalance())
+                      : 0.00);
+      res.setTotalDeduction(
+              (searchEmp.getLoanOrdinary() != null
+                      ? Double.parseDouble(searchEmp.getLoanOrdinary())
+                      : 0.00)
+                      - (searchEmp.getInterestLoanLastMonth() != null
+                      ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
+                      : 0.00));
+    }
+    res.setTotalPrice(res.getStockValue() + res.getTotalDeduction() + res.getInterest());
+    res.setTotalText("(" + ThaiNumeralsUtils.formatThaiWords(res.getTotalPrice()) + ")");
+
+    return res;
+  }
+
 }
