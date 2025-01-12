@@ -153,32 +153,18 @@ public class DocumentController {
   }
 
   // Report PDF All
-//  @PostMapping("v1/document/receipt-report")
-//  public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
-//      throws Exception {
-//    val pdfStream = service.receiptStock(req);
-//
-//    val headers = new HttpHeaders();
-//    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
-//
-//    return ResponseEntity.ok()
-//        .headers(headers)
-//        .contentType(MediaType.APPLICATION_PDF)
-//        .body(pdfStream);
-//  }
-
   @PostMapping("v1/document/receipt-report")
   public ResponseEntity<InputStreamResource> receiptReport(@RequestBody ReportReq req)
-          throws Exception {
+      throws Exception {
     val pdfStream = service.receiptStock(req);
 
     val headers = new HttpHeaders();
     headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt_report.zip");
 
     return ResponseEntity.ok()
-            .headers(headers)
-            .contentType(MediaType.APPLICATION_OCTET_STREAM)  // Use appropriate content type for zip file
-            .body(pdfStream);
+        .headers(headers)
+        .contentType(MediaType.APPLICATION_PDF)
+        .body(pdfStream);
   }
 
   // Report PDF by emp code
