@@ -438,19 +438,15 @@ public class DocumentService {
   // v2
   @Transactional
   public EmployeeLoanNew searchEmployeeLoanNewV2(DocumentReq req) {
-    //    try {
-    //      val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
-    //      req.setStockId(empFullData.getStockId());
-    //      req.setLoanId(empFullData.getLoanId());
     boolean flagLoan = false;
     if (req.getLoanId() != null) {
       val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
       if (loadDetail.isEmpty()) {
         flagLoan = true;
+        req.setLoanId(null);
       }
     } else {
       flagLoan = true;
-      // req.setLoanId(null);
     }
 
     if (flagLoan) {
@@ -462,29 +458,10 @@ public class DocumentService {
     } else {
       return documentRepository.searchEmployeeLoanNew(req); // searchEmployeeLoanNewOfNull
     }
-
-    //    } catch (Exception e) {
-    //      return null;
-    //    }
   }
 
   @Transactional
   public EmployeeLoanNew searchEmployeeLoanOldV2(DocumentReq req) {
-    //    val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
-    //    req.setStockId(reportReq.getStockId());
-    //    req.setEmpId(reportReq.getEmpId());
-
-    //    if (req.getLoanId() != null) {
-    //      val loadDetail = documentRepository.searchEmployeeLoanOfNullHistory(req);
-    //      if (loadDetail != null) {
-    //        req.setLoanId(loadDetail.getLoan().getId());
-    //      } else {
-    //        req.setLoanId(null);
-    //      }
-    //    } else {
-    //      req.setLoanId(null);
-    //    }
-    // return documentRepository.searchEmployeeLoanOldHistory(req);
     val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
     if (employeeLoanNew != null) {
       employeeLoanNew.setHistoryLoanFlag(true);
@@ -498,6 +475,12 @@ public class DocumentService {
     val pdfList = new ArrayList<InputStreamResource>();
     val nameList = new ArrayList<String>();
 
+    val config1 = adminConfigRepository.findById(4L).get();
+    byte[] imageBytes1 = config1.getImage().getBytes(1, (int) config1.getImage().length());
+
+    val config2 = adminConfigRepository.findById(5L).get();
+    byte[] imageBytes2 = config2.getImage().getBytes(1, (int) config2.getImage().length());
+
     val find = documentRepository.findByActiveTrueAndEmployee();
     for (val stock : find) {
       req.setStockId(stock.getStockId());
@@ -505,7 +488,7 @@ public class DocumentService {
       req.setEmpId(stock.getEmpId());
       req.setLoanId(stock.getLoanId());
 
-      pdfList.add(generateReceiptStockReport(req, stock));
+      pdfList.add(generateReceiptStockReport(req, stock, imageBytes1, imageBytes2));
 
       nameList.add(stock.getEmployeeCode() + "_" + stock.getFirstName());
     }
@@ -521,13 +504,24 @@ public class DocumentService {
     req.setEmpId(find.getEmpId());
     req.setLoanId(find.getLoanId());
 
-    return generateReceiptStockReport(req, find);
+    val config1 = adminConfigRepository.findById(4L).get();
+    byte[] imageBytes1 = config1.getImage().getBytes(1, (int) config1.getImage().length());
+
+    val config2 = adminConfigRepository.findById(5L).get();
+    byte[] imageBytes2 = config2.getImage().getBytes(1, (int) config2.getImage().length());
+
+    return generateReceiptStockReport(req, find, imageBytes1, imageBytes2);
   }
 
   public InputStreamResource generateReceiptStockReport(
-      ReportReq req, StockAndEmployeeCodeRes resEmp) throws Exception {
-    val stock = stockService.getStock(req.getStockId());
-    val stockDetails = stock.getStockDetails();
+      ReportReq req, StockAndEmployeeCodeRes resEmp, byte[] imageBytes1, byte[] imageBytes2)
+      throws Exception {
+    val currentDate = LocalDate.now();
+    val monthNow = DateUtils.getThaiMonthInt(currentDate.getMonthValue());
+    val yearNow = String.valueOf(currentDate.getYear() + 543);
+
+    val stockDetails = stockDetailRepository.findAllByStock_Id(req.getStockId());
+    val lastStockDetail = stockDetails.get(stockDetails.size() - 1);
 
     val documentReq = new DocumentReq();
     documentReq.setEmpCode(req.getEmpCode());
@@ -538,12 +532,6 @@ public class DocumentService {
     documentReq.setLoanId(req.getLoanId());
 
     EmployeeLoanNew searchEmp;
-
-    val currentDate = LocalDate.now();
-    val monthNow = DateUtils.getThaiMonthInt(currentDate.getMonthValue());
-    val yearNow = String.valueOf(currentDate.getYear() + 543);
-
-    val lastStockDetail = stockDetails.get(stockDetails.size() - 1);
     if (Objects.equals(req.getMonthCurrent(), monthNow)
         && Objects.equals(req.getYearCurrent(), yearNow)) {
       searchEmp = searchEmployeeLoanNewV2(documentReq);
@@ -590,12 +578,7 @@ public class DocumentService {
     res.setTotalPrice(res.getStockValue() + res.getTotalDeduction() + res.getInterest());
     res.setTotalText("(" + ThaiNumeralsUtils.formatThaiWords(res.getTotalPrice()) + ")");
 
-    val config1 = adminConfigRepository.findById(4L).get();
-    byte[] imageBytes1 = config1.getImage().getBytes(1, (int) config1.getImage().length());
     res.setSignature1(imageBytes1);
-
-    val config2 = adminConfigRepository.findById(5L).get();
-    byte[] imageBytes2 = config2.getImage().getBytes(1, (int) config2.getImage().length());
     res.setSignature2(imageBytes2);
 
     val params = new HashMap<String, Object>();
@@ -623,30 +606,6 @@ public class DocumentService {
       return new InputStreamResource(new ByteArrayInputStream(output.toByteArray()));
     }
   }
-
-  //  @Transactional
-  //  public EmployeeLoanNew allBillReceipt(DocumentReq req) {
-  //    val empFullData = documentRepository.getEmpFullData(req.getEmpCode());
-  //    req.setStockId(empFullData.getStockId());
-  //    req.setLoanId(empFullData.getLoanId());
-  //    req.setEmpId(empFullData.getEmpId());
-  //
-  //    if (req.getLoanId() != null) {
-  //      val loadDetail = documentRepository.searchEmployeeLoanOfNullHistory(req);
-  //      if (loadDetail != null) {
-  //        req.setLoanId(empFullData.getLoanId());
-  //      } else {
-  //        req.setLoanId(null);
-  //      }
-  //    } else {
-  //      req.setLoanId(null);
-  //    }
-  //    // return documentRepository.searchEmployeeLoanOldHistory(req);
-  //    EmployeeLoanNew employeeLoanNew =
-  // documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
-  //    employeeLoanNew.setHistoryLoanFlag(true);
-  //    return employeeLoanNew;
-  //  }
 
   @Transactional
   public List<GuaranteeRes> searchGuarantorUnique(String empCode) {

@@ -455,7 +455,7 @@
                         <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                     </reportElement>
                     <textElement verticalAlignment="Middle">
-                        <font fontName="SARABUN" size="20" isBold="true"/>
+                        <font fontName="SARABUN" size="22" isBold="true"/>
                         <paragraph firstLineIndent="2" leftIndent="5"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalText}]]></textFieldExpression>
