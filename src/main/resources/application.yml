@@ -1,7 +1,10 @@
 server:
+  connection-timeout: 300s
   servlet:
     session:
-      timeout: 5m
+      context-parameters:
+        request-timeout: 300s # 5 minutes for the request processing time
+      timeout: 10m
   http2:
     enabled: true
   port: 8787
@@ -21,6 +24,7 @@ spring:
     password: ${DATABASE_PASSWORD}
     hikari:
       auto-commit: false
+      maximum-pool-size: 20
     initialization-mode: always
   jpa:
     generate-ddl: true
@@ -44,8 +48,12 @@ spring:
             required: true
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 200MB
+      max-request-size: 200MB
+  tomcat:
+    connection-timeout: 300000 # 5 minutes in milliseconds
+    max-connections: 200 # Max number of connections
+    max-threads: 200
   mvc:
     async:
       request-timeout: 300000
