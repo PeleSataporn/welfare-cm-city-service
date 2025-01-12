@@ -1154,7 +1154,7 @@ public class DocumentRepository {
   public StringBuilder buildQuerySqlFindByActiveTrueAndEmployeeCode(String employeeCode) {
     val sql = new StringBuilder();
     sql.append(
-            " SELECT stock.id as stockId, stock.sto, employee.employee_code, employee.first_name, employee.id as empId, employee.loan_id, department.name as departmentName , CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM stock ")
+            " SELECT stock.id as stockId, employee.employee_code, employee.first_name, employee.id as empId, employee.loan_id, department.name as departmentName , CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM stock ")
         .append(
             " LEFT JOIN employee ON employee.stock_id = stock.id LEFT JOIN department ON employee.department_id = department.id WHERE stock.active = true and employee.active = true and employee.employee_code = '"
                 + employeeCode
