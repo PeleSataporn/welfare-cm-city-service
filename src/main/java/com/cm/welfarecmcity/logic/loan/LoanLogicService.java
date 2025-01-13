@@ -274,8 +274,8 @@ public class LoanLogicService {
 
     loanRepository.save(loan);
 
-    val detailLoan = repository.searchLoanOfLoanDetail(id);
-    loanDetailRepository.deleteAll(detailLoan);
+    //    val detailLoan = repository.searchLoanOfLoanDetail(id);
+    //    loanDetailRepository.deleteAll(detailLoan);
   }
 
   @Transactional
