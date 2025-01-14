@@ -1168,4 +1168,23 @@ public class DocumentRepository {
     return jdbcTemplate.queryForObject(
         sql.toString(), new BeanPropertyRowMapper<>(StockAndEmployeeCodeRes.class));
   }
+
+  public StringBuilder buildQuerySqlLoanCheck(long loanId) {
+    val sql = new StringBuilder();
+    sql.append(
+            " select id as loanId, active, loan_no  FROM loan where id = "
+                    + loanId);
+    return sql;
+  }
+
+  public DocumentInfoAllLoanEmpRes documentloanCheck(long loanId) {
+    val sql = buildQuerySqlLoanCheck(loanId);
+    try {
+      return jdbcTemplate.queryForObject(
+              sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
 }

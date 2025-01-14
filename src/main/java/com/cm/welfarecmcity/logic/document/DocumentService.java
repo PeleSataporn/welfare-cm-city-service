@@ -411,12 +411,18 @@ public class DocumentService {
       req.setLoanId(empFullData.getLoanId());
       boolean flagLoan = false;
       if (req.getLoanId() != null) {
-        val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
-        if (loadDetail.size() > 0) {
-          req.setLoanId(empFullData.getLoanId());
-        } else {
+        DocumentInfoAllLoanEmpRes loanCheck = documentRepository.documentloanCheck(req.getLoanId());
+        if(!loanCheck.isActive()){
+          req.setLoanId(null);
           flagLoan = true;
-          // req.setLoanId(null);
+        }else{
+          val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
+          if (!loadDetail.isEmpty()) {
+            req.setLoanId(empFullData.getLoanId());
+          } else {
+            flagLoan = true;
+            // req.setLoanId(null);
+          }
         }
       } else {
         flagLoan = true;
