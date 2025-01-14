@@ -24,4 +24,8 @@ public class DocumentV2ResLoan {
   private String totalValuePrincipleTotal;
   // คงคาง(ต้น)
   private String outStandPrincipleTotal;
+  private Boolean loanActive = null;
+  private Double loanValue = null;
+  private String loanTime = null;
+  private String installment = null;
 }

@@ -1,13 +1,14 @@
 package com.cm.welfarecmcity.api.loandetailhistory;
 
 import com.cm.welfarecmcity.logic.document.DocumentService;
-import com.cm.welfarecmcity.logic.document.model.CalculateInstallments;
-import com.cm.welfarecmcity.logic.document.model.CalculateReq;
-import com.cm.welfarecmcity.logic.document.model.DocumentV1ResLoan;
-import com.cm.welfarecmcity.logic.document.model.DocumentV2ResLoan;
+import com.cm.welfarecmcity.logic.document.model.*;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class LoanDetailHistoryService {
   @Transactional
   public List<DocumentV1ResLoan> searchV1LoanHistory(String getMonthCurrent, String yearCurrent) {
 
+    val result = new ArrayList<DocumentV1ResLoan>();
     var resLoan =
         loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
     resLoan.forEach(
@@ -128,8 +130,16 @@ public class LoanDetailHistoryService {
                   String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
             }
           }
+
+          if (res.getLoanActive()) {
+            result.add(res);
+          } else if (!res.getLoanActive()
+              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
+            result.add(res);
+          }
         });
-    return resLoan;
+
+    return result;
   }
 
   @Transactional
@@ -144,7 +154,44 @@ public class LoanDetailHistoryService {
   }
 
   @Transactional
-  public List<DocumentV2ResLoan> searchV2LoanHistory(String getMonthCurrent, String yearCurrent) {
-    return loanDetailHistoryLogicRepository.searchV2LoanHistory(getMonthCurrent, yearCurrent);
+  public List<DocumentV2ResLoanV2> searchV2LoanHistory(String getMonthCurrent, String yearCurrent) {
+    // Step 1: Fetch loan data
+    val result = new ArrayList<DocumentV2ResLoan>();
+    var resLoan =
+        loanDetailHistoryLogicRepository.searchV2LoanHistory(getMonthCurrent, yearCurrent);
+
+    // Step 2: Filter and collect the valid results
+    resLoan.forEach(
+        res -> {
+          if (res.getLoanActive()
+              || (!res.getLoanActive()
+                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
+            result.add(res);
+          }
+        });
+
+    // Step 3: Group by departmentName and sum loanValueTotal
+    Map<String, Double> groupedData =
+        result.stream()
+            .collect(
+                Collectors.groupingBy(
+                    DocumentV2ResLoan::getDepartmentName,
+                    Collectors.summingDouble(
+                        res ->
+                            Double.parseDouble(
+                                res.getLoanValue() != null
+                                    ? String.valueOf(res.getLoanValue())
+                                    : "0"))));
+
+    // Step 4: Convert grouped data to a list of DocumentV2ResLoanV2
+    return groupedData.entrySet().stream()
+        .map(
+            entry -> {
+              DocumentV2ResLoanV2 dto = new DocumentV2ResLoanV2();
+              dto.setDepartmentName(entry.getKey());
+              dto.setLoanValueTotal(String.valueOf(entry.getValue()));
+              return dto;
+            })
+        .collect(Collectors.toList());
   }
 }

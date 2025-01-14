@@ -133,6 +133,11 @@ public class DocumentController {
     service.update();
   }
 
+  @PutMapping("v1/document/test-update-2")
+  public void update2() throws ParseException {
+    service.updateTest();
+  }
+
   @PostMapping(
       value = "v1/document/export-data/dividends",
       produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

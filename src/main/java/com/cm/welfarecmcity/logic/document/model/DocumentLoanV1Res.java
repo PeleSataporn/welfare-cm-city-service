@@ -11,4 +11,5 @@ public class DocumentLoanV1Res {
   private String loanOrdinary = null;
   private String interest = null;
   private String loanTime = null;
+  private Boolean loanActive = null;
 }

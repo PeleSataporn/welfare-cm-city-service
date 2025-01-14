@@ -14,6 +14,8 @@ import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
+import com.cm.welfarecmcity.logic.loan.LoanLogicService;
 import com.cm.welfarecmcity.utils.DateUtils;
 import com.cm.welfarecmcity.utils.NumberFormatUtils;
 import com.cm.welfarecmcity.utils.ThaiNumeralsUtils;
@@ -63,6 +65,8 @@ public class DocumentService {
   @Autowired private AdminConfigRepository adminConfigRepository;
   @Autowired private StockService stockService;
   @Autowired private StockRepository stockRepository;
+  @Autowired private LoanLogicService loanLogicService;
+  @Autowired private LoanLogicRepository repository;
 
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
@@ -233,22 +237,43 @@ public class DocumentService {
                 documentRepository.documentInfoV1loanHistory(
                     res1.get(i).getEmpId(), monthCurrent, yearCurrent);
 
-        if (res2.size() > 0) {
-          res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
-          res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
-          res1.get(i).setInterest(res2.get(0).getInterest());
-          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
+        if (!res2.isEmpty()) {
+          if (res2.get(0).getLoanActive()) {
+            res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
+            res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
+            res1.get(i).setInterest(res2.get(0).getInterest());
+            res1.get(i).setLoanTime(res2.get(0).getLoanTime());
+          } else if (Objects.equals(res2.get(0).getLoanInstallment(), res2.get(0).getLoanTime())
+              && !res2.get(0).getLoanActive()) {
+            res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
+            res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
+            res1.get(i).setInterest(res2.get(0).getInterest());
+            res1.get(i).setLoanTime(res2.get(0).getLoanTime());
+          }
         }
       } else {
         res2 =
             (ArrayList<DocumentLoanV1Res>)
                 documentRepository.documentInfoV1loanHistory(empId, null, yearCurrent);
 
-        if (res2.size() > 0) {
-          res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
-          res1.get(i).setLoanInstallment(res2.get(i).getLoanInstallment());
-          res1.get(i).setInterest(res2.get(i).getInterest());
-          res1.get(i).setLoanTime(res2.get(i).getLoanTime());
+        //        if (!res2.isEmpty() && res2.get(0).getLoanActive()) {
+        //          res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
+        //          res1.get(i).setLoanInstallment(res2.get(i).getLoanInstallment());
+        //          res1.get(i).setInterest(res2.get(i).getInterest());
+        //          res1.get(i).setLoanTime(res2.get(i).getLoanTime());
+        //        }
+
+        if (res2.get(0).getLoanActive()) {
+          res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
+          res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
+          res1.get(i).setInterest(res2.get(0).getInterest());
+          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
+        } else if (Objects.equals(res2.get(0).getLoanInstallment(), res2.get(0).getLoanTime())
+            && !res2.get(0).getLoanActive()) {
+          res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
+          res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
+          res1.get(i).setInterest(res2.get(0).getInterest());
+          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
         }
       }
 
@@ -1470,6 +1495,20 @@ public class DocumentService {
         loanDetailHistoryRepository.save(his);
       }
     }
+  }
+
+  public String updateTest() throws ParseException {
+    val loanDetails = repository.getLoanDetailByMonth("ธันวาคม", "2567");
+    loanLogicService.addInfoLoanDetailHistory(loanDetails);
+    //    for (val loanDetail : loanDetails) {
+    //      val calculate = new CalculateReq();
+    //      calculate.setPrincipal(loanDetail.());
+    //      calculate.setInterestRate(5);
+    //      calculate.setNumOfPayments(loanDetail.getLoanTime());
+    //      calculate.setPaymentStartDate(loanDetail.getStartLoanDate());
+
+    return null;
+    //    }
   }
 
   // Export EXCEL

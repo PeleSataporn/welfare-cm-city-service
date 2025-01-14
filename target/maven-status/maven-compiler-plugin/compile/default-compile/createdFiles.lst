@@ -2,6 +2,7 @@ com/cm/welfarecmcity/dto/BeneficiaryDto.class
 com/cm/welfarecmcity/dto/base/SearchDataResponse.class
 com/cm/welfarecmcity/exception/GlobalExceptionController.class
 com/cm/welfarecmcity/api/notification/NotificationController.class
+com/cm/welfarecmcity/logic/document/model/DocumentV2ResLoanV2.class
 com/cm/welfarecmcity/api/employee/model/UpdateResignReq.class
 com/cm/welfarecmcity/logic/document/model/DocumentV2Res.class
 com/cm/welfarecmcity/exception/entity/DocumentException.class

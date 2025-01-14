@@ -90,12 +90,13 @@ public class DocumentRepository {
       Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time FROM employee "
+        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time, loan.active as loanActive FROM employee "
             + " LEFT JOIN department ON employee.department_id = department.id "
             + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
             + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
             + " WHERE 1=1");
 
+    //    sql.append(" and loan.active = TRUE ").append(" ");
     if (empId != null && monthCurrent != null && yearCurrent != null) {
       sql.append(" AND employee.id = ").append(empId);
       sql.append(" AND loan_detail_history.loan_month = '").append(monthCurrent).append("'");

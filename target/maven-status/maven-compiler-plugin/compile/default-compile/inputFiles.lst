@@ -234,6 +234,7 @@
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/dto/base/BaseDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminOrderReqDto.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/news/model/SearchImagesRes.java
+/Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/document/model/DocumentV2ResLoanV2.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/loan/model/AddLoanDetailAllReq.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/api/loandetail/LoanDetailRepository.java
 /Users/pele/job/icoop-cm/icoop-backend/src/main/java/com/cm/welfarecmcity/logic/stock/StockLogicService.java

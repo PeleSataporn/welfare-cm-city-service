@@ -2,7 +2,7 @@ package com.cm.welfarecmcity.api.loandetailhistory;
 
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import com.cm.welfarecmcity.logic.document.model.DocumentV1ResLoan;
-import com.cm.welfarecmcity.logic.document.model.DocumentV2ResLoan;
+import com.cm.welfarecmcity.logic.document.model.DocumentV2ResLoanV2;
 import java.text.ParseException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class LoanDetailHistoryController {
   }
 
   @PostMapping("v2/all")
-  public List<DocumentV2ResLoan> searchV2LoanHistory(@RequestBody DocumentReq req) {
+  public List<DocumentV2ResLoanV2> searchV2LoanHistory(@RequestBody DocumentReq req) {
     return loanDetailHistoryService.searchV2LoanHistory(
         req.getMonthCurrent(), req.getYearCurrent());
   }
