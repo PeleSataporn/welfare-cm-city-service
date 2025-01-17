@@ -4,6 +4,8 @@ import com.cm.welfarecmcity.dto.base.BaseDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +43,9 @@ public class LoanDto extends BaseDto {
 
   @Comment("สถานะการใช้หุ้นค้ำ")
   private Boolean stockFlag;
+
+  @Comment("สถานะการใช้หุ้นค้ำ")
+  private Date closeLoanDate;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

@@ -131,12 +131,13 @@ public class LoanDetailHistoryService {
             }
           }
 
-          if (res.getLoanActive()) {
-            result.add(res);
-          } else if (!res.getLoanActive()
-              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
-            result.add(res);
-          }
+//          if (res.getLoanActive()) {
+//            result.add(res);
+//          } else if (!res.getLoanActive()
+//              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
+//            result.add(res);
+//          }
+          result.add(res);
         });
 
     return result;
@@ -163,11 +164,11 @@ public class LoanDetailHistoryService {
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
         res -> {
-          if (res.getLoanActive()
-              || (!res.getLoanActive()
-                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
+//          if (res.getLoanActive()
+//              || (!res.getLoanActive()
+//                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
             result.add(res);
-          }
+//          }
         });
 
     // Step 3: Group by departmentName and sum loanValueTotal

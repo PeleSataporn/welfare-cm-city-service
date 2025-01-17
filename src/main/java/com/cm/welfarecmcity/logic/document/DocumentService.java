@@ -30,6 +30,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -224,6 +225,18 @@ public class DocumentService {
     }
   }
 
+  public boolean isLoanClosedInYear(Date closeLoanDate, String yearCurrent) {
+    if (closeLoanDate == null) {
+      return true; // Handle null safely
+    }
+
+    // Convert Date to LocalDate
+    LocalDate localDate = closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    // Extract the year and check the condition
+    return localDate.getYear() > Integer.parseInt(yearCurrent);
+  }
+
   @Transactional
   public List<DocumentV1Res> searchDocumentOldV1(
       Long empId, String monthCurrent, String yearCurrent) {
@@ -243,8 +256,8 @@ public class DocumentService {
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
             res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-          } else if (Objects.equals(res2.get(0).getLoanInstallment(), res2.get(0).getLoanTime())
-              && !res2.get(0).getLoanActive()) {
+          } else if ( Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
+              && !res2.get(0).getLoanActive() && isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent)) {
             res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
@@ -268,8 +281,8 @@ public class DocumentService {
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
           res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-        } else if (Objects.equals(res2.get(0).getLoanInstallment(), res2.get(0).getLoanTime())
-            && !res2.get(0).getLoanActive()) {
+        } else if ( Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
+                && !res2.get(0).getLoanActive() && isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent)) {
           res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());

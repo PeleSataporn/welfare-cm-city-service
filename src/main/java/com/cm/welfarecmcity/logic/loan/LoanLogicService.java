@@ -23,6 +23,7 @@ import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.val;
@@ -271,6 +272,7 @@ public class LoanLogicService {
     loan.setLoanBalance(0);
     loan.setActive(false);
     loan.setDeleted(true);
+    loan.setCloseLoanDate(new Date());
 
     loanRepository.save(loan);
 

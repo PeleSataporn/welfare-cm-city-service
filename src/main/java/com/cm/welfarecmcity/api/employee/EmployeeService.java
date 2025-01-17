@@ -291,7 +291,7 @@ public class EmployeeService {
         stockRepository.save(stock);
 
         val stockDetail = stockDetailRepository.findAllByStock_Id(stock.getId());
-        if (stockDetail.size() > 0) {
+        if (!stockDetail.isEmpty()) {
           for (StockDetailDto listStock : stockDetail) {
             listStock.setActive(false);
             stockDetailRepository.save(listStock);
@@ -300,6 +300,7 @@ public class EmployeeService {
       }
 
       employee.setLoan(null);
+      employee.setResignationDate(new Date());
       // employee.setStock(null);
     }
     employeeRepository.save(employee);
