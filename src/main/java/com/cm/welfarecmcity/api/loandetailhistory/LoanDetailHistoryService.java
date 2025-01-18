@@ -5,12 +5,12 @@ import com.cm.welfarecmcity.logic.document.model.*;
 import com.cm.welfarecmcity.utils.DateUtils;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,14 +134,14 @@ public class LoanDetailHistoryService {
             }
           }
 
-//          if (res.getLoanActive()) {
-//            result.add(res);
-//          } else if (!res.getLoanActive()
-//              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
-//            result.add(res);
-//          }
+          //          if (res.getLoanActive()) {
+          //            result.add(res);
+          //          } else if (!res.getLoanActive()
+          //              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
+          //            result.add(res);
+          //          }
 
-          if (isLoanClosedInYear(res.getCloseLoanDate(),yearCurrent,getMonthCurrent)) {
+          if (isLoanClosedInYear(res.getCloseLoanDate(), yearCurrent, getMonthCurrent)) {
             result.add(res);
           }
         });
@@ -157,14 +157,14 @@ public class LoanDetailHistoryService {
     // Convert Date to LocalDate
     LocalDate localDate = closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     // Extract the year and check the condition
-    if((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)){
+    if ((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)) {
       int monthFM = DateUtils.getThaiMonthIntOfValue(monthCurrent);
-      if(localDate.getMonthValue() > monthFM){
+      if (localDate.getMonthValue() > monthFM) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   }
@@ -190,13 +190,13 @@ public class LoanDetailHistoryService {
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
         res -> {
-//          if (res.getLoanActive()
-//              || (!res.getLoanActive()
-//                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
-//            result.add(res);
-//          }
+          //          if (res.getLoanActive()
+          //              || (!res.getLoanActive()
+          //                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
+          //            result.add(res);
+          //          }
 
-          if (isLoanClosedInYear(res.getCloseLoanDate(),yearCurrent,getMonthCurrent)) {
+          if (isLoanClosedInYear(res.getCloseLoanDate(), yearCurrent, getMonthCurrent)) {
             result.add(res);
           }
         });

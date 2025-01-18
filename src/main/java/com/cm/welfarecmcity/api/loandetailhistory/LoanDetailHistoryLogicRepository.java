@@ -41,7 +41,6 @@ public class LoanDetailHistoryLogicRepository {
       sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
       sql.append(" AND employee.id != 0 "); // employee.employee_status IN (2,5) AND
       sql.append(" AND ( employee.resignation_date IS NULL ")
-
           .append(" OR (" + " (YEAR(employee.resignation_date) + 543 = CAST('")
           .append(yearCurrent)
           .append(" ' AS INT)) ")

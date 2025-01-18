@@ -364,6 +364,7 @@ public class EmployeeService {
     loan.getLoanDetails().get(0).setActive(true);
     loanRepository.save(loan);
 
+    employee.setResignationDate(null);
     employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.getState());
     employee.setLoan(loan);
     employeeRepository.save(employee);

@@ -1,9 +1,8 @@
 package com.cm.welfarecmcity.logic.document.model;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Getter
 @Setter

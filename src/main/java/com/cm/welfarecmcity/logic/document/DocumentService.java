@@ -236,14 +236,14 @@ public class DocumentService {
     // Convert Date to LocalDate
     LocalDate localDate = closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     // Extract the year and check the condition
-    if((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)){
+    if ((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)) {
       int monthFM = DateUtils.getThaiMonthIntOfValue(monthCurrent);
-      if(localDate.getMonthValue() > monthFM){
+      if (localDate.getMonthValue() > monthFM) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   }
@@ -262,27 +262,35 @@ public class DocumentService {
                     res1.get(i).getEmpId(), monthCurrent, yearCurrent);
 
         if (!res2.isEmpty()) {
-//          if(res1.get(i).getEmpId() == 331){
-//            log.info(" res2 [ getLoanActive ] ========================================> {}", res2.get(0).getLoanActive());
-//            log.info(" res2 [ isLoanClosedInYear ] ========================================> {}", isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent, monthCurrent));
-//            log.info(" res2 [ getLoanInstallment ] ========================================> {}", res2.get(0).getLoanInstallment());
-//            log.info(" res2 [ getLoanTime ] ========================================> {}", res2.get(0).getLoanTime());
-//            log.info(" res2 [ getCloseLoanDate ] ========================================> {}", res2.get(0).getCloseLoanDate());
-//            log.info(" res2 [ yearCurrent ] ========================================> {}", yearCurrent);
-//          }
+          //          if(res1.get(i).getEmpId() == 331){
+          //            log.info(" res2 [ getLoanActive ] ========================================>
+          // {}", res2.get(0).getLoanActive());
+          //            log.info(" res2 [ isLoanClosedInYear ]
+          // ========================================> {}",
+          // isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent, monthCurrent));
+          //            log.info(" res2 [ getLoanInstallment ]
+          // ========================================> {}", res2.get(0).getLoanInstallment());
+          //            log.info(" res2 [ getLoanTime ] ========================================>
+          // {}", res2.get(0).getLoanTime());
+          //            log.info(" res2 [ getCloseLoanDate ]
+          // ========================================> {}", res2.get(0).getCloseLoanDate());
+          //            log.info(" res2 [ yearCurrent ] ========================================>
+          // {}", yearCurrent);
+          //          }
 
           if (res2.get(0).getLoanActive()) {
             res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
             res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-          } else if ( !res2.get(0).getLoanActive() &&
-                  isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent,monthCurrent) &&
-                  Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
-               ) {
-//            if(res1.get(i).getEmpId() == 331){
-//              log.info(" data loan ========================================> {}", res2.get(0).getLoanOrdinary());
-//            }
+          } else if (!res2.get(0).getLoanActive()
+              && isLoanClosedInYear(res2.get(0).getCloseLoanDate(), yearCurrent, monthCurrent)
+              && Integer.parseInt(res2.get(0).getLoanInstallment())
+                  <= Integer.parseInt(res2.get(0).getLoanTime())) {
+            //            if(res1.get(i).getEmpId() == 331){
+            //              log.info(" data loan ========================================> {}",
+            // res2.get(0).getLoanOrdinary());
+            //            }
             res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
@@ -306,8 +314,10 @@ public class DocumentService {
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
           res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-        } else if ( Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
-                && !res2.get(0).getLoanActive() && isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent,monthCurrent)) {
+        } else if (Integer.parseInt(res2.get(0).getLoanInstallment())
+                <= Integer.parseInt(res2.get(0).getLoanTime())
+            && !res2.get(0).getLoanActive()
+            && isLoanClosedInYear(res2.get(0).getCloseLoanDate(), yearCurrent, monthCurrent)) {
           res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
