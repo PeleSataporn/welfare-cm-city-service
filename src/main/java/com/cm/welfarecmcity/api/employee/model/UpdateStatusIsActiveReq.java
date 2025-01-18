@@ -10,4 +10,5 @@ public class UpdateStatusIsActiveReq {
   private Long id;
   private String guarantorOne;
   private String guarantorTwo;
+  private boolean guaranteeStockFlag;
 }

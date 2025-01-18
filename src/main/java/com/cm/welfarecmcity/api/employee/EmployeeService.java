@@ -359,8 +359,14 @@ public class EmployeeService {
     loan.setActive(true);
     loan.setLoanBalance(loanDetails.get(0).getLoanBalance());
     loan.setInterest(loanDetails.get(0).getInterest());
-    loan.setGuarantorOne(getByEmployeeCode(req.getGuarantorOne()));
-    loan.setGuarantorTwo(getByEmployeeCode(req.getGuarantorTwo()));
+
+    if (!req.isGuaranteeStockFlag()) {
+      loan.setGuarantorOne(getByEmployeeCode(req.getGuarantorOne()));
+      loan.setGuarantorTwo(getByEmployeeCode(req.getGuarantorTwo()));
+    } else {
+      loan.setStockFlag(true);
+    }
+
     loan.getLoanDetails().get(0).setActive(true);
     loanRepository.save(loan);
 
