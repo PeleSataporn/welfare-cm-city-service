@@ -60,6 +60,12 @@ public class EmployeeController {
     return employeeService.updateEmployeeStatus(req);
   }
 
+  @PatchMapping("/update-emp-status/is-active")
+  public ResponseModel<ResponseId> updateEmployeeStatusIsActive(
+      @RequestBody UpdateStatusIsActiveReq req) {
+    return employeeService.updateEmployeeStatusIsActive(req);
+  }
+
   @PatchMapping("/update-beneficiary-id")
   public ResponseModel<ResponseId> updateBeneficiaryId(@RequestBody List<BeneficiaryReq> req)
       throws JsonProcessingException {

@@ -256,8 +256,10 @@ public class DocumentService {
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
             res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-          } else if ( Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
-              && !res2.get(0).getLoanActive() && isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent)) {
+          } else if (Integer.parseInt(res2.get(0).getLoanInstallment())
+                  <= Integer.parseInt(res2.get(0).getLoanTime())
+              && !res2.get(0).getLoanActive()
+              && isLoanClosedInYear(res2.get(0).getCloseLoanDate(), yearCurrent)) {
             res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
             res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
             res1.get(i).setInterest(res2.get(0).getInterest());
@@ -281,8 +283,10 @@ public class DocumentService {
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
           res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-        } else if ( Integer.parseInt(res2.get(0).getLoanInstallment()) <= Integer.parseInt(res2.get(0).getLoanTime())
-                && !res2.get(0).getLoanActive() && isLoanClosedInYear(res2.get(0).getCloseLoanDate(),yearCurrent)) {
+        } else if (Integer.parseInt(res2.get(0).getLoanInstallment())
+                <= Integer.parseInt(res2.get(0).getLoanTime())
+            && !res2.get(0).getLoanActive()
+            && isLoanClosedInYear(res2.get(0).getCloseLoanDate(), yearCurrent)) {
           res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
           res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
           res1.get(i).setInterest(res2.get(0).getInterest());
@@ -425,10 +429,10 @@ public class DocumentService {
       boolean flagLoan = false;
       if (req.getLoanId() != null) {
         DocumentInfoAllLoanEmpRes loanCheck = documentRepository.documentloanCheck(req.getLoanId());
-        if(!loanCheck.isActive()){
+        if (!loanCheck.isActive()) {
           req.setLoanId(null);
           flagLoan = true;
-        }else{
+        } else {
           val loadDetail = documentRepository.searchEmployeeLoanOfNull(req);
           if (!loadDetail.isEmpty()) {
             req.setLoanId(empFullData.getLoanId());

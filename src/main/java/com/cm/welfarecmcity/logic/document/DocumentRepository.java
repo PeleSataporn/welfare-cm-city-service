@@ -90,8 +90,8 @@ public class DocumentRepository {
       Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time," +
-                " loan.active as loanActive, loan.deleted as loanDelete, loan.close_loan_date  FROM employee "
+        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time,"
+            + " loan.active as loanActive, loan.deleted as loanDelete, loan.close_loan_date  FROM employee "
             + " LEFT JOIN department ON employee.department_id = department.id "
             + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
             + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
@@ -935,23 +935,29 @@ public class DocumentRepository {
       sql.append(" AND stock_detail.stock_year = '").append(yearCurrent).append("'");
     }
     sql.append(" AND ( employee.resignation_date IS NULL ")
-            .append(" OR ((YEAR(employee.resignation_date) + 543 > CAST('").append(yearCurrent)
-            .append(" ' AS INT)) ")
-            .append(" OR (" +  " (YEAR(employee.resignation_date) + 543 = CAST('").append(yearCurrent)
-            .append(" ' AS INT)) ").append(" AND MONTH(employee.resignation_date) > ") // >=
-            .append(" CASE '").append(monthCurrent).append("' ")
-            .append(" WHEN 'มกราคม' THEN '1' ")
-            .append(" WHEN 'กุมภาพันธ์' THEN '2' ")
-            .append(" WHEN 'มีนาคม' THEN '3' ")
-            .append(" WHEN 'เมษายน' THEN '4'")
-            .append(" WHEN 'พฤษภาคม' THEN '5'")
-            .append(" WHEN 'มิถุนายน' THEN '6'")
-            .append(" WHEN 'กรกฎาคม' THEN '7'")
-            .append(" WHEN 'สิงหาคม' THEN '8'")
-            .append(" WHEN 'กันยายน' THEN '9'")
-            .append(" WHEN 'ตุลาคม' THEN '10'")
-            .append(" WHEN 'พฤศจิกายน' THEN '11'")
-            .append(" WHEN 'ธันวาคม' THEN '12' ").append(" END ))) ");
+        .append(" OR ((YEAR(employee.resignation_date) + 543 > CAST('")
+        .append(yearCurrent)
+        .append(" ' AS INT)) ")
+        .append(" OR (" + " (YEAR(employee.resignation_date) + 543 = CAST('")
+        .append(yearCurrent)
+        .append(" ' AS INT)) ")
+        .append(" AND MONTH(employee.resignation_date) > ") // >=
+        .append(" CASE '")
+        .append(monthCurrent)
+        .append("' ")
+        .append(" WHEN 'มกราคม' THEN '1' ")
+        .append(" WHEN 'กุมภาพันธ์' THEN '2' ")
+        .append(" WHEN 'มีนาคม' THEN '3' ")
+        .append(" WHEN 'เมษายน' THEN '4'")
+        .append(" WHEN 'พฤษภาคม' THEN '5'")
+        .append(" WHEN 'มิถุนายน' THEN '6'")
+        .append(" WHEN 'กรกฎาคม' THEN '7'")
+        .append(" WHEN 'สิงหาคม' THEN '8'")
+        .append(" WHEN 'กันยายน' THEN '9'")
+        .append(" WHEN 'ตุลาคม' THEN '10'")
+        .append(" WHEN 'พฤศจิกายน' THEN '11'")
+        .append(" WHEN 'ธันวาคม' THEN '12' ")
+        .append(" END ))) ");
     sql.append(" GROUP BY employee.employee_code "); // AND employee.employee_status IN (2,5)
     return sql;
   }
@@ -1162,9 +1168,7 @@ public class DocumentRepository {
 
   public StringBuilder buildQuerySqlLoanCheck(long loanId) {
     val sql = new StringBuilder();
-    sql.append(
-            " select id as loanId, active, loan_no  FROM loan where id = "
-                    + loanId);
+    sql.append(" select id as loanId, active, loan_no  FROM loan where id = " + loanId);
     return sql;
   }
 
@@ -1172,10 +1176,9 @@ public class DocumentRepository {
     val sql = buildQuerySqlLoanCheck(loanId);
     try {
       return jdbcTemplate.queryForObject(
-              sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
+          sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
     } catch (Exception e) {
       return null;
     }
   }
-
 }

@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,12 +130,12 @@ public class LoanDetailHistoryService {
             }
           }
 
-//          if (res.getLoanActive()) {
-//            result.add(res);
-//          } else if (!res.getLoanActive()
-//              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
-//            result.add(res);
-//          }
+          //          if (res.getLoanActive()) {
+          //            result.add(res);
+          //          } else if (!res.getLoanActive()
+          //              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
+          //            result.add(res);
+          //          }
           result.add(res);
         });
 
@@ -164,11 +163,11 @@ public class LoanDetailHistoryService {
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
         res -> {
-//          if (res.getLoanActive()
-//              || (!res.getLoanActive()
-//                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
-            result.add(res);
-//          }
+          //          if (res.getLoanActive()
+          //              || (!res.getLoanActive()
+          //                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
+          result.add(res);
+          //          }
         });
 
     // Step 3: Group by departmentName and sum loanValueTotal

@@ -9,4 +9,6 @@ public interface EmployeeRepository
   public EmployeeDto getByUserId(long userId);
 
   public EmployeeDto getByStockId(long stockId);
+
+  public EmployeeDto getByEmployeeCode(String employeeCode);
 }

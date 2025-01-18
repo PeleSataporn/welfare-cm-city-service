@@ -8,18 +8,19 @@ import com.cm.welfarecmcity.api.fileresource.FileResourceService;
 import com.cm.welfarecmcity.api.level.LevelRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
 import com.cm.welfarecmcity.api.notification.NotificationRepository;
 import com.cm.welfarecmcity.api.stock.StockRepository;
 import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.constant.EmployeeStatusEnum;
 import com.cm.welfarecmcity.constant.NotificationStatusEnum;
-import com.cm.welfarecmcity.dto.LoanDetailDto;
-import com.cm.welfarecmcity.dto.PetitionNotificationDto;
-import com.cm.welfarecmcity.dto.StockDetailDto;
+import com.cm.welfarecmcity.dto.*;
 import com.cm.welfarecmcity.dto.base.RequestModel;
 import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.dto.base.SearchDataResponse;
+import com.cm.welfarecmcity.exception.ResourceNotFoundException;
+import com.cm.welfarecmcity.exception.entity.DocumentException;
 import com.cm.welfarecmcity.exception.entity.EmployeeException;
 import com.cm.welfarecmcity.logic.employee.EmployeeLogicRepository;
 import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,8 @@ public class EmployeeService {
   @Autowired private FileResourceService service;
 
   @Autowired private EmployeeLogicRepository employeeLogicRepository;
+
+  @Autowired private LoanDetailHistoryRepository loanDetailHistoryRepository;
 
   @Transactional
   public List<EmpByAdminRes> searchEmployee() throws SQLException {
@@ -304,6 +308,79 @@ public class EmployeeService {
       // employee.setStock(null);
     }
     employeeRepository.save(employee);
+    return responseDataUtils.updateDataSuccess(req.getId());
+  }
+
+  @Transactional
+  public EmployeeDto getByEmployeeCode(String employeeCode) {
+    return employeeRepository.getByEmployeeCode(employeeCode);
+  }
+
+  @Transactional
+  public ResponseModel<ResponseId> updateEmployeeStatusIsActive(UpdateStatusIsActiveReq req) {
+
+    val findEmployee = employeeRepository.findById(req.getId());
+
+    if (findEmployee.isEmpty()) {
+      throw new EmployeeException("Employee id not found");
+    }
+
+    val employee = findEmployee.get();
+
+    if (employee.getResignationDate() != null) {
+      // Convert Date to LocalDate
+      LocalDate resignationDate =
+          employee.getResignationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+      LocalDate now = LocalDate.now();
+
+      // Compare dates using isAfter()
+      if (now.isAfter(resignationDate.plusMonths(1))) {
+        throw new ResourceNotFoundException("Not found");
+      }
+    }
+
+    val findLoanDetailHistory = loanDetailHistoryRepository.findByEmployeeId(req.getId());
+
+    if (findLoanDetailHistory.isEmpty()) {
+      throw new EmployeeException("Employee id not found");
+    }
+
+    val lastHistory = findLoanDetailHistory.get(findLoanDetailHistory.size() - 1);
+    val loanDetails = lastHistory.getLoan().getLoanDetails();
+
+    val findLoan = loanRepository.findById(lastHistory.getLoan().getId());
+
+    if (findLoan.isEmpty()) {
+      throw new DocumentException("Loan id not found");
+    }
+
+    val loan = findLoan.get();
+    loan.setActive(true);
+    loan.setLoanBalance(loanDetails.get(0).getLoanBalance());
+    loan.setInterest(loanDetails.get(0).getInterest());
+    loan.setGuarantorOne(getByEmployeeCode(req.getGuarantorOne()));
+    loan.setGuarantorTwo(getByEmployeeCode(req.getGuarantorTwo()));
+    loan.getLoanDetails().get(0).setActive(true);
+    loanRepository.save(loan);
+
+    employee.setLoan(loan);
+    employeeRepository.save(employee);
+
+    val stock = stockRepository.findById(employee.getStock().getId()).get();
+    val stockDetails = stock.getStockDetails();
+
+    for (val stockDetail : stockDetails) {
+      stockDetail.setActive(true);
+    }
+
+    val lastStockDetails = stock.getStockDetails().get(loanDetails.size() - 1);
+
+    stock.setStockAccumulate(lastStockDetails.getStockAccumulate());
+    stock.setStockValue(lastStockDetails.getStockValue());
+    stock.setActive(true);
+    stockRepository.save(stock);
+
     return responseDataUtils.updateDataSuccess(req.getId());
   }
 
