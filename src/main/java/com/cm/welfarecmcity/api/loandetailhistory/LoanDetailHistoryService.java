@@ -2,11 +2,15 @@ package com.cm.welfarecmcity.api.loandetailhistory;
 
 import com.cm.welfarecmcity.logic.document.DocumentService;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.utils.DateUtils;
 import jakarta.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,16 +134,39 @@ public class LoanDetailHistoryService {
             }
           }
 
-          //          if (res.getLoanActive()) {
-          //            result.add(res);
-          //          } else if (!res.getLoanActive()
-          //              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
-          //            result.add(res);
-          //          }
-          result.add(res);
+//          if (res.getLoanActive()) {
+//            result.add(res);
+//          } else if (!res.getLoanActive()
+//              && Objects.equals(res.getInstallment(), res.getLoanTime())) {
+//            result.add(res);
+//          }
+
+          if (isLoanClosedInYear(res.getCloseLoanDate(),yearCurrent,getMonthCurrent)) {
+            result.add(res);
+          }
         });
 
     return result;
+  }
+
+  public boolean isLoanClosedInYear(Date closeLoanDate, String yearCurrent, String monthCurrent) {
+    if (closeLoanDate == null) {
+      return true; // Handle null safely
+    }
+
+    // Convert Date to LocalDate
+    LocalDate localDate = closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    // Extract the year and check the condition
+    if((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)){
+      int monthFM = DateUtils.getThaiMonthIntOfValue(monthCurrent);
+      if(localDate.getMonthValue() > monthFM){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
   }
 
   @Transactional
@@ -163,11 +190,15 @@ public class LoanDetailHistoryService {
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
         res -> {
-          //          if (res.getLoanActive()
-          //              || (!res.getLoanActive()
-          //                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
-          result.add(res);
-          //          }
+//          if (res.getLoanActive()
+//              || (!res.getLoanActive()
+//                  && Objects.equals(res.getInstallment(), res.getLoanTime()))) {
+//            result.add(res);
+//          }
+
+          if (isLoanClosedInYear(res.getCloseLoanDate(),yearCurrent,getMonthCurrent)) {
+            result.add(res);
+          }
         });
 
     // Step 3: Group by departmentName and sum loanValueTotal

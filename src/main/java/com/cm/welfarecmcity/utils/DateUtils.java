@@ -55,4 +55,23 @@ public class DateUtils {
       default -> "Invalid month";
     };
   }
+
+  public static int getThaiMonthIntOfValue(String monthString) {
+    return switch (monthString) {
+      case "มกราคม" -> 1;
+      case "กุมภาพันธ์" -> 2;
+      case "มีนาคม" -> 3;
+      case "เมษายน" -> 4;
+      case "พฤษภาคม" -> 5;
+      case "มิถุนายน" -> 6;
+      case "กรกฎาคม" -> 7;
+      case "สิงหาคม" -> 8;
+      case "กันยายน" -> 9;
+      case "ตุลาคม" -> 10;
+      case "พฤศจิกายน" -> 11;
+      case "ธันวาคม" -> 12;
+      default -> 0;
+    };
+  }
+
 }

@@ -3,6 +3,8 @@ package com.cm.welfarecmcity.logic.document.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class DocumentV1ResLoan {
@@ -37,4 +39,5 @@ public class DocumentV1ResLoan {
   // คงคาง(ต้น)
   private String outStandPrinciple;
   private String startLoanDate;
+  private Date closeLoanDate;
 }

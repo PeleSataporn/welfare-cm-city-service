@@ -25,7 +25,7 @@ public class LoanDetailHistoryLogicRepository {
         " SELECT employee.id, department.name as departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
             + " loan_detail_history.installment, loan_detail_history.interest_last_month as interestLastMonth, loan.new_loan as newLoan, loan.loan_value as loanValue, loan.active as loanActive, "
             + " loan.loan_time as loanTime, loan_detail_history.interest_percent as interestPercent, loan.guarantor_one_id as guarantor1, loan.guarantor_two_id as guarantor2, loan.start_loan_date "
-            + " ,employee.resignation_date "
+            + " ,employee.resignation_date, loan.close_loan_date "
             + " FROM department "
             + " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) "
             + " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) "
@@ -41,6 +41,7 @@ public class LoanDetailHistoryLogicRepository {
       sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
       sql.append(" AND employee.id != 0 "); // employee.employee_status IN (2,5) AND
       sql.append(" AND ( employee.resignation_date IS NULL ")
+
           .append(" OR (" + " (YEAR(employee.resignation_date) + 543 = CAST('")
           .append(yearCurrent)
           .append(" ' AS INT)) ")
@@ -77,7 +78,7 @@ public class LoanDetailHistoryLogicRepository {
     val sql = new StringBuilder();
     sql.append(
         " SELECT employee.employee_code, department.name as departmentName, loan.loan_value, loan.active as loanActive, "
-            + " loan_detail_history.installment, loan.loan_time as loanTime FROM department "
+            + " loan_detail_history.installment, loan.loan_time as loanTime, loan.close_loan_date FROM department "
             + " LEFT JOIN employee ON employee.department_id = department.id "
             + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
             + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
