@@ -9,4 +9,6 @@ public interface LoanDetailHistoryRepository
     extends JpaRepository<LoanDetailHistory, Long>, JpaSpecificationExecutor<LoanDetailHistory> {
 
   List<LoanDetailHistory> findByEmployeeId(Long employeeId);
+
+  List<LoanDetailHistory> findByLoanId(Long loanId);
 }

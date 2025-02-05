@@ -162,6 +162,13 @@ public class LoanLogicService {
 
   @Transactional
   public void add(AddLoanDetailAllReq req) {
+    val listLoanDetail = getLoanDetailByMonth(req);
+    addInfoLoanDetailHistory(listLoanDetail);
+    deleteInfoLoanDetail(listLoanDetail);
+  }
+
+  @Transactional
+  public List<LoanDetailRes> getLoanDetailByMonth(AddLoanDetailAllReq req) {
     val listLoanDetail = repository.getLoanDetailByMonth(req.getOldMonth(), req.getOldYear());
     listLoanDetail.forEach(
         detail -> {
@@ -217,8 +224,7 @@ public class LoanLogicService {
           }
         });
 
-    addInfoLoanDetailHistory(listLoanDetail);
-    deleteInfoLoanDetail(listLoanDetail);
+    return listLoanDetail;
   }
 
   @Transactional
@@ -251,9 +257,18 @@ public class LoanLogicService {
     loanDetailHistory.setLoan(loan);
     loanDetailHistory.setLoanNo(loan.getLoanNo());
 
-    val employee = employeeRepository.findById(loanDetailRes.getEmployeeId()).get();
-    loanDetailHistory.setEmployee(employee);
-    loanDetailHistory.setEmployeeCode(employee.getEmployeeCode());
+    if (loanDetailRes.getEmployeeId() != null) {
+      val employee = employeeRepository.findById(loanDetailRes.getEmployeeId()).get();
+      loanDetailHistory.setEmployee(employee);
+      loanDetailHistory.setEmployeeCode(employee.getEmployeeCode());
+    } else {
+      val findLoanDetailHistory =
+          loanDetailHistoryRepository.findByLoanId(loanDetailRes.getLoanId());
+      val lastHistory = findLoanDetailHistory.get(findLoanDetailHistory.size() - 1);
+
+      loanDetailHistory.setEmployee(lastHistory.getEmployee());
+      loanDetailHistory.setEmployeeCode(lastHistory.getEmployeeCode());
+    }
 
     return loanDetailHistory;
   }

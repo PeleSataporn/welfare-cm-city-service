@@ -29,6 +29,10 @@ public class StockLogicService {
   @Transactional
   public List<StockRes> searchStock() {
     List<StockRes> stock = stockLogicRepository.searchStock();
+    val lastStock = stock.get(stock.size() - 1);
+
+    val stockDetail = stockDetailRepository.findAllByStock_Id(lastStock.getId());
+    val lastDetail = stockDetail.get(stockDetail.size() - 1);
 
     for (StockRes item : stock) {
       switch (item.getEmployeeStatus()) {
@@ -42,6 +46,9 @@ public class StockLogicService {
         case 8 -> item.setStatus("เกษียณ");
         default -> item.setStatus("ไม่ทราบสถานะ");
       }
+
+      item.setStockMonth(lastDetail.getStockMonth());
+      item.setStockYear(lastDetail.getStockYear());
     }
 
     return stock;
