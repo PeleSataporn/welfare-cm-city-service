@@ -90,11 +90,11 @@ public class DocumentRepository {
       Long empId, String monthCurrent, String yearCurrent) {
     val sql = new StringBuilder();
     sql.append(
-        " SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time,"
-            + " loan.active as loanActive, loan.deleted as loanDelete, loan.close_loan_date  FROM employee "
+        " WITH latest_loan AS (SELECT loan_detail_history.installment AS loanInstallment, loan_detail_history.loan_ordinary, loan_detail_history.interest, loan.loan_time,"
+            + " loan.active as loanActive, loan.deleted as loanDelete, loan.close_loan_date ,ROW_NUMBER() OVER (PARTITION BY loan_detail_history.employee_id ORDER BY loan_detail_history.id DESC) AS row_num FROM employee "
             + " LEFT JOIN department ON employee.department_id = department.id "
             + " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
-            + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  "
+            + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id "
             + " WHERE 1=1");
 
     //    sql.append(" and loan.active = TRUE ").append(" ");
@@ -115,7 +115,7 @@ public class DocumentRepository {
         sql.append(" AND loan_detail_history.loan_year = '").append(yearCurrent).append("'");
       }
     }
-    sql.append(" GROUP BY employee.employee_code ");
+    sql.append(" )SELECT * FROM latest_loan WHERE row_num = 1 ");
     return sql;
   }
 
@@ -920,7 +920,7 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
         " SELECT employee.id as empId, department.name AS departmentName, employee.employee_code, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName, "
-            + " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate ,employee.resignation_date FROM employee "
+            + " stock_detail.installment AS stockInstallment, stock_detail.stock_value, stock_detail.stock_accumulate ,employee.resignation_date, employee.loan_id FROM employee "
             + " LEFT JOIN department ON employee.department_id = department.id LEFT JOIN stock ON employee.stock_id = stock.id "
             + " LEFT JOIN stock_detail ON stock_detail.stock_id = stock.id WHERE 1=1 ");
     if (empId != null) {

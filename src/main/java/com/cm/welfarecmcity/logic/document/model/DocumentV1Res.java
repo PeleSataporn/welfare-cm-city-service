@@ -18,4 +18,5 @@ public class DocumentV1Res {
   private String sumMonth = null;
   private String stockAccumulate = null;
   private String loanTime = null;
+  private Long loanId = null;
 }
