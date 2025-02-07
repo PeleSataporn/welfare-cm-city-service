@@ -30,9 +30,19 @@ public class LoanDetailHistoryLogicRepository {
             + " JOIN employee ON (employee.department_id = department.id AND employee.deleted = FALSE) "
             + " JOIN stock ON (employee.stock_id = stock.id AND stock.deleted = FALSE) "
             + " JOIN stock_detail ON (stock_detail.stock_id = stock.id AND stock_detail.deleted = FALSE) "
-            + " JOIN loan_detail_history ON (loan_detail_history.employee_id = employee.id "
-            + " AND loan_detail_history.deleted = FALSE "
-            + " AND loan_detail_history.loan_ordinary != 0) "
+            + " JOIN loan_detail_history ON (" +
+                "    loan_detail_history.employee_id = employee.id" +
+                "    AND loan_detail_history.deleted = FALSE" +
+                "    AND loan_detail_history.loan_ordinary != 0" +
+                "    AND loan_detail_history.id = (" +
+                "        SELECT MAX(lh.id) " +
+                "        FROM loan_detail_history lh " +
+                "        WHERE lh.employee_id = employee.id");
+            sql.append(" AND lh.loan_month = '").append(getMonthCurrent).append("'");
+            sql.append(" AND lh.loan_year = '").append(yearCurrent).append("'");
+            sql.append(
+                "  ) " +
+                ") "
             + " left JOIN loan ON "
             + " loan_detail_history.loan_id = loan.id "
             + " WHERE 1=1 ");
