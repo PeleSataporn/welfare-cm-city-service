@@ -25,12 +25,12 @@ spring:
     default-property-inclusion: non_null
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-#    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-#    username: ${DATABASE_USER}
-#    password: ${DATABASE_PASSWORD}
-    url: jdbc:mariadb://127.0.0.1:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
-    username: root
-    password: root
+    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+#    url: jdbc:mariadb://127.0.0.1:3306/icoop_system?characterEncoding=utf-8&useCompression=true&tcpKeepAlive=true&autocommit=false&profileSQL=true
+#    username: root
+#    password: root
     hikari:
       auto-commit: false
       maximum-pool-size: 20
