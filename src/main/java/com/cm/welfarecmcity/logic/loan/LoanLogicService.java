@@ -215,6 +215,7 @@ public class LoanLogicService {
 
             loanDetailRepository.save(loanDetailDto);
             loanRepository.save(loanDto);
+
             // close loan
             if (installment == (calLast.getInstallment() + 1)) {
               closeLoan(detail.getLoanId());
@@ -243,31 +244,38 @@ public class LoanLogicService {
   }
 
   private LoanDetailHistory mapToLoanDetailHistory(LoanDetailRes loanDetailRes) {
+
+    val exists =
+        loanDetailHistoryRepository.existsLoanDetailHistoryByLoanIdLoanMonthLoanYear(
+            loanDetailRes.getLoanId(), loanDetailRes.getLoanMonth(), loanDetailRes.getLoanYear());
     LoanDetailHistory loanDetailHistory = new LoanDetailHistory();
-    loanDetailHistory.setInstallment(loanDetailRes.getInstallment());
-    loanDetailHistory.setLoanMonth(loanDetailRes.getLoanMonth());
-    loanDetailHistory.setLoanYear(loanDetailRes.getLoanYear());
-    loanDetailHistory.setLoanOrdinary(loanDetailRes.getLoanOrdinary());
-    loanDetailHistory.setInterest(loanDetailRes.getInterest());
-    loanDetailHistory.setInterestPercent(loanDetailRes.getInterestPercent());
-    loanDetailHistory.setInterestLastMonth(loanDetailRes.getInterestLastMonth());
-    loanDetailHistory.setLoanBalance(loanDetailRes.getLoanValue());
 
-    val loan = loanRepository.findById(loanDetailRes.getLoanId()).get();
-    loanDetailHistory.setLoan(loan);
-    loanDetailHistory.setLoanNo(loan.getLoanNo());
+    if (!exists) {
+      loanDetailHistory.setInstallment(loanDetailRes.getInstallment());
+      loanDetailHistory.setLoanMonth(loanDetailRes.getLoanMonth());
+      loanDetailHistory.setLoanYear(loanDetailRes.getLoanYear());
+      loanDetailHistory.setLoanOrdinary(loanDetailRes.getLoanOrdinary());
+      loanDetailHistory.setInterest(loanDetailRes.getInterest());
+      loanDetailHistory.setInterestPercent(loanDetailRes.getInterestPercent());
+      loanDetailHistory.setInterestLastMonth(loanDetailRes.getInterestLastMonth());
+      loanDetailHistory.setLoanBalance(loanDetailRes.getLoanValue());
 
-    if (loanDetailRes.getEmployeeId() != null) {
-      val employee = employeeRepository.findById(loanDetailRes.getEmployeeId()).get();
-      loanDetailHistory.setEmployee(employee);
-      loanDetailHistory.setEmployeeCode(employee.getEmployeeCode());
-    } else {
-      val findLoanDetailHistory =
-          loanDetailHistoryRepository.findByLoanId(loanDetailRes.getLoanId());
-      val lastHistory = findLoanDetailHistory.get(findLoanDetailHistory.size() - 1);
+      val loan = loanRepository.findById(loanDetailRes.getLoanId()).get();
+      loanDetailHistory.setLoan(loan);
+      loanDetailHistory.setLoanNo(loan.getLoanNo());
 
-      loanDetailHistory.setEmployee(lastHistory.getEmployee());
-      loanDetailHistory.setEmployeeCode(lastHistory.getEmployeeCode());
+      if (loanDetailRes.getEmployeeId() != null) {
+        val employee = employeeRepository.findById(loanDetailRes.getEmployeeId()).get();
+        loanDetailHistory.setEmployee(employee);
+        loanDetailHistory.setEmployeeCode(employee.getEmployeeCode());
+      } else {
+        val findLoanDetailHistory =
+            loanDetailHistoryRepository.findByLoanId(loanDetailRes.getLoanId());
+        val lastHistory = findLoanDetailHistory.get(findLoanDetailHistory.size() - 1);
+
+        loanDetailHistory.setEmployee(lastHistory.getEmployee());
+        loanDetailHistory.setEmployeeCode(lastHistory.getEmployeeCode());
+      }
     }
 
     return loanDetailHistory;
@@ -279,6 +287,7 @@ public class LoanLogicService {
     addInfoLoanDetailHistory(listLoanDetail);
 
     val empLoan = repository.searchLoanOfEmployee(id);
+
     val emp1 = employeeRepository.findById(empLoan.getId()).get();
     emp1.setLoan(null);
     employeeRepository.save(emp1);
@@ -290,9 +299,6 @@ public class LoanLogicService {
     loan.setCloseLoanDate(new Date());
 
     loanRepository.save(loan);
-
-    //    val detailLoan = repository.searchLoanOfLoanDetail(id);
-    //    loanDetailRepository.deleteAll(detailLoan);
   }
 
   @Transactional
