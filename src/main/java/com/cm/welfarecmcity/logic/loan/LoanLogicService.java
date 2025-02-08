@@ -250,7 +250,7 @@ public class LoanLogicService {
             loanDetailRes.getLoanId(), loanDetailRes.getLoanMonth(), loanDetailRes.getLoanYear());
     LoanDetailHistory loanDetailHistory = new LoanDetailHistory();
 
-    if (!exists) {
+    if (exists == null) {
       loanDetailHistory.setInstallment(loanDetailRes.getInstallment());
       loanDetailHistory.setLoanMonth(loanDetailRes.getLoanMonth());
       loanDetailHistory.setLoanYear(loanDetailRes.getLoanYear());
