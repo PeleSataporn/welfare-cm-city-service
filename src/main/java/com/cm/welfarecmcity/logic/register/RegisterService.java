@@ -268,11 +268,19 @@ public class RegisterService {
   @Transactional
   public ResponseModel<ResponseId> approveRegister(ApproveRegisterReq req) {
     val findEmployee = employeeRepository.findById(req.getId());
+
     if (findEmployee.isEmpty()) {
       throw new EmployeeException("Employee not found.");
     }
+
+    val exists = employeeRepository.existsByEmployeeCode(req.getEmployeeCode());
+
+    if (exists) {
+      throw new EmployeeException("Employee employee code not found.");
+    }
+
     val employee = findEmployee.get();
-    employee.setEmployeeCode(generateListener.generateCustomerCode());
+    employee.setEmployeeCode(req.getEmployeeCode());
     employee.setEmployeeStatus(EmployeeStatusEnum.NORMAL_EMPLOYEE.getState());
     employee.setApproveFlag(req.getApproveFlag());
 

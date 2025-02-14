@@ -11,4 +11,6 @@ public interface EmployeeRepository
   public EmployeeDto getByStockId(long stockId);
 
   public EmployeeDto getByEmployeeCode(String employeeCode);
+
+  boolean existsByEmployeeCode(String employeeCode);
 }

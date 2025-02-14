@@ -30,7 +30,8 @@ public class EmployeeLogicRepository {
             + " LEFT JOIN positions p on p.id = e.position_id "
             + " LEFT JOIN department d on d.id = e.department_id "
             + " LEFT JOIN affiliation a on a.id = e.affiliation_id "
-            + " LEFT JOIN bureau b on b.id  = a.bureau_id ");
+            + " LEFT JOIN bureau b on b.id  = a.bureau_id "
+            + " WHERE e.employee_code != '' ORDER BY e.employee_code ");
 
     return sql;
   }
