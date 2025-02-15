@@ -10,6 +10,7 @@ services:
       - MARIADB_USER=${DATABASE_USER}
       - MARIADB_PASSWORD=${DATABASE_PASSWORD}
       - MARIADB_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ROOT_HOST=%
     volumes:
       - ./db-data:/var/lib/mysql
