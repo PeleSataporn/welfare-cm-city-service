@@ -32,11 +32,6 @@ public class EmployeeController {
     return employeeService.searchEmployee();
   }
 
-  @GetMapping("/test/jenkins")
-  public String jenkins() throws SQLException {
-    return "test jenkins.";
-  }
-
   @PostMapping("/v2/search")
   public ResponseModel<SearchDataResponse<EmpByAdminRes>> searchEmployeeByAdmin(
       @RequestBody RequestModel<EmployeeByAdminReqDto, EmployeeByAdminOrderReqDto> req)
