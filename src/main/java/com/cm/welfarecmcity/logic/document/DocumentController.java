@@ -110,6 +110,13 @@ public class DocumentController {
     return service.calculateLoanNew(req);
   }
 
+  // calculate Loan
+  @PostMapping("v1/document/calculate-loan-new-sumAll")
+  public CalculateInstallments calculateLoanNewSumAll(@RequestBody CalculateReq req)
+          throws ParseException {
+    return service.calculateLoanNewSumAll(req);
+  }
+
   @PostMapping("v1/document/calculate-loan-old")
   public List<CalculateInstallments> calculateLoanOld(@RequestBody CalculateReq req)
       throws ParseException {

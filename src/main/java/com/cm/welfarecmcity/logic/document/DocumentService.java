@@ -1085,6 +1085,34 @@ public class DocumentService {
 
   // calculate Loan
 
+  @Transactional
+  public CalculateInstallments calculateLoanNewSumAll(CalculateReq req) throws ParseException {
+    double principal = req.getPrincipal();
+    double interestRate = req.getInterestRate();
+    int numOfPayments = req.getNumOfPayments();
+
+    String dateSt = req.getPaymentStartDate();
+    LocalDate date = LocalDate.parse(dateSt);
+
+    // calculate loan
+    LocalDate paymentStartDate =
+            LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    double installment = calculateLoanInstallment(principal, interestRate, numOfPayments);
+    List<CalculateInstallments> calculateInstallments =
+            createAmortizationTableNew(
+                    principal, interestRate, numOfPayments, installment, paymentStartDate);
+
+    CalculateInstallments sumAll = new CalculateInstallments();
+    int total = 0;
+    for(CalculateInstallments list : calculateInstallments){
+      total =  total + list.getInterest();
+    }
+    int sumt = total - calculateInstallments.get(calculateInstallments.size() - 1).getInterest();
+    sumAll.setInterest(sumt);
+
+    return sumAll;
+  }
+
   // loan New
   @Transactional
   public List<CalculateInstallments> calculateLoanNew(CalculateReq req) throws ParseException {
@@ -1192,6 +1220,7 @@ public class DocumentService {
 
     return result;
   }
+
 
   // lan old
 

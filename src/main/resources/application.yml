@@ -20,7 +20,7 @@ server:
 
 spring:
   config:
-    import: env.properties
+    import: .env
   jackson:
     default-property-inclusion: non_null
   datasource:
