@@ -11,7 +11,7 @@ public class Calculate {
     double principal = 350000; // The initial loan amount
     double interestRate = 5.0; // The annual interest rate (e.g., 5%)
     int numOfPayments = 24; // The number of monthly payments
-    LocalDate paymentStartDate = LocalDate.of(2023, 1, 31); // The start date of payments
+    LocalDate paymentStartDate = LocalDate.of(2023, 1, 31);
 
     double installment = calculateLoanInstallment(principal, interestRate, numOfPayments);
     System.out.println("Monthly installment: " + installment);
