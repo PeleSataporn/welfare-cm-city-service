@@ -37,11 +37,6 @@ public class EmployeeController {
     return "test jenkins.";
   }
 
-  @GetMapping("/test/jenkins/v2")
-  public String jenkinsV2() throws SQLException {
-    return "test jenkins v2.";
-  }
-
   @PostMapping("/v2/search")
   public ResponseModel<SearchDataResponse<EmpByAdminRes>> searchEmployeeByAdmin(
       @RequestBody RequestModel<EmployeeByAdminReqDto, EmployeeByAdminOrderReqDto> req)
