@@ -258,7 +258,7 @@ public class LoanLogicService {
       loanDetailHistory.setInterest(loanDetailRes.getInterest());
       loanDetailHistory.setInterestPercent(loanDetailRes.getInterestPercent());
       loanDetailHistory.setInterestLastMonth(loanDetailRes.getInterestLastMonth());
-      loanDetailHistory.setLoanBalance(loanDetailRes.getLoanValue());
+      loanDetailHistory.setLoanBalance(loanDetailRes.getLoanBalance());
 
       val loan = loanRepository.findById(loanDetailRes.getLoanId()).get();
       loanDetailHistory.setLoan(loan);

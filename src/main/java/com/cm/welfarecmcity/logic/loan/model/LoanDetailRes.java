@@ -43,4 +43,7 @@ public class LoanDetailRes {
   private String startLoanDate;
 
   private Long employeeId;
+
+  @Comment("เงินกู้คงเหลือ")
+  private double loanBalance;
 }

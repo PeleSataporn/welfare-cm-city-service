@@ -14,9 +14,8 @@ public interface LoanDetailHistoryRepository
   List<LoanDetailHistory> findByLoanId(Long loanId);
 
   @Query(
-          value =
-                  "SELECT 1 FROM loan_detail_history WHERE loan_id = :loanId AND loan_month = :month AND loan_year = :year",
-          nativeQuery = true)
+      value =
+          "SELECT 1 FROM loan_detail_history WHERE loan_id = :loanId AND loan_month = :month AND loan_year = :year",
+      nativeQuery = true)
   Integer existsLoanDetailHistoryByLoanIdLoanMonthLoanYear(Long loanId, String month, String year);
-
 }

@@ -1044,7 +1044,7 @@ public class DocumentRepository {
             + " employee.salary, employee.employee_type_id AS employeeTypeId, stock_detail.installment as stockDetailInstallment, stock.id as stockId ");
     if (req.getLoanId() != null) {
       sql.append(
-          " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan.loan_balance AS loanBalance, "
+          " ,loan.id as loanId, loan.active as loanActive, loan.loan_value AS loanValue, loan_detail_history.loan_balance AS loanBalance, "
               + " loan.id as loanId, loan.start_loan_date as startDateLoan, loan.new_loan, "
               + " loan_detail_history.installment, loan.loan_time AS loanTime, loan.interest_percent AS interestPercent, loan_detail_history.interest as interestLoanLastMonth, loan_detail_history.loan_ordinary ");
     }

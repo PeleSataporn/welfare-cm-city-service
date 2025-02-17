@@ -113,7 +113,7 @@ public class DocumentController {
   // calculate Loan
   @PostMapping("v1/document/calculate-loan-new-sumAll")
   public CalculateInstallments calculateLoanNewSumAll(@RequestBody CalculateReq req)
-          throws ParseException {
+      throws ParseException {
     return service.calculateLoanNewSumAll(req);
   }
 

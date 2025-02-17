@@ -1096,16 +1096,16 @@ public class DocumentService {
 
     // calculate loan
     LocalDate paymentStartDate =
-            LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+        LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
     double installment = calculateLoanInstallment(principal, interestRate, numOfPayments);
     List<CalculateInstallments> calculateInstallments =
-            createAmortizationTableNew(
-                    principal, interestRate, numOfPayments, installment, paymentStartDate);
+        createAmortizationTableNew(
+            principal, interestRate, numOfPayments, installment, paymentStartDate);
 
     CalculateInstallments sumAll = new CalculateInstallments();
     int total = 0;
-    for(CalculateInstallments list : calculateInstallments){
-      total =  total + list.getInterest();
+    for (CalculateInstallments list : calculateInstallments) {
+      total = total + list.getInterest();
     }
     int sumt = total - calculateInstallments.get(calculateInstallments.size() - 1).getInterest();
     sumAll.setInterest(sumt);
@@ -1220,7 +1220,6 @@ public class DocumentService {
 
     return result;
   }
-
 
   // lan old
 
