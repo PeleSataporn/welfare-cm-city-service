@@ -245,7 +245,7 @@ public class RegisterService {
         idEmp = result.getId();
       } else if (result.getEmployeeStatus() == EmployeeStatusEnum.RESIGN_EMPLOYEE.getState()) {
         // ลาออก
-        val findEmployee = employeeRepository.findById(idEmp).get();
+        val findEmployee = employeeRepository.findById(result.getId()).get();
         val stock = findEmployee.getStock();
         stock.setStockAccumulate(0);
         stock.setStockValue(0);
