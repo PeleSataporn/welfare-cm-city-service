@@ -245,12 +245,14 @@ public class RegisterService {
         idEmp = result.getId();
       } else if (result.getEmployeeStatus() == EmployeeStatusEnum.RESIGN_EMPLOYEE.getState()) {
         // ลาออก
-        resultStatus = EmployeeStatusEnum.RESIGN_EMPLOYEE.name();
-        idEmp = result.getId();
-
         val findEmployee = employeeRepository.findById(idEmp).get();
         findEmployee.setApproveFlag(false);
+        findEmployee.setActive(false);
+        findEmployee.setDeleted(true);
         employeeRepository.save(findEmployee);
+
+        idEmp = setModelEmployee(req);
+        resultStatus = EmployeeStatusEnum.NEW_EMPLOYEE.name();
       } else if (result.getEmployeeStatus() == EmployeeStatusEnum.NEW_EMPLOYEE.getState()) {
         // ลาออก
         //        throw new EmployeeException("ID Card has already been used.");
