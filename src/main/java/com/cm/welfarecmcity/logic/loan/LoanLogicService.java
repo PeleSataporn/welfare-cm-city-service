@@ -98,17 +98,17 @@ public class LoanLogicService {
 
     val loans = repository.searchLoanByAdmin(criteria, order, pageReq);
 
-    for (val loan : loans) {
+    for (val list : loans) {
       int sum = 0;
-      if (Integer.parseInt(loan.getLoanYear()) >= 2567) {
-        if (loan.getLoanBalance() > 0 && loan.getInstallment() > 0) {
+      if (Integer.parseInt(list.getLoanYear()) >= 2567) {
+        if (list.getLoanBalance() > 0 && list.getInstallment() > 0) {
           sum =
-              (loan.getLoanBalanceDetail()
-                  + Math.round((loan.getLoanOrdinary() - loan.getInterestDetail())));
+              (list.getLoanBalanceDetail()
+                  + Math.round((list.getLoanOrdinary() - list.getInterestDetail())));
         } else {
-          sum = loan.getLoanValue();
+          sum = list.getLoanValue();
         }
-        loan.setLoanBalance(sum);
+        list.setLoanBalance(sum);
       }
     }
 

@@ -62,6 +62,10 @@ public class StockLogicService {
     val pageReq = req.getPageReq();
 
     val stocks = stockLogicRepository.searchStockByAdmin(criteria, order, pageReq);
+    val lastStock = stocks.get(stocks.size() - 1);
+
+    val stockDetail = stockDetailRepository.findAllByStock_Id(lastStock.getId());
+    val lastDetail = stockDetail.get(stockDetail.size() - 1);
 
     for (val stock : stocks) {
       switch (stock.getEmployeeStatus()) {
@@ -75,6 +79,9 @@ public class StockLogicService {
         case 8 -> stock.setStatus("เกษียณ");
         default -> stock.setStatus("ไม่ทราบสถานะ");
       }
+
+      stock.setStockMonth(lastDetail.getStockMonth());
+      stock.setStockYear(lastDetail.getStockYear());
     }
 
     val totalElements = stockLogicRepository.count(criteria);
