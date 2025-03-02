@@ -62,10 +62,8 @@ public class StockLogicService {
     val pageReq = req.getPageReq();
 
     val stocks = stockLogicRepository.searchStockByAdmin(criteria, order, pageReq);
-    val lastStock = stocks.get(stocks.size() - 1);
 
-    val stockDetail = stockDetailRepository.findAllByStock_Id(lastStock.getId());
-    val lastDetail = stockDetail.get(stockDetail.size() - 1);
+    val lastDetail = stockDetailRepository.findTopByOrderByIdDesc();
 
     for (val stock : stocks) {
       switch (stock.getEmployeeStatus()) {
