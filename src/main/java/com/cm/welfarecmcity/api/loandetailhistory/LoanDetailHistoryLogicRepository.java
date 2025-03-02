@@ -53,7 +53,7 @@ public class LoanDetailHistoryLogicRepository {
       sql.append(" AND ( employee.resignation_date IS NULL ")
           .append(" OR (" + " (YEAR(employee.resignation_date) + 543 = CAST('")
           .append(yearCurrent)
-          .append(" ' AS INT)) ")
+          .append("' AS INT)) ")
           .append(" AND MONTH(employee.resignation_date) > ") // >=
           .append(" CASE '")
           .append(getMonthCurrent)
