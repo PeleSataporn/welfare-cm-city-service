@@ -74,7 +74,7 @@ public class StockLogicRepository {
     statements.add(" s.deleted = FALSE ");
 
     if (criteria.employeeCode() != null) {
-      statements.add(" e.employee_code = '" + criteria.employeeCode() + "' ");
+      statements.add(" e.employee_code LIKE '%" + criteria.employeeCode() + "%' ");
     }
 
     if (criteria.firstName() != null) {
@@ -86,7 +86,7 @@ public class StockLogicRepository {
     }
 
     if (criteria.idCard() != null) {
-      statements.add(" e.id_card = '" + criteria.idCard() + "' ");
+      statements.add(" e.id_card LIKE '%" + criteria.idCard() + "%' ");
     }
 
     return " WHERE " + statements;

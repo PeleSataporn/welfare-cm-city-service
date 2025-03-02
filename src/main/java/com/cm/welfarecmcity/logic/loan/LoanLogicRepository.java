@@ -104,7 +104,7 @@ public class LoanLogicRepository {
             + "' ");
 
     if (criteria.employeeCode() != null) {
-      statements.add(" e.employee_code = '" + criteria.employeeCode() + "' ");
+      statements.add(" e.employee_code LIKE '%" + criteria.employeeCode() + "%' ");
     }
 
     if (criteria.firstName() != null) {
@@ -116,11 +116,11 @@ public class LoanLogicRepository {
     }
 
     if (criteria.idCard() != null) {
-      statements.add(" e.id_card = '" + criteria.idCard() + "' ");
+      statements.add(" e.id_card LIKE '%" + criteria.idCard() + "%' ");
     }
 
     if (criteria.loanNo() != null) {
-      statements.add(" l.loan_no = '" + criteria.loanNo() + "' ");
+      statements.add(" l.loan_no LIKE '%" + criteria.loanNo() + "%' ");
     }
 
     return " WHERE " + statements;
