@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.val;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -299,4 +300,70 @@ public class DocumentsService {
 
     return response;
   }
+
+  public List<List<String>> readFileExcelForLoan() {
+    String filePath = "excel-import-loan/test-impoer-data-loan.xlsx";
+    InputStream fileStream = getClass().getClassLoader().getResourceAsStream(filePath);
+
+    if (fileStream == null) {
+      throw new RuntimeException("File not found in resources: " + filePath);
+    }
+
+    return readExcelColumnsFromResource(fileStream);
+  }
+
+  public static List<List<String>> readExcelColumnsFromResource(InputStream fileStream) {
+    List<List<String>> dataList = new ArrayList<>();
+
+    try (Workbook workbook = WorkbookFactory.create(fileStream)) {
+      Sheet sheet = workbook.getSheetAt(0); // Read first sheet
+
+      if (sheet == null || sheet.getRow(0) == null) {
+        System.out.println("The sheet is empty.");
+        return dataList;
+      }
+
+      // Read each row and store values in a list
+      for (Row row : sheet) {
+        List<String> rowData = new ArrayList<>();
+        for (Cell cell : row) {
+          String cellValue = getCellValue(cell);
+          if (!cellValue.isEmpty()) {
+            rowData.add(cellValue);
+          }
+        }
+        if (!rowData.isEmpty()) {
+          dataList.add(rowData);
+        }
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return dataList;
+  }
+
+
+  private static String getCellValue(Cell cell) {
+    if (cell == null) return "";
+    switch (cell.getCellType()) {
+      case STRING:
+        return cell.getStringCellValue().trim();
+      case NUMERIC:
+        // Check if it's a whole number (integer)
+        double numericValue = cell.getNumericCellValue();
+        if (numericValue == Math.floor(numericValue)) {
+          return String.valueOf((long) numericValue); // Convert to long to remove .0
+        } else {
+          return String.valueOf(numericValue);
+        }
+      case BOOLEAN:
+        return String.valueOf(cell.getBooleanCellValue());
+      case FORMULA:
+        return cell.getCellFormula();
+      default:
+        return "";
+    }
+  }
+
 }

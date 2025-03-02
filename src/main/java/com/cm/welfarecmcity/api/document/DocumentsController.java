@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+
+import com.cm.welfarecmcity.logic.document.model.CalculateInstallments;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -73,5 +75,10 @@ public class DocumentsController {
       throws IOException {
     val res = documentService.addFile2(file, month, year);
     return ResponseEntity.status(HttpStatus.OK).body(res);
+  }
+
+  @PostMapping("/readFileExcelForLoan")
+  public List<List<String>> readFileExcelForLoan(){
+    return documentService.readFileExcelForLoan();
   }
 }

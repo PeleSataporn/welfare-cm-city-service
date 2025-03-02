@@ -2,6 +2,7 @@ com\cm\welfarecmcity\exception\GlobalExceptionController.class
 com\cm\welfarecmcity\logic\loan\model\LoanRes.class
 com\cm\welfarecmcity\logic\document\model\ReportRes.class
 com\cm\welfarecmcity\api\contact\ContactService.class
+com\cm\welfarecmcity\api\loandetailhistory\LoanDetailHistoryService$1.class
 com\cm\welfarecmcity\mapper\base\BaseMapperConfig.class
 com\cm\welfarecmcity\dto\base\ResponseTextStatus.class
 com\cm\welfarecmcity\dto\DocumentDto.class
@@ -234,6 +235,7 @@ com\cm\welfarecmcity\api\employeetype\EmployeeTypeRepository.class
 com\cm\welfarecmcity\api\admin\AdminConfigController.class
 com\cm\welfarecmcity\api\loandetail\model\LoanDetailRes.class
 com\cm\welfarecmcity\api\stock\StockController.class
+com\cm\welfarecmcity\api\document\DocumentsService$1.class
 com\cm\welfarecmcity\constant\NotificationStatusEnum$NotificationStatusDto.class
 com\cm\welfarecmcity\dto\NewsDto.class
 com\cm\welfarecmcity\logic\employee\model\EmployeeTypeRes.class
