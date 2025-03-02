@@ -221,12 +221,12 @@ public class LoanDetailHistoryService {
   @Transactional
   public List<DocumentV2ResLoanV2> searchV2LoanHistory(String getMonthCurrent, String yearCurrent) {
     // Step 1: Fetch loan data
-    val result = new ArrayList<DocumentV2ResLoan>();
-    var resLoan =
-        loanDetailHistoryLogicRepository.searchV2LoanHistory(getMonthCurrent, yearCurrent);
-
+    val result = new ArrayList<DocumentV1ResLoan>();
 //    var resLoan =
-//            loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
+//        loanDetailHistoryLogicRepository.searchV2LoanHistory(getMonthCurrent, yearCurrent);
+
+    var resLoan =
+            loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
 
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
@@ -247,7 +247,7 @@ public class LoanDetailHistoryService {
         result.stream()
             .collect(
                 Collectors.groupingBy(
-                        DocumentV2ResLoan::getDepartmentName,
+                        DocumentV1ResLoan::getDepartmentName,
                     Collectors.summingDouble(
                         res ->
                             Double.parseDouble(
