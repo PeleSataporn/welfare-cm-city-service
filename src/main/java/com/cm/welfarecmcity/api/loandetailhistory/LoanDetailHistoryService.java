@@ -33,6 +33,7 @@ public class LoanDetailHistoryService {
     var resLoan =
         loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
 
+    List<List<String>> listTest;
     List<List<String>> listMonthInterest;
     List<List<String>> listMonthPrinciple;
     List<List<String>> listLastMonthInterest;
@@ -42,6 +43,7 @@ public class LoanDetailHistoryService {
     List<List<String>> listTotalValuePrinciple;
 
     if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
+      listTest = new ArrayList<>();
       listMonthInterest =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_month_interest.xlsx");
       listMonthPrinciple =
@@ -56,7 +58,17 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(0, "excel-import-loan/import_loan_out_stand_interest.xlsx");
       listTotalValuePrinciple =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_total_principle.xlsx");
+    } else if (getMonthCurrent.equals("กุมภาพันธ์") && yearCurrent.equals("2568")) {
+      listTest = readFileExcelForLoan(0, "excel-import-loan/test-import-data-loan.xlsx");
+      listMonthInterest = new ArrayList<>();
+      listMonthPrinciple = new ArrayList<>();
+      listLastMonthInterest = new ArrayList<>();
+      listLastMonthPrinciple = new ArrayList<>();
+      listTotalValueInterest = new ArrayList<>();
+      listOutStandInterest = new ArrayList<>();
+      listTotalValuePrinciple = new ArrayList<>();
     } else {
+      listTest = new ArrayList<>();
       listMonthInterest = new ArrayList<>();
       listMonthPrinciple = new ArrayList<>();
       listLastMonthInterest = new ArrayList<>();
@@ -229,6 +241,20 @@ public class LoanDetailHistoryService {
               if (resInfo != null) {
                 res.setTotalValuePrinciple(resInfo.get(3));
                 //                res.setOutStandPrinciple(employeeInfo.get(20));
+              }
+            }
+
+            if (!listTest.isEmpty()) {
+              List<String> employeeInfo = findEmployeeInfo(listTest, res.getEmployeeCode());
+              if (employeeInfo != null) {
+                res.setMonthInterest(employeeInfo.get(12));
+                res.setMonthPrinciple(employeeInfo.get(6));
+                res.setTotalValueInterest(employeeInfo.get(17));
+                res.setTotalValuePrinciple(employeeInfo.get(19));
+                res.setLastMonthInterest(employeeInfo.get(14));
+                res.setLastMonthPrinciple(employeeInfo.get(15));
+                res.setOutStandInterest(employeeInfo.get(18));
+                res.setOutStandPrinciple(employeeInfo.get(20));
               }
             }
           }
