@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface StockDetailRepository
     extends JpaRepository<StockDetailDto, Long>, JpaSpecificationExecutor<StockDetailDto> {
   List<StockDetailDto> findAllByStock_Id(Long stockId);
+
   StockDetailDto findTopByOrderByIdDesc();
 }

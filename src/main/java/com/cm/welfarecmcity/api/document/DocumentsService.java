@@ -343,7 +343,6 @@ public class DocumentsService {
     return dataList;
   }
 
-
   private static String getCellValue(Cell cell) {
     if (cell == null) return "";
     switch (cell.getCellType()) {
@@ -365,5 +364,4 @@ public class DocumentsService {
         return "";
     }
   }
-
 }
