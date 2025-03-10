@@ -32,10 +32,31 @@ public class LoanDetailHistoryService {
     val result = new ArrayList<DocumentV1ResLoan>();
     var resLoan =
         loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
-    List<List<String>> listLoanEmp = readFileExcelForLoan();
+
+    List<List<String>> listMonthInterest;
+    List<List<String>> listMonthPrinciple;
+    List<List<String>> listLastMonthInterest;
+    List<List<String>> listLastMonthPrinciple;
+
+    if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
+      listMonthInterest =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_interest.xlsx");
+      listMonthPrinciple =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_principle.xlsx");
+      listLastMonthInterest =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_last_month_interest.xlsx");
+      listLastMonthPrinciple =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_last_month_principle.xlsx");
+    } else {
+      listMonthInterest = new ArrayList<>();
+      listMonthPrinciple = new ArrayList<>();
+      listLastMonthInterest = new ArrayList<>();
+      listLastMonthPrinciple = new ArrayList<>();
+    }
+
     resLoan.forEach(
         res -> {
-          //          List<String> employeeInfo = findEmployeeInfo(listLoanEmp,
+          //          List<String> employeeInfo = findEmployeeInfo(listMonthInterest,
           // res.getEmployeeCode());
           //          if (employeeInfo != null) {
           //              res.setMonthInterest(employeeInfo.get(5));
@@ -149,18 +170,37 @@ public class LoanDetailHistoryService {
                   String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
             }
 
-            //              List<String> employeeInfo = findEmployeeInfo(listLoanEmp,
-            // res.getEmployeeCode());
-            //              if (employeeInfo != null) {
-            //                  res.setMonthInterest(employeeInfo.get(12));
-            //                  res.setMonthPrinciple(employeeInfo.get(6));
-            //                  res.setTotalValueInterest(employeeInfo.get(17));
-            //                  res.setTotalValuePrinciple(employeeInfo.get(19));
-            //                  res.setLastMonthInterest(employeeInfo.get(14));
-            //                  res.setLastMonthPrinciple(employeeInfo.get(15));
-            //                  res.setOutStandInterest(employeeInfo.get(18));
-            //                  res.setOutStandPrinciple(employeeInfo.get(20));
-            //              }
+            if (!listMonthInterest.isEmpty()) {
+              val resInfo = findEmployeeInfo(listMonthInterest, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setMonthInterest(resInfo.get(3));
+              }
+            }
+
+            if (!listMonthPrinciple.isEmpty()) {
+              val resInfo = findEmployeeInfo(listMonthPrinciple, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setMonthPrinciple(resInfo.get(3));
+              }
+            }
+
+            if (!listLastMonthInterest.isEmpty()) {
+              val resInfo = findEmployeeInfo(listLastMonthInterest, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setTotalValueInterest(resInfo.get(3));
+              }
+            }
+
+            if (!listLastMonthPrinciple.isEmpty()) {
+              val resInfo = findEmployeeInfo(listLastMonthPrinciple, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setTotalValuePrinciple(resInfo.get(3));
+                //                res.setLastMonthInterest(employeeInfo.get(14));
+                //                res.setLastMonthPrinciple(employeeInfo.get(15));
+                //                res.setOutStandInterest(employeeInfo.get(18));
+                //                res.setOutStandPrinciple(employeeInfo.get(20));
+              }
+            }
           }
 
           //          if (res.getLoanActive()) {
@@ -269,22 +309,22 @@ public class LoanDetailHistoryService {
         .collect(Collectors.toList());
   }
 
-  public List<List<String>> readFileExcelForLoan() {
-    String filePath = "excel-import-loan/test-impoer-data-loan.xlsx";
+  public List<List<String>> readFileExcelForLoan(Integer sheetIndex, String filePath) {
     InputStream fileStream = getClass().getClassLoader().getResourceAsStream(filePath);
 
     if (fileStream == null) {
       throw new RuntimeException("File not found in resources: " + filePath);
     }
 
-    return readExcelColumnsFromResource(fileStream);
+    return readExcelColumnsFromResource(sheetIndex, fileStream);
   }
 
-  public static List<List<String>> readExcelColumnsFromResource(InputStream fileStream) {
+  public static List<List<String>> readExcelColumnsFromResource(
+      Integer sheetIndex, InputStream fileStream) {
     List<List<String>> dataList = new ArrayList<>();
 
     try (Workbook workbook = WorkbookFactory.create(fileStream)) {
-      Sheet sheet = workbook.getSheetAt(0); // Read first sheet
+      Sheet sheet = workbook.getSheetAt(sheetIndex); // Read first sheet
 
       if (sheet == null || sheet.getRow(0) == null) {
         System.out.println("The sheet is empty.");

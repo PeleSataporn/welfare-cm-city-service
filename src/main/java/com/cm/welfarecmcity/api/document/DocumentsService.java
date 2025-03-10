@@ -302,7 +302,7 @@ public class DocumentsService {
   }
 
   public List<List<String>> readFileExcelForLoan() {
-    String filePath = "excel-import-loan/test-impoer-data-loan.xlsx";
+    String filePath = "excel-import-loan/import_loan_month_interest.xlsx";
     InputStream fileStream = getClass().getClassLoader().getResourceAsStream(filePath);
 
     if (fileStream == null) {
