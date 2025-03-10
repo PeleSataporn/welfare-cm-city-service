@@ -187,16 +187,16 @@ public class LoanDetailHistoryService {
             if (!listLastMonthInterest.isEmpty()) {
               val resInfo = findEmployeeInfo(listLastMonthInterest, res.getEmployeeCode());
               if (resInfo != null) {
-                res.setTotalValueInterest(resInfo.get(3));
+                res.setLastMonthInterest(resInfo.get(3));
               }
             }
 
             if (!listLastMonthPrinciple.isEmpty()) {
               val resInfo = findEmployeeInfo(listLastMonthPrinciple, res.getEmployeeCode());
               if (resInfo != null) {
-                res.setTotalValuePrinciple(resInfo.get(3));
-                //                res.setLastMonthInterest(employeeInfo.get(14));
-                //                res.setLastMonthPrinciple(employeeInfo.get(15));
+                res.setLastMonthPrinciple(resInfo.get(3));
+                //                res.setTotalValueInterest(employeeInfo.get(14));
+                //                res.setTotalValuePrinciple(employeeInfo.get(15));
                 //                res.setOutStandInterest(employeeInfo.get(18));
                 //                res.setOutStandPrinciple(employeeInfo.get(20));
               }
