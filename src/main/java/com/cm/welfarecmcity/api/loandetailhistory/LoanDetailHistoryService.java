@@ -37,6 +37,9 @@ public class LoanDetailHistoryService {
     List<List<String>> listMonthPrinciple;
     List<List<String>> listLastMonthInterest;
     List<List<String>> listLastMonthPrinciple;
+    List<List<String>> listTotalValueInterest;
+    List<List<String>> listOutStandInterest;
+    List<List<String>> listTotalValuePrinciple;
 
     if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
       listMonthInterest =
@@ -47,11 +50,20 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(0, "excel-import-loan/import_loan_last_month_interest.xlsx");
       listLastMonthPrinciple =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_last_month_principle.xlsx");
+      listTotalValueInterest =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_total_interest.xlsx");
+      listOutStandInterest =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_out_stand_interest.xlsx");
+      listTotalValuePrinciple =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_total_principle.xlsx");
     } else {
       listMonthInterest = new ArrayList<>();
       listMonthPrinciple = new ArrayList<>();
       listLastMonthInterest = new ArrayList<>();
       listLastMonthPrinciple = new ArrayList<>();
+      listTotalValueInterest = new ArrayList<>();
+      listOutStandInterest = new ArrayList<>();
+      listTotalValuePrinciple = new ArrayList<>();
     }
 
     resLoan.forEach(
@@ -195,9 +207,27 @@ public class LoanDetailHistoryService {
               val resInfo = findEmployeeInfo(listLastMonthPrinciple, res.getEmployeeCode());
               if (resInfo != null) {
                 res.setLastMonthPrinciple(resInfo.get(3));
-                //                res.setTotalValueInterest(employeeInfo.get(14));
-                //                res.setTotalValuePrinciple(employeeInfo.get(15));
-                //                res.setOutStandInterest(employeeInfo.get(18));
+              }
+            }
+
+            if (!listTotalValueInterest.isEmpty()) {
+              val resInfo = findEmployeeInfo(listTotalValueInterest, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setTotalValueInterest(resInfo.get(3));
+              }
+            }
+
+            if (!listOutStandInterest.isEmpty()) {
+              val resInfo = findEmployeeInfo(listOutStandInterest, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setOutStandInterest(resInfo.get(3));
+              }
+            }
+
+            if (!listTotalValuePrinciple.isEmpty()) {
+              val resInfo = findEmployeeInfo(listTotalValuePrinciple, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setTotalValuePrinciple(resInfo.get(3));
                 //                res.setOutStandPrinciple(employeeInfo.get(20));
               }
             }
