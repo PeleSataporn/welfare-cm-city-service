@@ -59,6 +59,7 @@ public class LoanDetailHistoryService {
     List<List<String>> listTotalValueInterest;
     List<List<String>> listOutStandInterest;
     List<List<String>> listTotalValuePrinciple;
+    List<List<String>> listOutStandPrinciple;
     if (getMonthCurrent.equals("ธันวาคม") && yearCurrent.equals("2567")) {
       listMonthInterest = new ArrayList<>();
       listMonthPrinciple = new ArrayList<>();
@@ -72,6 +73,7 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(0, "excel-import-loan/import_loan_out_stand_interest.xlsx");
       listTotalValuePrinciple =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_total_principle.xlsx");
+      listOutStandPrinciple = new ArrayList<>();
     } else if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
       listMonthInterest =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_month_interest.xlsx");
@@ -87,6 +89,7 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(1, "excel-import-loan/import_loan_out_stand_interest.xlsx");
       listTotalValuePrinciple =
           readFileExcelForLoan(1, "excel-import-loan/import_loan_total_principle.xlsx");
+      listOutStandPrinciple = new ArrayList<>();
     } else if (getMonthCurrent.equals("กุมภาพันธ์") && yearCurrent.equals("2568")) {
       listMonthInterest =
           readFileExcelForLoan(1, "excel-import-loan/import_loan_month_interest.xlsx");
@@ -102,6 +105,8 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(2, "excel-import-loan/import_loan_out_stand_interest.xlsx");
       listTotalValuePrinciple =
           readFileExcelForLoan(2, "excel-import-loan/import_loan_total_principle.xlsx");
+      listOutStandPrinciple =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_out_stand_principle.xlsx");
     } else {
       listMonthInterest = new ArrayList<>();
       listMonthPrinciple = new ArrayList<>();
@@ -110,6 +115,7 @@ public class LoanDetailHistoryService {
       listTotalValueInterest = new ArrayList<>();
       listOutStandInterest = new ArrayList<>();
       listTotalValuePrinciple = new ArrayList<>();
+      listOutStandPrinciple = new ArrayList<>();
     }
 
     resLoan.forEach(
@@ -274,7 +280,13 @@ public class LoanDetailHistoryService {
               val resInfo = findEmployeeInfo(listTotalValuePrinciple, res.getEmployeeCode());
               if (resInfo != null) {
                 res.setTotalValuePrinciple(resInfo.get(3));
-                //                res.setOutStandPrinciple(employeeInfo.get(20));
+              }
+            }
+
+            if (!listOutStandPrinciple.isEmpty()) {
+              val resInfo = findEmployeeInfo(listOutStandPrinciple, res.getEmployeeCode());
+              if (resInfo != null) {
+                res.setOutStandPrinciple(resInfo.get(3));
               }
             }
           }
