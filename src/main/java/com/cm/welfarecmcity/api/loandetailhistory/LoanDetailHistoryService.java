@@ -26,12 +26,31 @@ public class LoanDetailHistoryService {
 
   @Autowired private DocumentService documentService;
 
+  public static int getMonthNumber(String thaiMonth) {
+    return switch (thaiMonth) {
+      case "มกราคม" -> 1;
+      case "กุมภาพันธ์" -> 2;
+      case "มีนาคม" -> 3;
+      case "เมษายน" -> 4;
+      case "พฤษภาคม" -> 5;
+      case "มิถุนายน" -> 6;
+      case "กรกฎาคม" -> 7;
+      case "สิงหาคม" -> 8;
+      case "กันยายน" -> 9;
+      case "ตุลาคม" -> 10;
+      case "พฤศจิกายน" -> 11;
+      case "ธันวาคม" -> 12;
+      default -> 0;
+    };
+  }
+
   @Transactional
   public List<DocumentV1ResLoan> searchV1LoanHistory(String getMonthCurrent, String yearCurrent) {
 
     val result = new ArrayList<DocumentV1ResLoan>();
     var resLoan =
-        loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
+        loanDetailHistoryLogicRepository.searchV1LoanHistory(
+            getMonthCurrent, yearCurrent, getMonthNumber(getMonthCurrent));
 
     List<List<String>> listTest;
     List<List<String>> listMonthInterest;
@@ -324,7 +343,8 @@ public class LoanDetailHistoryService {
     //        loanDetailHistoryLogicRepository.searchV2LoanHistory(getMonthCurrent, yearCurrent);
 
     var resLoan =
-        loanDetailHistoryLogicRepository.searchV1LoanHistory(getMonthCurrent, yearCurrent);
+        loanDetailHistoryLogicRepository.searchV1LoanHistory(
+            getMonthCurrent, yearCurrent, getMonthNumber(getMonthCurrent));
 
     // Step 2: Filter and collect the valid results
     resLoan.forEach(
