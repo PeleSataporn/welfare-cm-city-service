@@ -60,13 +60,10 @@ public class LoanDetailHistoryService {
     List<List<String>> listTotalValueInterest;
     List<List<String>> listOutStandInterest;
     List<List<String>> listTotalValuePrinciple;
-
-    if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
+    if (getMonthCurrent.equals("ธันวาคม") && yearCurrent.equals("2567")) {
       listTest = new ArrayList<>();
-      listMonthInterest =
-          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_interest.xlsx");
-      listMonthPrinciple =
-          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_principle.xlsx");
+      listMonthInterest = new ArrayList<>();
+      listMonthPrinciple = new ArrayList<>();
       listLastMonthInterest =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_last_month_interest.xlsx");
       listLastMonthPrinciple =
@@ -77,6 +74,22 @@ public class LoanDetailHistoryService {
           readFileExcelForLoan(0, "excel-import-loan/import_loan_out_stand_interest.xlsx");
       listTotalValuePrinciple =
           readFileExcelForLoan(0, "excel-import-loan/import_loan_total_principle.xlsx");
+    } else if (getMonthCurrent.equals("มกราคม") && yearCurrent.equals("2568")) {
+      listTest = new ArrayList<>();
+      listMonthInterest =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_interest.xlsx");
+      listMonthPrinciple =
+          readFileExcelForLoan(0, "excel-import-loan/import_loan_month_principle.xlsx");
+      listLastMonthInterest =
+          readFileExcelForLoan(1, "excel-import-loan/import_loan_last_month_interest.xlsx");
+      listLastMonthPrinciple =
+          readFileExcelForLoan(1, "excel-import-loan/import_loan_last_month_principle.xlsx");
+      listTotalValueInterest =
+          readFileExcelForLoan(1, "excel-import-loan/import_loan_total_interest.xlsx");
+      listOutStandInterest =
+          readFileExcelForLoan(1, "excel-import-loan/import_loan_out_stand_interest.xlsx");
+      listTotalValuePrinciple =
+          readFileExcelForLoan(1, "excel-import-loan/import_loan_total_principle.xlsx");
     } else if (getMonthCurrent.equals("กุมภาพันธ์") && yearCurrent.equals("2568")) {
       listTest = readFileExcelForLoan(0, "excel-import-loan/test-import-data-loan.xlsx");
       listMonthInterest = new ArrayList<>();
