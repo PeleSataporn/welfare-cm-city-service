@@ -304,21 +304,46 @@ public class LoanDetailHistoryService {
     return null; // Return null if not found
   }
 
+  //  public boolean isLoanClosedInYear(Date closeLoanDate, String yearCurrent, String monthCurrent)
+  // {
+  //    if (closeLoanDate == null) {
+  //      return true; // Handle null safely
+  //    }
+  //
+  //    // Convert Date to LocalDate
+  //    LocalDate localDate =
+  // closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+  //    // Extract the year and check the condition
+  //    if ((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)) {
+  //      int monthFM = DateUtils.getThaiMonthIntOfValue(monthCurrent);
+  //      if (localDate.getMonthValue() > monthFM) {
+  //        return true;
+  //      } else {
+  //        return false;
+  //      }
+  //    } else {
+  //      return false;
+  //    }
+  //  }
+
   public boolean isLoanClosedInYear(Date closeLoanDate, String yearCurrent, String monthCurrent) {
     if (closeLoanDate == null) {
-      return true; // Handle null safely
+      return true; // Treat null as "closed"
     }
 
     // Convert Date to LocalDate
     LocalDate localDate = closeLoanDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    // Extract the year and check the condition
-    if ((localDate.getYear() + 543) >= Integer.parseInt(yearCurrent)) {
-      int monthFM = DateUtils.getThaiMonthIntOfValue(monthCurrent);
-      if (localDate.getMonthValue() > monthFM) {
-        return true;
-      } else {
-        return false;
-      }
+    int thaiYearClosed = localDate.getYear() + 543; // Convert to Thai Buddhist year
+    int thaiYearCurrent = Integer.parseInt(yearCurrent);
+    int monthCurrentInt =
+        DateUtils.getThaiMonthIntOfValue(monthCurrent); // Convert month name to int
+
+    // Check year condition
+    if (thaiYearClosed > thaiYearCurrent) {
+      return true;
+    } else if (thaiYearClosed == thaiYearCurrent) {
+      // Check month condition
+      return localDate.getMonthValue() > monthCurrentInt;
     } else {
       return false;
     }
