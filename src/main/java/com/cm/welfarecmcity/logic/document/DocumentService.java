@@ -34,6 +34,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.val;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -689,22 +690,25 @@ public class DocumentService {
 
   @Transactional
   public GrandTotalRes grandTotal(DocumentReq req) {
-    // val res = documentRepository.grandTotal(req.getYearCurrent(), req.getMonthCurrent());
-    GrandTotalRes res = new GrandTotalRes();
+    val res = new GrandTotalRes();
+    // จำนวนสมาชิกทั้งหมด
     val resEmp = documentRepository.documentInfoSumEmp();
     res.setSumEmp(resEmp.getSumEmp());
+
+    // จำนวนสมาชิกกู้เงินสามัญ
     val resLoan = documentRepository.documentInfoSumLoanEmp();
     res.setSumLoan(resLoan.getSumLoan());
-    //    val resLoanBalance = documentRepository.getSumLoanBalance(req.getYearCurrent(),
-    // req.getMonthCurrent());
-    //    res.setSumLoanBalance(resLoanBalance.getSumLoanBalance());
+
+    // ยอดเงินกู้สามัญคงค้าง
     val listLoanBalance =
         documentRepository.getSumLoanBalanceList(req.getYearCurrent(), req.getMonthCurrent());
-    if (listLoanBalance.size() > 0) {
+    if (!listLoanBalance.isEmpty()) {
       calculateSumLoanBalance(listLoanBalance, res);
     } else {
       res.setSumLoanBalance(0L);
     }
+
+    // ค่าหุ้นสะสมรวม
     val resStockAccumulate =
         documentRepository.getSumStockAccumulate(req.getYearCurrent(), req.getMonthCurrent());
     res.setSumStockAccumulate(
@@ -712,28 +716,113 @@ public class DocumentService {
             ? resStockAccumulate.getSumStockAccumulate()
             : 0);
 
+    // มูลค่าหุ้นที่ส่งเดือนนี
     val resStockValue =
         documentRepository.getSumStockValue(req.getYearCurrent(), req.getMonthCurrent());
     res.setSumStockValue(
         resStockValue.getSumStockValue() != null ? resStockValue.getSumStockValue() : 0);
-    val resLoanInterest =
-        documentRepository.getSumLoanInterest(req.getYearCurrent(), req.getMonthCurrent());
-    res.setSumLoanInterest(
-        resLoanInterest.getSumLoanInterest() != null ? resLoanInterest.getSumLoanInterest() : 0);
-    //    val resLoanOrdinary = documentRepository.getSumLoanOrdinary(req.getYearCurrent(),
-    // req.getMonthCurrent());
-    //    res.setSumLoanOrdinary(resLoanOrdinary.getSumLoanOrdinary());
-    val listLoanOrdinary =
-        documentRepository.getSumLoanOrdinaryList(req.getYearCurrent(), req.getMonthCurrent());
-    if (listLoanOrdinary.size() > 0) {
-      calculateSumLoanOrdinary(listLoanOrdinary, res);
-    } else {
-      res.setSumLoanOrdinary(0L);
-    }
+
+    // HOTFIX
+    val calculate = checkCalculateInstallmentsTotal(req.getMonthCurrent(), req.getYearCurrent());
+
+    // ดอกเบียจากเงินกู้สามัญ
+    res.setSumLoanInterest(calculate.getTotalMonthInterest());
+
+    // รวมส่งเงินต้นจากเงินกู้สามัญ
+    res.setSumLoanOrdinary(calculate.getTotalMonthPrinciple());
+
+    // รวมยอดเงินที่ได้รับทั้งหมด
     val sumTotal = (res.getSumStockValue() + res.getSumLoanInterest() + res.getSumLoanOrdinary());
     res.setSumTotal(sumTotal);
 
     return res;
+  }
+
+  @Transactional
+  public CheckCalculateInstallmentsTotalRes checkCalculateInstallmentsTotal(
+      String getMonthCurrent, String yearCurrent) {
+    val monthInterest = new AtomicReference<>(0);
+    val monthPrinciple = new AtomicReference<>(0);
+
+    val resLoan = documentRepository.documentInfoV1Loan(null, getMonthCurrent, null, yearCurrent);
+    resLoan.forEach(
+        res -> {
+          if (res.getLoanValue() != null) {
+            if (!Boolean.TRUE.equals(res.getNewLoan())) {
+              val req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate());
+              try {
+                val resList = calculateLoanOld(req);
+                for (val calculateInstallments : resList) {
+                  if (Integer.parseInt(res.getInstallment())
+                      == calculateInstallments.getInstallment()) {
+                    res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                    res.setMonthPrinciple(
+                        String.valueOf(calculateInstallments.getTotalDeduction()));
+                  }
+                }
+              } catch (ParseException e) {
+                e.printStackTrace();
+              }
+            } else {
+              val req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate()); // "2024-01-01"
+              try {
+                val resList = calculateLoanNew(req);
+                int setTotalValuePrinciple = 0;
+                int setTotalValuePrincipleOfInstallment = 0;
+                int setOutStandPrinciple = 0;
+                for (val calculateInstallments : resList) {
+                  setOutStandPrinciple += calculateInstallments.getPrincipal();
+                  if (Integer.parseInt(res.getInstallment())
+                      == calculateInstallments.getInstallment()) {
+                    res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                    res.setMonthPrinciple(
+                        String.valueOf(calculateInstallments.getTotalDeduction()));
+                  }
+                  int installmentCurrent = Integer.parseInt(res.getInstallment()) - 1;
+                  if (calculateInstallments.getInstallment() <= installmentCurrent) {
+                    setTotalValuePrinciple += calculateInstallments.getPrincipal();
+                    setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+                  }
+                }
+                res.setOutStandPrinciple(
+                    String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
+              } catch (ParseException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+
+          if (res.getMonthInterest() != null) {
+            monthInterest.updateAndGet(v -> v + Integer.parseInt(res.getMonthInterest()));
+          }
+
+          if (res.getMonthPrinciple() != null && res.getMonthInterest() != null) {
+            int monthPrincipleValue = Integer.parseInt(res.getMonthPrinciple());
+            int monthInterestValue = Integer.parseInt(res.getMonthInterest());
+
+            int outStandPrincipleValue = Integer.parseInt(res.getOutStandPrinciple());
+            int calculatedValue =
+                (outStandPrincipleValue <= monthPrincipleValue)
+                    ? monthPrincipleValue
+                    : (monthPrincipleValue - monthInterestValue);
+
+            monthPrinciple.updateAndGet(v -> v + calculatedValue);
+          }
+        });
+
+    val resSave = new CheckCalculateInstallmentsTotalRes();
+    resSave.setTotalMonthInterest((long) monthInterest.get());
+    resSave.setTotalMonthPrinciple((long) monthPrinciple.get());
+
+    return resSave;
   }
 
   public void calculateSumLoanBalance(List<LoanDetailDto> loanBalanceList, GrandTotalRes res) {

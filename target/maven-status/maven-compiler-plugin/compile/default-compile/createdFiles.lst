@@ -197,6 +197,7 @@ com/cm/welfarecmcity/logic/stock/model/AddStockDetailAllReq.class
 com/cm/welfarecmcity/api/level/LevelRepository.class
 com/cm/welfarecmcity/logic/document/model/DocumentV1ResLoan.class
 com/cm/welfarecmcity/api/fileresource/FileResourceService.class
+com/cm/welfarecmcity/logic/document/model/CheckCalculateInstallmentsTotalRes.class
 com/cm/welfarecmcity/api/loandetailhistory/LoanDetailHistoryController.class
 com/cm/welfarecmcity/api/news/NewsRepository.class
 com/cm/welfarecmcity/api/level/LevelService.class
