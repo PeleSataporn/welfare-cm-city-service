@@ -299,96 +299,138 @@ public class DocumentService {
     return getRes;
   }
 
+  //  @Transactional
+  //  public List<DocumentV2Res> searchDocumentV2(Long empId, String monthCurrent, String
+  // yearCurrent) {
+  //    val documentV1 = searchDocumentV1(empId, monthCurrent, yearCurrent);
+  //
+  //    if (monthCurrent != null) {
+  //      val list = new ArrayList<DocumentV2Res>();
+  //
+  //      for (DocumentV1Res documentV1Res : documentV1) {
+  //        var loanDetailInterestTotal = 0;
+  //        var loanDetailOrdinaryTotal = 0;
+  //        var stockValueTotal = 0;
+  //        var stockAccumulateTotal = 0;
+  //        var totalMonth = 0;
+  //        var loanInterest = 0;
+  //        var loanOrdinary = 0;
+  //
+  //        val documentV2 = new DocumentV2Res();
+  //        documentV2.setDepartmentName(documentV1Res.getDepartmentName());
+  //
+  //        if (documentV1Res.getInterest() != null) {
+  //          loanInterest = Integer.parseInt(documentV1Res.getInterest());
+  //        }
+  //
+  //        if (documentV1Res.getLoanOrdinary() != null) {
+  //          loanOrdinary = Integer.parseInt(documentV1Res.getLoanOrdinary());
+  //        }
+  //
+  //        loanDetailInterestTotal += loanInterest;
+  //        loanDetailOrdinaryTotal += loanOrdinary;
+  //        stockValueTotal +=
+  //            Integer.parseInt(
+  //                documentV1Res.getStockValue() != null ? documentV1Res.getStockValue() : "0");
+  //        stockAccumulateTotal +=
+  //            Integer.parseInt(
+  //                documentV1Res.getStockAccumulate() != null
+  //                    ? documentV1Res.getStockAccumulate()
+  //                    : "0");
+  //        totalMonth +=
+  //            Integer.parseInt(
+  //                documentV1Res.getSumMonth() != null ? documentV1Res.getSumMonth() : "0");
+  //
+  //        documentV2.setLoanDetailInterestTotal(String.valueOf(loanDetailInterestTotal));
+  //        documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanDetailOrdinaryTotal));
+  //        documentV2.setStockValueTotal(String.valueOf(stockValueTotal));
+  //        documentV2.setStockAccumulateTotal(String.valueOf(stockAccumulateTotal));
+  //        documentV2.setTotalMonth(String.valueOf(totalMonth));
+  //
+  //        list.add(documentV2);
+  //      }
+  //
+  //      return list;
+  //    } else {
+  //      val list = new ArrayList<DocumentV2Res>();
+  //      var loanDetailInterestTotal = 0;
+  //      var loanDetailOrdinaryTotal = 0;
+  //      var stockValueTotal = 0;
+  //      var stockAccumulateTotal = 0;
+  //      var totalMonth = 0;
+  //
+  //      var loanInterest = 0;
+  //      var loanOrdinary = 0;
+  //      val documentV2 = new DocumentV2Res();
+  //
+  //      for (DocumentV1Res documentV1Res : documentV1) {
+  //        documentV2.setDepartmentName(documentV1Res.getDepartmentName());
+  //
+  //        if (documentV1Res.getInterest() != null) {
+  //          loanInterest = Integer.parseInt(documentV1Res.getInterest());
+  //        }
+  //
+  //        if (documentV1Res.getLoanOrdinary() != null) {
+  //          loanOrdinary = Integer.parseInt(documentV1Res.getLoanOrdinary());
+  //        }
+  //
+  //        loanDetailInterestTotal += loanInterest;
+  //        loanDetailOrdinaryTotal += loanOrdinary;
+  //        stockValueTotal += Integer.parseInt(documentV1Res.getStockValue());
+  //        stockAccumulateTotal += Integer.parseInt(documentV1Res.getStockAccumulate());
+  //        totalMonth += Integer.parseInt(documentV1Res.getSumMonth());
+  //      }
+  //
+  //      documentV2.setLoanDetailInterestTotal(String.valueOf(loanDetailInterestTotal));
+  //      documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanDetailOrdinaryTotal));
+  //      documentV2.setStockValueTotal(String.valueOf(stockValueTotal));
+  //      documentV2.setStockAccumulateTotal(String.valueOf(stockAccumulateTotal));
+  //      documentV2.setTotalMonth(String.valueOf(totalMonth));
+  //
+  //      list.add(documentV2);
+  //
+  //      return list;
+  //    }
+  //  }
+
   @Transactional
   public List<DocumentV2Res> searchDocumentV2(Long empId, String monthCurrent, String yearCurrent) {
-    val documentV1 = searchDocumentV1(empId, monthCurrent, yearCurrent);
+    val documentV1List = searchDocumentV1(empId, monthCurrent, yearCurrent);
+    val resultList = new ArrayList<DocumentV2Res>();
 
-    if (monthCurrent != null) {
-      val list = new ArrayList<DocumentV2Res>();
+    if (documentV1List.isEmpty()) return resultList;
 
-      for (DocumentV1Res documentV1Res : documentV1) {
-        var loanDetailInterestTotal = 0;
-        var loanDetailOrdinaryTotal = 0;
-        var stockValueTotal = 0;
-        var stockAccumulateTotal = 0;
-        var totalMonth = 0;
-        var loanInterest = 0;
-        var loanOrdinary = 0;
-
-        val documentV2 = new DocumentV2Res();
-        documentV2.setDepartmentName(documentV1Res.getDepartmentName());
-
-        if (documentV1Res.getInterest() != null) {
-          loanInterest = Integer.parseInt(documentV1Res.getInterest());
-        }
-
-        if (documentV1Res.getLoanOrdinary() != null) {
-          loanOrdinary = Integer.parseInt(documentV1Res.getLoanOrdinary());
-        }
-
-        loanDetailInterestTotal += loanInterest;
-        loanDetailOrdinaryTotal += loanOrdinary;
-        stockValueTotal +=
-            Integer.parseInt(
-                documentV1Res.getStockValue() != null ? documentV1Res.getStockValue() : "0");
-        stockAccumulateTotal +=
-            Integer.parseInt(
-                documentV1Res.getStockAccumulate() != null
-                    ? documentV1Res.getStockAccumulate()
-                    : "0");
-        totalMonth +=
-            Integer.parseInt(
-                documentV1Res.getSumMonth() != null ? documentV1Res.getSumMonth() : "0");
-
-        documentV2.setLoanDetailInterestTotal(String.valueOf(loanDetailInterestTotal));
-        documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanDetailOrdinaryTotal));
-        documentV2.setStockValueTotal(String.valueOf(stockValueTotal));
-        documentV2.setStockAccumulateTotal(String.valueOf(stockAccumulateTotal));
-        documentV2.setTotalMonth(String.valueOf(totalMonth));
-
-        list.add(documentV2);
-      }
-
-      return list;
-    } else {
-      val list = new ArrayList<DocumentV2Res>();
-      var loanDetailInterestTotal = 0;
-      var loanDetailOrdinaryTotal = 0;
-      var stockValueTotal = 0;
-      var stockAccumulateTotal = 0;
-      var totalMonth = 0;
-
-      var loanInterest = 0;
-      var loanOrdinary = 0;
+    for (DocumentV1Res documentV1Res : documentV1List) {
       val documentV2 = new DocumentV2Res();
+      documentV2.setDepartmentName(documentV1Res.getDepartmentName());
 
-      for (DocumentV1Res documentV1Res : documentV1) {
-        documentV2.setDepartmentName(documentV1Res.getDepartmentName());
+      int loanInterest = parseIntOrDefault(documentV1Res.getInterest());
+      int loanOrdinary = parseIntOrDefault(documentV1Res.getLoanOrdinary());
+      int stockValue = parseIntOrDefault(documentV1Res.getStockValue());
+      int stockAccumulate = parseIntOrDefault(documentV1Res.getStockAccumulate());
+      int totalMonth = parseIntOrDefault(documentV1Res.getSumMonth());
 
-        if (documentV1Res.getInterest() != null) {
-          loanInterest = Integer.parseInt(documentV1Res.getInterest());
-        }
-
-        if (documentV1Res.getLoanOrdinary() != null) {
-          loanOrdinary = Integer.parseInt(documentV1Res.getLoanOrdinary());
-        }
-
-        loanDetailInterestTotal += loanInterest;
-        loanDetailOrdinaryTotal += loanOrdinary;
-        stockValueTotal += Integer.parseInt(documentV1Res.getStockValue());
-        stockAccumulateTotal += Integer.parseInt(documentV1Res.getStockAccumulate());
-        totalMonth += Integer.parseInt(documentV1Res.getSumMonth());
-      }
-
-      documentV2.setLoanDetailInterestTotal(String.valueOf(loanDetailInterestTotal));
-      documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanDetailOrdinaryTotal));
-      documentV2.setStockValueTotal(String.valueOf(stockValueTotal));
-      documentV2.setStockAccumulateTotal(String.valueOf(stockAccumulateTotal));
+      documentV2.setLoanDetailInterestTotal(String.valueOf(loanInterest));
+      documentV2.setLoanDetailOrdinaryTotal(String.valueOf(loanOrdinary));
+      documentV2.setStockValueTotal(String.valueOf(stockValue));
+      documentV2.setStockAccumulateTotal(String.valueOf(stockAccumulate));
       documentV2.setTotalMonth(String.valueOf(totalMonth));
 
-      list.add(documentV2);
+      resultList.add(documentV2);
 
-      return list;
+      if (monthCurrent == null) break;
+
+      System.out.println(documentV2.getLoanDetailOrdinaryTotal());
+    }
+
+    return resultList;
+  }
+
+  private int parseIntOrDefault(String value) {
+    try {
+      return value != null ? Integer.parseInt(value) : 0;
+    } catch (NumberFormatException e) {
+      return 0;
     }
   }
 
