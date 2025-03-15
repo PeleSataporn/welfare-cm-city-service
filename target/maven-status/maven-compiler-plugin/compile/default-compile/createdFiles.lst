@@ -258,6 +258,7 @@ com/cm/welfarecmcity/logic/employee/model/LoanDetailRes.class
 com/cm/welfarecmcity/constant/SizeImageEnum.class
 com/cm/welfarecmcity/logic/loan/model/search/LoanByAdminOrderReqDto.class
 com/cm/welfarecmcity/api/employee/model/EmpRes.class
+com/cm/welfarecmcity/logic/document/model/GetListCalculateInstallmentsTotalRes.class
 com/cm/welfarecmcity/logic/stock/StockLogicService.class
 com/cm/welfarecmcity/exception/ResourceNotFoundException.class
 com/cm/welfarecmcity/utils/image/ImageUtils.class

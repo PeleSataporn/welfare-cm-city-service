@@ -73,67 +73,230 @@ public class DocumentService {
   @Autowired private LoanLogicService loanLogicService;
   @Autowired private LoanLogicRepository repository;
 
+  //  @Transactional
+  //  public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String
+  // yearCurrent) {
+  //    val res1 = documentRepository.documentInfoV1stock(empId, monthCurrent, yearCurrent);
+  //
+  //    for (int i = 0; i < res1.size(); i++) {
+  //      var res2 = new ArrayList<DocumentLoanV1Res>();
+  //      if (monthCurrent != null) {
+  //        res2 =
+  //            (ArrayList<DocumentLoanV1Res>)
+  //                documentRepository.documentInfoV1loan(
+  //                    res1.get(i).getEmpId(), monthCurrent, yearCurrent);
+  //
+  //        if (res2.size() > 0) {
+  //          res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
+  //          res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
+  //          res1.get(i).setInterest(res2.get(0).getInterest());
+  //          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
+  //        }
+  //      } else {
+  //        res2 =
+  //            (ArrayList<DocumentLoanV1Res>)
+  //                documentRepository.documentInfoV1loan(empId, null, yearCurrent);
+  //
+  //        if (res2.size() > 0) {
+  //          res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
+  //          res1.get(i).setLoanInstallment(res2.get(i).getLoanInstallment());
+  //          res1.get(i).setInterest(res2.get(i).getInterest());
+  //          res1.get(i).setLoanTime(res2.get(i).getLoanTime());
+  //        }
+  //      }
+  //
+  //      // sum
+  //      if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() != null) {
+  //        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
+  //        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
+  //        val interest = Integer.parseInt(res1.get(i).getInterest());
+  //        int sum = 0;
+  //        if (res1.get(i).getLoanTime().equals(res1.get(i).getLoanInstallment())) {
+  //          sum = stockValue + (loanOrdinary + interest);
+  //        } else {
+  //          sum = stockValue + (loanOrdinary - interest) + interest;
+  //        }
+  //        res1.get(i).setSumMonth(String.valueOf(sum));
+  //      } else if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() == null) {
+  //        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
+  //        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
+  //        val sum = stockValue + loanOrdinary;
+  //
+  //        res1.get(i).setSumMonth(String.valueOf(sum));
+  //      } else if (res1.get(i).getLoanOrdinary() == null && res1.get(i).getInterest() != null) {
+  //        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
+  //        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
+  //        val sum = stockValue + loanOrdinary;
+  //
+  //        res1.get(i).setSumMonth(String.valueOf(sum));
+  //      } else {
+  //        res1.get(i).setSumMonth(res1.get(i).getStockValue());
+  //      }
+  //    }
+  //
+  //    return res1;
+  //  }
+
   @Transactional
   public List<DocumentV1Res> searchDocumentV1(Long empId, String monthCurrent, String yearCurrent) {
-    val res1 = documentRepository.documentInfoV1stock(empId, monthCurrent, yearCurrent);
+    val documentList = documentRepository.documentInfoV1stock(empId, monthCurrent, yearCurrent);
+    val getListCalculateInstallments = getListCalculateInstallmentsTotal(monthCurrent, yearCurrent);
 
-    for (int i = 0; i < res1.size(); i++) {
-      var res2 = new ArrayList<DocumentLoanV1Res>();
+    for (val document : documentList) {
+      List<DocumentLoanV1Res> loanInfo;
       if (monthCurrent != null) {
-        res2 =
-            (ArrayList<DocumentLoanV1Res>)
-                documentRepository.documentInfoV1loan(
-                    res1.get(i).getEmpId(), monthCurrent, yearCurrent);
-
-        if (res2.size() > 0) {
-          res1.get(i).setLoanOrdinary(res2.get(0).getLoanOrdinary());
-          res1.get(i).setLoanInstallment(res2.get(0).getLoanInstallment());
-          res1.get(i).setInterest(res2.get(0).getInterest());
-          res1.get(i).setLoanTime(res2.get(0).getLoanTime());
-        }
+        loanInfo =
+            documentRepository.documentInfoV1loan(document.getEmpId(), monthCurrent, yearCurrent);
       } else {
-        res2 =
-            (ArrayList<DocumentLoanV1Res>)
-                documentRepository.documentInfoV1loan(empId, null, yearCurrent);
-
-        if (res2.size() > 0) {
-          res1.get(i).setLoanOrdinary(res2.get(i).getLoanOrdinary());
-          res1.get(i).setLoanInstallment(res2.get(i).getLoanInstallment());
-          res1.get(i).setInterest(res2.get(i).getInterest());
-          res1.get(i).setLoanTime(res2.get(i).getLoanTime());
-        }
+        loanInfo = documentRepository.documentInfoV1loan(empId, null, yearCurrent);
       }
 
-      // sum
-      if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() != null) {
-        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
-        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
-        val interest = Integer.parseInt(res1.get(i).getInterest());
-        int sum = 0;
-        if (res1.get(i).getLoanTime().equals(res1.get(i).getLoanInstallment())) {
-          sum = stockValue + (loanOrdinary + interest);
-        } else {
-          sum = stockValue + (loanOrdinary - interest) + interest;
-        }
-        res1.get(i).setSumMonth(String.valueOf(sum));
-      } else if (res1.get(i).getLoanOrdinary() != null && res1.get(i).getInterest() == null) {
-        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
-        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
-        val sum = stockValue + loanOrdinary;
-
-        res1.get(i).setSumMonth(String.valueOf(sum));
-      } else if (res1.get(i).getLoanOrdinary() == null && res1.get(i).getInterest() != null) {
-        val stockValue = Integer.parseInt(res1.get(i).getStockValue());
-        val loanOrdinary = Integer.parseInt(res1.get(i).getLoanOrdinary());
-        val sum = stockValue + loanOrdinary;
-
-        res1.get(i).setSumMonth(String.valueOf(sum));
-      } else {
-        res1.get(i).setSumMonth(res1.get(i).getStockValue());
+      if (!loanInfo.isEmpty()) {
+        val loan = loanInfo.get(0);
+        document.setLoanInstallment(loan.getLoanInstallment());
+        document.setLoanTime(loan.getLoanTime());
       }
+
+      val listCalculate =
+          getListCalculateInstallments.stream()
+              .filter(
+                  lc ->
+                      lc.getEmployeeCode() != null
+                          && lc.getEmployeeCode().equals(document.getEmployeeCode()))
+              .findFirst()
+              .orElse(null);
+
+      if (listCalculate != null) {
+        document.setInterest(listCalculate.getInterest());
+        document.setLoanOrdinary(listCalculate.getPrinciple());
+      }
+
+      calculateSumMonth(document);
     }
 
-    return res1;
+    return documentList;
+  }
+
+  private void calculateSumMonth(DocumentV1Res document) {
+    try {
+      val stockValue = Integer.parseInt(document.getStockValue());
+      val loanOrdinary =
+          document.getLoanOrdinary() != null ? Integer.parseInt(document.getLoanOrdinary()) : 0;
+      val sum = getAnInt(document, stockValue, loanOrdinary);
+
+      document.setSumMonth(String.valueOf(sum));
+    } catch (NumberFormatException e) {
+      document.setSumMonth(document.getStockValue());
+    }
+  }
+
+  private static int getAnInt(DocumentV1Res document, int stockValue, int loanOrdinary) {
+    val interest = document.getInterest() != null ? Integer.parseInt(document.getInterest()) : 0;
+    val loanTime = document.getLoanTime() != null ? Integer.parseInt(document.getLoanTime()) : null;
+    val loanInstallment =
+        document.getLoanInstallment() != null
+            ? Integer.parseInt(document.getLoanInstallment())
+            : null;
+
+    int sum;
+    if (loanTime != null && loanTime.equals(loanInstallment)) {
+      sum = stockValue + (loanOrdinary + interest);
+    } else {
+      sum = stockValue + loanOrdinary;
+    }
+    return sum;
+  }
+
+  @Transactional
+  public List<GetListCalculateInstallmentsTotalRes> getListCalculateInstallmentsTotal(
+      String getMonthCurrent, String yearCurrent) {
+    val resGetList = new ArrayList<GetListCalculateInstallmentsTotalRes>();
+
+    val resLoan = documentRepository.documentInfoV1Loan(null, getMonthCurrent, null, yearCurrent);
+    resLoan.forEach(
+        res -> {
+          if (res.getLoanValue() != null) {
+            if (!Boolean.TRUE.equals(res.getNewLoan())) {
+              val req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate());
+              try {
+                val resList = calculateLoanOld(req);
+                for (val calculateInstallments : resList) {
+                  if (Integer.parseInt(res.getInstallment())
+                      == calculateInstallments.getInstallment()) {
+                    res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                    res.setMonthPrinciple(
+                        String.valueOf(calculateInstallments.getTotalDeduction()));
+                  }
+                }
+              } catch (ParseException e) {
+                e.printStackTrace();
+              }
+            } else {
+              val req = new CalculateReq();
+              req.setPrincipal(Double.parseDouble(res.getLoanValue()));
+              req.setInterestRate(Double.parseDouble(res.getInterestPercent()));
+              req.setNumOfPayments(Integer.parseInt(res.getLoanTime()));
+              req.setPaymentStartDate(res.getStartLoanDate()); // "2024-01-01"
+              try {
+                val resList = calculateLoanNew(req);
+                int setTotalValuePrinciple = 0;
+                int setTotalValuePrincipleOfInstallment = 0;
+                int setOutStandPrinciple = 0;
+                for (val calculateInstallments : resList) {
+                  setOutStandPrinciple += calculateInstallments.getPrincipal();
+                  if (Integer.parseInt(res.getInstallment())
+                      == calculateInstallments.getInstallment()) {
+                    res.setMonthInterest(String.valueOf(calculateInstallments.getInterest()));
+                    res.setMonthPrinciple(
+                        String.valueOf(calculateInstallments.getTotalDeduction()));
+                  }
+                  int installmentCurrent = Integer.parseInt(res.getInstallment()) - 1;
+                  if (calculateInstallments.getInstallment() <= installmentCurrent) {
+                    setTotalValuePrinciple += calculateInstallments.getPrincipal();
+                    setTotalValuePrincipleOfInstallment = setTotalValuePrinciple;
+                  }
+                }
+                res.setOutStandPrinciple(
+                    String.valueOf(setOutStandPrinciple - setTotalValuePrincipleOfInstallment));
+              } catch (ParseException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+
+          val getRes = getGetListCalculateInstallmentsTotalRes(res);
+          resGetList.add(getRes);
+        });
+
+    return resGetList;
+  }
+
+  private static GetListCalculateInstallmentsTotalRes getGetListCalculateInstallmentsTotalRes(
+      DocumentV1ResLoan res) {
+    val getRes = new GetListCalculateInstallmentsTotalRes();
+    getRes.setEmployeeCode(res.getEmployeeCode());
+
+    if (res.getMonthInterest() != null) {
+      getRes.setInterest(res.getMonthInterest());
+    }
+
+    if (res.getMonthPrinciple() != null && res.getMonthInterest() != null) {
+      int monthPrincipleValue = Integer.parseInt(res.getMonthPrinciple());
+      int monthInterestValue = Integer.parseInt(res.getMonthInterest());
+
+      int outStandPrincipleValue = Integer.parseInt(res.getOutStandPrinciple());
+      int calculatedValue =
+          (outStandPrincipleValue <= monthPrincipleValue)
+              ? monthPrincipleValue
+              : (monthPrincipleValue - monthInterestValue);
+
+      getRes.setPrinciple(String.valueOf(calculatedValue));
+    }
+    return getRes;
   }
 
   @Transactional
