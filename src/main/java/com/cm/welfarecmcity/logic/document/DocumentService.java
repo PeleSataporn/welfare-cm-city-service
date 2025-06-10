@@ -199,7 +199,7 @@ public class DocumentService {
             : null;
 
     int sum;
-    if (loanTime != null ) { // && loanTime.equals(loanInstallment)
+    if (loanTime != null) { // && loanTime.equals(loanInstallment)
       sum = stockValue + (loanOrdinary + interest);
     } else {
       sum = stockValue + loanOrdinary;

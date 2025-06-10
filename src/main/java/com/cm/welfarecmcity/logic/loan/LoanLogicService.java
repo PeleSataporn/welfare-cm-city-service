@@ -25,6 +25,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +170,7 @@ public class LoanLogicService {
 
   @Transactional
   public List<LoanDetailRes> getLoanDetailByMonth(AddLoanDetailAllReq req) {
+    AtomicInteger index = new AtomicInteger();
     val listLoanDetail = repository.getLoanDetailByMonth(req.getOldMonth(), req.getOldYear());
     listLoanDetail.forEach(
         detail -> {
@@ -216,6 +218,8 @@ public class LoanLogicService {
             loanDetailRepository.save(loanDetailDto);
             loanRepository.save(loanDto);
 
+            index.getAndIncrement();
+            System.out.println("index : " + index);
             // close loan
             if (installment == (calLast.getInstallment() + 1)) {
               closeLoan(detail.getLoanId());
@@ -287,18 +291,19 @@ public class LoanLogicService {
     addInfoLoanDetailHistory(listLoanDetail);
 
     val empLoan = repository.searchLoanOfEmployee(id);
+    if (empLoan != null) {
+      val emp1 = employeeRepository.findById(empLoan.getId()).get();
+      emp1.setLoan(null);
+      employeeRepository.save(emp1);
 
-    val emp1 = employeeRepository.findById(empLoan.getId()).get();
-    emp1.setLoan(null);
-    employeeRepository.save(emp1);
+      val loan = loanRepository.findById(id).get();
+      loan.setLoanBalance(0);
+      loan.setActive(false);
+      loan.setDeleted(true);
+      loan.setCloseLoanDate(new Date());
 
-    val loan = loanRepository.findById(id).get();
-    loan.setLoanBalance(0);
-    loan.setActive(false);
-    loan.setDeleted(true);
-    loan.setCloseLoanDate(new Date());
-
-    loanRepository.save(loan);
+      loanRepository.save(loan);
+    }
   }
 
   @Transactional

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -232,8 +233,14 @@ public class LoanLogicRepository {
 
   public EmployeeDto searchLoanOfEmployee(Long loanId) {
     val sql = buildQuerySqlLoanOfEmployee(loanId);
-    return jdbcTemplate.queryForObject(
-        sql.toString(), new BeanPropertyRowMapper<>(EmployeeDto.class));
+    //    return jdbcTemplate.queryForObject(
+    //        sql.toString(), new BeanPropertyRowMapper<>(EmployeeDto.class));
+    try {
+      return jdbcTemplate.queryForObject(
+          sql.toString(), new BeanPropertyRowMapper<>(EmployeeDto.class));
+    } catch (EmptyResultDataAccessException e) {
+      return null; // หรือจะ throw ใหม่ก็ได้
+    }
   }
 
   public StringBuilder buildQuerySqlLoanOfLoanDetail(Long loanId) {
