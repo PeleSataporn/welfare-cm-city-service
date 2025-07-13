@@ -170,4 +170,19 @@ public class StockLogicRepository {
     val sql = buildQueryDetailSql(req);
     return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StockDetailDto.class));
   }
+
+  public StringBuilder buildQueryCheckDetailSql(String month, String year) {
+    val sql = new StringBuilder();
+    sql.append(" SELECT stock_month FROM stock_detail WHERE active = true and stock_month = '")
+            .append(month)
+            .append("' AND stock_year = '")
+            .append(year)
+            .append("'");
+    return sql;
+  }
+
+  public List<String> checkStockDetail(String month, String year) {
+    val sql = buildQueryCheckDetailSql(month, year);
+    return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(String.class));
+  }
 }

@@ -5,6 +5,7 @@ import com.cm.welfarecmcity.dto.base.ResponseId;
 import com.cm.welfarecmcity.dto.base.ResponseModel;
 import com.cm.welfarecmcity.dto.base.SearchDataResponse;
 import com.cm.welfarecmcity.logic.stock.model.AddStockDetailAllReq;
+import com.cm.welfarecmcity.logic.stock.model.CheckStockDetailReq;
 import com.cm.welfarecmcity.logic.stock.model.StockRes;
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminOrderReqDto;
 import com.cm.welfarecmcity.logic.stock.model.search.StockByAdminReqDto;
@@ -43,5 +44,10 @@ public class StockLogicController {
   @PostMapping("setting-stock-detail")
   public String settingStockDetailAll(@RequestBody AddStockDetailAllReq req) {
     return stockService.settingStockDetailAll(req);
+  }
+
+  @PostMapping("check-stock-detail")
+  public Boolean checkStockDetail(@RequestBody CheckStockDetailReq req) {
+    return stockService.checkStockDetail(req.getMonth(), req.getYear());
   }
 }

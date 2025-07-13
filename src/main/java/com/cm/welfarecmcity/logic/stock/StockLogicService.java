@@ -65,6 +65,8 @@ public class StockLogicService {
 
     val lastDetail = stockDetailRepository.findTopByOrderByIdDesc();
 
+    val checkMonth = stockLogicRepository.checkStockDetail(lastDetail.getStockMonth(), lastDetail.getStockYear());
+
     for (val stock : stocks) {
       switch (stock.getEmployeeStatus()) {
         case 1 -> stock.setStatus("สมาชิกแรกเข้า");
@@ -78,8 +80,10 @@ public class StockLogicService {
         default -> stock.setStatus("ไม่ทราบสถานะ");
       }
 
-      stock.setStockMonth(lastDetail.getStockMonth());
-      stock.setStockYear(lastDetail.getStockYear());
+      if (checkMonth.size() > 1) {
+        stock.setStockMonth(lastDetail.getStockMonth());
+        stock.setStockYear(lastDetail.getStockYear());
+      }
     }
 
     val totalElements = stockLogicRepository.count(criteria);
@@ -123,5 +127,12 @@ public class StockLogicService {
     }
 
     return "success";
+  }
+
+  @Transactional
+  public Boolean checkStockDetail(String month, String year) {
+    val checkMonth = stockLogicRepository.checkStockDetail(month, year);
+
+    return checkMonth.size() > 1;
   }
 }
