@@ -1055,7 +1055,7 @@ public class DocumentRepository {
       sql.append(
           // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
           // loan_detail_history.loan_id = loan.id
-          " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id"
+          " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id and loan_detail_history.active = true "
               + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  ");
     }
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
