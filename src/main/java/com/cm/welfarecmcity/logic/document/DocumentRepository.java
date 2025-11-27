@@ -3,10 +3,12 @@ package com.cm.welfarecmcity.logic.document;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDetailHistory;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.logic.loan.model.LoanHisRes;
 import com.cm.welfarecmcity.utils.DateUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1178,6 +1180,26 @@ public class DocumentRepository {
       return jdbcTemplate.queryForObject(
           sql.toString(), new BeanPropertyRowMapper<>(DocumentInfoAllLoanEmpRes.class));
     } catch (Exception e) {
+      return null;
+    }
+  }
+
+  public LoanHisRes getLoanInHistory(String loanYear, String loanMonth, String employeeCode) {
+    String sql = """
+        SELECT
+            loan_id AS id,
+            loan_balance AS loanBalance
+        FROM loan_detail_history
+        WHERE loan_year = ?
+          AND loan_month = ?
+          AND employee_code = ?
+        """;
+
+    try {
+      return jdbcTemplate.queryForObject(sql,
+              BeanPropertyRowMapper.newInstance(LoanHisRes.class),
+              loanYear, loanMonth, employeeCode);
+    } catch (EmptyResultDataAccessException e) {
       return null;
     }
   }

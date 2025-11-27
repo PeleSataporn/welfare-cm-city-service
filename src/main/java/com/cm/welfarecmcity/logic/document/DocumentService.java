@@ -760,7 +760,17 @@ public class DocumentService {
     req.setStockId(find.getStockId());
     req.setEmpCode(find.getEmployeeCode());
     req.setEmpId(find.getEmpId());
-    req.setLoanId(find.getLoanId());
+
+    if (find.getLoanId() != null) {
+      req.setLoanId(find.getLoanId());
+    } else {
+      val loanHis = documentRepository.getLoanInHistory(req.getYearCurrent(), req.getMonthCurrent(), req.getEmpCode());
+      if (loanHis.getLoanBalance() <= 0) {
+        req.setLoanId(null);
+      } else {
+        req.setLoanId(loanHis.getId());
+      }
+    }
 
     val config1 = adminConfigRepository.findById(4L).get();
     byte[] imageBytes1 = config1.getImage().getBytes(1, (int) config1.getImage().length());
