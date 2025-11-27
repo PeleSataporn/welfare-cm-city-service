@@ -115,7 +115,7 @@
 # ENTRYPOINT ["java", "-Djava.awt.headless=true", "-jar", "app.jar"]
 
 #####################################################################
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 
 # ตั้งค่า working directory
 WORKDIR /app
