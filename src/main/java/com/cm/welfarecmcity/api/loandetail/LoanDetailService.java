@@ -5,7 +5,10 @@ import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import com.cm.welfarecmcity.logic.employee.EmployeeLogicRepository;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +55,7 @@ public class LoanDetailService {
   public List<LoanDetailRes> searchLoanDetail(DocumentReq req) {
     val emp = employeeLogicRepository.getEmployeeOfMain(req.getEmpId());
 
-    List<LoanDetailRes> loanDetailHistories = null;
+    List<LoanDetailRes> loanDetailHistories = new ArrayList<>();
     if (req.getLoanId() != null) {
       loanDetailHistories = loanDetailLogicRepository.getLoanDetailMergeHistory(req.getLoanId());
     } else {
@@ -78,6 +81,17 @@ public class LoanDetailService {
         list.setLoanBalance(sum);
       }
     }
+
+    Set<String> seen = new HashSet<>();
+    List<LoanDetailRes> result = new ArrayList<>();
+    for (LoanDetailRes item : loanDetailHistories) {
+      String key = item.getLoanYear() + "-" + item.getLoanMonth();
+      if (!seen.contains(key)) {
+        seen.add(key);
+        result.add(item);   // เก็บตามลำดับเดิม
+      }
+    }
+    loanDetailHistories = result;
     return loanDetailHistories;
   }
 

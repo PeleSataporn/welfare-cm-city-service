@@ -4,6 +4,7 @@ import com.cm.welfarecmcity.api.admin.AdminConfigRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
+import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.api.loandetail.model.LoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetail.model.SumLoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
@@ -1787,7 +1788,18 @@ public class DocumentService {
         list.setPrincipal(0);
       }
     }
-    return loanData;
+
+    Set<String> seen = new HashSet<>();
+    List<DocumentInfoAllLoanEmpRes> result = new ArrayList<>();
+    for (DocumentInfoAllLoanEmpRes item : loanData) {
+      String key = item.getLoanYear() + "-" + item.getLoanMonth();
+      if (!seen.contains(key)) {
+        seen.add(key);
+        result.add(item);   // เก็บตามลำดับเดิม
+      }
+    }
+    return result;
+    //return loanData;
     //    }
   }
 
