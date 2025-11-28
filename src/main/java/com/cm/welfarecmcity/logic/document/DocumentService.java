@@ -766,10 +766,14 @@ public class DocumentService {
       req.setLoanId(find.getLoanId());
     } else {
       val loanHis = documentRepository.getLoanInHistory(req.getYearCurrent(), req.getMonthCurrent(), req.getEmpCode());
-      if (loanHis.getLoanBalance() <= 0) {
-        req.setLoanId(null);
-      } else {
-        req.setLoanId(loanHis.getId());
+      if(loanHis != null){
+          if (loanHis.getLoanBalance() <= 0) {
+              req.setLoanId(null);
+          } else {
+              req.setLoanId(loanHis.getId());
+          }
+      }else{
+          req.setLoanId(null);
       }
     }
 
