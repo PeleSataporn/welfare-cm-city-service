@@ -40,4 +40,10 @@ public class LoginController {
   public ResponseTextStatus resetPassword(@RequestBody ResetPasswordReq res) {
     return loginService.resetPassword(res);
   }
+
+  @PostMapping("/change/reset-back-password")
+  public ResponseTextStatus resetBackPassword(@RequestBody ResetPasswordReq res) {
+    return loginService.resetBackPassword(res);
+  }
+
 }

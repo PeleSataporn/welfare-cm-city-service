@@ -161,4 +161,19 @@ public class LoginService {
       return response;
     }
   }
+
+  @Transactional
+  public ResponseTextStatus resetBackPassword(ResetPasswordReq req) {
+    val response = new ResponseTextStatus();
+
+    val emp = employeeRepository.findById(req.getId()).get();
+    val user = emp.getUser();
+    emp.setPasswordFlag(false);
+    user.setPassword(emp.getIdCard());
+    employeeRepository.save(emp);
+
+    response.setStatusEmployee("success");
+    return response;
+  }
+
 }
