@@ -198,4 +198,24 @@ public class DocumentController {
         .contentType(MediaType.APPLICATION_PDF)
         .body(pdfStream);
   }
+
+  // รายงานประจำปีแสดงรายชื่อสมาชิกคงอยู่ หมดสมาชิกภาพ(ระหว่างปี) และ สมัครใหม่ โดยเจ้าหน้าที่กองทุนฯ
+  @PostMapping(
+          value = "v1/document/export-data/annual",
+          produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> exportAnnual() throws IOException {
+    val outputStream = service.exportAnnual();
+
+    if (outputStream == null || outputStream.size() == 0) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .contentLength(outputStream.size())
+            .header(
+                    "Content-Disposition",
+                    "attachment;filename=export-annual-" + System.nanoTime() + ".xlsx")
+            .body(outputStream.toByteArray());
+  }
 }

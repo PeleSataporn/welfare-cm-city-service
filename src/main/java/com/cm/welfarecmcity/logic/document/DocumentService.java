@@ -4,7 +4,6 @@ import com.cm.welfarecmcity.api.admin.AdminConfigRepository;
 import com.cm.welfarecmcity.api.loan.LoanRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailLogicRepository;
 import com.cm.welfarecmcity.api.loandetail.LoanDetailRepository;
-import com.cm.welfarecmcity.api.loandetail.model.LoanDetailRes;
 import com.cm.welfarecmcity.api.loandetail.model.LoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetail.model.SumLoanHistoryV2Res;
 import com.cm.welfarecmcity.api.loandetailhistory.LoanDetailHistoryRepository;
@@ -15,6 +14,9 @@ import com.cm.welfarecmcity.api.stockdetail.StockDetailRepository;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanHistoryDto;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpAllRes;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpNewRes;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpReSignRes;
 import com.cm.welfarecmcity.logic.loan.LoanLogicRepository;
 import com.cm.welfarecmcity.logic.loan.LoanLogicService;
 import com.cm.welfarecmcity.utils.DateUtils;
@@ -30,6 +32,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -2143,5 +2146,54 @@ public class DocumentService {
     res.setTotalText("(" + ThaiNumeralsUtils.formatThaiWords(res.getTotalPrice()) + ")");
 
     return res;
+  }
+
+  @Transactional
+  public ByteArrayOutputStream exportAnnual() throws IOException {
+    val today = LocalDate.now();
+    val formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("th", "TH"));
+    val dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+    // sheet1 : รายชื่อสมาชิกที่คงอยู่
+    val empAll = documentRepository.getAnnualEmpAll();
+    // sheet2 : ลาออก, เกษียณ, เสียชีวิต
+    val empReSign = documentRepository
+            .getAnnualEmpReSign(String.valueOf(today.getYear()))
+            .stream()
+            .peek(resign -> {
+              val date = LocalDateTime.parse(resign.getResignationDate(), dbFormatter);
+              val resignationDate = date.format(formatter);
+              resign.setResignationDate(resignationDate);
+            })
+            .toList();
+    // sheet3 : สมัครใหม่
+    val empNew = documentRepository
+            .getAnnualEmpNew(String.valueOf(today.getYear()))
+            .stream()
+            .peek(resign -> {
+              val date = LocalDateTime.parse(resign.getCreateDate(), dbFormatter);
+              val resignationDate = date.format(formatter);
+              resign.setCreateDate(resignationDate);
+            })
+            .toList();
+
+    return generateExportAnnualFile(empAll, empReSign, empNew);
+  }
+
+  @Transactional
+  public ByteArrayOutputStream generateExportAnnualFile(List<AnnualEmpAllRes> empAll, List<AnnualEmpReSignRes> empReSign, List<AnnualEmpNewRes> empNew)
+          throws IOException {
+    val input = new ClassPathResource("excel-template/template-annual.xlsx").getInputStream();
+
+    val output = new ByteArrayOutputStream();
+    val context = new Context();
+
+    context.putVar("empAllList", empAll);
+    context.putVar("empReSignList", empReSign);
+    context.putVar("empNewList", empNew);
+
+    JxlsHelper.getInstance().processTemplate(input, output, context);
+
+    return output;
   }
 }

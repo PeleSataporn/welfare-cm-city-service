@@ -3,6 +3,9 @@ package com.cm.welfarecmcity.logic.document;
 import com.cm.welfarecmcity.dto.LoanDetailDto;
 import com.cm.welfarecmcity.dto.LoanDetailHistory;
 import com.cm.welfarecmcity.logic.document.model.*;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpAllRes;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpNewRes;
+import com.cm.welfarecmcity.logic.document.model.annual.AnnualEmpReSignRes;
 import com.cm.welfarecmcity.logic.loan.model.LoanHisRes;
 import com.cm.welfarecmcity.utils.DateUtils;
 import java.time.LocalDate;
@@ -1202,5 +1205,59 @@ public class DocumentRepository {
     } catch (EmptyResultDataAccessException e) {
       return null;
     }
+  }
+
+  public List<AnnualEmpAllRes> getAnnualEmpAll() {
+    String sql = """
+                SELECT
+                    d.name as department_name,
+                    e.employee_code,
+                    CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name
+                FROM employee e
+                LEFT JOIN department d ON e.department_id = d.id
+                WHERE e.employee_status = 2
+                order by d.id
+            """;
+    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpAllRes.class));
+  }
+
+  public List<AnnualEmpReSignRes> getAnnualEmpReSign(String year) {
+    String sql = """
+              SELECT
+                  d.name as department_name,
+                  e.employee_code,
+                  CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name,
+                  CASE
+                      WHEN e.employee_status = 3 THEN 'ลาออก'\s
+                      WHEN e.employee_status = 6 THEN 'เสียชีวิต'\s
+                      WHEN e.employee_status = 8 THEN 'เกษียณ'\s
+                      ELSE 'อื่นๆ'
+                  END AS status_name,
+                  e.resignation_date
+              FROM employee e
+              LEFT JOIN department d ON e.department_id = d.id
+              WHERE
+                  e.employee_status in (3,6,8)
+                  AND YEAR(e.resignation_date) = ?
+              order by e.resignation_date;
+            """;
+    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpReSignRes.class), year);
+  }
+
+  public List<AnnualEmpNewRes> getAnnualEmpNew(String year) {
+    String sql = """
+              SELECT
+                  d.name as department_name,
+                  e.employee_code,
+                  CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name,
+                  e.create_date
+              FROM employee e
+              LEFT JOIN department d ON e.department_id = d.id
+              WHERE
+                  e.employee_status = 2
+                  AND YEAR(e.create_date) = ?
+              order by e.create_date;
+            """;
+    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpNewRes.class), year);
   }
 }
