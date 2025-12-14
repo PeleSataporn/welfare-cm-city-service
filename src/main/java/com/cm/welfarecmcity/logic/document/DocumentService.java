@@ -2149,8 +2149,7 @@ public class DocumentService {
   }
 
   @Transactional
-  public ByteArrayOutputStream exportAnnual() throws IOException {
-    val today = LocalDate.now();
+  public ByteArrayOutputStream exportAnnual(AnnualReq req) throws IOException {
     val formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("th", "TH"));
     val dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
@@ -2158,7 +2157,7 @@ public class DocumentService {
     val empAll = documentRepository.getAnnualEmpAll();
     // sheet2 : ลาออก, เกษียณ, เสียชีวิต
     val empReSign = documentRepository
-            .getAnnualEmpReSign(String.valueOf(today.getYear()))
+            .getAnnualEmpReSign(req.getYearCurrent())
             .stream()
             .peek(resign -> {
               val date = LocalDateTime.parse(resign.getResignationDate(), dbFormatter);
@@ -2168,7 +2167,7 @@ public class DocumentService {
             .toList();
     // sheet3 : สมัครใหม่
     val empNew = documentRepository
-            .getAnnualEmpNew(String.valueOf(today.getYear()))
+            .getAnnualEmpNew(String.valueOf(req.getYearCurrent()))
             .stream()
             .peek(resign -> {
               val date = LocalDateTime.parse(resign.getCreateDate(), dbFormatter);

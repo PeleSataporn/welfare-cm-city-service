@@ -203,8 +203,8 @@ public class DocumentController {
   @PostMapping(
           value = "v1/document/export-data/annual",
           produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public ResponseEntity<byte[]> exportAnnual() throws IOException {
-    val outputStream = service.exportAnnual();
+  public ResponseEntity<byte[]> exportAnnual(@RequestBody AnnualReq req) throws IOException {
+    val outputStream = service.exportAnnual(req);
 
     if (outputStream == null || outputStream.size() == 0) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
