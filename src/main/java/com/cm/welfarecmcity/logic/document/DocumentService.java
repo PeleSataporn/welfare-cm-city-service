@@ -2153,24 +2153,27 @@ public class DocumentService {
     val formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("th", "TH"));
     val dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
+    int yearSum = Integer.parseInt(req.getYearCurrent()) - 543;
+    String year = String.valueOf(yearSum);
+
     // sheet1 : รายชื่อสมาชิกที่คงอยู่
-    val empAll = documentRepository.getAnnualEmpAll();
+    val empAll = documentRepository.getAnnualEmpAll(year);
     // sheet2 : ลาออก, เกษียณ, เสียชีวิต
     val empReSign = documentRepository
-            .getAnnualEmpReSign(req.getYearCurrent())
+            .getAnnualEmpReSign(year)
             .stream()
             .peek(resign -> {
-              val date = LocalDateTime.parse(resign.getResignationDate(), dbFormatter);
+              val date = LocalDateTime.parse(resign.getResignationDate(), dbFormatter).plusYears(543);
               val resignationDate = date.format(formatter);
               resign.setResignationDate(resignationDate);
             })
             .toList();
     // sheet3 : สมัครใหม่
     val empNew = documentRepository
-            .getAnnualEmpNew(String.valueOf(req.getYearCurrent()))
+            .getAnnualEmpNew(year)
             .stream()
             .peek(resign -> {
-              val date = LocalDateTime.parse(resign.getCreateDate(), dbFormatter);
+              val date = LocalDateTime.parse(resign.getCreateDate(), dbFormatter).plusYears(543);
               val resignationDate = date.format(formatter);
               resign.setCreateDate(resignationDate);
             })

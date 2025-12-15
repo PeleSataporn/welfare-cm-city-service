@@ -1207,7 +1207,7 @@ public class DocumentRepository {
     }
   }
 
-  public List<AnnualEmpAllRes> getAnnualEmpAll() {
+  public List<AnnualEmpAllRes> getAnnualEmpAll(String year) {
     String sql = """
                 SELECT
                     d.name as department_name,
@@ -1215,10 +1215,12 @@ public class DocumentRepository {
                     CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name
                 FROM employee e
                 LEFT JOIN department d ON e.department_id = d.id
-                WHERE e.employee_status = 2
+                WHERE
+                    e.employee_status = 2
+                    AND YEAR(e.create_date) <= ?
                 order by d.id
             """;
-    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpAllRes.class));
+    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpAllRes.class), year);
   }
 
   public List<AnnualEmpReSignRes> getAnnualEmpReSign(String year) {
@@ -1228,9 +1230,9 @@ public class DocumentRepository {
                   e.employee_code,
                   CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name,
                   CASE
-                      WHEN e.employee_status = 3 THEN 'ลาออก'\s
-                      WHEN e.employee_status = 6 THEN 'เสียชีวิต'\s
-                      WHEN e.employee_status = 8 THEN 'เกษียณ'\s
+                      WHEN e.employee_status = 3 THEN 'ลาออก'
+                      WHEN e.employee_status = 6 THEN 'เสียชีวิต'
+                      WHEN e.employee_status = 8 THEN 'เกษียณ'
                       ELSE 'อื่นๆ'
                   END AS status_name,
                   e.resignation_date
