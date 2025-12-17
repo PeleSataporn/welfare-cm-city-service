@@ -1625,8 +1625,8 @@ public class DocumentService {
             if (!Objects.requireNonNull(resDividendYearOld).isEmpty()) {
               double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
               int stockValue = Integer.parseInt(resDividendYearOld.get(0).getStockValue());
-              int stockAccumulate =
-                  Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue;
+//            int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue; // old
+              int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate());
               sumYearOld = (stockAccumulate * stockDividendPercent); // * ((12-0) / 12)
               BigDecimal roundedValue =
                   new BigDecimal(sumYearOld).setScale(2, RoundingMode.HALF_UP);
