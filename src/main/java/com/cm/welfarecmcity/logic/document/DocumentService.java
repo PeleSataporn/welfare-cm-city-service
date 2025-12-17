@@ -1916,8 +1916,8 @@ public class DocumentService {
             if (!Objects.requireNonNull(resDividendYearOld).isEmpty()) {
               double stockDividendPercent = Double.parseDouble(req.getStockDividendPercent()) / 100;
               int stockValue = Integer.parseInt(resDividendYearOld.get(0).getStockValue());
-              int stockAccumulate =
-                  Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue;
+              // int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate()) - stockValue; // old
+              int stockAccumulate = Integer.parseInt(resDividendYearOld.get(0).getStockAccumulate());
               sumYearOld = (stockAccumulate * stockDividendPercent); // * ((12-0) / 12)
               BigDecimal roundedValue =
                   new BigDecimal(sumYearOld).setScale(2, RoundingMode.HALF_UP);
@@ -2198,4 +2198,72 @@ public class DocumentService {
 
     return output;
   }
+
+  @Transactional
+  public ByteArrayOutputStream exportMergeAnnouncementExcel(DocumentReq req) throws IOException {
+    val dataList = calculateStockDividendExcel(req);
+
+    if (dataList.isEmpty()) {
+      return null;
+    }
+
+    val sum = calculateSumsMergeAnnouncement(dataList);
+    dataList.add(sum);
+
+    return generateExportMergeAnnouncementFile(dataList);
+  }
+
+  public static DocumentStockDevidend calculateSumsMergeAnnouncement(List<DocumentStockDevidend> dataList) {
+    DocumentStockDevidend sumResult = new DocumentStockDevidend();
+
+    // Calculate the sums
+    long stockAccumulateSum =
+            dataList.stream()
+                    .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getStockAccumulate()))
+                    .sum();
+    long stockDividendSum =
+            dataList.stream()
+                    .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getStockDividend()))
+                    .sum();
+    long cumulativeInterestSum =
+            dataList.stream()
+                    .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getCumulativeInterest()))
+                    .sum();
+    long interestDividendSum =
+            dataList.stream()
+                    .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getInterestDividend()))
+                    .sum();
+    long totalDividendSum =
+            dataList.stream()
+                    .mapToLong(doc -> NumberFormatUtils.parseNumber(doc.getTotalDividend()))
+                    .sum();
+
+    // Set the calculated sums in the result object
+    sumResult.setStockAccumulate(
+            NumberFormatUtils.numberFormat(String.valueOf(stockAccumulateSum)));
+    sumResult.setStockDividend(NumberFormatUtils.numberFormat(String.valueOf(stockDividendSum)));
+    sumResult.setCumulativeInterest(
+            NumberFormatUtils.numberFormat(String.valueOf(cumulativeInterestSum)));
+    sumResult.setInterestDividend(
+            NumberFormatUtils.numberFormat(String.valueOf(interestDividendSum)));
+    sumResult.setTotalDividend(NumberFormatUtils.numberFormat(String.valueOf(totalDividendSum)));
+    sumResult.setFullName("รวม");
+
+    return sumResult;
+  }
+
+  @Transactional
+  public ByteArrayOutputStream generateExportMergeAnnouncementFile(List<DocumentStockDevidend> dataList)
+          throws IOException {
+    val input = new ClassPathResource("excel-template/template-mergeannouncement.xlsx").getInputStream();
+
+    val output = new ByteArrayOutputStream();
+    val context = new Context();
+
+    context.putVar("dataList", dataList);
+    JxlsHelper.getInstance().processTemplate(input, output, context);
+
+    return output;
+  }
+
 }

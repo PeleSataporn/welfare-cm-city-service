@@ -218,4 +218,24 @@ public class DocumentController {
                     "attachment;filename=export-annual-" + System.nanoTime() + ".xlsx")
             .body(outputStream.toByteArray());
   }
+
+  @PostMapping(
+          value = "v1/document/export-data/merge-announcements",
+          produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public ResponseEntity<byte[]> exportMergeAnnouncementExcel(@RequestBody DocumentReq req) throws IOException {
+    val outputStream = service.exportMergeAnnouncementExcel(req);
+
+    if (outputStream == null || outputStream.size() == 0) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .contentLength(outputStream.size())
+            .header(
+                    "Content-Disposition",
+                    "attachment;filename=export-dividends-" + System.nanoTime() + ".xlsx")
+            .body(outputStream.toByteArray());
+  }
+
 }
