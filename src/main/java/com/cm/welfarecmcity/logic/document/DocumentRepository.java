@@ -1241,7 +1241,7 @@ public class DocumentRepository {
               WHERE
                   e.employee_status in (3,6,8)
                   AND YEAR(e.resignation_date) = ?
-              order by e.employee_status;
+              order by e.employee_code;
             """;
     return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpReSignRes.class), year);
   }
