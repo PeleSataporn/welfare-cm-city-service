@@ -1241,7 +1241,7 @@ public class DocumentRepository {
               WHERE
                   e.employee_status in (3,6,8)
                   AND YEAR(e.resignation_date) = ?
-              order by e.resignation_date;
+              order by e.employee_status;
             """;
     return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AnnualEmpReSignRes.class), year);
   }
@@ -1256,7 +1256,7 @@ public class DocumentRepository {
               FROM employee e
               LEFT JOIN department d ON e.department_id = d.id
               WHERE
-                  e.employee_status = 2
+                  e.employee_status != 1
                   AND YEAR(e.create_date) = ?
               order by e.create_date;
             """;
