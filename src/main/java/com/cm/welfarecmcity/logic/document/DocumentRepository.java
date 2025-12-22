@@ -1252,6 +1252,7 @@ public class DocumentRepository {
                   d.name as department_name,
                   e.employee_code,
                   CONCAT(e.prefix, e.first_name, ' ', e.last_name) AS full_name,
+                  e.id_card,
                   e.create_date
               FROM employee e
               LEFT JOIN department d ON e.department_id = d.id

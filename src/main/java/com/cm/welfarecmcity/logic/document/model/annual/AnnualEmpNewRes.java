@@ -9,5 +9,6 @@ public class AnnualEmpNewRes {
     String departmentName;
     String employeeCode;
     String fullName;
+    String idCard;
     String createDate;
 }
