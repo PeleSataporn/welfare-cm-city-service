@@ -727,8 +727,16 @@ public class DocumentService {
     val employeeLoanNew = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
     if (employeeLoanNew != null) {
       employeeLoanNew.setHistoryLoanFlag(true);
+      return employeeLoanNew;
+    }else{
+      // case สำหรับพนักงานที่พึ่งกู้เงิน เเต่มีหุ้นสะสมหลายเดือน
+       req.setLoanId(null);
+      val employeeLoanNew2 = documentRepository.searchEmployeeLoanOldHistoryOfNull(req);
+      if(employeeLoanNew2 != null){
+        employeeLoanNew2.setHistoryLoanFlag(true);
+      }
+      return employeeLoanNew2;
     }
-    return employeeLoanNew;
   }
 
   // all bill receipt
