@@ -107,7 +107,11 @@ public class LoanLogicService {
               (list.getLoanBalanceDetail()
                   + Math.round((list.getLoanOrdinary() - list.getInterestDetail())));
         } else {
-          sum = list.getLoanValue();
+          if(list.getInstallment() == list.getLoanTime()){
+            sum = list.getLoanOrdinary();
+          }else{
+            sum = list.getLoanValue();
+          }
         }
         list.setLoanBalance(sum);
       }
