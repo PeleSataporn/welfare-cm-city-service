@@ -259,9 +259,9 @@ public class EmployeeService {
     }
 
     val employee = findEmployee.get();
-    if (req.getType() == EmployeeStatusEnum.ESCAPE_DEBT.getState()) {
-      employee.setEmployeeStatus(req.getType());
-    } else {
+//    if (req.getType() == EmployeeStatusEnum.ESCAPE_DEBT.getState()) {
+//      employee.setEmployeeStatus(req.getType());
+//    } else { }
       employee.setEmployeeStatus(req.getType());
       // set loan
       if (employee.getLoan() != null) {
@@ -306,7 +306,7 @@ public class EmployeeService {
       employee.setLoan(null);
       employee.setResignationDate(new Date());
       // employee.setStock(null);
-    }
+
     employeeRepository.save(employee);
     return responseDataUtils.updateDataSuccess(req.getId());
   }
