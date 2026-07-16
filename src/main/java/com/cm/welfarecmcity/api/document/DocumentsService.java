@@ -44,6 +44,14 @@ public class DocumentsService {
     return documentRepository.save(document).getId();
   }
 
+  public long saveDocumentForByte(String name, byte[] pdfFile) throws IOException {
+    val document = new DocumentDto();
+    document.setName(name);
+    document.setPdfFile(pdfFile);
+
+    return documentRepository.save(document).getId();
+  }
+
   public DocumentDto getDocument(Long id) {
     return documentRepository
         .findById(id)
@@ -160,7 +168,7 @@ public class DocumentsService {
     // + month + "\\" + year
     List<FileConfigBean> textAllFile = new ArrayList<>();
 
-    log.debug(" directoryPathToSever : {} ", directoryPathToSever);
+    log.info(" directoryPathToSever : {} ", directoryPathToSever);
 
     File directory = new File(directoryPathToSever);
 
@@ -169,9 +177,9 @@ public class DocumentsService {
       // Loop through all files in the directory
       for (File file : Objects.requireNonNull(directory.listFiles())) {
         if (file.isFile() && file.getName().endsWith(".pdf")) {
-          System.out.println("Processing PDF: " + file.getName());
+          log.info("Processing PDF: " + file.getName());
 
-          log.debug(" Processing PDF: {} ", file.getName());
+          log.info(" Processing PDF: {} ", file.getName());
 
           try (InputStream inputStream = new FileInputStream(file)) {
             // Load the PDF document
@@ -184,7 +192,7 @@ public class DocumentsService {
             // Print the content of the PDF
             // System.out.println(text);
 
-            System.out.println(file.getName());
+            log.info(file.getName());
 
             // ByteArrayInputStream copiedStream = copyInputStream(inputStream);
             byte[] fileByte = convertInputStreamToByteArray(inputStream);

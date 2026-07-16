@@ -1,11 +1,16 @@
 package com.cm.welfarecmcity.Scheduled;
 
+import com.cm.welfarecmcity.Scheduled.MemberData.MemberPdfService;
+import com.cm.welfarecmcity.api.document.DocumentsService;
 import com.cm.welfarecmcity.api.summary.SummaryRepository;
 import com.cm.welfarecmcity.dto.SummaryDto;
 import com.cm.welfarecmcity.logic.document.DocumentService;
+import com.cm.welfarecmcity.logic.document.model.DocumentInfoAllRes;
 import com.cm.welfarecmcity.logic.document.model.DocumentReq;
 import com.cm.welfarecmcity.logic.document.model.GrandTotalRes;
 import java.time.LocalDate;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,12 @@ public class MonthlyTotalJob {
   @Autowired private DocumentService documentService;
 
   @Autowired private SummaryRepository summaryRepository;
+
+  @Autowired
+  private MemberPdfService memberPdfService;
+
+  @Autowired
+  private DocumentsService DocumentsServiceAddFile;
 
   @Scheduled(
       cron =
@@ -84,6 +95,20 @@ public class MonthlyTotalJob {
       default -> "";
     };
   }
+
+//  @Scheduled(cron="0 0 23 L * ?")
+//  public void savePdfMemberAllForByte()  throws Exception {
+//
+//    DocumentReq req = new DocumentReq();
+//    req.setMonthCurrent("กรกฎาคม");
+//    req.setYearCurrent("2569");
+//
+//    List<DocumentInfoAllRes> list =  documentService.documentInfoAll(req);
+//    byte[] pdf = memberPdfService.generate(list);
+//
+//    // name = มิย69-รายงานหน้า1หน้า3.pdf
+//    DocumentsServiceAddFile.saveDocumentForByte("กค69-รายงานหน้า1หน้า3.pdf", pdf);
+//  }
 
   @Bean
   public ThreadPoolTaskScheduler taskScheduler() {
