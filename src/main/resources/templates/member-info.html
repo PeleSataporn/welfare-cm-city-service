@@ -39,7 +39,7 @@
 
             font-family:THSarabun;
 
-            font-size:18px;
+            font-size:19px;
 
         }
 
@@ -127,7 +127,7 @@
             text-align:center;
 
 
-            font-size:18px;
+            font-size:19px;
 
 
             font-weight:bold;
@@ -284,7 +284,7 @@
             text-align:center;
 
 
-            font-size:18px;
+            font-size:19px;
 
 
             font-weight:bold;
@@ -315,10 +315,13 @@
         }
 
 
+        .unit {
+            padding-left:40px;
+        }
 
-
-
-
+        .unit-text {
+           width:100px;
+        }
 
     </style>
 
@@ -370,11 +373,11 @@
 
                     <td class="right">
 
-                        เดือน
+                        <span class="label">เดือน</span>
 
                         <span th:text="${month}"></span>
 
-                        ปี
+                        <span class="label">ปี</span>
 
                         <span th:text="${year}"></span>
 
@@ -430,7 +433,7 @@
                     </td>
 
 
-                    <td th:text="${m.regisDate}">
+                    <td th:text="${m.regisDateText}">
                     </td>
 
 
@@ -513,17 +516,17 @@
                     <td>
 
 
-                        1.
 
-                        <span th:text="${m.codeGuaranteeOne != null ? m.codeGuaranteeOne:'ไม่มี'}"></span>
+
+                        <span th:text="${m.fullNameGuaranteeOneText != null ? m.fullNameGuaranteeOneText:'1. ไม่มี'}"></span>
 
 
                         <br/>
 
 
-                        2.
 
-                        <span th:text="${m.codeGuaranteeTwo != null ? m.codeGuaranteeTwo:'ไม่มี'}"></span>
+
+                        <span th:text="${m.fullNameGuaranteeTwoText != null ? m.fullNameGuaranteeTwoText:'2. ไม่มี'}"></span>
 
 
                     </td>
@@ -555,7 +558,7 @@
 
                         <span th:text="${m.stockValue}"></span>
 
-                        บาท
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -587,9 +590,9 @@
 
                     <td>
 
-                        <span th:text="${m.stockAccumulate}"></span>
+                        <span th:text="${m.stockAccVlText}"></span>
 
-                        บาท
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -603,7 +606,8 @@
 
                     <td>
 
-                        - บาท
+                        <span>-</span>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -672,11 +676,11 @@
 
                     <td class="right">
 
-                        เดือน
+                        <span class="label">เดือน</span>
 
                         <span th:text="${month}"></span>
 
-                        ปี
+                        <span class="label">ปี</span>
 
                         <span th:text="${year}"></span>
 
@@ -763,7 +767,7 @@
 
                     <td>
 
-                        <span th:text="${m.loanValue}"></span>
+                        <span th:text="${m.loanValueText}"></span>
 
                     </td>
 
@@ -814,7 +818,7 @@
                     </td>
 
 
-                    <td th:text="${m.interestPercent}">
+                    <td th:text="${m.interestPercentText}">
                     </td>
 
 
@@ -895,7 +899,7 @@
 
 
                     <td  colspan="2"
-                        th:text="${m.codeGuarantorOne}">
+                        th:text="${m.fullNameGuarantorOneText != null ? m.fullNameGuarantorOneText:'ไม่มี'}">
                     </td>
 
 
@@ -915,7 +919,7 @@
 
 
                     <td colspan="2"
-                        th:text="${m.codeGuarantorTwo}">
+                        th:text="${m.fullNameGuarantorTwoText != null ? m.fullNameGuarantorTwoText:'ไม่มี'}">
                     </td>
 
 
@@ -924,11 +928,6 @@
 
 
             </table>
-
-
-
-
-
 
 
             <table class="loan-table">
@@ -946,9 +945,11 @@
 
                     <td>
 
-                        <span th:text="${m.interestMonth}"></span>
+                        <span class="unit-text" th:text="${m.interestMonthText}"></span>
 
-                        บาท
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -963,9 +964,11 @@
 
                     <td >
 
-                        <span th:text="${m.earlyMonth}"></span>
+                        <span class="unit-text" th:text="${m.earlyMonthIntText}"></span>
 
-                        บาท
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -987,9 +990,12 @@
 
                     <td>
 
-                        <span th:text="${m.interestMonthLast}"></span>
+                        <span class="unit-text" th:text="${m.interestMonthLastText}"></span>
 
-                        บาท
+                    </td>
+
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -1004,9 +1010,11 @@
 
                     <td >
 
-                        <span th:text="${m.earlyMonthLast}"></span>
+                        <span class="unit-text" th:text="${m.earlyMonthLastText}"></span>
 
-                        บาท
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -1027,7 +1035,7 @@
                     </td>
 
 
-                    <td th:text="${m.installmentLoan}">
+                    <td class="unit-text" th:text="${m.installmentLoanText}">
                     </td>
 
 
@@ -1049,7 +1057,11 @@
 
                     <td>
 
-                        0 บาท
+                        <span class="unit-text">0</span>
+
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -1064,9 +1076,11 @@
 
                     <td>
 
-                        <span th:text="${m.outStandInterest}"></span>
+                        <span class="unit-text" th:text="${m.outStandInterestText}"></span>
 
-                        บาท
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -1090,7 +1104,11 @@
 
                     <td>
 
-                        0 บาท
+                        <span class="unit-text">0</span>
+
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 
@@ -1105,9 +1123,11 @@
 
                     <td>
 
-                        <span th:text="${m.outStandPrinciple}"></span>
+                        <span class="unit-text" th:text="${m.outStandPrincipleText}"></span>
 
-                        บาท
+                    </td>
+                    <td>
+                        <span class="unit">บาท</span>
 
                     </td>
 

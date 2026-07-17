@@ -17,24 +17,33 @@ public class MemberPdfService {
 
     private final TemplateEngine templateEngine;
 
-    public byte[] generate(List<DocumentInfoAllRes> list)
+    public byte[] generate(List<DocumentInfoAllRes> list, String monthThai, String yearThai)
             throws Exception {
-
 
         Context context = new Context();
         context.setVariable(
                 "members",
                 list
         );
+        context.setVariable("month", monthThai);
+        context.setVariable("year", yearThai);
 
         String html = templateEngine.process(
                         "member-info",
                         context
                 );
 
-        ByteArrayOutputStream output =
-                new ByteArrayOutputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
 
+        PdfRendererBuilder builder = getPdfRendererBuilder(html);
+        builder.useFastMode();
+        builder.toStream(output);
+        builder.run();
+
+        return output.toByteArray();
+    }
+
+    private static PdfRendererBuilder getPdfRendererBuilder(String html) throws IOException {
         PdfRendererBuilder builder =
                 new PdfRendererBuilder();
 
@@ -61,25 +70,19 @@ public class MemberPdfService {
                 "THSarabun"
         );
 
-
-//        builder.useFont(
-//                () -> {
-//                    try {
-//                        return new ClassPathResource(
-//                                "fonts/THSarabun-Bold.ttf"
-//                        ).getInputStream();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                },
-//                "THSarabun"
-//        );
-
-        builder.useFastMode();
-        builder.toStream(output);
-        builder.run();
-
-        return output.toByteArray();
+        //        builder.useFont(
+        //                () -> {
+        //                    try {
+        //                        return new ClassPathResource(
+        //                                "fonts/THSarabun-Bold.ttf"
+        //                        ).getInputStream();
+        //                    } catch (IOException e) {
+        //                        throw new RuntimeException(e);
+        //                    }
+        //                },
+        //                "THSarabun"
+        //        );
+        return builder;
     }
 
 }

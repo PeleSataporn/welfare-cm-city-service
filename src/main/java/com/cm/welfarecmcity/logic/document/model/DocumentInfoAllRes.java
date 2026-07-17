@@ -45,4 +45,24 @@ public class DocumentInfoAllRes {
   private String interestLastMonth = null;
   private Boolean newLoan;
   private String startLoanDate;
+  // current date
+  private String currentDay;
+  private String currentMonth;
+  private String currentYear;
+  private String regisDateText;
+  private String fullNameGuaranteeOneText;
+  private String fullNameGuaranteeTwoText;
+  private String stockAccVlText;
+  private String loanValueText;
+  private String fullNameGuarantorOneText;
+  private String fullNameGuarantorTwoText;
+  private String interestMonthText;
+  private String earlyMonthIntText;
+  private String interestMonthLastText;
+  private String earlyMonthLastText;
+  private String installmentLoanText;
+  private String outStandInterestText;
+  private String outStandPrincipleText;
+  private String interestPercentText;
+
 }
