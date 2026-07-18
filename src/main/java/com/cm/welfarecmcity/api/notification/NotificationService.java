@@ -148,13 +148,20 @@ public class NotificationService {
     }
   }
 
-  @Transactional
   public void rejectRegister(Long id, Long empId) {
     val notification = notificationRepository.findById(id).get();
     notificationRepository.delete(notification);
 
     val emp = employeeRepository.findById(empId).get();
-    employeeRepository.delete(emp);
+    emp.setEmployeeType(null);
+    emp.setDepartment(null);
+    emp.setAffiliation(null);
+    emp.setContact(null);
+    emp.setLevel(null);
+    emp.setPosition(null);
+
+    val employee = employeeRepository.save(emp);
+    employeeRepository.delete(employee);
     //
     //    val stock = new StockDto();
     //    stock.setId(emp.getStock().getId());
