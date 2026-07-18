@@ -353,12 +353,13 @@ public class RegisterService {
   @Transactional
   public ResponseModel<ResponseId> cancelApproveRegister(CancelRegisterReq req) {
     val findEmployee = employeeRepository.findById(req.getId());
+
     if (findEmployee.isEmpty()) {
       throw new EmployeeException("Employee id not null.");
     }
+
     val employee = findEmployee.get();
-    employee.setDeleted(true);
-    employeeRepository.save(employee);
+    employeeRepository.delete(employee);
 
     emailSendService.sendSimpleEmailCancel(employee.getContact().getEmail(), req.getRemark());
     return responseDataUtils.deleteDataSuccess(req.getId());
