@@ -100,8 +100,9 @@ public class MonthlyTotalJob {
     };
   }
 
-  //@Scheduled(cron = "0 0 0 L * ?")
-  @Scheduled(cron = "0 */10 * * * *")
+
+  //@Scheduled(cron = "0 */10 * * * *")
+  @Scheduled(cron = "0 0 0 L * ?")
   public void savePdfMemberAllForByte()  throws Exception {
     log.info("======= [ SavePdfMemberAllForByte Service ] =======");
     LocalDate currentDate = LocalDate.now();
