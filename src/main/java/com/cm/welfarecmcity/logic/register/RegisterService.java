@@ -23,9 +23,12 @@ import com.cm.welfarecmcity.logic.register.model.req.CancelRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.RegisterReq;
 import com.cm.welfarecmcity.logic.register.model.req.ResignRegisterReq;
 import com.cm.welfarecmcity.logic.register.model.res.SearchNewRegisterRes;
+import com.cm.welfarecmcity.utils.DateUtils;
 import com.cm.welfarecmcity.utils.ResponseDataUtils;
 import com.cm.welfarecmcity.utils.listener.GenerateListener;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
@@ -78,6 +81,7 @@ public class RegisterService {
     employee.setEmployeeStatus(EmployeeStatusEnum.NEW_EMPLOYEE.getState());
     employee.setContact(contact);
     employee.setApproveFlag(false);
+    employee.setMonthlyStockMoney(req.getStockValue());
 
     switch (req.getPrefix()) {
       case 1 -> {
@@ -189,33 +193,33 @@ public class RegisterService {
     employee.setMonthlyStockMoney(req.getStockValue());
 
     // stock
-    val stock = new StockDto();
-    stock.setStockValue(req.getStockValue());
-
-    if (req.getInstallment() == 1) {
-      stock.setStockAccumulate(req.getStockValue());
-    } else {
-      stock.setStockAccumulate(0);
-    }
-
-    val stockDetail = new StockDetailDto();
-    stockDetail.setStockValue(req.getStockValue());
-    stockDetail.setStockMonth(req.getStockMonth());
-    stockDetail.setStockYear(req.getStockYear());
-
-    if (req.getInstallment() == 1) {
-      stockDetail.setInstallment(1);
-      stockDetail.setStockAccumulate(req.getStockValue());
-    } else {
-      stockDetail.setInstallment(0);
-      stockDetail.setStockAccumulate(0);
-    }
-
-    // stockDetail
-    List<StockDetailDto> stockDetailList = new ArrayList<>();
-    stockDetailList.add(stockDetail);
-    stock.setStockDetails(stockDetailList);
-    employee.setStock(stock);
+//    val stock = new StockDto();
+//    stock.setStockValue(req.getStockValue());
+//
+//    if (req.getInstallment() == 1) {
+//      stock.setStockAccumulate(req.getStockValue());
+//    } else {
+//      stock.setStockAccumulate(0);
+//    }
+//
+//    val stockDetail = new StockDetailDto();
+//    stockDetail.setStockValue(req.getStockValue());
+//    stockDetail.setStockMonth(req.getStockMonth());
+//    stockDetail.setStockYear(req.getStockYear());
+//
+//    if (req.getInstallment() == 1) {
+//      stockDetail.setInstallment(1);
+//      stockDetail.setStockAccumulate(req.getStockValue());
+//    } else {
+//      stockDetail.setInstallment(0);
+//      stockDetail.setStockAccumulate(0);
+//    }
+//
+//    // stockDetail
+//    List<StockDetailDto> stockDetailList = new ArrayList<>();
+//    stockDetailList.add(stockDetail);
+//    stock.setStockDetails(stockDetailList);
+//    employee.setStock(stock);
 
     val empTemp = employeeRepository.save(employee);
 
@@ -291,6 +295,29 @@ public class RegisterService {
     user.setPassword(employee.getIdCard());
     val userTemp = userRepository.save(user);
 
+    // stock
+    val stock = new StockDto();
+    stock.setStockValue(employee.getMonthlyStockMoney());
+    stock.setStockAccumulate(employee.getMonthlyStockMoney());
+
+    // stockDetail
+    List<StockDetailDto> stockDetailList = new ArrayList<>();
+
+    // get date now thai
+    LocalDate currentDate = LocalDate.now();
+    String monthThai = DateUtils.getThaiMonthInt(currentDate.getMonthValue());
+    int yearThai = currentDate.getYear() + 543;
+
+    val stockDetail = new StockDetailDto();
+    stockDetail.setStockValue(employee.getMonthlyStockMoney());
+    stockDetail.setStockMonth(monthThai);
+    stockDetail.setStockYear(String.valueOf(yearThai));
+    stockDetail.setStockAccumulate(employee.getMonthlyStockMoney());
+
+    stockDetailList.add(stockDetail);
+    stock.setStockDetails(stockDetailList);
+
+    employee.setStock(stock);
     employee.setUser(userTemp);
     employeeRepository.save(employee);
 
