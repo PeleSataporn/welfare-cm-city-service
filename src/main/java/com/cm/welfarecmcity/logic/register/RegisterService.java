@@ -313,6 +313,7 @@ public class RegisterService {
     stockDetail.setStockMonth(monthThai);
     stockDetail.setStockYear(String.valueOf(yearThai));
     stockDetail.setStockAccumulate(employee.getMonthlyStockMoney());
+    stockDetail.setInstallment(1);
 
     stockDetailList.add(stockDetail);
     stock.setStockDetails(stockDetailList);
