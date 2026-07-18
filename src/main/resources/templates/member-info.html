@@ -1,1157 +1,440 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="UTF-8"/>
-
-
     <style>
-
-
         @page {
-
-            size:A4;
-
-            margin-top:25px;
-
-            margin-right:40px;
-
-            margin-bottom:25px;
-
-            margin-left:40px;
-
+        size:A4;
+        margin-top:25px;
+        margin-right:40px;
+        margin-bottom:25px;
+        margin-left:40px;
         }
-
-
-
         html,body {
-
-            margin:0;
-
-            padding:0;
-
+        margin:0;
+        padding:0;
         }
-
-
-
         body {
-
-            font-family:THSarabun;
-
-            font-size:19px;
-
+        font-family:THSarabun;
+        font-size:19px;
         }
-
-
-
-
-
         /* ==============================
-           1 MEMBER = 1 PDF PAGE
-           ============================== */
-
+        1 MEMBER = 1 PDF PAGE
+        ============================== */
         .pdf-page {
-
-            page-break-after:always;
-
-            page-break-inside:avoid;
-
+        page-break-after:always;
+        page-break-inside:avoid;
         }
-
-
         .page {
-
-            width:100%;
-
-            height:100%;
-
-            border:1px solid black;
-
-            box-sizing:border-box;
-
+        width:100%;
+        height:100%;
+        border:1px solid black;
+        box-sizing:border-box;
         }
-
-
         /* ==============================
-                TOP / BOTTOM SECTION
-           ============================== */
-
-
+        TOP / BOTTOM SECTION
+        ============================== */
         .section {
-
-
-            height:47%;
-
-
-            padding:1.2% 3%;
-
-
-            box-sizing:border-box;
-
-
-            overflow:hidden;
-
-
+        height:47%;
+        padding:1.2% 3% 3% 3%;
+        box-sizing:border-box;
+        overflow:hidden;
         }
-
-
-
-
-
         .divider {
-
-
-            height:3%;
-
-
-            border-top:1px solid black;
-
-
+        height:3%;
+        border-top:1px solid black;
         }
-
-
-
-
-
-
-
         /* ==============================
-                  HEADER
-           ============================== */
-
-
+        HEADER
+        ============================== */
         .title {
-
-
-            text-align:center;
-
-
-            font-size:19px;
-
-
-            font-weight:bold;
-
-
-            line-height:18px;
-
-
-            margin:0 0 2px 0;
-
-
+        text-align:center;
+        font-size:19px;
+        font-weight:bold;
+        line-height:18px;
+        margin:0 0 2px 0;
         }
-
-
-
-
-
-
         .header-table {
-
-
-            width:100%;
-
-
-            border-collapse:collapse;
-
-
-            margin-top:3px;
-
-
-            margin-bottom:3px;
-
-
+        width:100%;
+        border-collapse:collapse;
+        margin-top:3px;
+        margin-bottom:3px;
         }
-
-
-
-
         .header-table td {
-
-
-            padding:1px;
-
-
-            line-height:16px;
-
-
+        padding:1px 3px;
+        line-height:16px;
         }
-
-
-
-
-
         .right {
-
-            text-align:right;
-
+        text-align:right;
         }
-
-
-
-
-
-
-
-
         /* ==============================
-                     TABLE
-           ============================== */
-
-
+        TABLE
+        ============================== */
         .info-table,
         .stock-table,
         .loan-table {
-
-
-            width:100%;
-
-
-            border-collapse:collapse;
-
-
+        width:100%;
+        border-collapse:collapse;
         }
-
-
-
-
-
-
-
         .info-table td,
         .stock-table td,
         .loan-table td {
-
-
-            padding:1px 3px;
-
-
-            line-height:23px;
-
-
-            vertical-align:middle;
-
-
-            word-wrap:break-word;
-
-
+        padding:1px 3px;
+        line-height:23px;
+        vertical-align:middle;
+        word-wrap:break-word;
         }
-
-
-
-
-
-
         .label {
-
-
-            width:120px;
-
-
-            font-weight:500;
-
-
+        width:120px;
+        font-weight:500;
         }
-
-
-
-
-
-
         .stock-table {
-
-
-            margin-top:4px;
-
-
+        margin-top:4px;
         }
-
-
-
-
-
-
-
-
         /* ==============================
-                     LOAN
-           ============================== */
-
-
+        LOAN
+        ============================== */
         .loan-title {
-
-
-            text-align:center;
-
-
-            font-size:19px;
-
-
-            font-weight:bold;
-
-
-            line-height:18px;
-
-
-            margin:3px 0;
-
-
+        text-align:center;
+        font-size:19px;
+        font-weight:bold;
+        line-height:18px;
+        margin:3px 0;
         }
-
-
-
-
-
-
         .loan-label {
-
-
-            width:120px;
-
-
-            font-weight:500;
-
-
+        width:120px;
+        font-weight:500;
         }
-
-
         .unit {
-            padding-left:40px;
+        padding-left:40px;
         }
-
         .unit-text {
-           width:100px;
+        width:100px;
         }
-
     </style>
-
-
 </head>
-
-
-
 <body>
-
-
-
-
 <div th:each="m:${members}" class="pdf-page">
-
-
-
     <div class="page">
-
-
-
         <!-- ================= PAGE 1 ================= -->
-
         <div class="section">
-
-
-
             <div class="title">
                 เทศบาลนครเชียงใหม่
             </div>
-
-
             <div class="title">
                 ข้อมูลสมาชิก
             </div>
-
-
-
-
-
             <table class="header-table">
-
                 <tr>
-
                     <td class="label">
                         หน้า 1
                     </td>
-
-
                     <td class="right">
-
                         <span class="label">เดือน</span>
-
                         <span th:text="${month}"></span>
-
                         <span class="label">ปี</span>
-
                         <span th:text="${year}"></span>
-
                     </td>
-
-
                 </tr>
-
-
             </table>
-
-
-
-
-
             <table class="info-table">
-
-
                 <tr>
-
                     <td class="label">
                         รหัสพนักงาน
                     </td>
-
-
                     <td th:text="${m.employeeCode}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         ชื่อ-สกุล
                     </td>
-
-
                     <td th:text="${m.fullName}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         วันที่เป็นสมาชิก
                     </td>
-
-
                     <td th:text="${m.regisDateText}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         หน่วยงาน
                     </td>
-
-
                     <td th:text="${m.departmentName}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         ประเภท
                     </td>
-
-
                     <td th:text="${m.employeeTypeName}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         ตำแหน่ง
                     </td>
-
-
                     <td th:text="${m.positionsName}">
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         อัตราเงินเดือน
                     </td>
-
-
                     <td>
-
                         <span th:text="${m.salary}"></span>
-
                         บาท
-
                     </td>
-
-
                 </tr>
-
-
-
                 <tr>
-
                     <td class="label">
                         ค้ำประกันให้
                     </td>
-
-
                     <td>
-
-
-
-
                         <span th:text="${m.fullNameGuaranteeOneText != null ? m.fullNameGuaranteeOneText:'1. ไม่มี'}"></span>
-
-
                         <br/>
-
-
-
-
                         <span th:text="${m.fullNameGuaranteeTwoText != null ? m.fullNameGuaranteeTwoText:'2. ไม่มี'}"></span>
-
-
                     </td>
-
-
                 </tr>
-
-
-
             </table>
-
-
-
-
-
-
             <table class="stock-table">
-
-
                 <tr>
-
-
                     <td class="label">
                         ส่งค่าหุ้น
                     </td>
-
-
                     <td>
-
                         <span th:text="${m.stockValue}"></span>
-
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                     <td class="label">
                         งวดที่
                     </td>
-
-
                     <td th:text="${m.installment <= 1 ? m.installment : m.installment - 1}">
                     </td>
-
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
-
                     <td class="label">
                         หุ้นสะสม
                     </td>
-
-
                     <td>
-
                         <span th:text="${m.stockAccVlText}"></span>
-
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
-
                     <td class="label">
                         ได้ปันผล
                     </td>
-
-
                     <td>
-
                         <span>-</span>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
                 </tr>
-
-
-
             </table>
-
-
-
         </div>
-
-
-
-
-
-
-
         <div class="divider"></div>
-
-
-
-
-
-
-
         <!-- ================= PAGE 2 ================= -->
-
-
         <div class="section">
-
-
-
             <div class="title">
-
                 เทศบาลนครเชียงใหม่
-
             </div>
-
-
-
             <div class="title">
-
                 ข้อมูลสมาชิก
-
             </div>
-
-
-
-
-
             <table class="header-table">
-
-
                 <tr>
-
-
                     <td class="label">
-
                         หน้า 2
-
                     </td>
-
-
                     <td class="right">
-
                         <span class="label">เดือน</span>
-
                         <span th:text="${month}"></span>
-
                         <span class="label">ปี</span>
-
                         <span th:text="${year}"></span>
-
                     </td>
-
-
                 </tr>
-
-
             </table>
-
-
-
-
-
             <table class="info-table">
-
-
                 <tr>
-
-
                     <td class="label">
-
                         รหัสพนักงาน
-
                     </td>
-
-
                     <td th:text="${m.employeeCode}">
                     </td>
-
-
                 </tr>
-
-
-
-
                 <tr>
-
-
                     <td class="label">
-
                         ชื่อ-สกุล
-
                     </td>
-
-
                     <td th:text="${m.fullName}">
                     </td>
-
-
                 </tr>
-
-
-
             </table>
-
-
-
-
-
             <div class="loan-title">
-
                 ข้อมูลการกู้เงินสามัญ
-
             </div>
-
-
-
-
-
             <table class="loan-table">
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         กู้เงินจำนวน
-
                     </td>
-
-
                     <td>
-
                         <span th:text="${m.loanValueText}"></span>
-
                     </td>
-
-
                     <td>
-
                         บาท
-
                     </td>
-
-
                 </tr>
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         ระยะเวลากู้
-
                     </td>
-
-
                     <td th:text="${m.loanTime}">
                     </td>
-
-
                     <td>
-
                         เดือน
-
                     </td>
-
-
                 </tr>
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         อัตราดอกเบี้ย
-
                     </td>
-
-
                     <td th:text="${m.interestPercentText}">
                     </td>
-
-
                     <td>
-
                         เปอร์เซ็นต์ต่อปี
-
                     </td>
-
-
                 </tr>
-
-
-
-
                 <tr>
-
-
                     <td class="loan-label">
-
                         วันที่เริ่มกู้
-
                     </td>
-
-
                     <td>
-
                         -
-
                     </td>
-
-
                     <td class="loan-label">
-
                         วันที่ทำสัญญา
-
                     </td>
-
-
                     <td th:text="${m.startLoanDate}">
                     </td>
-
-
                 </tr>
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         เหตุผลการกู้
-
                     </td>
-
-
                     <td colspan="2">
-
                         -
-
                     </td>
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         ผู้ค้ำประกัน 1
-
                     </td>
-
-
-                    <td  colspan="2"
+                    <td colspan="2"
                         th:text="${m.fullNameGuarantorOneText != null ? m.fullNameGuarantorOneText:'ไม่มี'}">
                     </td>
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         ผู้ค้ำประกัน 2
-
                     </td>
-
-
                     <td colspan="2"
                         th:text="${m.fullNameGuarantorTwoText != null ? m.fullNameGuarantorTwoText:'ไม่มี'}">
                     </td>
-
-
                 </tr>
-
-
-
             </table>
-
-
             <table class="loan-table">
-
-
                 <tr>
-
-
                     <td class="loan-label">
-
                         ดอกเดือนนี้
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text" th:text="${m.interestMonthText}"></span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                     <td class="loan-label">
-
                         ต้นเดือนนี้
-
                     </td>
-
-
-                    <td >
-
+                    <td>
                         <span class="unit-text" th:text="${m.earlyMonthIntText}"></span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         เดือนสุดท้าย
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text" th:text="${m.interestMonthLastText}"></span>
-
                     </td>
-
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                     <td class="loan-label">
-
                         เดือนสุดท้าย
-
                     </td>
-
-
-                    <td >
-
+                    <td>
                         <span class="unit-text" th:text="${m.earlyMonthLastText}"></span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
                 </tr>
-
-
-
-
-
-
                 <tr>
-
                     <td class="loan-label">
-
                         ส่งงวดที่
-
                     </td>
-
-
                     <td class="unit-text" th:text="${m.installmentLoanText}">
                     </td>
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
-
                     <td class="loan-label">
-
                         ดอกรวมส่ง
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text">0</span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                     <td class="loan-label">
-
                         ดอกคงค้าง
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text" th:text="${m.outStandInterestText}"></span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                 </tr>
-
-
-
-
-
                 <tr>
-
-
                     <td class="loan-label">
-
                         ต้นรวมส่ง
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text">0</span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
-
                     <td class="loan-label">
-
                         ต้นคงค้าง
-
                     </td>
-
-
                     <td>
-
                         <span class="unit-text" th:text="${m.outStandPrincipleText}"></span>
-
                     </td>
                     <td>
                         <span class="unit">บาท</span>
-
                     </td>
-
-
                 </tr>
-
-
-
-
             </table>
-
-
-
         </div>
-
-
-
     </div>
-
-
 </div>
-
-
 </body>
-
-
 </html>

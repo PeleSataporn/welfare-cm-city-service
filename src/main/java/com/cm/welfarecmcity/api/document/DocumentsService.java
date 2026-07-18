@@ -10,9 +10,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.val;
@@ -372,4 +370,103 @@ public class DocumentsService {
         return "";
     }
   }
+
+  public Map<String, String> addFileForSeverPath(
+          byte[] fileBytes,
+          String fileName,
+          String month,
+          String year) {
+
+    Map<String, String> response = new HashMap<>();
+
+    // Validate file
+    if (fileBytes == null || fileBytes.length == 0) {
+      response.put(
+              "message",
+              "No file data!"
+      );
+      return response;
+    }
+
+
+    try {
+
+      // Maximum file size 10 MB
+      long maxFileSize = 10 * 1024 * 1024;
+      if (fileBytes.length > maxFileSize) {
+        response.put(
+                "message",
+                "File size exceeds limit!"
+        );
+        return response;
+      }
+
+
+      // Prevent Path Traversal
+      String safeFileName = Paths.get(fileName)
+                      .getFileName()
+                      .toString();
+
+
+      // Upload directory
+      Path uploadDir = Paths.get(
+                      appProperties.getPathFile(),
+                      month,
+                      year
+              );
+
+      // Create directory if not exists
+      Files.createDirectories(uploadDir);
+
+      // Destination file
+      Path destination =
+              uploadDir.resolve(safeFileName);
+
+      // Write file
+      Files.write(
+              destination,
+              fileBytes,
+              StandardOpenOption.CREATE,
+              StandardOpenOption.TRUNCATE_EXISTING
+      );
+
+      log.info(
+              "File upload success. fileName={}, size={}, path={}",
+              safeFileName,
+              fileBytes.length,
+              destination.toString()
+      );
+
+      response.put(
+              "message",
+              "File uploaded successfully!"
+      );
+
+      response.put(
+              "fileName",
+              safeFileName
+      );
+
+      response.put(
+              "path",
+              destination.toString()
+      );
+
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      log.error(
+              "File upload failed. fileName={}",
+              fileName,
+              e
+      );
+      response.put(
+              "message",
+              "Failed to upload file!"
+      );
+    }
+
+    return response;
+  }
+
 }

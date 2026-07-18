@@ -7,13 +7,17 @@ import com.cm.welfarecmcity.utils.DateUtils;
 import com.cm.welfarecmcity.utils.NumberFormatUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +33,7 @@ public class MemberPdfController {
     @Autowired
     private DocumentService documentService;
 
-    @GetMapping("/generatePdfMemberAll")
+    @PostMapping("/generatePdfMemberAll")
     public ResponseEntity<byte[]> generatePdfMemberAll() throws Exception {
 
         LocalDate currentDate = LocalDate.now();
@@ -158,11 +162,16 @@ public class MemberPdfController {
 
         }
         byte[] pdf =  memberPdfService.generate(InfoAll, monthThai, String.valueOf(yearThai));
+        String fileName = DateUtils.getThaiMonthShort(monthThai) + yearThai + "-รายงานหน้า1หน้า3.pdf";
+        System.out.println(" fileName : " + fileName);
 
-        return ResponseEntity.ok().header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=memberAll.pdf"
-                )
+        ContentDisposition contentDisposition = ContentDisposition
+                .attachment()
+                .filename(fileName, StandardCharsets.UTF_8)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
