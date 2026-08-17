@@ -491,7 +491,7 @@ public class DocumentRepository {
     val sql = new StringBuilder();
     sql.append(
         " SELECT employee.id AS empId, employee.employee_code AS empCode, CONCAT(employee.prefix, employee.first_name,' ', employee.last_name) AS fullName FROM employee ");
-    sql.append(" WHERE employee.employee_code = '").append(empCode).append("'");
+    sql.append(" WHERE employee.employee_code = '").append(empCode).append("' and employee.employee_status = 2 ");
     return sql;
   }
 
