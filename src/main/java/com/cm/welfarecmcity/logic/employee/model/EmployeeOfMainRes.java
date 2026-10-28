@@ -25,4 +25,5 @@ public class EmployeeOfMainRes {
   private Date billingStartDate;
   private String loanNo;
   private Date loanCreateDate;
+  private int loanTime = 0;
 }

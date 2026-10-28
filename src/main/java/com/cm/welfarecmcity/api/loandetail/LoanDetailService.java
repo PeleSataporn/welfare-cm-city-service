@@ -78,7 +78,13 @@ public class LoanDetailService {
             sum = list.getLoanOrdinary();
           }
         }
-        list.setLoanBalance(sum);
+
+        if(emp.getLoanTime() == list.getInstallment()){
+          list.setLoanBalance(list.getLoanBalance());
+        }else{
+          list.setLoanBalance(sum);
+        }
+
       }
     }
 

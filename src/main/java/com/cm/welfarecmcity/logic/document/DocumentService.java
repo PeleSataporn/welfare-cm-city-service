@@ -847,23 +847,34 @@ public class DocumentService {
           searchEmp.getInterestLoanLastMonth() != null
               ? Long.parseLong(searchEmp.getInterestLoanLastMonth())
               : 0L);
-      res.setPrincipalBalance(
-          searchEmp.getLoanBalance() != null
-              ? Double.parseDouble(searchEmp.getLoanBalance())
-                  + ( (searchEmp.getLoanOrdinary() != null
-                  ? Double.parseDouble(searchEmp.getLoanOrdinary())
-                  : 0.00)
-                  - (searchEmp.getInterestLoanLastMonth() != null
-                  ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
-                  : 0.00) )
-              : 0.00);
-      res.setTotalDeduction(
-          (searchEmp.getLoanOrdinary() != null
-                  ? Double.parseDouble(searchEmp.getLoanOrdinary())
-                  : 0.00)
-              - (searchEmp.getInterestLoanLastMonth() != null
-                  ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
-                  : 0.00));
+
+      if(Objects.equals(searchEmp.getLoanTime(), searchEmp.getInstallment())){
+        res.setPrincipalBalance(
+                searchEmp.getLoanBalance() != null
+                ? Double.parseDouble(searchEmp.getLoanBalance()): 0.00);
+        res.setTotalDeduction(
+                searchEmp.getLoanOrdinary() != null
+                ? Double.parseDouble(searchEmp.getLoanOrdinary()): 0.00);
+      }else{
+        res.setPrincipalBalance(
+                searchEmp.getLoanBalance() != null
+                        ? Double.parseDouble(searchEmp.getLoanBalance())
+                        + ( (searchEmp.getLoanOrdinary() != null
+                        ? Double.parseDouble(searchEmp.getLoanOrdinary())
+                        : 0.00)
+                        - (searchEmp.getInterestLoanLastMonth() != null
+                        ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
+                        : 0.00) )
+                        : 0.00);
+        res.setTotalDeduction(
+                (searchEmp.getLoanOrdinary() != null
+                        ? Double.parseDouble(searchEmp.getLoanOrdinary())
+                        : 0.00)
+                        - (searchEmp.getInterestLoanLastMonth() != null
+                        ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
+                        : 0.00));
+      }
+
     }
     res.setTotalPrice(res.getStockValue() + res.getTotalDeduction() + res.getInterest());
     res.setTotalText("(" + ThaiNumeralsUtils.formatThaiWords(res.getTotalPrice()) + ")");
@@ -1788,7 +1799,12 @@ public class DocumentService {
       list.setEmployeeCode(empData.getEmployeeCode());
       list.setFullName(empData.getFullName());
       if (Integer.parseInt(list.getLoanYear()) >= 2567) {
-        list.setLoanBalance(list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
+        // เเก้ไขเมื่อถึงงวดสุดท้ายให้ set เงินคงเหลือเป็น 0
+        if(Integer.parseInt(list.getLoanTime()) == list.getInstallment()){
+          list.setLoanBalance(list.getLoanBalance());
+        }else{
+          list.setLoanBalance(list.getLoanBalance() + (list.getLoanOrdinary() - list.getInterest()));
+        }
         val calculateReq = new CalculateReq();
         calculateReq.setPrincipal(list.getLoanValue());
         calculateReq.setInterestRate(list.getInterestPercent());
