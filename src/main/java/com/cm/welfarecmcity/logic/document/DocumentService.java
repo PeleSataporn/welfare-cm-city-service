@@ -856,16 +856,20 @@ public class DocumentService {
                 searchEmp.getLoanOrdinary() != null
                 ? Double.parseDouble(searchEmp.getLoanOrdinary()): 0.00);
       }else{
+//        res.setPrincipalBalance(
+//                searchEmp.getLoanBalance() != null
+//                        ? Double.parseDouble(searchEmp.getLoanBalance())
+//                        + ( (searchEmp.getLoanOrdinary() != null
+//                        ? Double.parseDouble(searchEmp.getLoanOrdinary())
+//                        : 0.00)
+//                        - (searchEmp.getInterestLoanLastMonth() != null
+//                        ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
+//                        : 0.00) )
+//                        : 0.00);
         res.setPrincipalBalance(
-                searchEmp.getLoanBalance() != null
-                        ? Double.parseDouble(searchEmp.getLoanBalance())
-                        + ( (searchEmp.getLoanOrdinary() != null
-                        ? Double.parseDouble(searchEmp.getLoanOrdinary())
-                        : 0.00)
-                        - (searchEmp.getInterestLoanLastMonth() != null
-                        ? Double.parseDouble(searchEmp.getInterestLoanLastMonth())
-                        : 0.00) )
-                        : 0.00);
+            searchEmp.getLoanBalance() != null
+                        ? Double.parseDouble(searchEmp.getLoanBalance()): 0.00
+        );
         res.setTotalDeduction(
                 (searchEmp.getLoanOrdinary() != null
                         ? Double.parseDouble(searchEmp.getLoanOrdinary())

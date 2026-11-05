@@ -1059,8 +1059,19 @@ public class DocumentRepository {
       sql.append(
           // " LEFT JOIN loan ON employee.loan_id = loan.id LEFT JOIN loan_detail_history ON
           // loan_detail_history.loan_id = loan.id
-          " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id and loan_detail_history.active = true "
-              + " LEFT JOIN loan ON loan_detail_history.loan_id = loan.id  ");
+          // " LEFT JOIN loan_detail_history ON loan_detail_history.employee_id = employee.id and loan_detail_history.active = true "
+              " LEFT JOIN loan_detail_history ON loan_detail_history.id = ( "
+              + " SELECT MAX(ldh2.id) FROM loan_detail_history ldh2 "
+              + " WHERE ldh2.employee_id = employee.id AND ldh2.active = TRUE ");
+      sql.append("and ldh2.employee_code = '")
+            .append(req.getEmpCode())
+            .append("'");
+      sql.append(" and ldh2.loan_month = '")
+            .append(req.getMonthCurrent())
+            .append("' and ldh2.loan_year = '")
+            .append(req.getYearCurrent())
+            .append("')");
+      sql.append(" LEFT JOIN loan ON loan_detail_history.loan_id = loan.id ");
     }
     sql.append(" WHERE employee.employee_code = '").append(req.getEmpCode()).append("'");
     if (req.getMonthCurrent() != null && req.getYearCurrent() != null) {
@@ -1071,16 +1082,16 @@ public class DocumentRepository {
             .append(req.getYearCurrent())
             .append("'");
       }
-      if (req.getLoanId() != null) {
-        sql.append("and loan_detail_history.employee_code = '")
-            .append(req.getEmpCode())
-            .append("'");
-        sql.append(" and loan_detail_history.loan_month = '")
-            .append(req.getMonthCurrent())
-            .append("' and loan_detail_history.loan_year = '")
-            .append(req.getYearCurrent())
-            .append("'");
-      }
+//      if (req.getLoanId() != null) {
+//        sql.append("and loan_detail_history.employee_code = '")
+//            .append(req.getEmpCode())
+//            .append("'");
+//        sql.append(" and loan_detail_history.loan_month = '")
+//            .append(req.getMonthCurrent())
+//            .append("' and loan_detail_history.loan_year = '")
+//            .append(req.getYearCurrent())
+//            .append("'");
+//      }
     }
     sql.append(" GROUP BY employee.employee_code ");
     return sql;
