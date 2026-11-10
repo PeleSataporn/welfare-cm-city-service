@@ -494,10 +494,26 @@ public class DocumentRepository {
     return sql;
   }
 
+//  public DocumentReq getEmpCodeOfId(String empCode) {
+//    val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
+//    return jdbcTemplate.queryForObject(
+//        sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+//  }
+
   public DocumentReq getEmpCodeOfId(String empCode) {
     val sql = buildQuerySqlV1GetEmpCodeOfId(empCode);
-    return jdbcTemplate.queryForObject(
-        sql.toString(), new BeanPropertyRowMapper<>(DocumentReq.class));
+
+    try {
+      DocumentReq result = jdbcTemplate.queryForObject(
+              sql.toString(),
+              new BeanPropertyRowMapper<>(DocumentReq.class)
+      );
+
+      return result;
+
+    } catch (EmptyResultDataAccessException e) {
+      return null;
+    }
   }
 
   public StringBuilder buildQuerySqlV1GetIdOfEmpCode(Long empId) {

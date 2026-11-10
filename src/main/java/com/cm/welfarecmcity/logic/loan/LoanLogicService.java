@@ -326,26 +326,36 @@ public class LoanLogicService {
         config.setStockFlag(req.getGuaranteeStockFlag());
         if (req.getGuarantorOne() != null) {
           var result1 = documentRepository.getEmpCodeOfId(req.getGuarantorOne());
-          val emp1 = employeeRepository.findById(result1.getEmpId()).get();
-          config.setGuarantorOne(emp1);
-          // loanDto.getGuarantorOne().setId(result1.getEmpId());
+          if(result1 == null){
+            throw new EmployeeException("รหัสพนักงานค้ำ1 ไม่ได้เป็นสมาชิกในระบบโปรดตรวจสอบและเเก้ไขผู้ค้ำใหม่");
+          }else{
+            val emp1 = employeeRepository.findById(result1.getEmpId()).get();
+            config.setGuarantorOne(emp1);
+            // loanDto.getGuarantorOne().setId(result1.getEmpId());
+          }
         } else {
           config.setGuarantorOne(null);
         }
 
         if (req.getGuarantorTwo() != null) {
           var result2 = documentRepository.getEmpCodeOfId(req.getGuarantorTwo());
-          val emp2 = employeeRepository.findById(result2.getEmpId()).get();
-          config.setGuarantorTwo(emp2);
-          // loanDto.getGuarantorTwo().setId(result2.getEmpId());
+          if(result2 == null){
+            throw new EmployeeException("รหัสพนักงานค้ำ2 ไม่ได้เป็นสมาชิกในระบบโปรดตรวจสอบและเเก้ไขผู้ค้ำใหม่");
+          }else {
+            val emp2 = employeeRepository.findById(result2.getEmpId()).get();
+            config.setGuarantorTwo(emp2);
+            // loanDto.getGuarantorTwo().setId(result2.getEmpId());
+          }
         } else {
           config.setGuarantorTwo(null);
         }
       }
       loanRepository.save(config);
       return responseDataUtils.insertDataSuccess(req.getLoanId());
+    } catch (EmployeeException e) {
+      throw e;
     } catch (Exception e) {
-      return null;
+     return null;
     }
   }
 }
